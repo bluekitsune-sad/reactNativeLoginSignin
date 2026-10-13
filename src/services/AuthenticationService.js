@@ -77,4 +77,21 @@ const refreshToken = async () => {
   }
 };
 
+// const test = async () => {
+//   try {
+//     let apirespons = await axios.get(`${ApiContants.BACKEND_BASE_URL}/test`);
+
+//     if (apirespons?.status === 200) {
+//       console.log(apirespons);
+//       return { status: true, data: apirespons?.data };
+//     } else {
+//       return { status: false };
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return { status: false, message: "Oops! Something went wrong" };
+//   }
+// };
+
+// export default { register, login, checkUserExist, refreshToken, test };
 export default { register, login, checkUserExist, refreshToken };

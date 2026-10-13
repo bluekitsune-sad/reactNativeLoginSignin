@@ -72,6 +72,24 @@ npm run web        # start in the browser
 
 ## Backend configuration
 
+The API base URL is resolved in `src/constants/ApiContants.js` with the
+following precedence:
+
+1. `EXPO_PUBLIC_BACKEND_URL` environment variable (e.g.
+   `EXPO_PUBLIC_BACKEND_URL=http://192.168.1.10:3001 npm start`)
+2. `extra.backendUrl` in `app.json`
+3. Fallback: `http://localhost:3001`
+
+To point the app at your machine, edit `app.json`:
+
+```json
+"extra": {
+  "backendUrl": "http://192.168.0.103:3001"
+}
+```
+
+All endpoints (`/api/register`, `/api/getUser/`, `/api/cart`, `/api/bookmark`,
+`/api/getfood`, …) are derived from this constant.
 The API base URL is no longer hardcoded. It is resolved in
 `src/constants/ApiContants.js` in this order:
 

@@ -43,6 +43,11 @@ Living backlog for the React Native login / food‑ordering app. Move items to
 
 ## P2 — State, storage & auth hardening
 
+- [ ] Replace/upgrade `useUserManagement` (`src/utils/userData.js`) with a
+      Context or Redux store so the logged‑in user is shared across screens.
+- [x] **Fix `StorageService`:**
+  - `setUser` now `JSON.stringify`s before writing.
+  - `getUser` reads the same `"user"` key and `JSON.parse`s the result.
 - [x] Replace/upgrade `useUserManagement` (`src/utils/userData.js`) with a
       React Context (`UserProvider` + `useUserManagement`), mounted in
       `src/navigators/index.js`, so the logged‑in user is shared across
@@ -97,6 +102,15 @@ Living backlog for the React Native login / food‑ordering app. Move items to
 - [x] Design tokens (`Colors`, `Fonts`, `Images`) and responsive helpers
       (`Display`).
 - [x] README.md and AGENTS.md written.
+- [x] Vector icons migrated to `@expo/vector-icons` (Expo SDK 50 bundling fixed).
+- [x] `SigninScreen` hook misuse fixed — `useUserManagement` called at component
+      top level; `loginResponse` → `response`.
+- [x] `ApiContants.js` duplicate keys resolved (`ALL_RESTAURANTS` / `RESTAURANT`;
+      `BOOKMARK` no longer shadowed by `"/test"`). `RestaurantService` updated.
+- [x] Backend base URL is configurable via `EXPO_PUBLIC_BACKEND_URL` /
+      `app.json` `extra.backendUrl` (`expo-constants`), replacing the
+      hardcoded IP in `ApiContants.js` and `AuthenticationService.test()`.
+- [x] `StorageService.setUser`/`getUser` key and serialization mismatch fixed.
 - [x] P0 hardening: icon package migration, `SigninScreen` hook fix, duplicate
       API constant keys, configurable backend URL.
 - [x] `SignupScreen` and `ForgotPasswordScreen` implemented and wired into the

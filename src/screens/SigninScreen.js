@@ -25,6 +25,7 @@ const SigninScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const insets = useSafeAreaInsets();
+  const { updateUser } = useUserManagement();
 
   const { updateUser } = useUserManagement();
 
