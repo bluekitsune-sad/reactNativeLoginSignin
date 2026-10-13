@@ -5,23 +5,27 @@ Living backlog for the React Native login / food‑ordering app. Move items to
 
 ## P0 — App is broken / blocking
 
-- [ ] **Install a vector icon package.** `SigninScreen.js`, `FoodCard.js`,
-      `RestaurantCard.js`, `RestaurantMediumCard.js` import
-      `react-native-vector-icons` (`Ionicons`, `Feather`, `AntDesign`,
-      `FontAwesome`) but it is not in `package.json`. Add it, or migrate to
-      `@expo/vector-icons` (already available via Expo).
-- [ ] **Fix hook misuse in `SigninScreen.signIn()`** (`src/screens/SigninScreen.js`):
-  - `useUserManagement()` is called *inside* an async callback — must be called at
-    the top level of the component.
-  - The response is referenced as `loginResponse` (undefined variable); should be
-    `response`.
-- [ ] **Fix duplicate keys in `src/constants/ApiContants.js`.** `ALLRESTAURANT`
-      and `BOOKMARK` are each declared twice; the second declaration wins, so
-      `BOOKMARK` is `"/test"` and `BookmarkService` hits the wrong endpoint.
-      Rename (e.g. `ALL_RESTAURANTS`, `BOOKMARK_LIST`) and update consumers.
-- [ ] **Make the backend URL configurable.** Replace the hardcoded
-      `http://192.168.0.103:3001` in `ApiContants.js` and
-      `AuthenticationService.test()` with `expo-constants` extra / env config.
+- [x] **Install a vector icon package.** Migrated all imports
+      (`SigninScreen.js`, `FoodCard.js`, `RestaurantCard.js`,
+      `RestaurantMediumCard.js`) from `react-native-vector-icons` to
+      `@expo/vector-icons` (bundled with Expo — no new package needed).
+      Also gave `RestaurantMediumCard`'s empty `<FontAwesome />` a
+      `name="star"` so the rating row renders.
+- [x] **Fix hook misuse in `SigninScreen.signIn()`** (`src/screens/SigninScreen.js`):
+  - `useUserManagement()` is now called at the top level of the component.
+  - The response is correctly referenced as `response?.data` (was the
+    undefined `loginResponse`).
+- [x] **Fix duplicate keys in `src/constants/ApiContants.js`.** Renamed to
+      `ALL_RESTAURANTS` (`/getAllRestaurants`) and `RESTAURANT`
+      (`/getRestaurant`); removed the `"/test"` shadow of `BOOKMARK` so
+      `BookmarkService` hits `/bookmark` again. Updated `RestaurantService`
+      (it previously referenced a non‑existent `RESTAURANT` key, producing
+      `.../apiundefined`).
+- [x] **Make the backend URL configurable.** `ApiContants.js` now resolves the
+      base URL from `EXPO_PUBLIC_BACKEND_URL` env var → `app.json`
+      `extra.backendUrl` → `http://localhost:3001` fallback. The hardcoded
+      IP in `AuthenticationService.test()` was replaced with the shared
+      `BACKEND_BASE_URL`.
 
 ## P1 — Missing screens & flow
 
@@ -43,9 +47,9 @@ Living backlog for the React Native login / food‑ordering app. Move items to
 
 - [ ] Replace/upgrade `useUserManagement` (`src/utils/userData.js`) with a
       Context or Redux store so the logged‑in user is shared across screens.
-- [ ] Fix `StorageService`:
-  - `setUser` stores an object — `AsyncStorage` requires `JSON.stringify`.
-  - `getUser` reads key `"token"` but `setUser` writes `"user"`.
+- [x] **Fix `StorageService`:**
+  - `setUser` now `JSON.stringify`s before writing.
+  - `getUser` reads the same `"user"` key and `JSON.parse`s the result.
 - [ ] Persist the token and restore session on app launch; wire
       `refreshToken()` and auth headers (`utils/Generator.js#authHeader`) into
       the services (currently commented out).
@@ -88,3 +92,12 @@ Living backlog for the React Native login / food‑ordering app. Move items to
 - [x] Design tokens (`Colors`, `Fonts`, `Images`) and responsive helpers
       (`Display`).
 - [x] README.md and AGENTS.md written.
+- [x] Vector icons migrated to `@expo/vector-icons` (Expo SDK 50 bundling fixed).
+- [x] `SigninScreen` hook misuse fixed — `useUserManagement` called at component
+      top level; `loginResponse` → `response`.
+- [x] `ApiContants.js` duplicate keys resolved (`ALL_RESTAURANTS` / `RESTAURANT`;
+      `BOOKMARK` no longer shadowed by `"/test"`). `RestaurantService` updated.
+- [x] Backend base URL is configurable via `EXPO_PUBLIC_BACKEND_URL` /
+      `app.json` `extra.backendUrl` (`expo-constants`), replacing the
+      hardcoded IP in `ApiContants.js` and `AuthenticationService.test()`.
+- [x] `StorageService.setUser`/`getUser` key and serialization mismatch fixed.

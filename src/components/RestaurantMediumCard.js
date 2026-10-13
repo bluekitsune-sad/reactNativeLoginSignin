@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { FontAwesome } from "@expo/vector-icons";
 import { Colors, Fonts, Images } from "../constants";
 import { StaticImageService } from "../services";
 import { Display } from "../utils";
@@ -25,7 +25,7 @@ const RestaurantMediumCard = ({
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>{name}</Text>
           <View style={styles.rowAndCenter}>
-            <FontAwesome />
+            <FontAwesome name="star" size={12} color={Colors.DEFAULT_YELLOW} />
             <Text style={styles.ratingText}>4.2</Text>
             <Text style={styles.reviewsText}>({233})</Text>
           </View>

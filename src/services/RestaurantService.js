@@ -5,7 +5,7 @@ const getRestaurants = async () => {
   console.log(`RestaurantsService | getRestaurants`);
   try {
     let restaurantResponse = await axios.get(
-      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.RESTAURANT}`
+      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.ALL_RESTAURANTS}`
     );
     if (restaurantResponse?.status === 200) {
       return {

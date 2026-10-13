@@ -39,12 +39,8 @@ food‑ordering experience (restaurants, food, cart, bookmarks).
 | Storage    | `@react-native-async-storage/async-storage` |
 | Animation  | `lottie-react-native`, `Animated` API |
 | Fonts      | `expo-font` (Poppins) |
+| Icons      | `@expo/vector-icons` (Ionicons, Feather, AntDesign, FontAwesome) |
 | Safe area  | `react-native-safe-area-context` |
-
-> **Note:** `react-native-vector-icons` (`Ionicons`, `Feather`, `AntDesign`,
-> `FontAwesome`) is imported by several files but is **not** listed in
-> `package.json`. Install it (or switch to `@expo/vector-icons`) before running —
-> see [TODO.md](./TODO.md).
 
 ## Getting started
 
@@ -71,15 +67,24 @@ npm run web        # start in the browser
 
 ## Backend configuration
 
-The API base URL is hardcoded in `src/constants/ApiContants.js`:
+The API base URL is resolved in `src/constants/ApiContants.js` with the
+following precedence:
 
-```js
-const BACKEND_BASE_URL = "http://192.168.0.103:3001";
+1. `EXPO_PUBLIC_BACKEND_URL` environment variable (e.g.
+   `EXPO_PUBLIC_BACKEND_URL=http://192.168.1.10:3001 npm start`)
+2. `extra.backendUrl` in `app.json`
+3. Fallback: `http://localhost:3001`
+
+To point the app at your machine, edit `app.json`:
+
+```json
+"extra": {
+  "backendUrl": "http://192.168.0.103:3001"
+}
 ```
 
-Change it to your machine's LAN IP (or `http://localhost:3001` for a simulator)
-so the device can reach the server. All endpoints (`/api/register`, `/api/getUser/`,
-`/api/cart`, `/api/bookmark`, `/api/getfood`, …) are derived from this constant.
+All endpoints (`/api/register`, `/api/getUser/`, `/api/cart`, `/api/bookmark`,
+`/api/getfood`, …) are derived from this constant.
 
 The expected sign‑in payload shape:
 

@@ -1,8 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Colors, Fonts } from "../constants";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { StaticImageService } from "../services";
 // import { useDispatch, useSelector } from "react-redux";
 // import { BookmarkAction } from "../actions";

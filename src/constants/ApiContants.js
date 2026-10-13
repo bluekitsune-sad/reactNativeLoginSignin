@@ -1,5 +1,9 @@
-// const BACKEND_BASE_URL = "http://localhost:3001";
-const BACKEND_BASE_URL = "http://192.168.0.103:3001";
+import Constants from "expo-constants";
+
+const BACKEND_BASE_URL =
+  process.env.EXPO_PUBLIC_BACKEND_URL ||
+  Constants.expoConfig?.extra?.backendUrl ||
+  "http://localhost:3001";
 
 const COUNTRY_FLAG = {
   BASE_URL: `https://www.countryflags.io`,
@@ -22,12 +26,11 @@ const BACKEND_API = {
   USER: "/getUser",
   ADDUSER: "/addUser",
   REFRESH_TOKEN: "/refresh-token",
-  ALLRESTAURANT: "/getAllRestaurants",
-  ALLRESTAURANT: "/getRestaurant",
+  ALL_RESTAURANTS: "/getAllRestaurants",
+  RESTAURANT: "/getRestaurant",
   CART: "/cart",
   FOOD: "/getfood",
   BOOKMARK: "/bookmark",
-  BOOKMARK: "/test",
 };
 
-export default { COUNTRY_FLAG, BACKEND_API, STATIC_IMAGE };
+export default { BACKEND_BASE_URL, COUNTRY_FLAG, BACKEND_API, STATIC_IMAGE };

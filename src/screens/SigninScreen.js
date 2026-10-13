@@ -9,11 +9,10 @@ import {
   Image,
 } from "react-native";
 import { Separator, ToggleButton } from "../components";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import Feather from "react-native-vector-icons/Feather";
+import { Ionicons, Feather } from "@expo/vector-icons";
 import { Colors, Fonts, General, Images } from "../constants";
 import { Display } from "../utils";
-import { AuthenicationService, StorageService } from "../services";
+import { AuthenicationService } from "../services";
 import LottieView from "lottie-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useUserManagement from "../utils/userData";
@@ -26,6 +25,7 @@ const SigninScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const insets = useSafeAreaInsets();
+  const { updateUser } = useUserManagement();
 
   // const dispatch = useDispatch();
 
@@ -36,18 +36,10 @@ const SigninScreen = ({ navigation }) => {
       password,
     };
     // {"_id":{"$oid":"6599672232526fab54c8423b"},"name":"sad Doe","phone":"1234567890","email":"saad.sad@example.com","password":"54321","role":"Customer","tokens":[],"__v":{"$numberInt":"0"}}
-    // AuthenicationService.test();
     AuthenicationService.login(user).then((response) => {
       setIsLoading(false);
       if (response?.status) {
-        console.log(response?.data);
-        const { updateUser } = useUserManagement();
-        updateUser(loginResponse?.data);
-        // userManupulation.updateUser(response?.data);
-        // StorageService.setUser(response?.data);
-        // StorageService.setToken(response?.data).then(() => {
-        //   dispatch(GeneralAction.setToken(response?.data));
-        // });
+        updateUser(response?.data);
       } else {
         setErrorMessage(response?.message);
       }

@@ -53,27 +53,24 @@ consistent.
 
 ## Known landmines (read before editing)
 
-1. **`react-native-vector-icons` is not installed.** `SigninScreen.js`,
-   `FoodCard.js`, `RestaurantCard.js`, `RestaurantMediumCard.js` import
-   `Ionicons`/`Feather`/`AntDesign`/`FontAwesome` from it, but it is absent from
-   `package.json`. Either add it (or `@expo/vector-icons`) or leave a note in
-   `TODO.md`; do not silently break bundling.
-2. **Hook misuse in `src/screens/SigninScreen.js` (`signIn`).**
-   `useUserManagement()` is called *inside* the async callback and the result is
-   referenced as `loginResponse` (undefined variable). This throws at runtime.
-   Hooks must be called at the top level of the component body.
-3. **Duplicate keys in `src/constants/ApiContants.js`:** `ALLRESTAURANT` and
-   `BOOKMARK` are declared twice; the second wins, so `BOOKMARK` resolves to
-   `"/test"` and breaks `BookmarkService`. Fixing means renaming the keys and
-   updating consumers.
-4. **`StorageService`:** `setUser` stores an object (AsyncStorage requires a
-   string) and `getUser` reads the `"token"` key while `setUser` writes `"user"`.
-5. **`useUserManagement` is a plain hook, not a context** — each call gets fresh
+1. **`useUserManagement` is a plain hook, not a context** — each call gets fresh
    state, so it cannot share the logged‑in user across screens yet.
-6. **Hardcoded backend** `http://192.168.0.103:3001` in `ApiContants.js` and in
-   `AuthenticationService.test()`.
-7. **Dead third‑party API:** `countryflags.io` in `ApiContants.COUNTRY_FLAG`.
-8. **No `src/actions` directory** even though commented code imports from it.
+2. **Dead third‑party API:** `countryflags.io` in `ApiContants.COUNTRY_FLAG`.
+3. **No `src/actions` directory** even though commented code imports from it
+   (`FoodCard.js`, `RestaurantCard.js`).
+4. **`AuthenticationService.login`** still does a GET with the credentials
+   JSON‑stringified into the URL path (see TODO P3) — do not copy that pattern
+   into new services.
+5. **Screens still missing:** `SigninScreen` navigates to `"Signup"` and
+   `"ForgotPassword"` but neither screen nor route exists yet.
+
+Previously documented and now fixed (do not regress): icons come from
+`@expo/vector-icons`; `SigninScreen` calls `useUserManagement` at the top level
+with `response?.data`; `ApiContants.js` has unique keys (`ALL_RESTAURANTS`,
+`RESTAURANT`, `BOOKMARK`); the backend URL is configurable via
+`EXPO_PUBLIC_BACKEND_URL` / `app.json` `extra.backendUrl` (`expo-constants`);
+`StorageService` serializes with `JSON.stringify`/`JSON.parse` on the shared
+`"user"` key.
 
 ## Conventions
 

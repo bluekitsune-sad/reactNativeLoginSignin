@@ -1,17 +1,9 @@
 import axios from "axios";
 import { ApiContants } from "../constants";
-import useUserManagement from "../utils/userData";
 
 const AuthRequest = axios.create({
   baseURL: ApiContants.BACKEND_API.BASE_API_URL,
-  // baseURL: "http://localhost:3001/api",
-  // baseURL: "https://62bf-101-53-224-18.ngrok-free.app/api",
 });
-// const [user, setUser] = useState({
-//   username: "",
-//   email: "",
-//   password: "",
-// });
 
 const register = async (user) => {
   if (!user?.username || !user?.email || !user?.password) {
@@ -43,21 +35,10 @@ const login = async (user) => {
       username: user?.username,
       password: user?.password,
     });
-    // let requestBody = {
-    //   username: user?.username,
-    //   password: user?.password,
-    // };
-    // console.log("initial request created: " + requestBody);
-
-    //   "http://192.168.0.103:3001/api/getUser/" + requestBody
     let loginResponse = await AuthRequest.get(
       ApiContants.BACKEND_API.LOGIN + requestBody,
       requestBody
     );
-
-    // console.log("this is the result data: ", loginResponse?.data);
-    // const { updateUser } = useUserManagement();
-    // updateUser(loginResponse?.data);
     return loginResponse?.data;
   } catch (error) {
     console.log(error);
@@ -98,14 +79,7 @@ const refreshToken = async () => {
 
 const test = async () => {
   try {
-    // let apirespons = await AuthRequest.get(
-    // ApiContants.BACKEND_API.TEST
-    // { headers: authHeader(getToken()) }
-    // );
-    let apirespons = await axios.get(
-      "http://192.168.0.103:3001/test"
-      // "https://62bf-101-53-224-18.ngrok-free.app/test"
-    );
+    let apirespons = await axios.get(`${ApiContants.BACKEND_BASE_URL}/test`);
 
     if (apirespons?.status === 200) {
       console.log(apirespons);
