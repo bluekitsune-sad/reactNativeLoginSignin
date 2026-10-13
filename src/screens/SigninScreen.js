@@ -27,15 +27,15 @@ const SigninScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const { updateUser } = useUserManagement();
 
-  // const dispatch = useDispatch();
+  const { updateUser } = useUserManagement();
 
   const signIn = async () => {
     setIsLoading(true);
+    setErrorMessage("");
     let user = {
       username,
       password,
     };
-    // {"_id":{"$oid":"6599672232526fab54c8423b"},"name":"sad Doe","phone":"1234567890","email":"saad.sad@example.com","password":"54321","role":"Customer","tokens":[],"__v":{"$numberInt":"0"}}
     AuthenicationService.login(user).then((response) => {
       setIsLoading(false);
       if (response?.status) {

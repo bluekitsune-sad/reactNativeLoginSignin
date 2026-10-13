@@ -1,33 +1,36 @@
-import React, { useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
+import { StorageService } from "../services";
 
-const UserManagement = () => {
-  const [userData, setUserData] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
+const UserContext = createContext(null);
 
-  const updateUser = (userInfo) => {
-    setUserData(userInfo);
-    setLoggedIn(true);
-    console.log("update made: ", userInfo);
-  };
+export const UserProvider = ({ children }) => {
+  const [userData, setUserData] = useState(null);
 
-  const getUser = () => {
-    if (!loggedIn) {
-      return loggedIn;
-    } else {
-      return userData;
-    }
-  };
+  const updateUser = useCallback((userInfo) => {
+    setUserData(userInfo ?? null);
+    StorageService.setUser(userInfo ?? null);
+  }, []);
 
-  const resetUser = () => {
-    setUserData("");
-    setLoggedIn(false);
-  };
+  const resetUser = useCallback(() => {
+    setUserData(null);
+    StorageService.removeUser();
+  }, []);
 
-  return {
-    updateUser,
-    getUser,
-    resetUser,
-  };
+  return (
+    <UserContext.Provider value={{ userData, updateUser, resetUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
-export default UserManagement;
+const useUserManagement = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error(
+      "useUserManagement must be used within a <UserProvider> (see src/navigators)"
+    );
+  }
+  return context;
+};
+
+export default useUserManagement;

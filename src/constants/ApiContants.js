@@ -1,9 +1,24 @@
 import Constants from "expo-constants";
 
-const BACKEND_BASE_URL =
-  process.env.EXPO_PUBLIC_BACKEND_URL ||
-  Constants.expoConfig?.extra?.backendUrl ||
-  "http://localhost:3001";
+const DEFAULT_BACKEND_BASE_URL = "http://localhost:3001";
+
+const stripTrailingSlash = (url) => url.replace(/\/+$/, "");
+
+const resolveBackendBaseUrl = () => {
+  const envUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
+  if (envUrl) {
+    return stripTrailingSlash(envUrl);
+  }
+  const extraUrl =
+    Constants.expoConfig?.extra?.backendUrl ??
+    Constants.manifest?.extra?.backendUrl;
+  if (extraUrl) {
+    return stripTrailingSlash(extraUrl);
+  }
+  return DEFAULT_BACKEND_BASE_URL;
+};
+
+const BACKEND_BASE_URL = resolveBackendBaseUrl();
 
 const COUNTRY_FLAG = {
   BASE_URL: `https://www.countryflags.io`,
@@ -27,10 +42,9 @@ const BACKEND_API = {
   ADDUSER: "/addUser",
   REFRESH_TOKEN: "/refresh-token",
   ALL_RESTAURANTS: "/getAllRestaurants",
-  RESTAURANT: "/getRestaurant",
   CART: "/cart",
   FOOD: "/getfood",
-  BOOKMARK: "/bookmark",
+  BOOKMARK_LIST: "/bookmark",
 };
 
-export default { BACKEND_BASE_URL, COUNTRY_FLAG, BACKEND_API, STATIC_IMAGE };
+export default { COUNTRY_FLAG, BACKEND_API, STATIC_IMAGE, BACKEND_BASE_URL };

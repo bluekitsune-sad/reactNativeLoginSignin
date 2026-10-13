@@ -35,10 +35,11 @@ const login = async (user) => {
       username: user?.username,
       password: user?.password,
     });
+
     let loginResponse = await AuthRequest.get(
-      ApiContants.BACKEND_API.LOGIN + requestBody,
-      requestBody
+      ApiContants.BACKEND_API.LOGIN + requestBody
     );
+
     return loginResponse?.data;
   } catch (error) {
     console.log(error);
@@ -64,7 +65,6 @@ const refreshToken = async () => {
   try {
     let tokenResponse = await AuthRequest.post(
       ApiContants.BACKEND_API.REFRESH_TOKEN
-      // { headers: authHeader(getToken()) }
     );
     if (tokenResponse?.status === 200) {
       return { status: true, data: tokenResponse?.data };
@@ -77,20 +77,21 @@ const refreshToken = async () => {
   }
 };
 
-const test = async () => {
-  try {
-    let apirespons = await axios.get(`${ApiContants.BACKEND_BASE_URL}/test`);
+// const test = async () => {
+//   try {
+//     let apirespons = await axios.get(`${ApiContants.BACKEND_BASE_URL}/test`);
 
-    if (apirespons?.status === 200) {
-      console.log(apirespons);
-      return { status: true, data: apirespons?.data };
-    } else {
-      return { status: false };
-    }
-  } catch (error) {
-    console.log(error);
-    return { status: false, message: "Oops! Something went wrong" };
-  }
-};
+//     if (apirespons?.status === 200) {
+//       console.log(apirespons);
+//       return { status: true, data: apirespons?.data };
+//     } else {
+//       return { status: false };
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return { status: false, message: "Oops! Something went wrong" };
+//   }
+// };
 
-export default { register, login, checkUserExist, refreshToken, test };
+// export default { register, login, checkUserExist, refreshToken, test };
+export default { register, login, checkUserExist, refreshToken };

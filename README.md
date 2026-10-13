@@ -5,8 +5,9 @@ shipped flow today is a Sign In screen backed by a REST backend, with a full set
 reusable components, services and constants already in place for the rest of the
 food‑ordering experience (restaurants, food, cart, bookmarks).
 
-> Status: **work in progress.** Only the `Signin` screen is registered in the
-> navigator — see [TODO.md](./TODO.md) for the missing screens and known bugs.
+> Status: **work in progress.** The `Signin`, `Signup` and `ForgotPassword`
+> screens are registered in the navigator — see [TODO.md](./TODO.md) for the
+> remaining screens and known gaps.
 
 ---
 
@@ -14,6 +15,10 @@ food‑ordering experience (restaurants, food, cart, bookmarks).
 
 - Sign In screen with username / password, show/hide password, "Remember me"
   toggle, loading state (Lottie animation) and inline error message.
+- Sign Up screen (username / email / password with validation) and a Forgot
+  Password screen (email lookup via `user-exist`).
+- Shared user state through a React Context (`UserProvider` +
+  `useUserManagement`), persisted to `AsyncStorage`.
 - Facebook / Google social sign‑in buttons (UI only, not wired up).
 - Authentication service (`register`, `login`, `checkUserExist`, `refreshToken`)
   built on `axios`.
@@ -85,6 +90,33 @@ To point the app at your machine, edit `app.json`:
 
 All endpoints (`/api/register`, `/api/getUser/`, `/api/cart`, `/api/bookmark`,
 `/api/getfood`, …) are derived from this constant.
+The API base URL is no longer hardcoded. It is resolved in
+`src/constants/ApiContants.js` in this order:
+
+1. `EXPO_PUBLIC_BACKEND_URL` environment variable (highest priority).
+2. `expo.extra.backendUrl` from `app.json` (via `expo-constants`).
+3. Fallback: `http://localhost:3001`.
+
+To point the app at your LAN backend, edit `app.json`:
+
+```json
+{
+  "expo": {
+    "extra": {
+      "backendUrl": "http://192.168.0.103:3001"
+    }
+  }
+}
+```
+
+or launch with an env var:
+
+```bash
+EXPO_PUBLIC_BACKEND_URL=http://192.168.0.103:3001 npm start
+```
+
+All endpoints (`/api/register`, `/api/getUser/`, `/api/cart`, `/api/bookmark`,
+`/api/getfood`, …) are derived from this base URL.
 
 The expected sign‑in payload shape:
 
@@ -104,10 +136,10 @@ The expected sign‑in payload shape:
     ├── assets/                # Fonts (Poppins), images, gallery, posters, logos
     ├── components/            # Reusable UI (FoodCard, RestaurantCard, ...)
     ├── constants/             # Colors, Fonts, Images, ApiContants, mock data
-    ├── navigators/            # React Navigation stack (currently: Signin only)
-    ├── screens/               # App screens (currently: SigninScreen)
+    ├── navigators/            # React Navigation stack (Signin, Signup, ForgotPassword)
+    ├── screens/               # App screens (SigninScreen, SignupScreen, ...)
     ├── services/              # axios API services + AsyncStorage wrapper
-    └── utils/                 # Display helpers, auth header, user state hook
+    └── utils/                 # Display helpers, auth header, user state context
 ```
 
 ### Key modules
@@ -115,11 +147,13 @@ The expected sign‑in payload shape:
 | Path | Purpose |
 | ---- | ------- |
 | `App.js` | Loads custom fonts, then mounts `<Navigators />`. |
-| `src/navigators/index.js` | Root `Stack.Navigator`; header hidden on all screens. |
+| `src/navigators/index.js` | Root `Stack.Navigator`; wraps the app in `<UserProvider>`. |
 | `src/screens/SigninScreen.js` | Sign in form and submit logic. |
+| `src/screens/SignupScreen.js` | Registration form and validation. |
+| `src/screens/ForgotPasswordScreen.js` | Email lookup for password reset. |
 | `src/services/AuthenticationService.js` | Register / login / token refresh. |
 | `src/utils/Display.js` | `setWidth(w)` / `setHeight(h)` percentage helpers. |
-| `src/utils/userData.js` | `useUserManagement` hook for the current user. |
+| `src/utils/userData.js` | `UserProvider` + `useUserManagement` context for the current user. |
 | `src/constants/Colors.js` | Design tokens (green primary `#0A8791`, etc.). |
 
 ## Available scripts

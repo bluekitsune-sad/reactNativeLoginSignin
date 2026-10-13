@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { ApiContants, Colors, Fonts } from "../constants";
 import { StaticImageService } from "../services";
 import { Display } from "../utils";
