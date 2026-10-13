@@ -1,32 +1,46 @@
 name: OpenCode
 
 on:
-  # Automatically review PRs when opened or updated
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+  # Run when a new issue contains an OpenCode command
+  issues:
+    types: [opened]
 
-  # Comments in the PR conversation
+  # Run commands posted as issue or PR conversation comments
   issue_comment:
     types: [created]
 
-  # Comments on specific lines in the PR Files tab
+  # Run commands posted on specific lines in PR reviews
   pull_request_review_comment:
     types: [created]
+
+  # Automatically review new or updated pull requests
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
 
 jobs:
-  # Job 1: Automatically review a new or updated PR
-  review-pr:
-    if: github.event_name == 'pull_request'
+  # 1. Run a task from the body of a newly created issue
+  issue-task:
+    if: |
+      (
+        github.event.issue.author_association == 'OWNER' ||
+        github.event.issue.author_association == 'MEMBER' ||
+        github.event.issue.author_association == 'COLLABORATOR'
+      ) &&
+      (
+        contains(github.event.issue.body, '/opencode') ||
+        contains(github.event.issue.body, '/oc')
+      )
+
     runs-on: ubuntu-latest
 
     permissions:
-      id-token: write
       contents: read
-      pull-requests: read
       issues: read
+      pull-requests: read
+      id-token: write
 
     steps:
       - name: Checkout repository
@@ -35,20 +49,45 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Run OpenCode PR review
+      - name: Run OpenCode from issue
         uses: anomalyco/opencode/github@latest
         with:
           model: opencode/mimo-v2.6-flash-free
+          prompt: |
+            Handle the following request from a trusted repository collaborator.
 
-  # Job 2: Respond to /opencode or /oc comments on PRs
-  opencode-comment:
+            Issue title:
+            ${{ github.event.issue.title }}
+
+            Issue description:
+            ${{ github.event.issue.body }}
+
+            Inspect the repository, understand the requested task,
+            implement appropriate changes on a separate branch,
+            and open a pull request for human review.
+            Do not merge the pull request.
+
+  # 2. Handle commands in issue comments, PR conversations,
+  #    and inline PR review comments
+  comment-task:
     if: |
       (
         (
           github.event_name == 'issue_comment' &&
-          github.event.issue.pull_request != null
+          (
+            github.event.comment.author_association == 'OWNER' ||
+            github.event.comment.author_association == 'MEMBER' ||
+            github.event.comment.author_association == 'COLLABORATOR'
+          )
         ) ||
-        github.event_name == 'pull_request_review_comment'
+        (
+          github.event_name == 'pull_request_review_comment' &&
+          (
+            github.event.comment.author_association == 'OWNER' ||
+            github.event.comment.author_association == 'MEMBER' ||
+            github.event.comment.author_association == 'COLLABORATOR'
+          )
+        )
       ) &&
       (
         contains(github.event.comment.body, '/opencode') ||
@@ -58,10 +97,10 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      id-token: write
       contents: read
-      pull-requests: read
       issues: read
+      pull-requests: read
+      id-token: write
 
     steps:
       - name: Checkout repository
@@ -74,7 +113,30 @@ jobs:
         uses: anomalyco/opencode/github@latest
         with:
           model: opencode/mimo-v2.6-flash-free
-      # - name: Run OpenCode
+
+  # 3. Automatically review PRs when opened or updated
+  review-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Run OpenCode PR review
+        uses: anomalyco/opencode/github@latest
+        with:
+          model: opencode/mimo-v2.6-flash-free
+    # - name: Run OpenCode
       #   uses: anomalyco/opencode/github@latest
       #   env:
       #     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
