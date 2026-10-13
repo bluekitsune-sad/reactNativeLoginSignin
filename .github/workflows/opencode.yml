@@ -1,19 +1,32 @@
 name: OpenCode
 
 on:
+  # Automatically review PRs when opened or updated
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+  # Comments in the PR conversation
   issue_comment:
     types: [created]
+
+  # Comments on specific lines in the PR Files tab
   pull_request_review_comment:
     types: [created]
 
+permissions:
+  contents: read
+
 jobs:
-  opencode:
-    if: |
-      contains(github.event.comment.body, '/opencode') ||
-      contains(github.event.comment.body, '/oc')
+  # Job 1: Automatically review a new or updated PR
+  review-pr:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+
     permissions:
       id-token: write
+      contents: read
+      pull-requests: read
+      issues: read
 
     steps:
       - name: Checkout repository
@@ -22,7 +35,42 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Run OpenCode
+      - name: Run OpenCode PR review
+        uses: anomalyco/opencode/github@latest
+        with:
+          model: opencode/mimo-v2.6-flash-free
+
+  # Job 2: Respond to /opencode or /oc comments on PRs
+  opencode-comment:
+    if: |
+      (
+        (
+          github.event_name == 'issue_comment' &&
+          github.event.issue.pull_request != null
+        ) ||
+        github.event_name == 'pull_request_review_comment'
+      ) &&
+      (
+        contains(github.event.comment.body, '/opencode') ||
+        contains(github.event.comment.body, '/oc')
+      )
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: read
+      issues: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Run OpenCode from comment
         uses: anomalyco/opencode/github@latest
         with:
           model: opencode/mimo-v2.6-flash-free
