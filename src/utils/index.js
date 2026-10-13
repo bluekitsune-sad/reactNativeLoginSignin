@@ -1,3 +1,4 @@
-import Display from './Display';
+import Display from "./Display";
+import useUserManagement, { UserProvider } from "./userData";
 
-export {Display};
+export { Display, useUserManagement, UserProvider };

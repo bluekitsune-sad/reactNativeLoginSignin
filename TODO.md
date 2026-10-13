@@ -5,35 +5,37 @@ Living backlog for the React Native login / food‑ordering app. Move items to
 
 ## P0 — App is broken / blocking
 
-- [ ] **Install a vector icon package.** `SigninScreen.js`, `FoodCard.js`,
-      `RestaurantCard.js`, `RestaurantMediumCard.js` import
-      `react-native-vector-icons` (`Ionicons`, `Feather`, `AntDesign`,
-      `FontAwesome`) but it is not in `package.json`. Add it, or migrate to
-      `@expo/vector-icons` (already available via Expo).
-- [ ] **Fix hook misuse in `SigninScreen.signIn()`** (`src/screens/SigninScreen.js`):
-  - `useUserManagement()` is called *inside* an async callback — must be called at
-    the top level of the component.
-  - The response is referenced as `loginResponse` (undefined variable); should be
-    `response`.
-- [ ] **Fix duplicate keys in `src/constants/ApiContants.js`.** `ALLRESTAURANT`
-      and `BOOKMARK` are each declared twice; the second declaration wins, so
-      `BOOKMARK` is `"/test"` and `BookmarkService` hits the wrong endpoint.
-      Rename (e.g. `ALL_RESTAURANTS`, `BOOKMARK_LIST`) and update consumers.
-- [ ] **Make the backend URL configurable.** Replace the hardcoded
-      `http://192.168.0.103:3001` in `ApiContants.js` and
-      `AuthenticationService.test()` with `expo-constants` extra / env config.
+- [x] **Install a vector icon package.** Migrated all icon imports
+      (`SigninScreen`, `FoodCard`, `RestaurantCard`, `RestaurantMediumCard`)
+      from the uninstalled `react-native-vector-icons` to `@expo/vector-icons`
+      (bundled with Expo).
+- [x] **Fix hook misuse in `SigninScreen.signIn()`** (`src/screens/SigninScreen.js`):
+  - `useUserManagement()` is now called at the top level of the component.
+  - The response is referenced as `response` (was the undefined
+    `loginResponse`).
+- [x] **Fix duplicate keys in `src/constants/ApiContants.js`.** Renamed to
+      `ALL_RESTAURANTS` (`"/getAllRestaurants"`) and `BOOKMARK_LIST`
+      (`"/bookmark"`); consumers (`RestaurantService`, `BookmarkService`)
+      updated. Note `RestaurantService` previously read a non‑existent
+      `RESTAURANT` key, so its URLs contained `undefined`.
+- [x] **Make the backend URL configurable.** `ApiContants` resolves the base
+      URL from `EXPO_PUBLIC_BACKEND_URL`, then `expo.extra.backendUrl`
+      (`app.json` via `expo-constants`), then falls back to
+      `http://localhost:3001`. No hardcoded IPs remain.
 
 ## P1 — Missing screens & flow
 
-- [ ] `SignupScreen` (referenced by `navigation.navigate("Signup")` in
-      `SigninScreen` — currently crashes navigation).
-- [ ] `ForgotPasswordScreen` (referenced by `navigation.navigate("ForgotPassword")`).
-- [ ] `RegisterPhoneScreen` + `VerificationScreen` (stubbed as comments in
-      `src/navigators/index.js` and `src/screens/index.js`).
+- [x] `SignupScreen` — created (validation + `AuthenticationService.register`)
+      and registered in the navigator.
+- [x] `ForgotPasswordScreen` — created (email lookup via `checkUserExist`)
+      and registered in the navigator.
+- [ ] `RegisterPhoneScreen` + `VerificationScreen` (still stubbed as comments
+      in `src/navigators/index.js` and `src/screens/index.js`).
 - [ ] Post‑login main flow: home / restaurants, restaurant detail, food detail,
       cart, bookmarks, profile. Components already exist
       (`RestaurantCard`, `RestaurantMediumCard`, `FoodCard`, `WelcomeCard`,
       `CategoryMenuItem`, `CategoryListItem`) but no screens use them.
+      There is also no screen to navigate to after a successful sign‑in yet.
 - [ ] Wire social sign‑in buttons (Facebook / Google) or hide them until real
       auth exists.
 - [ ] Country code picker screen (`CountryCode.js` + `FlagItem.js` are ready;
@@ -41,11 +43,14 @@ Living backlog for the React Native login / food‑ordering app. Move items to
 
 ## P2 — State, storage & auth hardening
 
-- [ ] Replace/upgrade `useUserManagement` (`src/utils/userData.js`) with a
-      Context or Redux store so the logged‑in user is shared across screens.
-- [ ] Fix `StorageService`:
-  - `setUser` stores an object — `AsyncStorage` requires `JSON.stringify`.
-  - `getUser` reads key `"token"` but `setUser` writes `"user"`.
+- [x] Replace/upgrade `useUserManagement` (`src/utils/userData.js`) with a
+      React Context (`UserProvider` + `useUserManagement`), mounted in
+      `src/navigators/index.js`, so the logged‑in user is shared across
+      screens and persisted.
+- [x] Fix `StorageService`:
+  - `setUser` now `JSON.stringify`s before writing to `AsyncStorage`.
+  - `getUser` reads the same `"user"` key that `setUser` writes and parses it.
+  - Added `removeUser()`; fixed the `AsyncSorage` typo.
 - [ ] Persist the token and restore session on app launch; wire
       `refreshToken()` and auth headers (`utils/Generator.js#authHeader`) into
       the services (currently commented out).
@@ -57,8 +62,9 @@ Living backlog for the React Native login / food‑ordering app. Move items to
 
 - [ ] `AuthenticationService.login` performs a **GET with a request body** and
       stringifies `user` into the URL path (`/api/getUser/{json}`). Redesign to a
-      proper `POST /login`.
-- [ ] Remove the hardcoded `test()` endpoint / dead `ngrok` URLs from
+      proper `POST /login` (requires backend coordination — the bogus second
+      argument to `axios.get` was removed, behaviour unchanged).
+- [x] Remove the hardcoded `test()` endpoint / dead `ngrok` URLs from
       `AuthenticationService.js`.
 - [ ] Consolidate `resdata.js` / `fooddata.js` / `Mock.js` mock data vs the live
       API; decide which is the source of truth.
@@ -75,6 +81,9 @@ Living backlog for the React Native login / food‑ordering app. Move items to
       navigator needs them.
 - [ ] Review `app.json` (icon/splash/name `user_logsignin`) and rename the
       package to match the product.
+- [ ] `expo-doctor` still flags pre‑existing version drift (`expo`,
+      `lottie-react-native`, `react-native`, `react-native-safe-area-context`)
+      — align them with `npx expo install --check` when convenient.
 
 ---
 
@@ -83,8 +92,19 @@ Living backlog for the React Native login / food‑ordering app. Move items to
 - [x] Project scaffolded with Expo SDK 50, Poppins fonts, navigation skeleton.
 - [x] Sign In screen with validation, loading animation and error display.
 - [x] Service layer (`AuthenticationService`, `RestaurantService`, `FoodService`,
-      `CartService`, `BookmarkService`, `UserService`, `StaticImageService`,
-      `StorageService`).
+      `CartService`, `BookmarkService`, `UserService`, `StorageService`,
+      `StaticImageService`).
 - [x] Design tokens (`Colors`, `Fonts`, `Images`) and responsive helpers
       (`Display`).
 - [x] README.md and AGENTS.md written.
+- [x] P0 hardening: icon package migration, `SigninScreen` hook fix, duplicate
+      API constant keys, configurable backend URL.
+- [x] `SignupScreen` and `ForgotPasswordScreen` implemented and wired into the
+      navigator.
+- [x] User state moved to a shared `UserProvider` context; `StorageService`
+      fixed (key mismatch, missing `JSON.stringify`).
+- [x] Removed dead `test()` endpoint / `ngrok` leftovers from
+      `AuthenticationService`.
+- [x] Added missing `react-native-screens` peer dependency (required by
+      `@react-navigation/stack` outside Expo Go) plus explicit
+      `@expo/vector-icons`, `expo-constants`, `expo-font` dependencies.

@@ -7,7 +7,7 @@ const getBookmarks = async () => {
   console.log(`BookmarkService | getBookmarks`);
   try {
     let response = await axios.get(
-      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.BOOKMARK}`,
+      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.BOOKMARK_LIST}`,
       {
         // headers: authHeader(getToken()),
       }
@@ -36,7 +36,7 @@ const addBookmark = async ({ restaurantId }) => {
   console.log(`BookmarkService | addBookmark`);
   try {
     let response = await axios.post(
-      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.BOOKMARK}/${restaurantId}`,
+      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.BOOKMARK_LIST}/${restaurantId}`,
       {},
       {
         // headers: authHeader(getToken()),
@@ -67,7 +67,7 @@ const removeBookmark = async ({ restaurantId }) => {
   console.log(`BookmarkService | removeBookmark`);
   try {
     let response = await axios.delete(
-      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.BOOKMARK}/${restaurantId}`,
+      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.BOOKMARK_LIST}/${restaurantId}`,
       {
         // headers: authHeader(getToken()),
       }
