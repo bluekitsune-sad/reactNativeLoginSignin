@@ -1,19 +1,32 @@
-import AsyncSorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const USER_KEY = "user";
 
 const setFirstTimeUse = () => {
-  return AsyncSorage.setItem("isFirstTimeUse", "true");
+  return AsyncStorage.setItem("isFirstTimeUse", "true");
 };
 
 const getFirstTimeUse = () => {
-  return AsyncSorage.getItem("isFirstTimeUse");
+  return AsyncStorage.getItem("isFirstTimeUse");
 };
 
 const setUser = (userData) => {
-  return AsyncSorage.setItem("user", userData);
+  return AsyncStorage.setItem(USER_KEY, JSON.stringify(userData ?? null));
 };
 
-const getUser = () => {
-  return AsyncSorage.getItem("token");
+const getUser = async () => {
+  const storedUser = await AsyncStorage.getItem(USER_KEY);
+  return storedUser ? JSON.parse(storedUser) : null;
 };
 
-export default { setFirstTimeUse, getFirstTimeUse, setUser, getUser };
+const removeUser = () => {
+  return AsyncStorage.removeItem(USER_KEY);
+};
+
+export default {
+  setFirstTimeUse,
+  getFirstTimeUse,
+  setUser,
+  getUser,
+  removeUser,
+};
