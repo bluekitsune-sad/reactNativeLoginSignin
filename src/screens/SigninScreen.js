@@ -27,8 +27,6 @@ const SigninScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const { updateUser } = useUserManagement();
 
-  const { updateUser } = useUserManagement();
-
   const signIn = async () => {
     setIsLoading(true);
     setErrorMessage("");
