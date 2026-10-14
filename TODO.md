@@ -122,3 +122,9 @@ Living backlog for the React Native login / food‑ordering app. Move items to
 - [x] Added missing `react-native-screens` peer dependency (required by
       `@react-navigation/stack` outside Expo Go) plus explicit
       `@expo/vector-icons`, `expo-constants`, `expo-font` dependencies.
+- [x] GitHub Actions automation hardened: issue-triggered OpenCode runs now
+      auto-open **and auto-merge** a PR (deterministic `opencode/issue-<n>`
+      branch + merge step); daily 09:00 UTC TODO agent does one task or
+      analyzes the repo, always appends a `todoAgent Ran` footer to README,
+      and auto-merges; triggers restricted to OWNER with documented
+      customization comments in both workflows.
