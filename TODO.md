@@ -1,9 +1,56 @@
 # TODO
 
-Living backlog for the React Native login / food‑ordering app. Move items to
-**Done** when finished.
+Living backlog for this repository. Move items to **Done** when finished.
+todoAgent (the daily workflow) picks **one** item from the topmost section
+that has actionable work — start with the MallMate section below.
 
-## P0 — App is broken / blocking
+## MallMate — Phase 1 mobile foundation (top priority)
+
+This repo is becoming the **MallMate** multi-mall app. The full blueprint
+lives in [`MallMate_Project_Blueprint/`](./MallMate_Project_Blueprint/README.md)
+(PRD, API spec, ERD, screen inventory, design system). Implement one item
+per run, following the blueprint docs linked in each item. Keep changes
+small and verifiable; update this file and the README when done.
+
+- [ ] **Add ESLint + Prettier** (`eslint-config-universe` fits Expo) with
+      `npm run lint`. Blueprint: `07-delivery/ROADMAP_AND_BACKLOG.md`
+      Phase 1 (TypeScript/lint/format/test standards).
+- [ ] **Introduce TypeScript incrementally**: add `tsconfig.json` with
+      `allowJs: true`, and create `src/types/mallmate.ts` with core entity
+      types (Mall, Capability, Merchant, OpeningHours) derived from
+      `02-data/ERD.md`. Do NOT convert existing screens yet.
+- [ ] **Load the Inter font family** for MallMate typography (bundled TTF
+      or `@expo-google-fonts/inter`) in `App.js`, exposed through
+      `Fonts.js`. Blueprint: `04-mobile/DESIGN_SYSTEM.md`.
+- [ ] **Bottom tab navigation**: Home | Explore | Map | Rewards | Profile
+      with placeholder screens (`src/screens/home/HomeScreen.js`, etc.),
+      keeping the existing auth stack; after successful sign-in navigate to
+      the tabs. Blueprint: `04-mobile/SCREEN_INVENTORY.md`, PRD section 4.
+- [ ] **Mall selector screen** with mock data for one mall (LuckyOne:
+      name/logo/hours); persist the selection in a small `MallContext`
+      readable by other screens. Blueprint: PRD section 5.2.
+- [ ] **Capability-driven home skeleton**: render only ENABLED capability
+      cards for the selected mall (use `src/constants/Capabilities.js` and
+      mock config); hide DISABLED, label DEGRADED. Blueprint: PRD 5.3.
+- [ ] **Typed API client helper**: axios wrapper using `ApiContants` base
+      URL and the services error envelope `{status, message, data}`;
+      document it in AGENTS.md. Blueprint: `03-api/API_SPEC.md`.
+- [ ] **Screenshots for new screens**: once the local capture pipeline is
+      working, extend `scripts/capture-screens.mjs` to include the
+      MallMate screens in `output/` (workflow pending).
+
+### Blocked — do NOT implement until the owner decides
+
+P0 business decisions from
+[`08-decisions/OPEN_DECISIONS.md`](./MallMate_Project_Blueprint/08-decisions/OPEN_DECISIONS.md):
+payment model, merchant settlement, payment provider choice, LuckyOne data
+and branding permissions, ordering scope, loyalty funding, ranking data
+coverage, merchant onboarding verification. **No backend, payments, loyalty
+ledger, or ranking code until these are resolved.**
+
+## Legacy backlog — food-ordering scaffold
+
+P0 — App is broken / blocking
 
 - [x] **Install a vector icon package.** Migrated all icon imports
       (`SigninScreen`, `FoodCard`, `RestaurantCard`, `RestaurantMediumCard`)

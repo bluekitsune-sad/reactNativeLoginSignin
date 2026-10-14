@@ -4,12 +4,41 @@ Guidance for AI agents (and humans) working on this repository.
 
 ## What this project is
 
-An **Expo SDK 50 / React Native 0.73** JavaScript app for food ordering. The
-sign‑in flow is implemented; most of the app is scaffolding (components,
-services, mock data) waiting to be wired up. There is **no TypeScript, no tests,
-no linter** in the repo.
+An **Expo SDK 50 / React Native 0.73** JavaScript app. Historically a food
+ordering scaffold (sign‑in flow implemented); **it is now becoming the
+MallMate multi‑mall app** (see below). There is still **no TypeScript, no
+tests, no linter** in the repo — adding those is on the backlog.
 
-Entry point: `App.js` → loads Poppins fonts → renders `src/navigators/index.js`.
+Entry point: `App.js` → loads fonts → renders `src/navigators/index.js`.
+
+## MallMate — the direction
+
+The product blueprint lives in
+[`MallMate_Project_Blueprint/`](./MallMate_Project_Blueprint/README.md)
+(source of truth for features, design and API shape). Read, in order:
+
+1. `MallMate_Project_Blueprint/PRD.md`
+2. `MallMate_Project_Blueprint/08-decisions/OPEN_DECISIONS.md`
+3. Then whichever blueprint doc your task links to.
+
+Rules for agents working toward MallMate:
+
+- **The actionable queue is the "MallMate" section of `TODO.md`.** Pick one
+  small item, implement it, verify it, mark it done. Never attempt a whole
+  phase.
+- **Respect the "Blocked" list in `TODO.md`.** Payments, loyalty ledger,
+  rankings and backend work are blocked on business decisions — do not
+  implement them, even partially.
+- **New MallMate code uses `src/constants/Theme.js`** (Midnight Graphite +
+  Emerald tokens) and `src/constants/Capabilities.js` (capability keys /
+  statuses). Legacy screens still use `Colors.js` — do not rewrite them
+  just to swap tokens.
+- **TypeScript is introduced incrementally** (`allowJs`): new type files are
+  `.ts`, existing `.js` files stay as they are unless a TODO item says to
+  convert them.
+- The blueprint recommends a feature‑folder layout long term
+  (`01-architecture/PROJECT_STRUCTURE.md`); keep new screens organized under
+  `src/screens/<area>/` so a later restructure is cheap.
 
 ## Commands
 
@@ -44,7 +73,8 @@ consistent.
   hardcode a new host inside a service (the existing hardcoded IPs are legacy
   debt — do not add more).
 - **Design tokens** are in `src/constants/Colors.js` and `src/constants/Fonts.js`.
-  Use them; don't inline hex colors or font names.
+  Use them; don't inline hex colors or font names. New MallMate code uses
+  `src/constants/Theme.js` instead (see the MallMate section).
 - **Styling** is `StyleSheet.create` at the bottom of each component file, using
   `Display.setWidth/setHeight` for relative sizing.
 - **State:** Redux was removed; commented‑out `useDispatch`/`useSelector` and
@@ -53,24 +83,24 @@ consistent.
 
 ## Known landmines (read before editing)
 
-1. **`useUserManagement` is a plain hook, not a context** — each call gets fresh
-   state, so it cannot share the logged‑in user across screens yet.
-2. **Dead third‑party API:** `countryflags.io` in `ApiContants.COUNTRY_FLAG`.
-3. **No `src/actions` directory** even though commented code imports from it
+1. **Dead third‑party API:** `countryflags.io` in `ApiContants.COUNTRY_FLAG`.
+2. **No `src/actions` directory** even though commented code imports from it
    (`FoodCard.js`, `RestaurantCard.js`).
-4. **`AuthenticationService.login`** still does a GET with the credentials
+3. **`AuthenticationService.login`** still does a GET with the credentials
    JSON‑stringified into the URL path (see TODO P3) — do not copy that pattern
    into new services.
-5. **Screens still missing:** `SigninScreen` navigates to `"Signup"` and
-   `"ForgotPassword"` but neither screen nor route exists yet.
+4. **Web build:** `webpack.config.js` maps node's `crypto` to `false` so
+   Expo web compiles (`expo-modules-core/uuid`). Do not delete it.
 
 Previously documented and now fixed (do not regress): icons come from
 `@expo/vector-icons`; `SigninScreen` calls `useUserManagement` at the top level
-with `response?.data`; `ApiContants.js` has unique keys (`ALL_RESTAURANTS`,
-`RESTAURANT`, `BOOKMARK`); the backend URL is configurable via
-`EXPO_PUBLIC_BACKEND_URL` / `app.json` `extra.backendUrl` (`expo-constants`);
-`StorageService` serializes with `JSON.stringify`/`JSON.parse` on the shared
-`"user"` key.
+with `response?.data` and declares it only once; `ApiContants.js` has unique
+keys (`ALL_RESTAURANTS`, `RESTAURANT`, `BOOKMARK`); the backend URL is
+configurable via `EXPO_PUBLIC_BACKEND_URL` / `app.json` `extra.backendUrl`
+(`expo-constants`); `StorageService` serializes with `JSON.stringify`/
+`JSON.parse` on the shared `"user"` key; `useUserManagement` is a React
+Context (`UserProvider`) shared across screens; `SignupScreen` and
+`ForgotPasswordScreen` exist and are registered in the navigator.
 
 ## Conventions
 

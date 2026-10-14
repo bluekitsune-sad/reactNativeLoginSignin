@@ -8,6 +8,8 @@ import Mock from "./Mock";
 import CustomFonts from "./CustomFonts";
 import food_data from "./fooddata";
 import restaurant_data from "./resdata";
+import MallMateTheme from "./Theme";
+import { CAPABILITY_STATUS, CAPABILITIES } from "./Capabilities";
 
 export {
   Colors,
@@ -20,4 +22,7 @@ export {
   CustomFonts,
   restaurant_data,
   food_data,
+  MallMateTheme,
+  CAPABILITY_STATUS,
+  CAPABILITIES,
 };

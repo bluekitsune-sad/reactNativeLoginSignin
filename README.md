@@ -11,6 +11,20 @@ food‑ordering experience (restaurants, food, cart, bookmarks).
 
 ---
 
+## Direction: MallMate
+
+This project is becoming **MallMate**, a multi‑mall smart shopping,
+navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
+
+- Full blueprint (PRD, architecture, ERD, API spec, screen inventory, design
+  system): [`MallMate_Project_Blueprint/`](./MallMate_Project_Blueprint/README.md)
+- Active backlog (what the daily todoAgent works through):
+  the **MallMate** section of [TODO.md](./TODO.md)
+- New MallMate design tokens: `src/constants/Theme.js` ("Midnight Graphite +
+  Emerald"); capability registry: `src/constants/Capabilities.js`
+
+---
+
 ## Features
 
 - Sign In screen with username / password, show/hide password, "Remember me"
