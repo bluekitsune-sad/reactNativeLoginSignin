@@ -191,5 +191,4 @@ There is currently **no** lint, typecheck or test script — see [TODO.md](./TOD
 
 ## License
 
-This project is private (`"private": true` in `package.json`); no license file is
-currently attached.
+
