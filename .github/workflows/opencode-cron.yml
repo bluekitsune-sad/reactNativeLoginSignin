@@ -42,7 +42,7 @@ name: OpenCode Scheduled TODO Worker
 on:
   # Run every day at 09:00 UTC
   schedule:
-    - cron: "0 9 * * *"
+    - cron: "0 9,13,17 * * *"
 
   # Allow you to run it manually from GitHub Actions
   workflow_dispatch:
