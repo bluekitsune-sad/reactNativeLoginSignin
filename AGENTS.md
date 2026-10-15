@@ -50,9 +50,11 @@ npm run ios          # expo start --ios
 npm run web          # expo start --web
 ```
 
-There is no `lint`, `typecheck` or `test` script. Do not claim verification you
-cannot perform; at minimum re-read the files you changed and keep JSX/imports
-consistent.
+There is now a `lint` script (ESLint + Prettier via `eslint-config-universe`,
+`npm run lint`) but still no `typecheck` or `test` script. Do not claim
+verification you cannot perform; at minimum re-read the files you changed and
+keep JSX/imports consistent, and run `npm run lint` (existing code emits
+non-blocking warnings — only introduce no new errors).
 
 ## Architecture rules
 

@@ -12,9 +12,12 @@ lives in [`MallMate_Project_Blueprint/`](./MallMate_Project_Blueprint/README.md)
 per run, following the blueprint docs linked in each item. Keep changes
 small and verifiable; update this file and the README when done.
 
-- [ ] **Add ESLint + Prettier** (`eslint-config-universe` fits Expo) with
-      `npm run lint`. Blueprint: `07-delivery/ROADMAP_AND_BACKLOG.md`
-      Phase 1 (TypeScript/lint/format/test standards).
+- [x] **Add ESLint + Prettier** (`eslint-config-universe` fits Expo) with
+      `npm run lint`. Installed `eslint@8`, `eslint-config-universe@~14.2.0`
+      (the last ESLint 8-compatible line) and `prettier@3`; added
+      `.eslintrc.js` (`universe/native`), `.prettierrc` and the `lint` script.
+      Blueprint: `07-delivery/ROADMAP_AND_BACKLOG.md` Phase 1
+      (TypeScript/lint/format/test standards).
 - [ ] **Introduce TypeScript incrementally**: add `tsconfig.json` with
       `allowJs: true`, and create `src/types/mallmate.ts` with core entity
       types (Mall, Capability, Merchant, OpeningHours) derived from
@@ -125,7 +128,10 @@ P0 — App is broken / blocking
 
 ## P4 — Tooling & quality
 
-- [ ] Add ESLint (`eslint-config-universe` or similar) + `npm run lint`.
+- [x] Add ESLint (`eslint-config-universe` or similar) + `npm run lint`.
+- [ ] Bring the existing codebase to a clean lint baseline: run
+      `npx eslint . --fix` (clears ~260 of the ~275 current warnings) and
+      fix the remainder by hand.
 - [ ] Add tests (Jest + `@testing-library/react-native`) for services and the
       sign‑in flow; add `npm test`.
 - [ ] Consider TypeScript migration for screens/services.
@@ -175,3 +181,6 @@ P0 — App is broken / blocking
       analyzes the repo, always appends a `todoAgent Ran` footer to README,
       and auto-merges; triggers restricted to OWNER with documented
       customization comments in both workflows.
+- [x] ESLint + Prettier introduced (`eslint-config-universe` `universe/native`,
+      `.eslintrc.js` + `.prettierrc`) with `npm run lint`; existing style
+      debt left as warnings pending a follow-up `--fix` pass.

@@ -178,8 +178,11 @@ The expected sign‑in payload shape:
 | `npm run android` | Start on Android. |
 | `npm run ios` | Start on iOS. |
 | `npm run web` | Start the web build. |
+| `npm run lint` | Run ESLint (with Prettier rules via `eslint-config-universe`). |
 
-There is currently **no** lint, typecheck or test script — see [TODO.md](./TODO.md).
+There is currently **no** typecheck or test script — see [TODO.md](./TODO.md).
+`npm run lint` reports pre-existing style warnings on legacy files; they are
+non-blocking (warning level) pending a repo-wide `--fix` pass.
 
 ## Contributing
 
@@ -191,4 +194,5 @@ There is currently **no** lint, typecheck or test script — see [TODO.md](./TOD
 
 ## License
 
+todoAgent Ran (2026-10-15): done — added ESLint + Prettier (eslint-config-universe) with npm run lint
 
