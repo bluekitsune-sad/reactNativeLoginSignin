@@ -15,10 +15,6 @@ small and verifiable; update this file and the README when done.
 - [ ] **Add ESLint + Prettier** (`eslint-config-universe` fits Expo) with
       `npm run lint`. Blueprint: `07-delivery/ROADMAP_AND_BACKLOG.md`
       Phase 1 (TypeScript/lint/format/test standards).
-- [ ] **Introduce TypeScript incrementally**: add `tsconfig.json` with
-      `allowJs: true`, and create `src/types/mallmate.ts` with core entity
-      types (Mall, Capability, Merchant, OpeningHours) derived from
-      `02-data/ERD.md`. Do NOT convert existing screens yet.
 - [ ] **Load the Inter font family** for MallMate typography (bundled TTF
       or `@expo-google-fonts/inter`) in `App.js`, exposed through
       `Fonts.js`. Blueprint: `04-mobile/DESIGN_SYSTEM.md`.
@@ -175,3 +171,9 @@ P0 — App is broken / blocking
       analyzes the repo, always appends a `todoAgent Ran` footer to README,
       and auto-merges; triggers restricted to OWNER with documented
       customization comments in both workflows.
+- [x] **TypeScript introduced incrementally**: `tsconfig.json` with
+      `allowJs: true` (existing JS stays JS, `checkJs` off), `typescript`
+      devDependency and `npm run typecheck` (`tsc --noEmit`);
+      `src/types/mallmate.ts` (+ `src/types/index.ts` barrel) defines core
+      entity types `Mall`, `Capability`, `Merchant`, `OpeningHours` derived
+      from `02-data/ERD.md`. No existing screens converted.

@@ -52,7 +52,7 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 | Layer      | Choice |
 | ---------- | ------ |
 | Framework  | React Native `0.73.4` via Expo SDK `50` |
-| Language   | JavaScript (JSX) |
+| Language   | JavaScript (JSX); TypeScript types added incrementally (`allowJs`) |
 | Navigation | `@react-navigation/native` + `@react-navigation/stack` |
 | HTTP       | `axios` |
 | Storage    | `@react-native-async-storage/async-storage` |
@@ -153,6 +153,7 @@ The expected sign‑in payload shape:
     ├── navigators/            # React Navigation stack (Signin, Signup, ForgotPassword)
     ├── screens/               # App screens (SigninScreen, SignupScreen, ...)
     ├── services/              # axios API services + AsyncStorage wrapper
+    ├── types/                 # Incremental TypeScript entity types (MallMate)
     └── utils/                 # Display helpers, auth header, user state context
 ```
 
@@ -178,8 +179,9 @@ The expected sign‑in payload shape:
 | `npm run android` | Start on Android. |
 | `npm run ios` | Start on iOS. |
 | `npm run web` | Start the web build. |
+| `npm run typecheck` | Run `tsc --noEmit` over the incremental TypeScript setup. |
 
-There is currently **no** lint, typecheck or test script — see [TODO.md](./TODO.md).
+There is currently **no** lint or test script — see [TODO.md](./TODO.md).
 
 ## Contributing
 
@@ -191,4 +193,5 @@ There is currently **no** lint, typecheck or test script — see [TODO.md](./TOD
 
 ## License
 
+> todoAgent Ran (2026-10-16): done — introduced TypeScript incrementally (tsconfig with allowJs, src/types/mallmate.ts entity types from the ERD, npm run typecheck)
 
