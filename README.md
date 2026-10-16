@@ -194,4 +194,3 @@ There is currently **no** lint or test script — see [TODO.md](./TODO.md).
 ## License
 
 > todoAgent Ran (2026-10-16): done — introduced TypeScript incrementally (tsconfig with allowJs, src/types/mallmate.ts entity types from the ERD, npm run typecheck)
-
