@@ -1,3 +1,4 @@
+import { Ionicons, Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   View,
@@ -8,13 +9,11 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { Separator } from "../components";
-import { Ionicons, Feather } from "@expo/vector-icons";
-import { Colors, Fonts, Images } from "../constants";
-import { Display } from "../utils";
-import { AuthenicationService } from "../services";
-import LottieView from "lottie-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { Button, Separator } from "../components";
+import { MallMateTheme } from "../constants";
+import { AuthenicationService } from "../services";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -44,56 +43,54 @@ const SignupScreen = ({ navigation }) => {
       return;
     }
     setIsLoading(true);
-    AuthenicationService.register({ username, email, password }).then(
-      (response) => {
-        setIsLoading(false);
-        if (response?.status) {
-          Alert.alert(
-            "Registration successful",
-            "Your account has been created. Please sign in.",
-            [{ text: "OK", onPress: () => navigation.navigate("Signin") }]
-          );
-        } else {
-          setErrorMessage(response?.message);
-        }
+    AuthenicationService.register({ username, email, password }).then((response) => {
+      setIsLoading(false);
+      if (response?.status) {
+        Alert.alert("Registration successful", "Your account has been created. Please sign in.", [
+          { text: "OK", onPress: () => navigation.navigate("Signin") },
+        ]);
+      } else {
+        setErrorMessage(response?.message);
       }
-    );
+    });
   };
 
   return (
     <View style={styles.container}>
       <StatusBar
-        barStyle="dark-content"
-        backgroundColor={Colors.DEFAULT_WHITE}
+        barStyle="light-content"
+        backgroundColor={MallMateTheme.color.background}
         translucent
       />
       <Separator height={insets.top} />
       <View style={styles.headerContainer}>
-        <Ionicons
-          name="chevron-back-outline"
-          size={30}
+        <TouchableOpacity
           onPress={() => navigation.goBack()}
-        />
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+          style={styles.backButton}
+        >
+          <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Sign Up</Text>
       </View>
       <Text style={styles.title}>Create account</Text>
-      <Text style={styles.content}>
-        Join us and start ordering your favorite food
-      </Text>
+      <Text style={styles.content}>Join us and start ordering your favorite food</Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputSubContainer}>
           <Feather
             name="user"
             size={22}
-            color={Colors.DEFAULT_GREY}
-            style={{ marginRight: 10 }}
+            color={MallMateTheme.color.textMuted}
+            style={styles.inputIcon}
           />
           <TextInput
             placeholder="Username"
-            placeholderTextColor={Colors.DEFAULT_GREY}
-            selectionColor={Colors.DEFAULT_GREY}
+            placeholderTextColor={MallMateTheme.color.textMuted}
+            selectionColor={MallMateTheme.color.primary}
             style={styles.inputText}
             onChangeText={(text) => setUsername(text)}
+            accessibilityLabel="Username"
           />
         </View>
       </View>
@@ -103,17 +100,18 @@ const SignupScreen = ({ navigation }) => {
           <Feather
             name="mail"
             size={22}
-            color={Colors.DEFAULT_GREY}
-            style={{ marginRight: 10 }}
+            color={MallMateTheme.color.textMuted}
+            style={styles.inputIcon}
           />
           <TextInput
             placeholder="Email"
-            placeholderTextColor={Colors.DEFAULT_GREY}
-            selectionColor={Colors.DEFAULT_GREY}
+            placeholderTextColor={MallMateTheme.color.textMuted}
+            selectionColor={MallMateTheme.color.primary}
             autoCapitalize="none"
             keyboardType="email-address"
             style={styles.inputText}
             onChangeText={(text) => setEmail(text)}
+            accessibilityLabel="Email"
           />
         </View>
       </View>
@@ -123,23 +121,26 @@ const SignupScreen = ({ navigation }) => {
           <Feather
             name="lock"
             size={22}
-            color={Colors.DEFAULT_GREY}
-            style={{ marginRight: 10 }}
+            color={MallMateTheme.color.textMuted}
+            style={styles.inputIcon}
           />
           <TextInput
-            secureTextEntry={isPasswordShow ? false : true}
+            secureTextEntry={!isPasswordShow}
             placeholder="Password"
-            placeholderTextColor={Colors.DEFAULT_GREY}
-            selectionColor={Colors.DEFAULT_GREY}
+            placeholderTextColor={MallMateTheme.color.textMuted}
+            selectionColor={MallMateTheme.color.primary}
             style={styles.inputText}
             onChangeText={(text) => setPassword(text)}
+            accessibilityLabel="Password"
           />
           <Feather
             name={isPasswordShow ? "eye" : "eye-off"}
             size={22}
-            color={Colors.DEFAULT_GREY}
-            style={{ marginRight: 10 }}
+            color={MallMateTheme.color.textMuted}
+            style={styles.inputIcon}
             onPress={() => setIsPasswordShow(!isPasswordShow)}
+            accessibilityRole="button"
+            accessibilityLabel={isPasswordShow ? "Hide password" : "Show password"}
           />
         </View>
       </View>
@@ -149,36 +150,37 @@ const SignupScreen = ({ navigation }) => {
           <Feather
             name="lock"
             size={22}
-            color={Colors.DEFAULT_GREY}
-            style={{ marginRight: 10 }}
+            color={MallMateTheme.color.textMuted}
+            style={styles.inputIcon}
           />
           <TextInput
-            secureTextEntry={isPasswordShow ? false : true}
+            secureTextEntry={!isPasswordShow}
             placeholder="Confirm password"
-            placeholderTextColor={Colors.DEFAULT_GREY}
-            selectionColor={Colors.DEFAULT_GREY}
+            placeholderTextColor={MallMateTheme.color.textMuted}
+            selectionColor={MallMateTheme.color.primary}
             style={styles.inputText}
             onChangeText={(text) => setConfirmPassword(text)}
+            accessibilityLabel="Confirm password"
+          />
+          <Feather
+            name={isPasswordShow ? "eye" : "eye-off"}
+            size={22}
+            color={MallMateTheme.color.textMuted}
+            style={styles.inputIcon}
+            onPress={() => setIsPasswordShow(!isPasswordShow)}
+            accessibilityRole="button"
+            accessibilityLabel={isPasswordShow ? "Hide password" : "Show password"}
           />
         </View>
       </View>
       <Text style={styles.errorMessage}>{errorMessage}</Text>
-      <TouchableOpacity
-        style={styles.signupButton}
-        onPress={() => signUp()}
-        activeOpacity={0.8}
-      >
-        {isLoading ? (
-          <LottieView source={Images.LOADING} autoPlay />
-        ) : (
-          <Text style={styles.signupButtonText}>Sign Up</Text>
-        )}
-      </TouchableOpacity>
+      <Button label="Sign Up" onPress={signUp} loading={isLoading} style={styles.signupButton} />
       <View style={styles.signinContainer}>
         <Text style={styles.accountText}>Already have an account?</Text>
         <Text
           style={styles.signinText}
           onPress={() => navigation.navigate("Signin")}
+          accessibilityRole="button"
         >
           Sign In
         </Text>
@@ -190,102 +192,98 @@ const SignupScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.DEFAULT_WHITE,
+    backgroundColor: MallMateTheme.color.background,
   },
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: MallMateTheme.spacing.lg,
+  },
+  backButton: {
+    minHeight: MallMateTheme.touchTarget.min,
+    minWidth: MallMateTheme.touchTarget.min,
+    alignItems: "center",
+    justifyContent: "center",
   },
   headerTitle: {
-    fontSize: 20,
-    fontFamily: Fonts.POPPINS_MEDIUM,
-    lineHeight: 20 * 1.4,
-    width: Display.setWidth(80),
+    fontSize: MallMateTheme.typography.h3.fontSize,
+    fontFamily: MallMateTheme.fontFamily.semiBold,
+    color: MallMateTheme.color.textPrimary,
+    flex: 1,
     textAlign: "center",
+    marginRight: MallMateTheme.touchTarget.min,
   },
   title: {
-    fontSize: 20,
-    fontFamily: Fonts.POPPINS_MEDIUM,
-    lineHeight: 20 * 1.4,
-    marginTop: 30,
-    marginBottom: 10,
-    marginHorizontal: 20,
+    ...MallMateTheme.typography.h2,
+    fontFamily: MallMateTheme.fontFamily.bold,
+    color: MallMateTheme.color.textPrimary,
+    marginTop: MallMateTheme.spacing.xxl,
+    marginBottom: MallMateTheme.spacing.sm,
+    marginHorizontal: MallMateTheme.spacing.lg,
   },
   content: {
-    fontSize: 14,
-    fontFamily: Fonts.POPPINS_MEDIUM,
-    lineHeight: 14 * 1.4,
-    marginTop: 5,
-    marginBottom: 20,
-    marginHorizontal: 20,
-    color: Colors.DEFAULT_GREY,
+    ...MallMateTheme.typography.body,
+    fontFamily: MallMateTheme.fontFamily.regular,
+    color: MallMateTheme.color.textSecondary,
+    marginTop: MallMateTheme.spacing.xs,
+    marginBottom: MallMateTheme.spacing.xl,
+    marginHorizontal: MallMateTheme.spacing.lg,
   },
   inputContainer: {
-    backgroundColor: Colors.LIGHT_GREY,
-    paddingHorizontal: 10,
-    marginHorizontal: 20,
-    borderRadius: 8,
-    borderWidth: 0.5,
-    borderColor: Colors.LIGHT_GREY2,
+    backgroundColor: MallMateTheme.color.surface,
+    paddingHorizontal: MallMateTheme.spacing.md,
+    marginHorizontal: MallMateTheme.spacing.lg,
+    borderRadius: MallMateTheme.radius.control,
+    borderWidth: 1,
+    borderColor: MallMateTheme.color.border,
     justifyContent: "center",
   },
   inputSubContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
+  inputIcon: {
+    marginRight: MallMateTheme.spacing.sm,
+  },
   inputText: {
-    fontSize: 18,
+    fontSize: MallMateTheme.typography.bodyLarge.fontSize,
+    fontFamily: MallMateTheme.fontFamily.regular,
     textAlignVertical: "center",
     padding: 0,
-    height: Display.setHeight(6),
-    color: Colors.DEFAULT_BLACK,
+    height: MallMateTheme.touchTarget.ideal,
+    color: MallMateTheme.color.textPrimary,
     flex: 1,
   },
   errorMessage: {
-    fontSize: 10,
-    lineHeight: 10 * 1.4,
-    color: Colors.DEFAULT_RED,
-    fontFamily: Fonts.POPPINS_MEDIUM,
-    marginHorizontal: 20,
-    marginTop: 3,
-    marginBottom: 10,
+    ...MallMateTheme.typography.caption,
+    fontFamily: MallMateTheme.fontFamily.medium,
+    color: MallMateTheme.color.error,
+    marginHorizontal: MallMateTheme.spacing.lg,
+    marginTop: MallMateTheme.spacing.xs,
+    marginBottom: MallMateTheme.spacing.md,
   },
   signupButton: {
-    backgroundColor: Colors.DEFAULT_GREEN,
-    borderRadius: 8,
-    marginHorizontal: 20,
-    height: Display.setHeight(6),
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  signupButtonText: {
-    fontSize: 18,
-    lineHeight: 18 * 1.4,
-    color: Colors.DEFAULT_WHITE,
-    fontFamily: Fonts.POPPINS_MEDIUM,
+    marginHorizontal: MallMateTheme.spacing.lg,
+    marginTop: MallMateTheme.spacing.sm,
   },
   signinContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: MallMateTheme.spacing.lg,
     justifyContent: "center",
-    paddingVertical: 20,
+    paddingVertical: MallMateTheme.spacing.xl,
     flexDirection: "row",
     alignItems: "center",
   },
   accountText: {
-    fontSize: 13,
-    lineHeight: 13 * 1.4,
-    color: Colors.DEFAULT_BLACK,
-    fontFamily: Fonts.POPPINS_MEDIUM,
+    ...MallMateTheme.typography.label,
+    fontFamily: MallMateTheme.fontFamily.regular,
+    color: MallMateTheme.color.textSecondary,
   },
   signinText: {
-    fontSize: 13,
-    lineHeight: 13 * 1.4,
-    color: Colors.DEFAULT_GREEN,
-    fontFamily: Fonts.POPPINS_MEDIUM,
-    marginLeft: 5,
+    ...MallMateTheme.typography.label,
+    fontFamily: MallMateTheme.fontFamily.semiBold,
+    color: MallMateTheme.color.primary,
+    marginLeft: MallMateTheme.spacing.xs,
   },
 });
 

@@ -72,9 +72,13 @@ Rules for the factory:
 
 ### Stage B — identity and profile
 
-- [ ] **Re-skin the auth screens** (Signin, Signup, ForgotPassword) to the
+- [x] **Re-skin the auth screens** (Signin, Signup, ForgotPassword) to the
       MallMate theme + Inter (replace Colors.js usage with `Theme.js` on
       those screens only; behaviour unchanged). Blueprint: DESIGN_SYSTEM.
+      (Done: all three screens use `MallMateTheme` tokens + Inter via
+      `Theme.fontFamily`; dark Midnight Graphite background, emerald
+      primary CTAs via the kit `Button` (loading state kept), 44–48px
+      back targets; validation, service calls and navigation unchanged.)
 - [ ] **Profile tab**: profile header (mock user), rows for Orders,
       Favorites, Settings, Help, Privacy — placeholders that navigate.
       Blueprint: SCREEN_INVENTORY 60–64.
