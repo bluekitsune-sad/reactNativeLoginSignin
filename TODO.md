@@ -4,17 +4,35 @@ Living backlog for this repository. Move items to **Done** when finished.
 todoAgent (the daily workflow) picks **one** item from the topmost section
 that has actionable work — start with the MallMate section below.
 
-## MallMate — Phase 1 mobile foundation (top priority)
+## MallMate — mobile roadmap (top priority)
 
 This repo is becoming the **MallMate** multi-mall app. The full blueprint
 lives in [`MallMate_Project_Blueprint/`](./MallMate_Project_Blueprint/README.md)
-(PRD, API spec, ERD, screen inventory, design system). Implement one item
-per run, following the blueprint docs linked in each item. Keep changes
-small and verifiable; update this file and the README when done.
+(PRD, API spec, ERD, screen inventory, design system).
+
+Rules for the factory:
+
+- Work top-down; one item per task, following the blueprint docs linked in
+  each item. Keep changes small and verifiable; update this file and the
+  README footer when done.
+- **All items below are mobile UI on mock data** (mock data lives in
+  `src/constants/` or a new `src/mock/`). No backend, no real payments.
+- **If the top item needs something blocked or missing (owner decision,
+  API keys, mall/map data), leave it unchecked, say why briefly in the PR
+  body, and take the next actionable item instead.** The queue must keep
+  moving without waiting.
+
+### Stage A — foundation
 
 - [ ] **Load the Inter font family** for MallMate typography (bundled TTF
       or `@expo-google-fonts/inter`) in `App.js`, exposed through
       `Fonts.js`. Blueprint: `04-mobile/DESIGN_SYSTEM.md`.
+- [ ] **MallMate base component kit** in `src/components/mallmate/`:
+      Button (default/pressed/disabled/loading), TextInput, Card,
+      SectionHeader, ListRow, Badge ("Sponsored"/"Featured"), StatusChip,
+      EmptyState, ErrorState (with retry), LoadingState. Theme theming from
+      `Theme.js` only; 44–48px touch targets; export via the barrel.
+      Blueprint: `04-mobile/DESIGN_SYSTEM.md` component states.
 - [ ] **Bottom tab navigation**: Home | Explore | Map | Rewards | Profile
       with placeholder screens (`src/screens/home/HomeScreen.js`, etc.),
       keeping the existing auth stack; after successful sign-in navigate to
@@ -28,9 +46,106 @@ small and verifiable; update this file and the README when done.
 - [ ] **Typed API client helper**: axios wrapper using `ApiContants` base
       URL and the services error envelope `{status, message, data}`;
       document it in AGENTS.md. Blueprint: `03-api/API_SPEC.md`.
-- [ ] **Screenshots for new screens**: once the local capture pipeline is
-      working, extend `scripts/capture-screens.mjs` to include the
-      MallMate screens in `output/` (workflow pending).
+
+### Stage B — identity and profile
+
+- [ ] **Re-skin the auth screens** (Signin, Signup, ForgotPassword) to the
+      MallMate theme + Inter (replace Colors.js usage with `Theme.js` on
+      those screens only; behaviour unchanged). Blueprint: DESIGN_SYSTEM.
+- [ ] **Profile tab**: profile header (mock user), rows for Orders,
+      Favorites, Settings, Help, Privacy — placeholders that navigate.
+      Blueprint: SCREEN_INVENTORY 60–64.
+- [ ] **Settings + notification preferences**: static toggles with marketing
+      consent wording; local state only. Blueprint: PRD 5.15.
+
+### Stage C — home and discovery
+
+- [ ] **Multi-mall mock data + switching**: add a second mock mall with a
+      different capability map; switching refreshes mall-scoped screens,
+      shows the new mall identity, and never leaks previous-mall content.
+      Blueprint: PRD 5.2, SCREEN_INVENTORY flow "Switch mall".
+- [ ] **Home content sections (mock)**: category shortcuts,
+      featured/sponsored carousel with visible "Sponsored" badge, active
+      discounts section, events section — all driven by mock data and
+      capability flags. Blueprint: SCREEN_INVENTORY 11–16, PRD 5.5.
+- [ ] **Explore landing**: categories grid/list + entries to restaurant and
+      outlet lists. Blueprint: SCREEN_INVENTORY 18.
+- [ ] **Search UI**: search bar, suggestion rows, results list (mock),
+      distinct empty-results vs error states. Blueprint: PRD 5.7,
+      SCREEN_INVENTORY 10, 19.
+- [ ] **Filter bottom sheet**: category, cuisine, open-now, floor, price —
+      mock filtering applied client-side; "clear filters" affordance.
+      Blueprint: SCREEN_INVENTORY 20.
+- [ ] **Restaurant list + outlet list screens** with pagination pattern and
+      loading/empty/error states (mock pages). Blueprint: SCREEN_INVENTORY
+      21–22.
+- [ ] **Merchant detail page**: name, logo, category, floor/location,
+      hours + open-now status, active offers, tags, contact placeholder,
+      map-destination link placeholder. Blueprint: PRD 5.4, SCREEN_INVENTORY
+      23.
+- [ ] **Menu/product list + item detail** for a mock merchant (sections,
+      item cards, price display with tabular numerals). Blueprint:
+      SCREEN_INVENTORY 24–25.
+- [ ] **Offer detail + terms sheet**: discount types (%, fixed, BOGO) as
+      mock offers with dates/eligibility/terms shown; expired offers hidden.
+      Blueprint: PRD 5.8, SCREEN_INVENTORY 26.
+- [ ] **Favorites tab**: local favorites (AsyncStorage) for mock merchants,
+      empty state. Blueprint: SCREEN_INVENTORY 27.
+- [ ] **Organic top-selling section** on Home using MOCK numbers with the
+      mandatory disclosure ("based on app orders only"), separated
+      restaurant vs retail. Presentation only — no ranking logic (blocked).
+      Blueprint: PRD 5.6, SCREEN_INVENTORY 13.
+
+### Stage D — food court (presentation only; session logic is blocked)
+
+- [ ] **Food-court overview**: mock seating map/zone list, "scan to sit"
+      entry point (placeholder), capability-gated. Blueprint:
+      SCREEN_INVENTORY 28.
+- [ ] **Seat session screens (mock flow)**: scan-permission explainer,
+      seat confirmation, active session card, ended/expired screen, and
+      error states (invalid/occupied/unavailable) driven by mock data.
+      Pure presentation — no QR validation, no session rules (open
+      decisions #9/#10). Blueprint: SCREEN_INVENTORY 29–33.
+
+### Stage E — maps and events (placeholder assets; no live positioning)
+
+- [ ] **Floor selector + static floor map**: floor list, placeholder map
+      image with POI pins, and a clear "map data unavailable" state.
+      Blueprint: SCREEN_INVENTORY 43–44, 50; PRD 5.12.
+- [ ] **Destination search + route preview (mock)**: search POIs, show
+      destination detail, manual start-point picker, static route preview.
+      Never claim live positioning. Blueprint: SCREEN_INVENTORY 45–49.
+- [ ] **Events list + event detail** on mock events (title, image, time,
+      location, registration-link placeholder; expired events hidden).
+      Blueprint: PRD 5.14, SCREEN_INVENTORY 54–55.
+
+### Stage F — rewards and orders (display only; logic is blocked)
+
+- [ ] **Rewards dashboard + ledger list (mock)**: points balance card and
+      ledger rows (earn/redeem/reverse types) from mock data. No earning,
+      redemption, or balance logic (loyalty blocked). Blueprint:
+      SCREEN_INVENTORY 57–58, PRD 5.11.
+- [ ] **Order history + order detail timeline (mock)**: list of mock orders
+      and a status timeline using the PRD state names; clear pending vs
+      confirmed states. No checkout or payments (blocked). Blueprint:
+      PRD 5.10, SCREEN_INVENTORY 40–41.
+
+### Stage G — quality and polish
+
+- [ ] **Jest setup** (`jest-expo`) + first tests: typed API client envelope
+      helper and `MallContext` switching; `npm test` script. Blueprint:
+      `07-delivery/ROADMAP_AND_BACKLOG.md` Phase 1.
+- [ ] **i18n groundwork**: `expo-localization` + string catalog (English),
+      RTL-ready layout audit of new screens (no hardcoded left/right where
+      avoidable). Full Urdu translation is a later decision. PRD section 10.
+- [ ] **App identity**: rename app (app.json) to MallMate, placeholder
+      icon/splash, remove `user_logsignin`.
+- [ ] **Accessibility pass on new MallMate screens**: 44–48px targets,
+      dynamic-type friendly layouts, no color-only status, accessible
+      labels on icon buttons. Blueprint: DESIGN_SYSTEM rules.
+- [ ] **Screenshots for new screens**: extend `scripts/capture-screens.mjs`
+      to walk the MallMate screens (tabs, merchant, offer) into `output/`
+      once the local capture pipeline works (workflow pending).
 
 ### Blocked — do NOT implement until the owner decides
 
@@ -38,8 +153,12 @@ P0 business decisions from
 [`08-decisions/OPEN_DECISIONS.md`](./MallMate_Project_Blueprint/08-decisions/OPEN_DECISIONS.md):
 payment model, merchant settlement, payment provider choice, LuckyOne data
 and branding permissions, ordering scope, loyalty funding, ranking data
-coverage, merchant onboarding verification. **No backend, payments, loyalty
-ledger, or ranking code until these are resolved.**
+coverage, merchant onboarding verification. Additionally: **no cart /
+checkout / payment UI logic, no loyalty earn-redeem logic, no real ranking
+computation, no QR validation or seat-session rules, no parking, and no
+live map routing** — those need the decisions above or real integration
+data (keys, floor plans, merchant catalogs). Presentation-only screens on
+mock data (Stages D–F) are allowed.
 
 ## Legacy backlog — food-ordering scaffold
 
