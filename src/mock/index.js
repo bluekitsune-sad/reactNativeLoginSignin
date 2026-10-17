@@ -1,6 +1,14 @@
 import { HOME_CONTENT, getContentForMall, getExploreContent, getHomeSections } from "./homeContent";
 import { MALLS } from "./malls";
-import { getSuggestions, searchMerchants } from "./merchants";
+import {
+  EMPTY_FILTERS,
+  PRICE_BAND_LABELS,
+  applyMerchantFilters,
+  collectFilterOptions,
+  countActiveFilters,
+  getSuggestions,
+  searchMerchants,
+} from "./merchants";
 
 export {
   MALLS,
@@ -8,6 +16,11 @@ export {
   getContentForMall,
   getHomeSections,
   getExploreContent,
+  EMPTY_FILTERS,
+  PRICE_BAND_LABELS,
+  applyMerchantFilters,
+  collectFilterOptions,
+  countActiveFilters,
   getSuggestions,
   searchMerchants,
 };

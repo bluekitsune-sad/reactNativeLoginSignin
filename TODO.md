@@ -127,9 +127,15 @@ Rules for the factory:
       capability-gated), suggestion rows when idle, Loading/Error/Empty
       states; query `!error` simulates a recoverable failure so the error +
       retry path is reachable. Explore's search bar now opens Search.)
-- [ ] **Filter bottom sheet**: category, cuisine, open-now, floor, price —
+- [x] **Filter bottom sheet**: category, cuisine, open-now, floor, price —
       mock filtering applied client-side; "clear filters" affordance.
-      Blueprint: SCREEN_INVENTORY 20.
+      Blueprint: SCREEN_INVENTORY 20. (Done: kit `FilterSheet` Modal
+      bottom sheet with pill option groups + Clear all/Show N footer;
+      Search results gained a Filters button with active-count badge and a
+      Clear-filters text action. Options are derived from the current mock
+      result set; filtering is pure client-side via
+      `applyMerchantFilters`. Filtered-empty is a distinct state from
+      unfiltered empty.)
 - [ ] **Restaurant list + outlet list screens** with pagination pattern and
       loading/empty/error states (mock pages). Blueprint: SCREEN_INVENTORY
       21–22.

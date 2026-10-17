@@ -19,6 +19,7 @@ import {
   EmptyState,
   ErrorState,
   LoadingState,
+  FilterSheet,
 } from "./mallmate";
 
 export {
@@ -42,4 +43,5 @@ export {
   EmptyState,
   ErrorState,
   LoadingState,
+  FilterSheet,
 };

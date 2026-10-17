@@ -4,6 +4,7 @@ import CapabilityCard from "./CapabilityCard";
 import Card from "./Card";
 import EmptyState from "./EmptyState";
 import ErrorState from "./ErrorState";
+import FilterSheet from "./FilterSheet";
 import ListRow from "./ListRow";
 import LoadingState from "./LoadingState";
 import SectionHeader from "./SectionHeader";
@@ -22,4 +23,5 @@ export {
   EmptyState,
   ErrorState,
   LoadingState,
+  FilterSheet,
 };

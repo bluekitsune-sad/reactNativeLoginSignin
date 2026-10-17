@@ -1,26 +1,38 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   EmptyState,
   ErrorState,
+  FilterSheet,
   ListRow,
   LoadingState,
   SectionHeader,
   TextInput,
 } from "../../components";
 import { MallMateTheme } from "../../constants";
-import { getSuggestions, searchMerchants } from "../../mock";
+import {
+  EMPTY_FILTERS,
+  PRICE_BAND_LABELS,
+  applyMerchantFilters,
+  collectFilterOptions,
+  countActiveFilters,
+  getSuggestions,
+  searchMerchants,
+} from "../../mock";
 import { useMallManagement } from "../../utils";
 
 const SearchScreen = ({ navigation }) => {
   const { selectedMall } = useMallManagement();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("idle");
-  const [results, setResults] = useState([]);
+  const [rawResults, setRawResults] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [appliedFilters, setAppliedFilters] = useState(EMPTY_FILTERS);
+  const [draftFilters, setDraftFilters] = useState(EMPTY_FILTERS);
+  const [sheetVisible, setSheetVisible] = useState(false);
   const debounceRef = useRef(null);
   const requestIdRef = useRef(0);
 
@@ -29,7 +41,7 @@ const SearchScreen = ({ navigation }) => {
       const trimmed = (rawQuery || "").trim();
       if (!trimmed) {
         setStatus("idle");
-        setResults([]);
+        setRawResults([]);
         setErrorMessage(null);
         return;
       }
@@ -43,11 +55,11 @@ const SearchScreen = ({ navigation }) => {
       if (!response.status) {
         setStatus("error");
         setErrorMessage(response.message);
-        setResults([]);
+        setRawResults([]);
         return;
       }
       setErrorMessage(null);
-      setResults(response.data);
+      setRawResults(response.data);
       setStatus("ready");
     },
     [selectedMall.slug, selectedMall.capabilities],
@@ -61,7 +73,50 @@ const SearchScreen = ({ navigation }) => {
     return () => clearTimeout(debounceRef.current);
   }, [query, runSearch]);
 
+  useEffect(() => {
+    setAppliedFilters(EMPTY_FILTERS);
+    setDraftFilters(EMPTY_FILTERS);
+  }, [selectedMall.slug]);
+
+  const filterOptions = useMemo(() => {
+    const options = collectFilterOptions(rawResults);
+    return {
+      categories: options.categories.map((value) => ({ value, label: value })),
+      cuisines: options.cuisines.map((value) => ({ value, label: value })),
+      floors: options.floors.map((value) => ({ value, label: value })),
+      priceBands: options.priceBands.map((value) => ({
+        value,
+        label: PRICE_BAND_LABELS[value] || value,
+      })),
+    };
+  }, [rawResults]);
+
+  const filteredResults = useMemo(
+    () => applyMerchantFilters(rawResults, appliedFilters),
+    [rawResults, appliedFilters],
+  );
+  const draftResultCount = useMemo(
+    () => applyMerchantFilters(rawResults, draftFilters).length,
+    [rawResults, draftFilters],
+  );
+  const activeFilterCount = countActiveFilters(appliedFilters);
   const suggestions = getSuggestions(selectedMall.slug);
+
+  const openSheet = () => {
+    setDraftFilters(appliedFilters);
+    setSheetVisible(true);
+  };
+
+  const applyDraft = () => {
+    setAppliedFilters(draftFilters);
+    setSheetVisible(false);
+  };
+
+  const clearFilters = () => {
+    setDraftFilters(EMPTY_FILTERS);
+    setAppliedFilters(EMPTY_FILTERS);
+    setSheetVisible(false);
+  };
 
   const openResult = (merchant) => {
     navigation.navigate("ProfilePlaceholder", {
@@ -69,6 +124,9 @@ const SearchScreen = ({ navigation }) => {
       message: `${merchant.category} · ${merchant.floor}. Merchant detail is coming soon.`,
     });
   };
+
+  const showResults = status === "ready";
+  const filtersApply = showResults && activeFilterCount > 0;
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
@@ -92,6 +150,29 @@ const SearchScreen = ({ navigation }) => {
             style={styles.searchInput}
           />
         </View>
+        {showResults ? (
+          <Pressable
+            onPress={openSheet}
+            accessibilityRole="button"
+            accessibilityLabel={
+              activeFilterCount ? `Filters, ${activeFilterCount} active` : "Open filters"
+            }
+            style={({ pressed }) => [styles.filterButton, pressed && styles.filterButtonPressed]}
+          >
+            <Ionicons
+              name="options-outline"
+              size={20}
+              color={
+                activeFilterCount ? MallMateTheme.color.primary : MallMateTheme.color.textPrimary
+              }
+            />
+            {activeFilterCount ? (
+              <View style={styles.filterCountBadge}>
+                <Text style={styles.filterCountText}>{activeFilterCount}</Text>
+              </View>
+            ) : null}
+          </Pressable>
+        ) : null}
       </View>
       <ScrollView
         key={selectedMall.slug}
@@ -132,7 +213,7 @@ const SearchScreen = ({ navigation }) => {
           />
         ) : null}
 
-        {status === "ready" && results.length === 0 ? (
+        {showResults && rawResults.length === 0 ? (
           <EmptyState
             icon={<Ionicons name="search-outline" size={48} color={MallMateTheme.color.primary} />}
             title="No results"
@@ -140,15 +221,39 @@ const SearchScreen = ({ navigation }) => {
           />
         ) : null}
 
-        {status === "ready" && results.length > 0 ? (
+        {showResults && rawResults.length > 0 && filteredResults.length === 0 ? (
+          <EmptyState
+            icon={<Ionicons name="options-outline" size={48} color={MallMateTheme.color.primary} />}
+            title="No matches with these filters"
+            message="Try removing a filter to see more results."
+          />
+        ) : null}
+
+        {showResults && filteredResults.length > 0 ? (
           <>
-            <SectionHeader title={`${results.length} result${results.length === 1 ? "" : "s"}`} />
+            <View style={styles.resultsHeader}>
+              <SectionHeader
+                title={`${filteredResults.length} result${filteredResults.length === 1 ? "" : "s"}`}
+                style={styles.resultsHeaderSection}
+              />
+              {filtersApply ? (
+                <Pressable
+                  onPress={clearFilters}
+                  accessibilityRole="button"
+                  accessibilityLabel="Clear all filters"
+                  hitSlop={MallMateTheme.spacing.sm}
+                  style={styles.clearFilters}
+                >
+                  <Text style={styles.clearFiltersText}>Clear filters</Text>
+                </Pressable>
+              ) : null}
+            </View>
             <View style={styles.suggestionList}>
-              {results.map((merchant) => (
+              {filteredResults.map((merchant) => (
                 <ListRow
                   key={merchant.id}
                   title={merchant.name}
-                  subtitle={`${merchant.category}${merchant.cuisine ? ` · ${merchant.cuisine}` : ""} · ${merchant.floor}`}
+                  subtitle={`${merchant.category}${merchant.cuisine ? ` · ${merchant.cuisine}` : ""} · ${merchant.floor}${merchant.openNow ? " · Open now" : ""}`}
                   leading={
                     <Ionicons
                       name="storefront-outline"
@@ -164,6 +269,17 @@ const SearchScreen = ({ navigation }) => {
           </>
         ) : null}
       </ScrollView>
+
+      <FilterSheet
+        visible={sheetVisible}
+        onClose={() => setSheetVisible(false)}
+        onApply={applyDraft}
+        onClear={clearFilters}
+        options={filterOptions}
+        filters={draftFilters}
+        onChange={setDraftFilters}
+        resultCount={draftResultCount}
+      />
     </SafeAreaView>
   );
 };
@@ -192,6 +308,37 @@ const styles = StyleSheet.create({
   searchInput: {
     marginBottom: 0,
   },
+  filterButton: {
+    minHeight: MallMateTheme.touchTarget.min,
+    minWidth: MallMateTheme.touchTarget.min,
+    marginLeft: MallMateTheme.spacing.sm,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: MallMateTheme.radius.control,
+    borderWidth: 1,
+    borderColor: MallMateTheme.color.border,
+    backgroundColor: MallMateTheme.color.surface,
+  },
+  filterButtonPressed: {
+    backgroundColor: MallMateTheme.color.surfaceElevated,
+  },
+  filterCountBadge: {
+    position: "absolute",
+    top: 4,
+    right: 4,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    paddingHorizontal: 3,
+    backgroundColor: MallMateTheme.color.primary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  filterCountText: {
+    color: MallMateTheme.color.background,
+    fontSize: 10,
+    fontFamily: MallMateTheme.fontFamily.bold,
+  },
   content: {
     padding: MallMateTheme.spacing.lg,
     paddingBottom: MallMateTheme.spacing.xxl,
@@ -201,6 +348,24 @@ const styles = StyleSheet.create({
   },
   row: {
     marginBottom: 0,
+  },
+  resultsHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  resultsHeaderSection: {
+    flex: 1,
+  },
+  clearFilters: {
+    minHeight: MallMateTheme.touchTarget.min,
+    justifyContent: "center",
+    paddingHorizontal: MallMateTheme.spacing.sm,
+  },
+  clearFiltersText: {
+    color: MallMateTheme.color.primary,
+    fontSize: MallMateTheme.typography.label.fontSize,
+    fontFamily: MallMateTheme.fontFamily.medium,
   },
 });
 
