@@ -24,9 +24,13 @@ Rules for the factory:
 
 ### Stage A — foundation
 
-- [ ] **Load the Inter font family** for MallMate typography (bundled TTF
+- [x] **Load the Inter font family** for MallMate typography (bundled TTF
       or `@expo-google-fonts/inter`) in `App.js`, exposed through
-      `Fonts.js`. Blueprint: `04-mobile/DESIGN_SYSTEM.md`.
+      `Fonts.js`. Blueprint: `04-mobile/DESIGN_SYSTEM.md`. (Done via
+      `@expo-google-fonts/inter`: Inter 400/500/600/700 added to
+      `CustomFonts.js` so `App.js`'s `useFonts` loads them; names exposed in
+      `Fonts.js`; `Theme.js` `fontFamily` now maps to the concrete loaded
+      font names.)
 - [ ] **MallMate base component kit** in `src/components/mallmate/`:
       Button (default/pressed/disabled/loading), TextInput, Card,
       SectionHeader, ListRow, Badge ("Sponsored"/"Featured"), StatusChip,

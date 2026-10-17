@@ -50,7 +50,10 @@ const MallMateTheme = {
     price: { fontSize: 18, fontWeight: "700" },
   },
   fontFamily: {
-    main: "Inter",
+    regular: "Inter_400Regular",
+    medium: "Inter_500Medium",
+    semiBold: "Inter_600SemiBold",
+    bold: "Inter_700Bold",
     fallback: "System",
   },
   touchTarget: {
