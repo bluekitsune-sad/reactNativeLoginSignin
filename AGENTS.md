@@ -76,6 +76,8 @@ files you changed and keep JSX/imports consistent, and run `npm run lint`
 - **API paths and base URL come from `src/constants/ApiContants.js`.** Never
   hardcode a new host inside a service (the existing hardcoded IPs are legacy
   debt — do not add more).
+- **New MallMate network calls go through the shared API client helper**
+  (`src/services/apiClient.js`) — see "API client helper" below.
 - **Design tokens** are in `src/constants/Colors.js` and `src/constants/Fonts.js`.
   Use them; don't inline hex colors or font names. New MallMate code uses
   `src/constants/Theme.js` instead (see the MallMate section).
@@ -84,6 +86,44 @@ files you changed and keep JSX/imports consistent, and run `npm run lint`
 - **State:** Redux was removed; commented‑out `useDispatch`/`useSelector` and
   `src/actions` imports are leftovers. Current state lives in local `useState`
   plus the `useUserManagement` hook in `src/utils/userData.js`.
+
+### API client helper (`src/services/apiClient.js`)
+
+New MallMate network code should use the shared typed axios wrapper instead of
+calling `axios` directly:
+
+```js
+import { ApiClient } from "../services";
+// or: import ApiClient from "../services/apiClient";
+
+const res = await ApiClient.get("/malls");
+if (res.status) {
+  // res.data is the payload
+} else {
+  // res.message is a user-safe string; the call never threw
+}
+```
+
+- **Base URL** is always `ApiContants.BACKEND_API.BASE_API_URL` (resolved in
+  `ApiContants.js` from `EXPO_PUBLIC_BACKEND_URL` / `app.json`
+  `extra.backendUrl`). Do not pass a different host unless you have a
+  documented reason.
+- **Never throws.** `get`/`post`/`put`/`patch`/`del` and `request` always
+  resolve to `{ status: boolean, message: string, data?: any }` — the same
+  envelope legacy services already return. HTTP/network failures become
+  `{ status: false, message }`.
+- **Envelope passthrough.** If the response body already looks like
+  `{ status: boolean, ... }` it is passed through; otherwise success
+  (`2xx`) yields `{ status: true, message, data }` where `data` is the body
+  (or its nested `data` field).
+- **Types** live in `src/types/api.ts` (`ApiEnvelope<T>`,
+  `ApiSuccessEnvelope`, `ApiFailureEnvelope`) and are re-exported from
+  `src/types`. Prefer the helper over hand-rolling envelope shaping.
+- **Auth headers are not wired yet** (token restore is still on the legacy
+  backlog). When session restore lands, attach the bearer token here once —
+  not in each service.
+- Prefer migrating a legacy service onto the helper only when you touch that
+  service; do not mass-rewrite existing endpoints as a drive-by.
 
 ## Known landmines (read before editing)
 

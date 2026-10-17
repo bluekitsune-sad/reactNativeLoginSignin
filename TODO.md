@@ -62,9 +62,13 @@ Rules for the factory:
       `CapabilityCard` kit component with "Limited" StatusChip for
       DEGRADED; Home grids ENABLED/DEGRADED cards from the selected
       mall's mock capability map, hides DISABLED, empty fallback.)
-- [ ] **Typed API client helper**: axios wrapper using `ApiContants` base
+- [x] **Typed API client helper**: axios wrapper using `ApiContants` base
       URL and the services error envelope `{status, message, data}`;
-      document it in AGENTS.md. Blueprint: `03-api/API_SPEC.md`.
+      document it in AGENTS.md. Blueprint: `03-api/API_SPEC.md`. (Done:
+      `src/services/apiClient.js` — shared axios instance + `get`/`post`/
+      `put`/`patch`/`del` that never throw and always resolve to the
+      envelope; typed as `ApiEnvelope` in `src/types/api.ts`; barrel
+      export; usage documented in AGENTS.md "API client helper".)
 
 ### Stage B — identity and profile
 
