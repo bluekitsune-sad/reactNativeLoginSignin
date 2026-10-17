@@ -102,10 +102,16 @@ Rules for the factory:
       capability map; `selectMall` always re-resolves from `MALLS` by
       slug; Home remounts its content via `key={slug}` and shows the new
       name/address/hours.)
-- [ ] **Home content sections (mock)**: category shortcuts,
+- [x] **Home content sections (mock)**: category shortcuts,
       featured/sponsored carousel with visible "Sponsored" badge, active
       discounts section, events section — all driven by mock data and
       capability flags. Blueprint: SCREEN_INVENTORY 11–16, PRD 5.5.
+      (Done: `src/mock/homeContent.js` holds per-mall mock categories,
+      sponsored/featured campaigns, discounts and events; each entry is
+      capability-gated and expired campaigns/offers are filtered by date;
+      HomeScreen renders Browse chips, a Featured carousel with mandatory
+      Sponsored/Featured badges, Active discounts and Events sections —
+      tapping any of them routes to the Explore tab placeholder for now.)
 - [ ] **Explore landing**: categories grid/list + entries to restaurant and
       outlet lists. Blueprint: SCREEN_INVENTORY 18.
 - [ ] **Search UI**: search bar, suggestion rows, results list (mock),

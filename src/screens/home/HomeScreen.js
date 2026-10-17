@@ -3,8 +3,9 @@ import React from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { CapabilityCard, EmptyState, SectionHeader } from "../../components";
+import { Badge, CapabilityCard, Card, EmptyState, SectionHeader } from "../../components";
 import { CAPABILITIES, CAPABILITY_META, CAPABILITY_STATUS, MallMateTheme } from "../../constants";
+import { getHomeSections } from "../../mock";
 import { useMallManagement } from "../../utils";
 
 const hoursSummary = (mall) => {
@@ -21,6 +22,133 @@ const hoursSummary = (mall) => {
   return "See weekly hours";
 };
 
+const goExplore = (navigation) => navigation.navigate("Explore");
+
+const CategoryShortcuts = ({ categories, onSelect }) => {
+  if (!categories.length) {
+    return null;
+  }
+  return (
+    <View>
+      <SectionHeader title="Browse" />
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.categoryRow}
+      >
+        {categories.map((category) => (
+          <Pressable
+            key={category.key}
+            onPress={() => onSelect(category)}
+            accessibilityRole="button"
+            accessibilityLabel={`Browse ${category.title}`}
+            style={({ pressed }) => [styles.categoryChip, pressed && styles.categoryChipPressed]}
+          >
+            <Ionicons name={category.icon} size={22} color={MallMateTheme.color.primary} />
+            <Text style={styles.categoryLabel} numberOfLines={1}>
+              {category.title}
+            </Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+    </View>
+  );
+};
+
+const FeaturedCarousel = ({ items, onSelect }) => {
+  if (!items.length) {
+    return null;
+  }
+  return (
+    <View>
+      <SectionHeader title="Featured" />
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.carouselRow}
+      >
+        {items.map((item) => (
+          <Card key={item.id} onPress={() => onSelect(item)} style={styles.featuredCard}>
+            <Badge
+              label={item.placement === "SPONSORED" ? "Sponsored" : "Featured"}
+              tone={item.placement === "SPONSORED" ? "sponsored" : "featured"}
+              style={styles.featuredBadge}
+            />
+            <Text style={styles.featuredTitle} numberOfLines={2}>
+              {item.title}
+            </Text>
+            <Text style={styles.featuredMerchant} numberOfLines={1}>
+              {item.merchant}
+            </Text>
+            <Text style={styles.featuredSubtitle} numberOfLines={1}>
+              {item.subtitle}
+            </Text>
+          </Card>
+        ))}
+      </ScrollView>
+    </View>
+  );
+};
+
+const DiscountsSection = ({ offers, onSelect }) => {
+  if (!offers.length) {
+    return null;
+  }
+  return (
+    <View>
+      <SectionHeader title="Active discounts" />
+      {offers.map((offer) => (
+        <Card key={offer.id} onPress={() => onSelect(offer)} style={styles.discountCard}>
+          <View style={styles.discountLabelBox}>
+            <Text style={styles.discountLabel}>{offer.label}</Text>
+          </View>
+          <View style={styles.discountBody}>
+            <Text style={styles.discountTitle} numberOfLines={1}>
+              {offer.title}
+            </Text>
+            <Text style={styles.discountMerchant} numberOfLines={1}>
+              {offer.merchant} · {offer.scope === "restaurant" ? "Dining" : "Retail"}
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={MallMateTheme.color.textMuted} />
+        </Card>
+      ))}
+    </View>
+  );
+};
+
+const EventsSection = ({ events, onSelect }) => {
+  if (!events.length) {
+    return null;
+  }
+  return (
+    <View>
+      <SectionHeader title="Events" />
+      {events.map((event) => (
+        <Card key={event.id} onPress={() => onSelect(event)} style={styles.eventCard}>
+          <Ionicons
+            name="calendar-outline"
+            size={22}
+            color={MallMateTheme.color.primary}
+            style={styles.eventIcon}
+          />
+          <View style={styles.eventBody}>
+            <Text style={styles.eventTitle} numberOfLines={1}>
+              {event.title}
+            </Text>
+            <Text style={styles.eventMeta} numberOfLines={1}>
+              {event.when}
+            </Text>
+            <Text style={styles.eventMeta} numberOfLines={1}>
+              {event.location}
+            </Text>
+          </View>
+        </Card>
+      ))}
+    </View>
+  );
+};
+
 const HomeScreen = ({ navigation }) => {
   const { selectedMall } = useMallManagement();
   const capabilityMap = selectedMall.capabilities || {};
@@ -28,6 +156,12 @@ const HomeScreen = ({ navigation }) => {
     const status = capabilityMap[key];
     return status === CAPABILITY_STATUS.ENABLED || status === CAPABILITY_STATUS.DEGRADED;
   });
+  const { categories, featured, discounts, events } = getHomeSections(
+    selectedMall.slug,
+    capabilityMap,
+  );
+  const hasContent =
+    categories.length > 0 || featured.length > 0 || discounts.length > 0 || events.length > 0;
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
@@ -48,33 +182,41 @@ const HomeScreen = ({ navigation }) => {
         <Ionicons name="chevron-down" size={20} color={MallMateTheme.color.textMuted} />
       </Pressable>
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
-        <SectionHeader title="Services" />
-        {visibleCapabilities.length ? (
-          <View style={styles.grid}>
-            {visibleCapabilities.map((key) => {
-              const meta = CAPABILITY_META[key];
-              const degraded = capabilityMap[key] === CAPABILITY_STATUS.DEGRADED;
-              return (
-                <CapabilityCard
-                  key={key}
-                  title={meta.title}
-                  description={meta.description}
-                  icon={meta.icon}
-                  degraded={degraded}
-                />
-              );
-            })}
-          </View>
-        ) : (
+        <CategoryShortcuts categories={categories} onSelect={() => goExplore(navigation)} />
+        <FeaturedCarousel items={featured} onSelect={() => goExplore(navigation)} />
+        <View>
+          <SectionHeader title="Services" />
+          {visibleCapabilities.length ? (
+            <View style={styles.grid}>
+              {visibleCapabilities.map((key) => {
+                const meta = CAPABILITY_META[key];
+                const degraded = capabilityMap[key] === CAPABILITY_STATUS.DEGRADED;
+                return (
+                  <CapabilityCard
+                    key={key}
+                    title={meta.title}
+                    description={meta.description}
+                    icon={meta.icon}
+                    degraded={degraded}
+                  />
+                );
+              })}
+            </View>
+          ) : (
+            <EmptyState
+              title="No services yet"
+              message="This mall has no enabled services right now."
+            />
+          )}
+        </View>
+        <DiscountsSection offers={discounts} onSelect={() => goExplore(navigation)} />
+        <EventsSection events={events} onSelect={() => goExplore(navigation)} />
+        {!hasContent ? (
           <EmptyState
-            title="No services yet"
-            message="This mall has no enabled services right now."
+            title="Nothing new right now"
+            message="Categories, offers and events will appear here when available."
           />
-        )}
-        <EmptyState
-          title="More coming soon"
-          message="Categories, offers and events will appear here."
-        />
+        ) : null}
       </ScrollView>
     </SafeAreaView>
   );
@@ -119,11 +261,120 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: MallMateTheme.spacing.lg,
+    paddingBottom: MallMateTheme.spacing.xxl,
   },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+  },
+  categoryRow: {
+    paddingBottom: MallMateTheme.spacing.xs,
+    gap: MallMateTheme.spacing.sm,
+  },
+  categoryChip: {
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: 72,
+    minHeight: MallMateTheme.touchTarget.ideal,
+    paddingVertical: MallMateTheme.spacing.sm,
+    paddingHorizontal: MallMateTheme.spacing.md,
+    backgroundColor: MallMateTheme.color.surface,
+    borderRadius: MallMateTheme.radius.control,
+    borderWidth: 1,
+    borderColor: MallMateTheme.color.border,
+  },
+  categoryChipPressed: {
+    backgroundColor: MallMateTheme.color.surfaceElevated,
+  },
+  categoryLabel: {
+    marginTop: MallMateTheme.spacing.xs,
+    color: MallMateTheme.color.textPrimary,
+    fontSize: MallMateTheme.typography.caption.fontSize,
+    fontFamily: MallMateTheme.fontFamily.medium,
+  },
+  carouselRow: {
+    paddingBottom: MallMateTheme.spacing.xs,
+    gap: MallMateTheme.spacing.md,
+  },
+  featuredCard: {
+    width: 220,
+  },
+  featuredBadge: {
+    marginBottom: MallMateTheme.spacing.sm,
+  },
+  featuredTitle: {
+    color: MallMateTheme.color.textPrimary,
+    fontSize: MallMateTheme.typography.bodyLarge.fontSize,
+    fontFamily: MallMateTheme.fontFamily.semiBold,
+    marginBottom: 2,
+  },
+  featuredMerchant: {
+    color: MallMateTheme.color.textSecondary,
+    fontSize: MallMateTheme.typography.label.fontSize,
+    fontFamily: MallMateTheme.fontFamily.medium,
+  },
+  featuredSubtitle: {
+    color: MallMateTheme.color.textMuted,
+    fontSize: MallMateTheme.typography.caption.fontSize,
+    fontFamily: MallMateTheme.fontFamily.regular,
+    marginTop: 2,
+  },
+  discountCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: MallMateTheme.spacing.md,
+    padding: MallMateTheme.spacing.md,
+  },
+  discountLabelBox: {
+    backgroundColor: MallMateTheme.color.highlight,
+    borderRadius: MallMateTheme.radius.control / 2,
+    paddingHorizontal: MallMateTheme.spacing.sm,
+    paddingVertical: MallMateTheme.spacing.xs,
+    marginRight: MallMateTheme.spacing.md,
+  },
+  discountLabel: {
+    color: MallMateTheme.color.background,
+    fontSize: MallMateTheme.typography.caption.fontSize,
+    fontFamily: MallMateTheme.fontFamily.bold,
+  },
+  discountBody: {
+    flex: 1,
+  },
+  discountTitle: {
+    color: MallMateTheme.color.textPrimary,
+    fontSize: MallMateTheme.typography.body.fontSize,
+    fontFamily: MallMateTheme.fontFamily.semiBold,
+    marginBottom: 2,
+  },
+  discountMerchant: {
+    color: MallMateTheme.color.textSecondary,
+    fontSize: MallMateTheme.typography.caption.fontSize,
+    fontFamily: MallMateTheme.fontFamily.regular,
+  },
+  eventCard: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: MallMateTheme.spacing.md,
+    padding: MallMateTheme.spacing.md,
+  },
+  eventIcon: {
+    marginRight: MallMateTheme.spacing.md,
+    marginTop: 2,
+  },
+  eventBody: {
+    flex: 1,
+  },
+  eventTitle: {
+    color: MallMateTheme.color.textPrimary,
+    fontSize: MallMateTheme.typography.body.fontSize,
+    fontFamily: MallMateTheme.fontFamily.semiBold,
+    marginBottom: 2,
+  },
+  eventMeta: {
+    color: MallMateTheme.color.textSecondary,
+    fontSize: MallMateTheme.typography.caption.fontSize,
+    fontFamily: MallMateTheme.fontFamily.regular,
   },
 });
 
