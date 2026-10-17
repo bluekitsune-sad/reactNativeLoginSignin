@@ -7,6 +7,20 @@ import { CapabilityCard, EmptyState, SectionHeader } from "../../components";
 import { CAPABILITIES, CAPABILITY_META, CAPABILITY_STATUS, MallMateTheme } from "../../constants";
 import { useMallManagement } from "../../utils";
 
+const hoursSummary = (mall) => {
+  const days = mall.openingHours?.days ?? [];
+  if (!days.length) {
+    return "Hours unavailable";
+  }
+  const uniform = days.every(
+    (day) => day.opensAt === days[0].opensAt && day.closesAt === days[0].closesAt,
+  );
+  if (uniform) {
+    return `Daily ${days[0].opensAt}–${days[0].closesAt}`;
+  }
+  return "See weekly hours";
+};
+
 const HomeScreen = ({ navigation }) => {
   const { selectedMall } = useMallManagement();
   const capabilityMap = selectedMall.capabilities || {};
@@ -27,10 +41,13 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.mallBarBody}>
           <Text style={styles.mallBarLabel}>Shopping at</Text>
           <Text style={styles.mallBarName}>{selectedMall.name}</Text>
+          <Text style={styles.mallBarMeta} numberOfLines={1}>
+            {selectedMall.address} · {hoursSummary(selectedMall)}
+          </Text>
         </View>
         <Ionicons name="chevron-down" size={20} color={MallMateTheme.color.textMuted} />
       </Pressable>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <SectionHeader title="Services" />
         {visibleCapabilities.length ? (
           <View style={styles.grid}>
@@ -93,6 +110,12 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textPrimary,
     fontSize: MallMateTheme.typography.bodyLarge.fontSize,
     fontFamily: MallMateTheme.fontFamily.semiBold,
+  },
+  mallBarMeta: {
+    color: MallMateTheme.color.textSecondary,
+    fontSize: MallMateTheme.typography.caption.fontSize,
+    fontFamily: MallMateTheme.fontFamily.regular,
+    marginTop: 2,
   },
   content: {
     padding: MallMateTheme.spacing.lg,

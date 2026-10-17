@@ -94,10 +94,14 @@ Rules for the factory:
 
 ### Stage C — home and discovery
 
-- [ ] **Multi-mall mock data + switching**: add a second mock mall with a
+- [x] **Multi-mall mock data + switching**: add a second mock mall with a
       different capability map; switching refreshes mall-scoped screens,
       shows the new mall identity, and never leaks previous-mall content.
-      Blueprint: PRD 5.2, SCREEN_INVENTORY flow "Switch mall".
+      Blueprint: PRD 5.2, SCREEN_INVENTORY flow "Switch mall". (Done:
+      second mock mall `Harbour Walk Plaza` with a retail/events-only
+      capability map; `selectMall` always re-resolves from `MALLS` by
+      slug; Home remounts its content via `key={slug}` and shows the new
+      name/address/hours.)
 - [ ] **Home content sections (mock)**: category shortcuts,
       featured/sponsored carousel with visible "Sponsored" badge, active
       discounts section, events section — all driven by mock data and
