@@ -1,3 +1,5 @@
+import { Ionicons, Feather } from "@expo/vector-icons";
+import LottieView from "lottie-react-native";
 import React, { useState } from "react";
 import {
   View,
@@ -8,13 +10,12 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { Separator, ToggleButton } from "../components";
-import { Ionicons, Feather } from "@expo/vector-icons";
-import { Colors, Fonts, General, Images } from "../constants";
-import { Display } from "../utils";
-import { AuthenicationService } from "../services";
-import LottieView from "lottie-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { Separator, ToggleButton } from "../components";
+import { Colors, Fonts, General, Images } from "../constants";
+import { AuthenicationService } from "../services";
+import { Display } from "../utils";
 import useUserManagement from "../utils/userData";
 
 const SigninScreen = ({ navigation }) => {
@@ -30,7 +31,7 @@ const SigninScreen = ({ navigation }) => {
   const signIn = async () => {
     setIsLoading(true);
     setErrorMessage("");
-    let user = {
+    const user = {
       username,
       password,
     };
@@ -38,6 +39,7 @@ const SigninScreen = ({ navigation }) => {
       setIsLoading(false);
       if (response?.status) {
         updateUser(response?.data);
+        navigation.replace("Main");
       } else {
         setErrorMessage(response?.message);
       }
@@ -46,32 +48,17 @@ const SigninScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor={Colors.DEFAULT_WHITE}
-        translucent
-      />
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.DEFAULT_WHITE} translucent />
       <Separator height={insets.top} />
       <View style={styles.headerContainer}>
-        <Ionicons
-          name="chevron-back-outline"
-          size={30}
-          onPress={() => navigation.goBack()}
-        />
+        <Ionicons name="chevron-back-outline" size={30} onPress={() => navigation.goBack()} />
         <Text style={styles.headerTitle}>Sign In</Text>
       </View>
       <Text style={styles.title}>Welcome</Text>
-      <Text style={styles.content}>
-        Enter your username and password, and enjoy ordering food
-      </Text>
+      <Text style={styles.content}>Enter your username and password, and enjoy ordering food</Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputSubContainer}>
-          <Feather
-            name="user"
-            size={22}
-            color={Colors.DEFAULT_GREY}
-            style={{ marginRight: 10 }}
-          />
+          <Feather name="user" size={22} color={Colors.DEFAULT_GREY} style={{ marginRight: 10 }} />
           <TextInput
             placeholder="Username"
             placeholderTextColor={Colors.DEFAULT_GREY}
@@ -84,14 +71,9 @@ const SigninScreen = ({ navigation }) => {
       <Separator height={15} />
       <View style={styles.inputContainer}>
         <View style={styles.inputSubContainer}>
-          <Feather
-            name="lock"
-            size={22}
-            color={Colors.DEFAULT_GREY}
-            style={{ marginRight: 10 }}
-          />
+          <Feather name="lock" size={22} color={Colors.DEFAULT_GREY} style={{ marginRight: 10 }} />
           <TextInput
-            secureTextEntry={isPasswordShow ? false : true}
+            secureTextEntry={!isPasswordShow}
             placeholder="Password"
             placeholderTextColor={Colors.DEFAULT_GREY}
             selectionColor={Colors.DEFAULT_GREY}
@@ -120,11 +102,7 @@ const SigninScreen = ({ navigation }) => {
           Forgot Password
         </Text>
       </View>
-      <TouchableOpacity
-        style={styles.signinButton}
-        onPress={() => signIn()}
-        activeOpacity={0.8}
-      >
+      <TouchableOpacity style={styles.signinButton} onPress={() => signIn()} activeOpacity={0.8}>
         {isLoading ? (
           <LottieView source={Images.LOADING} autoPlay />
         ) : (
@@ -133,10 +111,7 @@ const SigninScreen = ({ navigation }) => {
       </TouchableOpacity>
       <View style={styles.signupContainer}>
         <Text style={styles.accountText}>Don't have an account?</Text>
-        <Text
-          style={styles.signupText}
-          onPress={() => navigation.navigate("Signup")}
-        >
+        <Text style={styles.signupText} onPress={() => navigation.navigate("Signup")}>
           Sign Up
         </Text>
       </View>
@@ -146,9 +121,7 @@ const SigninScreen = ({ navigation }) => {
           <View style={styles.signinButtonLogoContainer}>
             <Image source={Images.FACEBOOK} style={styles.signinButtonLogo} />
           </View>
-          <Text style={styles.socialSigninButtonText}>
-            Connect with Facebook
-          </Text>
+          <Text style={styles.socialSigninButtonText}>Connect with Facebook</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity style={styles.googleButton}>

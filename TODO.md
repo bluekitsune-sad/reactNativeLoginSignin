@@ -40,10 +40,13 @@ Rules for the factory:
       10 components + `mallmate/index.js` barrel, re-exported from
       `src/components/index.js`; pressed/disabled/loading/focused/invalid
       states implemented per the design system.)
-- [ ] **Bottom tab navigation**: Home | Explore | Map | Rewards | Profile
+- [x] **Bottom tab navigation**: Home | Explore | Map | Rewards | Profile
       with placeholder screens (`src/screens/home/HomeScreen.js`, etc.),
       keeping the existing auth stack; after successful sign-in navigate to
       the tabs. Blueprint: `04-mobile/SCREEN_INVENTORY.md`, PRD section 4.
+      (Done: `MainTabNavigator` with themed tab bar + Ionicons; placeholders
+      under `src/screens/{home,explore,map,rewards,profile}/`; stack screen
+      `Main`; `SigninScreen` uses `navigation.replace("Main")` on success.)
 - [ ] **Mall selector screen** with mock data for one mall (LuckyOne:
       name/logo/hours); persist the selection in a small `MallContext`
       readable by other screens. Blueprint: PRD section 5.2.
