@@ -85,8 +85,12 @@ Rules for the factory:
       signed-in user (or a mock guest) with avatar initial; ListRow
       entries for Orders/Favorites/Settings/Help/Privacy navigate to a
       shared `ProfilePlaceholderScreen` stack route.)
-- [ ] **Settings + notification preferences**: static toggles with marketing
-      consent wording; local state only. Blueprint: PRD 5.15.
+- [x] **Settings + notification preferences**: static toggles with marketing
+      consent wording; local state only. Blueprint: PRD 5.15. (Done:
+      `SettingsScreen` with local `useState` toggles for order/payment
+      updates, loyalty activity, event reminders, merchant alerts, plus an
+      optional marketing-offers consent row; Profile → Settings navigates
+      there. No persistence or backend sync yet.)
 
 ### Stage C — home and discovery
 

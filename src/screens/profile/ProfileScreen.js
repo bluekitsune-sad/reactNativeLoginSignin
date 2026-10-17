@@ -38,10 +38,7 @@ const PROFILE_ROWS = [
     title: "Settings",
     subtitle: "Preferences and notifications",
     icon: "settings-outline",
-    placeholder: {
-      title: "Settings",
-      message: "App preferences and notification settings will live here.",
-    },
+    route: "Settings",
   },
   {
     key: "help",
@@ -96,12 +93,16 @@ const ProfileScreen = ({ navigation }) => {
               title={row.title}
               subtitle={row.subtitle}
               leading={<Ionicons name={row.icon} size={22} color={MallMateTheme.color.primary} />}
-              onPress={() =>
-                navigation.navigate("ProfilePlaceholder", {
-                  title: row.placeholder.title,
-                  message: row.placeholder.message,
-                })
-              }
+              onPress={() => {
+                if (row.route) {
+                  navigation.navigate(row.route);
+                } else {
+                  navigation.navigate("ProfilePlaceholder", {
+                    title: row.placeholder.title,
+                    message: row.placeholder.message,
+                  });
+                }
+              }}
               style={styles.row}
             />
           ))}
