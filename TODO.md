@@ -141,6 +141,14 @@ P0 — App is broken / blocking
 
 ## Done
 
+- [x] **Software-factory automation.** Issue runs now auto-open *and*
+      auto-merge PRs via a before/after branch-list diff (works even when
+      the agent forgets `gh pr create`); comment runs merge issue-driven
+      branches and PR-driven commits; the scheduled worker loops up to 3
+      tasks per run (every 2h), ships a README `todoAgent Ran` footer each
+      run, and stops to open a question issue mentioning the owner whenever
+      it is blocked.
+
 - [x] Project scaffolded with Expo SDK 50, Poppins fonts, navigation skeleton.
 - [x] Sign In screen with validation, loading animation and error display.
 - [x] Service layer (`AuthenticationService`, `RestaurantService`, `FoodService`,
