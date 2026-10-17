@@ -70,12 +70,7 @@ const ExploreScreen = ({ navigation }) => {
           </Text>
         </View>
         <Pressable
-          onPress={() =>
-            navigation.navigate("ProfilePlaceholder", {
-              title: "Search",
-              message: "Search across restaurants, outlets and offers is coming soon.",
-            })
-          }
+          onPress={() => navigation.navigate("Search")}
           accessibilityRole="button"
           accessibilityLabel="Search this mall"
           style={({ pressed }) => [styles.searchBar, pressed && styles.searchBarPressed]}

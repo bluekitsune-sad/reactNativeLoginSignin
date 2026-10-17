@@ -9,6 +9,7 @@ import ProfilePlaceholderScreen from "./profile/ProfilePlaceholderScreen";
 import ProfileScreen from "./profile/ProfileScreen";
 import SettingsScreen from "./profile/SettingsScreen";
 import RewardsScreen from "./rewards/RewardsScreen";
+import SearchScreen from "./search/SearchScreen";
 // import RegisterPhoneScreen from "./RegisterPhoneScreen";
 // import VerificationScreen from "./VerificationScreen";
 
@@ -24,6 +25,7 @@ export {
   ProfilePlaceholderScreen,
   SettingsScreen,
   MallSelectorScreen,
+  SearchScreen,
   // RegisterPhoneScreen,
   // VerificationScreen,
 };

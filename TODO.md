@@ -119,9 +119,14 @@ Rules for the factory:
       category grid; entries route to the existing placeholder stack screen
       until list screens land. Mock explore directories/categories added per
       mall in `src/mock/homeContent.js` via `getExploreContent`.)
-- [ ] **Search UI**: search bar, suggestion rows, results list (mock),
+- [x] **Search UI**: search bar, suggestion rows, results list (mock),
       distinct empty-results vs error states. Blueprint: PRD 5.7,
-      SCREEN_INVENTORY 10, 19.
+      SCREEN_INVENTORY 10, 19. (Done: `SearchScreen` stack route with kit
+      TextInput, debounced mock search over per-mall merchants
+      (`src/mock/merchants.js` — name/category/cuisine/tags/offer keywords,
+      capability-gated), suggestion rows when idle, Loading/Error/Empty
+      states; query `!error` simulates a recoverable failure so the error +
+      retry path is reachable. Explore's search bar now opens Search.)
 - [ ] **Filter bottom sheet**: category, cuisine, open-now, floor, price —
       mock filtering applied client-side; "clear filters" affordance.
       Blueprint: SCREEN_INVENTORY 20.
