@@ -79,9 +79,12 @@ Rules for the factory:
       `Theme.fontFamily`; dark Midnight Graphite background, emerald
       primary CTAs via the kit `Button` (loading state kept), 44–48px
       back targets; validation, service calls and navigation unchanged.)
-- [ ] **Profile tab**: profile header (mock user), rows for Orders,
+- [x] **Profile tab**: profile header (mock user), rows for Orders,
       Favorites, Settings, Help, Privacy — placeholders that navigate.
-      Blueprint: SCREEN_INVENTORY 60–64.
+      Blueprint: SCREEN_INVENTORY 60–64. (Done: profile header shows the
+      signed-in user (or a mock guest) with avatar initial; ListRow
+      entries for Orders/Favorites/Settings/Help/Privacy navigate to a
+      shared `ProfilePlaceholderScreen` stack route.)
 - [ ] **Settings + notification preferences**: static toggles with marketing
       consent wording; local state only. Blueprint: PRD 5.15.
 

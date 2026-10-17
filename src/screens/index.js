@@ -5,6 +5,7 @@ import ExploreScreen from "./explore/ExploreScreen";
 import HomeScreen from "./home/HomeScreen";
 import MallSelectorScreen from "./mall/MallSelectorScreen";
 import MapScreen from "./map/MapScreen";
+import ProfilePlaceholderScreen from "./profile/ProfilePlaceholderScreen";
 import ProfileScreen from "./profile/ProfileScreen";
 import RewardsScreen from "./rewards/RewardsScreen";
 // import RegisterPhoneScreen from "./RegisterPhoneScreen";
@@ -19,6 +20,7 @@ export {
   MapScreen,
   RewardsScreen,
   ProfileScreen,
+  ProfilePlaceholderScreen,
   MallSelectorScreen,
   // RegisterPhoneScreen,
   // VerificationScreen,
