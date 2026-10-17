@@ -3,14 +3,18 @@ name: OpenCode
 # =============================================================================
 #  CUSTOMIZATION & SECURITY CHEAT-SHEET — edit this file freely, notes below
 # -----------------------------------------------------------------------------
-#  HOW THIS WORKFLOW ACTS LIKE A SOFTWARE FACTORY (hands-off):
+#  HOW THIS WORKFLOW ACTS LIKE A SOFTWARE FACTORY (hands-off, no PRs):
+#    This repo's policy blocks Actions from creating/approving pull
+#    requests, so everything lands on ONE long-lived branch: `work`.
 #    1. You open an issue (no command needed).
-#    2. The agent implements it on a NEW branch named opencode/* and pushes.
-#    3. A workflow step diffs the remote branch list before/after the agent,
-#       opens a PR for ANY branch the agent pushed (even if the agent forgot
-#       to run `gh pr create`), squash-merges it, and comments the PR link
-#       back on your issue. You should never see a stranded branch again.
-#    4. If the agent is blocked or the requirement is ambiguous it STOPPS and
+#    2. The agent implements it on a NEW branch named opencode/* (based on
+#       `work`) and pushes.
+#    3. A workflow step merges ANY opencode/* branch the agent pushed into
+#       `work` (fast-forward when possible), deletes the branch, and
+#       comments back on your issue. No PR API is used anywhere.
+#    4. You merge `work` into `main` whenever you like:
+#         git checkout main && git merge work && git push
+#    5. If the agent is blocked or the requirement is ambiguous it STOPS and
 #       opens an issue mentioning you (@${{ github.repository_owner }}) with
 #       numbered questions instead of guessing.
 #
@@ -41,12 +45,14 @@ name: OpenCode
 #
 #  BRANCH CONVENTION (important):
 #    Every branch the agent creates MUST start with `opencode/`. The safety
-#    net below only opens/merges new branches matching that prefix, so other
-#    bots (e.g. dependabot) are never touched.
+#    net only touches new branches matching that prefix, so other bots
+#    (e.g. dependabot) are never touched. Branches are based on `work`,
+#    which the workflow creates from main on first use.
 #
-#  AUTO-MERGE:
-#    If you later enable branch protection, add `--admin` to the
-#    `gh pr merge` calls or merges will (correctly) fail.
+#  MERGE CONFLICTS:
+#    If an agent branch cannot be merged into `work`, the run goes red and
+#    the branch is left on the remote — resolve it manually or let the
+#    cron run sweep it later.
 # =============================================================================
 
 on:
@@ -68,7 +74,7 @@ permissions:
 
 jobs:
   # ---------------------------------------------------------------------------
-  # 1. Implement tasks from new issues YOU open → PR → auto-merge → comment
+  # 1. Implement tasks from new issues YOU open → land in `work` → comment
   # ---------------------------------------------------------------------------
   issue-task:
     # Runs only on issues YOU open (author_association == 'OWNER').
@@ -91,14 +97,21 @@ jobs:
     permissions:
       contents: write
       issues: write
-      pull-requests: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
-          persist-credentials: false
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Ensure the work branch exists
+        run: |
+          set -euo pipefail
+          if ! git ls-remote --exit-code origin refs/heads/work >/dev/null; then
+            git push origin origin/main:work
+            echo "Created work branch from main."
+          fi
 
       - name: Snapshot remote branches (before agent)
         env:
@@ -125,18 +138,17 @@ jobs:
             Instructions:
             - Read AGENTS.md and follow the repository's architecture rules.
             - Inspect the relevant code before changing it.
-            - Create a branch named exactly:
-              opencode/issue-${{ github.event.issue.number }}-<short-slug>
+            - Branch from the work branch:
+                git fetch origin work
+                git checkout -b opencode/issue-${{ github.event.issue.number }}-<short-slug> origin/work
             - Implement the requested changes following existing conventions.
-            - This repo has no test suite or linter — do not invent passing
-              tests. Verify by re-reading changed files and running any
-              available npm scripts.
-            - Commit with a clear message and push the branch to origin.
-            - Try to open the pull request yourself:
-              gh pr create --head <branch> --base main --title "..." \
-                --body "Closes #${{ github.event.issue.number }} ..."
-              Do NOT merge it — the workflow merges it right after you finish.
-            - Never push directly to the default branch.
+            - Verify honestly: run `npm run lint` and `npm run typecheck`
+              when they apply; re-read changed files otherwise. Do not claim
+              verification you cannot perform.
+            - Commit with a clear message and push your branch to origin.
+            - Do NOT open a pull request and do NOT merge anything — the
+              workflow lands your branch into `work` right after you finish.
+              Never push to `main` or `work` yourself.
             - If the issue is a question with no code change, answer in an
               issue comment and do not create a branch.
             - If you are blocked, the requirements are ambiguous, or you need
@@ -146,10 +158,11 @@ jobs:
               then stop. The owner will answer there.
 
       # SAFETY NET — diff the branch list from before the agent ran. For every
-      # NEW branch starting with opencode/: open a PR if one is missing, then
-      # squash-merge it. This works regardless of what the agent named the
-      # branch or whether it ran `gh pr create`.
-      - name: Open and merge pull requests for new branches
+      # NEW branch starting with opencode/: merge it into `work` (fast-forward
+      # when possible, merge commit otherwise), then delete the branch. No PR
+      # API is used (repo policy blocks Actions from creating PRs). You merge
+      # work -> main manually whenever you want.
+      - name: Land new branches into work
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
@@ -166,35 +179,32 @@ jobs:
             exit 0
           fi
 
-          MERGED_URLS=""
+          LANDED=""
           FAILED=0
           for BRANCH in $NEW_BRANCHES; do
-            PR_URL=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[].url' | head -n 1)
-
-            if [ -z "$PR_URL" ]; then
-              EXISTING=$(gh pr list --head "$BRANCH" --state all --json number --jq 'length')
-              if [ "$EXISTING" != "0" ]; then
-                echo "PR for $BRANCH already merged/closed — skipping."
-                continue
-              fi
-              echo "No PR found for $BRANCH — creating one."
-              PR_URL=$(gh pr create --head "$BRANCH" --base main \
-                --title "issue #${ISSUE_NUMBER}: automated implementation" \
-                --body "Automated pull request created by the OpenCode workflow. Closes #${ISSUE_NUMBER}")
+            git fetch origin "$BRANCH" work
+            if git merge-base --is-ancestor "origin/$BRANCH" origin/work; then
+              echo "$BRANCH is already in work — deleting it."
+              git push origin --delete "$BRANCH" || true
+              continue
             fi
-
-            echo "Merging $PR_URL"
-            if gh pr merge "$PR_URL" --squash --delete-branch; then
-              MERGED_URLS="$MERGED_URLS
-            - $PR_URL"
+            git checkout -q -B work-land origin/work
+            if git merge --ff-only --no-edit "origin/$BRANCH" >/dev/null 2>&1 ||
+               git merge --no-edit --no-ff "origin/$BRANCH" >/dev/null 2>&1; then
+              git push origin HEAD:work
+              git push origin --delete "$BRANCH" || true
+              LANDED="$LANDED
+            - $BRANCH"
+              echo "Landed $BRANCH into work."
             else
-              echo "::error::Failed to merge $PR_URL"
+              git merge --abort || true
+              echo "::error::Could not land $BRANCH into work (conflict) — branch kept on the remote."
               FAILED=1
             fi
           done
 
-          if [ -n "$MERGED_URLS" ]; then
-            gh issue comment "$ISSUE_NUMBER" --body "Automated run completed — merged:$MERGED_URLS" \
+          if [ -n "$LANDED" ]; then
+            gh issue comment "$ISSUE_NUMBER" --body "$(printf 'Automated run completed — landed into the `work` branch:%s\n\nMerge `work` into `main` whenever convenient (`git checkout main && git merge work && git push`). No PR was created: this repo Actions policy does not allow workflow-created PRs.' "$LANDED")" \
               || echo "Could not comment on the issue (it may be locked)."
           fi
 
@@ -242,10 +252,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
-          persist-credentials: false
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Ensure the work branch exists
+        if: github.event.pull_request == null && github.event.issue.pull_request == null
+        run: |
+          set -euo pipefail
+          if ! git ls-remote --exit-code origin refs/heads/work >/dev/null; then
+            git push origin origin/main:work
+            echo "Created work branch from main."
+          fi
 
       - name: Snapshot remote branches (before agent)
+        if: github.event.pull_request == null && github.event.issue.pull_request == null
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -253,7 +273,7 @@ jobs:
             --jq '.[].name' | sort > /tmp/branches-before.txt
 
       # For comments on a PR we need to know whether the agent pushed new
-      # commits to the PR branch, so we only merge when it actually changed.
+      # commits to the PR branch, so we only report when it actually changed.
       - name: Record PR head sha (before agent)
         id: pr_before
         if: github.event.pull_request != null || github.event.issue.pull_request != null
@@ -282,18 +302,21 @@ jobs:
             - When the comment is on a pull request: commit your changes to
               THAT pull request's existing branch (never a new branch), then
               leave a PR comment (gh pr comment) explaining what changed.
+              Do not merge the PR — the owner merges it manually.
             - When the comment is on an issue and code changes are needed:
-              create a branch named opencode/comment-${{ github.event.issue.number }}-<short slug>,
-              push it, and try `gh pr create` — the workflow will merge it.
-            - Verify changes by re-reading them (no test suite exists here).
-            - Never push directly to the default branch.
-            - Never merge anything yourself.
+              branch from the work branch and push it:
+                git fetch origin work
+                git checkout -b opencode/comment-${{ github.event.issue.number }}-<short slug> origin/work
+              The workflow lands it into `work`. Do NOT open a PR.
+            - Verify honestly: run `npm run lint` / `npm run typecheck` when
+              they apply; re-read changed files otherwise.
+            - Never push to `main` or `work` yourself. Never merge anything.
             - If blocked or ambiguous, stop and ask: comment your numbered
               questions on the thread instead of guessing (include
               @${{ github.repository_owner }}).
 
-      # Issue-comment path: same branch-diff safety net as issue-task.
-      - name: Open and merge pull requests for new branches
+      # Issue-comment path: land new branches in `work` (same safety net).
+      - name: Land new branches into work
         if: github.event.pull_request == null && github.event.issue.pull_request == null
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -306,27 +329,34 @@ jobs:
           NEW_BRANCHES=$(comm -13 /tmp/branches-before.txt /tmp/branches-after.txt \
             | grep '^opencode/' || true)
           if [ -z "$NEW_BRANCHES" ]; then
-            echo "No new opencode/* branches — nothing to merge."
+            echo "No new opencode/* branches — nothing to land."
             exit 0
           fi
 
           FAILED=0
           for BRANCH in $NEW_BRANCHES; do
-            PR_URL=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[].url' | head -n 1)
-            if [ -z "$PR_URL" ]; then
-              EXISTING=$(gh pr list --head "$BRANCH" --state all --json number --jq 'length')
-              if [ "$EXISTING" != "0" ]; then continue; fi
-              PR_URL=$(gh pr create --head "$BRANCH" --base main \
-                --title "issue #${ISSUE_NUMBER}: automated change" \
-                --body "Automated pull request created by the OpenCode workflow. Closes #${ISSUE_NUMBER}")
+            git fetch origin "$BRANCH" work
+            if git merge-base --is-ancestor "origin/$BRANCH" origin/work; then
+              git push origin --delete "$BRANCH" || true
+              continue
             fi
-            echo "Merging $PR_URL"
-            gh pr merge "$PR_URL" --squash --delete-branch || FAILED=1
+            git checkout -q -B work-land origin/work
+            if git merge --ff-only --no-edit "origin/$BRANCH" >/dev/null 2>&1 ||
+               git merge --no-edit --no-ff "origin/$BRANCH" >/dev/null 2>&1; then
+              git push origin HEAD:work
+              git push origin --delete "$BRANCH" || true
+              echo "Landed $BRANCH into work."
+            else
+              git merge --abort || true
+              echo "::error::Could not land $BRANCH into work (conflict)."
+              FAILED=1
+            fi
           done
           exit $FAILED
 
-      # PR-comment path: merge the PR only if the agent pushed new commits.
-      - name: Merge the updated pull request
+      # PR-comment path: report new commits; the owner merges PRs manually
+      # (Actions cannot approve/merge PRs under this repo's policy).
+      - name: Report on the updated pull request
         if: github.event.pull_request != null || github.event.issue.pull_request != null
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -336,12 +366,12 @@ jobs:
           set -euo pipefail
           AFTER_SHA=$(gh pr view "$PR_NUMBER" --json headRefOid --jq .headRefOid)
           if [ "$AFTER_SHA" = "$BEFORE_SHA" ]; then
-            echo "Agent pushed no commits — question answered in comments, nothing to merge."
+            echo "Agent pushed no commits — question answered in comments."
             exit 0
           fi
-          echo "PR #$PR_NUMBER advanced $BEFORE_SHA -> $AFTER_SHA — merging."
-          gh pr merge "$PR_NUMBER" --squash --delete-branch \
-            || gh pr merge "$PR_NUMBER" --squash
+          echo "PR #$PR_NUMBER advanced $BEFORE_SHA -> $AFTER_SHA."
+          gh pr comment "$PR_NUMBER" --body "Agent pushed new commits — merge this PR manually when ready (Actions cannot merge PRs under this repo's policy)." \
+            || echo "Could not comment on the PR."
 
   # ---------------------------------------------------------------------------
   # 3. Automatically review pull requests you open

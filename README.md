@@ -197,12 +197,19 @@ non-blocking (warning level) pending a repo-wide `--fix` pass.
 ## Automation — the software factory
 
 This repo runs itself through two GitHub Actions workflows (both heavily
-commented, see `.github/workflows/`):
+commented, see `.github/workflows/`). **This repo's Actions policy does not
+allow workflow-created PRs, so the factory lands everything on one
+long-lived branch: `work`.** You merge `work` into `main` manually whenever
+you like:
+
+```bash
+git checkout main && git merge work && git push
+```
 
 | Workflow | Trigger | What it does |
 | -------- | ------- | ------------ |
-| `opencode.yml` | Issues and `/opencode` comments you open | Implements on an `opencode/*` branch, opens a PR (the workflow does it if the agent forgets), squash-merges, comments the result on your issue. Blocked? It opens a question issue @-mentioning you instead of guessing. |
-| `opencode-cron.yml` | 09:00 / 13:00 / 17:00 UTC + manual | Burns down **up to 5 TODO items per run** (branch → implement → mark done → PR → merge, one at a time), always ships a `todoAgent Ran` README footer, sweeps any stranded branch from earlier runs. |
+| `opencode.yml` | Issues and `/opencode` comments you open | Implements on an `opencode/*` branch based on `work`, merges it straight into `work` (no PR), comments the result on your issue. Blocked? It opens a question issue @-mentioning you instead of guessing. |
+| `opencode-cron.yml` | 09:00 / 13:00 / 17:00 UTC + manual | Burns down **up to 5 TODO items per run** (branch from `work` → implement → mark done → land in `work`, one at a time), always ships a `todoAgent Ran` README footer on `work`, sweeps any stranded branch from earlier runs into `work`. |
 
 **Why isn't it one endless in-run loop?** Three GitHub platform limits:
 
