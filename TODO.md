@@ -31,12 +31,15 @@ Rules for the factory:
       `CustomFonts.js` so `App.js`'s `useFonts` loads them; names exposed in
       `Fonts.js`; `Theme.js` `fontFamily` now maps to the concrete loaded
       font names.)
-- [ ] **MallMate base component kit** in `src/components/mallmate/`:
+- [x] **MallMate base component kit** in `src/components/mallmate/`:
       Button (default/pressed/disabled/loading), TextInput, Card,
       SectionHeader, ListRow, Badge ("Sponsored"/"Featured"), StatusChip,
       EmptyState, ErrorState (with retry), LoadingState. Theme theming from
       `Theme.js` only; 44–48px touch targets; export via the barrel.
-      Blueprint: `04-mobile/DESIGN_SYSTEM.md` component states.
+      Blueprint: `04-mobile/DESIGN_SYSTEM.md` component states. (Done: all
+      10 components + `mallmate/index.js` barrel, re-exported from
+      `src/components/index.js`; pressed/disabled/loading/focused/invalid
+      states implemented per the design system.)
 - [ ] **Bottom tab navigation**: Home | Explore | Map | Rewards | Profile
       with placeholder screens (`src/screens/home/HomeScreen.js`, etc.),
       keeping the existing auth stack; after successful sign-in navigate to
