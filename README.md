@@ -194,6 +194,31 @@ non-blocking (warning level) pending a repo-wide `--fix` pass.
 3. Update [TODO.md](./TODO.md) / this README if you change behaviour.
 4. Open a pull request.
 
+## Automation — the software factory
+
+This repo runs itself through two GitHub Actions workflows (both heavily
+commented, see `.github/workflows/`):
+
+| Workflow | Trigger | What it does |
+| -------- | ------- | ------------ |
+| `opencode.yml` | Issues and `/opencode` comments you open | Implements on an `opencode/*` branch, opens a PR (the workflow does it if the agent forgets), squash-merges, comments the result on your issue. Blocked? It opens a question issue @-mentioning you instead of guessing. |
+| `opencode-cron.yml` | 09:00 / 13:00 / 17:00 UTC + manual | Burns down **up to 5 TODO items per run** (branch → implement → mark done → PR → merge, one at a time), always ships a `todoAgent Ran` README footer, sweeps any stranded branch from earlier runs. |
+
+**Why isn't it one endless in-run loop?** Three GitHub platform limits:
+
+1. A workflow job is capped at 6 hours (we budget ~70 min), and agent
+   quality degrades over very long single sessions.
+2. A run authenticated with the built-in `GITHUB_TOKEN` is **not allowed to
+   trigger further workflow runs** (GitHub's recursion guard) — the factory
+   cannot re-launch itself mid-run. Only the cron clock or you can.
+3. `TODO.md` / `AGENTS.md` / `PRD.md` control *what* the agent does per
+   iteration (queue, rules, spec) — but they cannot extend a job's lifetime
+   or add steps. So the durable loop is split: **cron = when**, **prompt =
+   what per run**, **safety net = never leave a branch behind**.
+
+Tune it in `opencode-cron.yml`: the `cron:` line (cadence), the
+"LOOP LIMITS" line in the prompt (tasks per run), and `timeout-minutes`.
+
 ## License
 
 MIT — see [LICENSE](./LICENSE).

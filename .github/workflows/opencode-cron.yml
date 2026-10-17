@@ -13,9 +13,10 @@ name: OpenCode Scheduled TODO Worker
 #    If the agent ever needs a decision from you, it stops and opens an
 #    issue mentioning @${{ github.repository_owner }} with numbered questions.
 #    Safety net: after the agent finishes (even partially), a workflow step
-#    diffs the remote branch list and opens+merges a PR for ANY opencode/*
-#    branch pushed during this run that is still unmerged — no stranded
-#    branches, ever.
+#    opens+merges a PR for ANY opencode/* branch pushed during this run AND
+#    sweeps any leftover opencode/todo-* branch from earlier failed runs —
+#    no stranded branches, ever. (Branches whose PR failed to merge show up
+#    as a red run so they cannot rot silently.)
 #
 #  SCHEDULE (cron is UTC):
 #    Current: "0 9,13,17 * * *" = 09:00, 13:00 and 17:00 UTC daily.
@@ -25,9 +26,11 @@ name: OpenCode Scheduled TODO Worker
 #    scheduled workflows after 60 days without repo activity (merges keep it
 #    alive). You can always run it manually: Actions tab -> Run workflow.
 #
-#  TASKS_PER_RUN:
-#    Hard-coded in the prompt below ("up to 3 tasks / ~35 minutes").
-#    Raise it for faster burn-down, or lower it if runs get truncated.
+#  TASKS_PER_RUN (the loop knob):
+#    Hard-coded in the prompt below ("up to 5 tasks / ~70 minutes"). Raise
+#    it for faster burn-down (job timeout is 120 min), or lower it if runs
+#    get truncated. One task is always merged before the next starts, so a
+#    truncated run never loses completed work.
 #
 #  MODEL / AUTH:
 #    - Change `model:` below (format: provider/model).
@@ -66,7 +69,7 @@ jobs:
   todo-worker:
     name: Factory loop — burn down TODO, merge as we go
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
 
     permissions:
       contents: write
@@ -102,7 +105,7 @@ jobs:
             take the next. The workflow's safety-net step merges any branch
             you leave unmerged, but you should finish each task yourself.
 
-            LOOP LIMITS: up to 3 tasks per run, about 35 minutes total.
+            LOOP LIMITS: up to 5 tasks per run, about 70 minutes total.
             Stop early when: no actionable tasks remain, the limits are
             reached, or you are blocked (see BLOCKED below).
 
@@ -172,10 +175,13 @@ jobs:
             - Explain every change and verification honestly in the PR body.
             - Never merge with conflicts or force-push to main.
 
-      # SAFETY NET — diff the branch list from before the agent ran; for every
-      # NEW opencode/* branch still without a merged PR: open a PR (if the
-      # agent didn't) and squash-merge it. No branch is stranded even if
-      # the agent was interrupted after pushing.
+      # SAFETY NET — candidates are (a) every NEW opencode/* branch from
+      # this run (diff vs the before-snapshot) plus (b) every pre-existing
+      # opencode/todo-* branch still on the remote (self-healing sweep of
+      # strays from earlier interrupted runs). For each: merge it if it has
+      # an open PR, create the PR first if it has none, skip if already
+      # merged/closed. opencode/todo-* branches only come from this
+      # workflow, whose concurrency group guarantees no overlapping runs.
       - name: Open and merge pull requests for new branches
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -184,16 +190,20 @@ jobs:
           gh api --paginate "repos/${{ github.repository }}/branches?per_page=100" \
             --jq '.[].name' | sort > /tmp/branches-after.txt
 
-          NEW_BRANCHES=$(comm -13 /tmp/branches-before.txt /tmp/branches-after.txt \
-            | grep '^opencode/' || true)
+          CANDIDATES=$(
+            {
+              comm -13 /tmp/branches-before.txt /tmp/branches-after.txt
+              grep '^opencode/todo-' /tmp/branches-after.txt || true
+            } | grep '^opencode/' | sort -u || true
+          )
 
-          if [ -z "$NEW_BRANCHES" ]; then
-            echo "No new opencode/* branches left to handle."
+          if [ -z "$CANDIDATES" ]; then
+            echo "No opencode/* branches left to handle."
             exit 0
           fi
 
           FAILED=0
-          for BRANCH in $NEW_BRANCHES; do
+          for BRANCH in $CANDIDATES; do
             PR_URL=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[].url' | head -n 1)
             if [ -z "$PR_URL" ]; then
               EXISTING=$(gh pr list --head "$BRANCH" --state all --json number --jq 'length')
@@ -211,6 +221,6 @@ jobs:
           done
 
           if [ "$FAILED" = "1" ]; then
-            echo "::error::One or more todoAgent branches could not be merged (conflicts or protection)."
+            echo "::error::One or more todoAgent branches could not be merged (conflicts or protection) — resolve via an issue."
           fi
           exit $FAILED

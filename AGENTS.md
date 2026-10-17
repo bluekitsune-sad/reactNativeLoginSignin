@@ -7,8 +7,9 @@ Guidance for AI agents (and humans) working on this repository.
 An **Expo SDK 50 / React Native 0.73** JavaScript app. Historically a food
 ordering scaffold (sign‑in flow implemented); **it is now becoming the
 MallMate multi‑mall app** (see below). TypeScript is introduced incrementally
-(`tsconfig.json` with `allowJs`); new type files live in `src/types/`. There
-are still no tests and no linter — those are on the backlog.
+(`tsconfig.json` with `allowJs`); new type files live in `src/types/`.
+`npm run lint` (ESLint) and `npm run typecheck` (`tsc --noEmit`) exist; there
+is still no test suite — tests are on the backlog.
 
 Entry point: `App.js` → loads fonts → renders `src/navigators/index.js`.
 
