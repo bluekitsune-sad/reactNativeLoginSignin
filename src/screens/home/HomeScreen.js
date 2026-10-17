@@ -1,14 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { EmptyState } from "../../components";
-import { MallMateTheme } from "../../constants";
+import { CapabilityCard, EmptyState, SectionHeader } from "../../components";
+import { CAPABILITIES, CAPABILITY_META, CAPABILITY_STATUS, MallMateTheme } from "../../constants";
 import { useMallManagement } from "../../utils";
 
 const HomeScreen = ({ navigation }) => {
   const { selectedMall } = useMallManagement();
+  const capabilityMap = selectedMall.capabilities || {};
+  const visibleCapabilities = Object.values(CAPABILITIES).filter((key) => {
+    const status = capabilityMap[key];
+    return status === CAPABILITY_STATUS.ENABLED || status === CAPABILITY_STATUS.DEGRADED;
+  });
+
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <Pressable
@@ -24,13 +30,35 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <Ionicons name="chevron-down" size={20} color={MallMateTheme.color.textMuted} />
       </Pressable>
-      <View style={styles.body}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <SectionHeader title="Services" />
+        {visibleCapabilities.length ? (
+          <View style={styles.grid}>
+            {visibleCapabilities.map((key) => {
+              const meta = CAPABILITY_META[key];
+              const degraded = capabilityMap[key] === CAPABILITY_STATUS.DEGRADED;
+              return (
+                <CapabilityCard
+                  key={key}
+                  title={meta.title}
+                  description={meta.description}
+                  icon={meta.icon}
+                  degraded={degraded}
+                />
+              );
+            })}
+          </View>
+        ) : (
+          <EmptyState
+            title="No services yet"
+            message="This mall has no enabled services right now."
+          />
+        )}
         <EmptyState
-          icon={<Ionicons name="home-outline" size={48} color={MallMateTheme.color.primary} />}
-          title="Home"
-          message="Mall home, categories and offers are coming soon."
+          title="More coming soon"
+          message="Categories, offers and events will appear here."
         />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -66,9 +94,13 @@ const styles = StyleSheet.create({
     fontSize: MallMateTheme.typography.bodyLarge.fontSize,
     fontFamily: MallMateTheme.fontFamily.semiBold,
   },
-  body: {
-    flex: 1,
-    justifyContent: "center",
+  content: {
+    padding: MallMateTheme.spacing.lg,
+  },
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
   },
 });
 

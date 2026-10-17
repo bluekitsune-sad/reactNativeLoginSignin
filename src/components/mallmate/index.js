@@ -1,5 +1,6 @@
 import Badge from "./Badge";
 import Button from "./Button";
+import CapabilityCard from "./CapabilityCard";
 import Card from "./Card";
 import EmptyState from "./EmptyState";
 import ErrorState from "./ErrorState";
@@ -13,6 +14,7 @@ export {
   Button,
   TextInput,
   Card,
+  CapabilityCard,
   SectionHeader,
   ListRow,
   Badge,

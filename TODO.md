@@ -55,9 +55,13 @@ Rules for the factory:
       `MallProvider`/`useMallManagement` in `src/utils/mallData.js` with
       AsyncStorage persistence via new `StorageService` mall helpers,
       `MallSelectorScreen` stack route, current-mall bar on Home.)
-- [ ] **Capability-driven home skeleton**: render only ENABLED capability
+- [x] **Capability-driven home skeleton**: render only ENABLED capability
       cards for the selected mall (use `src/constants/Capabilities.js` and
       mock config); hide DISABLED, label DEGRADED. Blueprint: PRD 5.3.
+      (Done: `CapabilityMeta` title/description/icon registry +
+      `CapabilityCard` kit component with "Limited" StatusChip for
+      DEGRADED; Home grids ENABLED/DEGRADED cards from the selected
+      mall's mock capability map, hides DISABLED, empty fallback.)
 - [ ] **Typed API client helper**: axios wrapper using `ApiContants` base
       URL and the services error envelope `{status, message, data}`;
       document it in AGENTS.md. Blueprint: `03-api/API_SPEC.md`.
