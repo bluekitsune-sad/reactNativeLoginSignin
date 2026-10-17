@@ -47,9 +47,14 @@ Rules for the factory:
       (Done: `MainTabNavigator` with themed tab bar + Ionicons; placeholders
       under `src/screens/{home,explore,map,rewards,profile}/`; stack screen
       `Main`; `SigninScreen` uses `navigation.replace("Main")` on success.)
-- [ ] **Mall selector screen** with mock data for one mall (LuckyOne:
+- [x] **Mall selector screen** with mock data for one mall (LuckyOne:
       name/logo/hours); persist the selection in a small `MallContext`
-      readable by other screens. Blueprint: PRD section 5.2.
+      readable by other screens. Blueprint: PRD section 5.2. (Done:
+      `src/mock/malls.js` (LuckyOne + mock capability map, logo as
+      placeholder initial — real branding is blocked pending permission),
+      `MallProvider`/`useMallManagement` in `src/utils/mallData.js` with
+      AsyncStorage persistence via new `StorageService` mall helpers,
+      `MallSelectorScreen` stack route, current-mall bar on Home.)
 - [ ] **Capability-driven home skeleton**: render only ENABLED capability
       cards for the selected mall (use `src/constants/Capabilities.js` and
       mock config); hide DISABLED, label DEGRADED. Blueprint: PRD 5.3.

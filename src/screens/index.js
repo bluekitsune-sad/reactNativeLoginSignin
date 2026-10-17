@@ -3,6 +3,7 @@ import SigninScreen from "./SigninScreen";
 import SignupScreen from "./SignupScreen";
 import ExploreScreen from "./explore/ExploreScreen";
 import HomeScreen from "./home/HomeScreen";
+import MallSelectorScreen from "./mall/MallSelectorScreen";
 import MapScreen from "./map/MapScreen";
 import ProfileScreen from "./profile/ProfileScreen";
 import RewardsScreen from "./rewards/RewardsScreen";
@@ -18,6 +19,7 @@ export {
   MapScreen,
   RewardsScreen,
   ProfileScreen,
+  MallSelectorScreen,
   // RegisterPhoneScreen,
   // VerificationScreen,
 };

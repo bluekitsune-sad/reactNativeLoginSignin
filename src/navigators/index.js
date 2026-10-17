@@ -6,10 +6,12 @@ import {
   SigninScreen,
   SignupScreen,
   ForgotPasswordScreen,
+  MallSelectorScreen,
   // RegisterPhoneScreen,
   // VerificationScreen,
 } from "../screens";
 import MainTabNavigator from "./MainTabNavigator";
+import { MallProvider } from "../utils/mallData";
 import { UserProvider } from "../utils/userData";
 
 const Stack = createStackNavigator();
@@ -17,18 +19,21 @@ const Stack = createStackNavigator();
 const Navigators = () => {
   return (
     <UserProvider>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <>
-            <Stack.Screen name="Signin" component={SigninScreen} />
-            <Stack.Screen name="Signup" component={SignupScreen} />
-            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-            <Stack.Screen name="Main" component={MainTabNavigator} />
-            {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
-            {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
-          </>
-        </Stack.Navigator>
-      </NavigationContainer>
+      <MallProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <>
+              <Stack.Screen name="Signin" component={SigninScreen} />
+              <Stack.Screen name="Signup" component={SignupScreen} />
+              <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+              <Stack.Screen name="Main" component={MainTabNavigator} />
+              <Stack.Screen name="MallSelector" component={MallSelectorScreen} />
+              {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
+              {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
+            </>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </MallProvider>
     </UserProvider>
   );
 };
