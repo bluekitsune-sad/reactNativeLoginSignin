@@ -12,9 +12,6 @@ lives in [`MallMate_Project_Blueprint/`](./MallMate_Project_Blueprint/README.md)
 per run, following the blueprint docs linked in each item. Keep changes
 small and verifiable; update this file and the README when done.
 
-- [ ] **Load the Inter font family** for MallMate typography (bundled TTF
-      or `@expo-google-fonts/inter`) in `App.js`, exposed through
-      `Fonts.js`. Blueprint: `04-mobile/DESIGN_SYSTEM.md`.
 - [ ] **Bottom tab navigation**: Home | Explore | Map | Rewards | Profile
       with placeholder screens (`src/screens/home/HomeScreen.js`, etc.),
       keeping the existing auth stack; after successful sign-in navigate to
@@ -136,6 +133,13 @@ P0 — App is broken / blocking
 ---
 
 ## Done
+
+- [x] **Inter font family loaded for MallMate typography.** Added
+      `@expo-google-fonts/inter` (weights 400/500/600/700); `App.js` loads
+      Inter alongside Poppins via `useFonts`; registered names exposed in
+      `Fonts.js` (`INTER`, `INTER_MEDIUM`, `INTER_SEMI_BOLD`, `INTER_BOLD`)
+      and wired into `Theme.js` typography/fontFamily tokens. Blueprint:
+      `04-mobile/DESIGN_SYSTEM.md`.
 
 - [x] **Software-factory automation.** Issue runs now auto-open *and*
       auto-merge PRs via a before/after branch-list diff (works even when

@@ -40,7 +40,8 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
   `CartService`, `BookmarkService`, `UserService`, `StorageService`,
   `StaticImageService`.
 - Local persistence via `AsyncStorage` (`StorageService`).
-- Poppins font family loaded at boot through `expo-font`.
+- Poppins (legacy) and Inter (MallMate) font families loaded at boot through
+  `expo-font` / `@expo-google-fonts/inter`.
 - Reusable UI kit: `Separator`, `ToggleButton`, `WelcomeCard`, `FoodCard`,
   `RestaurantCard`, `RestaurantMediumCard`, `CategoryMenuItem`,
   `CategoryListItem`, `FlagItem`.
@@ -57,7 +58,7 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 | HTTP       | `axios` |
 | Storage    | `@react-native-async-storage/async-storage` |
 | Animation  | `lottie-react-native`, `Animated` API |
-| Fonts      | `expo-font` (Poppins) |
+| Fonts      | `expo-font` (Poppins + Inter via `@expo-google-fonts/inter`) |
 | Icons      | `@expo/vector-icons` (Ionicons, Feather, AntDesign, FontAwesome) |
 | Safe area  | `react-native-safe-area-context` |
 

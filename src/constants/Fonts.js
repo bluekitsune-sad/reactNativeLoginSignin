@@ -8,4 +8,8 @@ export default {
   POPPINS_REGULAR: 'Poppins-Regular',
   POPPINS_SEMI_BOLD: 'Poppins-SemiBold',
   POPPINS_THIN: 'Poppins-Thin',
+  INTER: 'Inter',
+  INTER_MEDIUM: 'Inter-Medium',
+  INTER_SEMI_BOLD: 'Inter-SemiBold',
+  INTER_BOLD: 'Inter-Bold',
 };
