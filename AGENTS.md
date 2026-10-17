@@ -51,9 +51,11 @@ npm run ios          # expo start --ios
 npm run web          # expo start --web
 ```
 
-There is no `lint` or `test` script; `npm run typecheck` runs `tsc --noEmit`.
-Do not claim verification you cannot perform; at minimum re-read the files you
-changed and keep JSX/imports consistent.
+There is now a `lint` script (ESLint + Prettier via `eslint-config-universe`,
+`npm run lint`) and `npm run typecheck` (`tsc --noEmit`); still no `test`
+script. Do not claim verification you cannot perform; at minimum re-read the
+files you changed and keep JSX/imports consistent, and run `npm run lint`
+(legacy files emit warnings — only introduce no new errors).
 
 ## Architecture rules
 

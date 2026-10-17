@@ -180,8 +180,11 @@ The expected sign‑in payload shape:
 | `npm run ios` | Start on iOS. |
 | `npm run web` | Start the web build. |
 | `npm run typecheck` | Run `tsc --noEmit` over the incremental TypeScript setup. |
+| `npm run lint` | Run ESLint (with Prettier rules via `eslint-config-universe`). |
 
-There is currently **no** lint or test script — see [TODO.md](./TODO.md).
+There is currently **no** test script — see [TODO.md](./TODO.md).
+`npm run lint` reports pre-existing style warnings on legacy files; they are
+non-blocking (warning level) pending a repo-wide `--fix` pass.
 
 ## Contributing
 
@@ -193,4 +196,7 @@ There is currently **no** lint or test script — see [TODO.md](./TODO.md).
 
 ## License
 
+MIT — see [LICENSE](./LICENSE).
+
+todoAgent Ran (2026-10-15): done — added ESLint + Prettier (eslint-config-universe) with npm run lint
 > todoAgent Ran (2026-10-16): done — introduced TypeScript incrementally (tsconfig with allowJs, src/types/mallmate.ts entity types from the ERD, npm run typecheck)

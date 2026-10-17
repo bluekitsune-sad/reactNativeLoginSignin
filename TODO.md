@@ -12,9 +12,6 @@ lives in [`MallMate_Project_Blueprint/`](./MallMate_Project_Blueprint/README.md)
 per run, following the blueprint docs linked in each item. Keep changes
 small and verifiable; update this file and the README when done.
 
-- [ ] **Add ESLint + Prettier** (`eslint-config-universe` fits Expo) with
-      `npm run lint`. Blueprint: `07-delivery/ROADMAP_AND_BACKLOG.md`
-      Phase 1 (TypeScript/lint/format/test standards).
 - [ ] **Load the Inter font family** for MallMate typography (bundled TTF
       or `@expo-google-fonts/inter`) in `App.js`, exposed through
       `Fonts.js`. Blueprint: `04-mobile/DESIGN_SYSTEM.md`.
@@ -121,7 +118,10 @@ P0 — App is broken / blocking
 
 ## P4 — Tooling & quality
 
-- [ ] Add ESLint (`eslint-config-universe` or similar) + `npm run lint`.
+- [x] Add ESLint (`eslint-config-universe` or similar) + `npm run lint`.
+- [ ] Bring the existing codebase to a clean lint baseline: run
+      `npx eslint . --fix` (clears ~260 of the ~275 current warnings) and
+      fix the remainder by hand.
 - [ ] Add tests (Jest + `@testing-library/react-native`) for services and the
       sign‑in flow; add `npm test`.
 - [ ] Consider TypeScript migration for screens/services.
@@ -185,3 +185,6 @@ P0 — App is broken / blocking
       `src/types/mallmate.ts` (+ `src/types/index.ts` barrel) defines core
       entity types `Mall`, `Capability`, `Merchant`, `OpeningHours` derived
       from `02-data/ERD.md`. No existing screens converted.
+- [x] ESLint + Prettier introduced (`eslint-config-universe` `universe/native`,
+      `.eslintrc.js` + `.prettierrc`) with `npm run lint`; existing style
+      debt left as warnings pending a follow-up `--fix` pass.
