@@ -6,8 +6,9 @@ Guidance for AI agents (and humans) working on this repository.
 
 An **Expo SDK 50 / React Native 0.73** JavaScript app. Historically a food
 ordering scaffold (sign‑in flow implemented); **it is now becoming the
-MallMate multi‑mall app** (see below). There is still **no TypeScript, no
-tests, no linter** in the repo — adding those is on the backlog.
+MallMate multi‑mall app** (see below). TypeScript is introduced incrementally
+(`tsconfig.json` with `allowJs`); new type files live in `src/types/`. There
+are still no tests and no linter — those are on the backlog.
 
 Entry point: `App.js` → loads fonts → renders `src/navigators/index.js`.
 
@@ -50,9 +51,9 @@ npm run ios          # expo start --ios
 npm run web          # expo start --web
 ```
 
-There is no `lint`, `typecheck` or `test` script. Do not claim verification you
-cannot perform; at minimum re-read the files you changed and keep JSX/imports
-consistent.
+There is no `lint` or `test` script; `npm run typecheck` runs `tsc --noEmit`.
+Do not claim verification you cannot perform; at minimum re-read the files you
+changed and keep JSX/imports consistent.
 
 ## Architecture rules
 
