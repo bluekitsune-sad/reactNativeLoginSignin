@@ -149,6 +149,50 @@ const EventsSection = ({ events, onSelect }) => {
   );
 };
 
+const TopSellingSection = ({ topSelling, onSelect }) => {
+  if (!topSelling) {
+    return null;
+  }
+  const { disclosure, restaurants, retail } = topSelling;
+  const groups = [
+    { key: "restaurants", title: "Top restaurants", items: restaurants },
+    { key: "retail", title: "Top retail", items: retail },
+  ].filter((group) => group.items.length > 0);
+  if (!groups.length) {
+    return null;
+  }
+  return (
+    <View>
+      <SectionHeader title="Popular now" />
+      <Text style={styles.disclosure} accessibilityLabel={disclosure}>
+        {disclosure}
+      </Text>
+      {groups.map((group) => (
+        <View key={group.key} style={styles.topGroup}>
+          <Text style={styles.topGroupTitle}>{group.title}</Text>
+          {group.items.map((item, index) => (
+            <Card key={item.id} onPress={() => onSelect(item)} style={styles.topRow}>
+              <View style={styles.topRankBox}>
+                <Text style={styles.topRank}>{index + 1}</Text>
+              </View>
+              <View style={styles.topBody}>
+                <Text style={styles.topMerchant} numberOfLines={1}>
+                  {item.merchant}
+                </Text>
+                {item.note ? (
+                  <Text style={styles.topNote} numberOfLines={1}>
+                    {item.note}
+                  </Text>
+                ) : null}
+              </View>
+            </Card>
+          ))}
+        </View>
+      ))}
+    </View>
+  );
+};
+
 const HomeScreen = ({ navigation }) => {
   const { selectedMall } = useMallManagement();
   const capabilityMap = selectedMall.capabilities || {};
@@ -156,12 +200,16 @@ const HomeScreen = ({ navigation }) => {
     const status = capabilityMap[key];
     return status === CAPABILITY_STATUS.ENABLED || status === CAPABILITY_STATUS.DEGRADED;
   });
-  const { categories, featured, discounts, events } = getHomeSections(
+  const { categories, featured, discounts, events, topSelling } = getHomeSections(
     selectedMall.slug,
     capabilityMap,
   );
   const hasContent =
-    categories.length > 0 || featured.length > 0 || discounts.length > 0 || events.length > 0;
+    categories.length > 0 ||
+    featured.length > 0 ||
+    discounts.length > 0 ||
+    events.length > 0 ||
+    !!topSelling;
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
@@ -211,6 +259,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <DiscountsSection offers={discounts} onSelect={() => goExplore(navigation)} />
         <EventsSection events={events} onSelect={() => goExplore(navigation)} />
+        <TopSellingSection topSelling={topSelling} onSelect={() => goExplore(navigation)} />
         {!hasContent ? (
           <EmptyState
             title="Nothing new right now"
@@ -375,6 +424,57 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textSecondary,
     fontSize: MallMateTheme.typography.caption.fontSize,
     fontFamily: MallMateTheme.fontFamily.regular,
+  },
+  disclosure: {
+    color: MallMateTheme.color.textMuted,
+    fontSize: MallMateTheme.typography.caption.fontSize,
+    fontFamily: MallMateTheme.fontFamily.regular,
+    marginBottom: MallMateTheme.spacing.md,
+  },
+  topGroup: {
+    marginBottom: MallMateTheme.spacing.md,
+  },
+  topGroupTitle: {
+    color: MallMateTheme.color.textSecondary,
+    fontSize: MallMateTheme.typography.label.fontSize,
+    fontFamily: MallMateTheme.fontFamily.medium,
+    marginBottom: MallMateTheme.spacing.sm,
+  },
+  topRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: MallMateTheme.spacing.sm,
+    padding: MallMateTheme.spacing.md,
+  },
+  topRankBox: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: MallMateTheme.color.surfaceElevated,
+    borderWidth: 1,
+    borderColor: MallMateTheme.color.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: MallMateTheme.spacing.md,
+  },
+  topRank: {
+    color: MallMateTheme.color.primary,
+    fontSize: MallMateTheme.typography.label.fontSize,
+    fontFamily: MallMateTheme.fontFamily.bold,
+  },
+  topBody: {
+    flex: 1,
+  },
+  topMerchant: {
+    color: MallMateTheme.color.textPrimary,
+    fontSize: MallMateTheme.typography.body.fontSize,
+    fontFamily: MallMateTheme.fontFamily.semiBold,
+  },
+  topNote: {
+    color: MallMateTheme.color.textSecondary,
+    fontSize: MallMateTheme.typography.caption.fontSize,
+    fontFamily: MallMateTheme.fontFamily.regular,
+    marginTop: 2,
   },
 });
 

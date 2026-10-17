@@ -130,6 +130,17 @@ export const HOME_CONTENT = {
         endsAt: farFuture,
       },
     ],
+    topSelling: {
+      disclosure: "Based on completed app orders only (last 7 days). Not total mall sales.",
+      restaurants: [
+        { id: "lucky-top-r1", merchant: "Spice Route Kitchen", note: "Lunch combos" },
+        { id: "lucky-top-r2", merchant: "Noodle Bar Express", note: "Quick bites" },
+      ],
+      retail: [
+        { id: "lucky-top-s1", merchant: "Demo Fashion", note: "Seasonal picks" },
+        { id: "lucky-top-s2", merchant: "TechHub Electronics", note: "Accessories" },
+      ],
+    },
     exploreDirectories: [
       {
         key: "restaurants",
@@ -273,6 +284,11 @@ export const HOME_CONTENT = {
         endsAt: farFuture,
       },
     ],
+    topSelling: {
+      disclosure: "Based on completed app orders only (last 7 days). Not total mall sales.",
+      restaurants: [],
+      retail: [{ id: "harbour-top-s1", merchant: "Harbour Boutique", note: "Summer edit" }],
+    },
     exploreDirectories: [
       {
         key: "outlets",
@@ -382,7 +398,7 @@ export const isOfferActive = (offer, now = new Date()) => {
 export const getHomeSections = (mallSlug, capabilityMap, now = new Date()) => {
   const content = getContentForMall(mallSlug);
   if (!content) {
-    return { categories: [], featured: [], discounts: [], events: [] };
+    return { categories: [], featured: [], discounts: [], events: [], topSelling: null };
   }
   const categories = (content.categories || []).filter((category) =>
     isCapabilityVisible(capabilityMap, category.capability),
@@ -396,7 +412,20 @@ export const getHomeSections = (mallSlug, capabilityMap, now = new Date()) => {
   const events = (content.events || []).filter(
     (event) => isCapabilityVisible(capabilityMap, event.capability) && isOfferActive(event, now),
   );
-  return { categories, featured, discounts, events };
+  let topSelling = null;
+  const rawTop = content.topSelling;
+  if (rawTop) {
+    const restaurants = isCapabilityVisible(capabilityMap, "restaurant_discovery")
+      ? rawTop.restaurants || []
+      : [];
+    const retail = isCapabilityVisible(capabilityMap, "retail_discovery")
+      ? rawTop.retail || []
+      : [];
+    if (restaurants.length || retail.length) {
+      topSelling = { disclosure: rawTop.disclosure, restaurants, retail };
+    }
+  }
+  return { categories, featured, discounts, events, topSelling };
 };
 
 /**

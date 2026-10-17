@@ -151,10 +151,15 @@ Rules for the factory:
       Blueprint: PRD 5.8, SCREEN_INVENTORY 26.
 - [ ] **Favorites tab**: local favorites (AsyncStorage) for mock merchants,
       empty state. Blueprint: SCREEN_INVENTORY 27.
-- [ ] **Organic top-selling section** on Home using MOCK numbers with the
+- [x] **Organic top-selling section** on Home using MOCK numbers with the
       mandatory disclosure ("based on app orders only"), separated
       restaurant vs retail. Presentation only — no ranking logic (blocked).
-      Blueprint: PRD 5.6, SCREEN_INVENTORY 13.
+      Blueprint: PRD 5.6, SCREEN_INVENTORY 13. (Done: `topSelling` mock
+      block per mall in `src/mock/homeContent.js` (disclosure + separate
+      restaurant/retail lists), capability-gated via `getHomeSections`;
+      HomeScreen "Popular now" section renders ranked mock rows with the
+      mandatory "Based on completed app orders only… Not total mall sales"
+      disclosure. No ranking computation.)
 
 ### Stage D — food court (presentation only; session logic is blocked)
 
