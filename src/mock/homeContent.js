@@ -130,6 +130,93 @@ export const HOME_CONTENT = {
         endsAt: farFuture,
       },
     ],
+    exploreDirectories: [
+      {
+        key: "restaurants",
+        title: "Restaurants",
+        subtitle: "Dining and food-court menus",
+        icon: "restaurant-outline",
+        capability: "restaurant_discovery",
+      },
+      {
+        key: "outlets",
+        title: "Outlets",
+        subtitle: "Shops, brands and services",
+        icon: "storefront-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "food-court",
+        title: "Food court",
+        subtitle: "Quick bites and seating zones",
+        icon: "cafe-outline",
+        capability: "food_court",
+      },
+      {
+        key: "offers",
+        title: "Offers",
+        subtitle: "Active discounts and coupons",
+        icon: "pricetag-outline",
+        capability: "digital_coupons",
+      },
+      {
+        key: "events",
+        title: "Events",
+        subtitle: "What's on at the mall",
+        icon: "calendar-outline",
+        capability: "events",
+      },
+    ],
+    exploreCategories: [
+      {
+        key: "dining",
+        title: "Dining",
+        icon: "restaurant-outline",
+        capability: "restaurant_discovery",
+      },
+      {
+        key: "fashion",
+        title: "Fashion",
+        icon: "shirt-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "electronics",
+        title: "Electronics",
+        icon: "phone-portrait-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "groceries",
+        title: "Groceries",
+        icon: "cart-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "beauty",
+        title: "Beauty & health",
+        icon: "sparkles-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "kids",
+        title: "Kids & family",
+        icon: "happy-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "home",
+        title: "Home & living",
+        icon: "home-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "services",
+        title: "Services",
+        icon: "construct-outline",
+        capability: "retail_discovery",
+      },
+    ],
   },
   harbourwalk: {
     categories: [
@@ -184,6 +271,75 @@ export const HOME_CONTENT = {
         location: "Promenade",
         capability: "events",
         endsAt: farFuture,
+      },
+    ],
+    exploreDirectories: [
+      {
+        key: "outlets",
+        title: "Outlets",
+        subtitle: "Shops, brands and services",
+        icon: "storefront-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "restaurants",
+        title: "Restaurants",
+        subtitle: "Dining and food-court menus",
+        icon: "restaurant-outline",
+        capability: "restaurant_discovery",
+      },
+      {
+        key: "food-court",
+        title: "Food court",
+        subtitle: "Quick bites and seating zones",
+        icon: "cafe-outline",
+        capability: "food_court",
+      },
+      {
+        key: "offers",
+        title: "Offers",
+        subtitle: "Active discounts and coupons",
+        icon: "pricetag-outline",
+        capability: "digital_coupons",
+      },
+      {
+        key: "events",
+        title: "Events",
+        subtitle: "What's on at the mall",
+        icon: "calendar-outline",
+        capability: "events",
+      },
+    ],
+    exploreCategories: [
+      {
+        key: "fashion",
+        title: "Fashion",
+        icon: "shirt-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "beauty",
+        title: "Beauty & health",
+        icon: "sparkles-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "home",
+        title: "Home & living",
+        icon: "home-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "services",
+        title: "Services",
+        icon: "construct-outline",
+        capability: "retail_discovery",
+      },
+      {
+        key: "dining",
+        title: "Dining",
+        icon: "restaurant-outline",
+        capability: "restaurant_discovery",
       },
     ],
   },
@@ -241,6 +397,24 @@ export const getHomeSections = (mallSlug, capabilityMap, now = new Date()) => {
     (event) => isCapabilityVisible(capabilityMap, event.capability) && isOfferActive(event, now),
   );
   return { categories, featured, discounts, events };
+};
+
+/**
+ * Resolve the Explore landing content for a mall (SCREEN_INVENTORY 18):
+ * capability-gated directory entries and a category grid.
+ */
+export const getExploreContent = (mallSlug, capabilityMap) => {
+  const content = getContentForMall(mallSlug);
+  if (!content) {
+    return { directories: [], categoryGrid: [] };
+  }
+  const directories = (content.exploreDirectories || []).filter((entry) =>
+    isCapabilityVisible(capabilityMap, entry.capability),
+  );
+  const categoryGrid = (content.exploreCategories || []).filter((category) =>
+    isCapabilityVisible(capabilityMap, category.capability),
+  );
+  return { directories, categoryGrid };
 };
 
 export default HOME_CONTENT;

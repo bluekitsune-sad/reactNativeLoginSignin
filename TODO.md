@@ -112,8 +112,13 @@ Rules for the factory:
       HomeScreen renders Browse chips, a Featured carousel with mandatory
       Sponsored/Featured badges, Active discounts and Events sections —
       tapping any of them routes to the Explore tab placeholder for now.)
-- [ ] **Explore landing**: categories grid/list + entries to restaurant and
-      outlet lists. Blueprint: SCREEN_INVENTORY 18.
+- [x] **Explore landing**: categories grid/list + entries to restaurant and
+      outlet lists. Blueprint: SCREEN_INVENTORY 18. (Done: ExploreScreen
+      shows a mall-scoped search entry point, capability-gated directory
+      ListRows — Restaurants, Outlets, Food court, Offers, Events — and a
+      category grid; entries route to the existing placeholder stack screen
+      until list screens land. Mock explore directories/categories added per
+      mall in `src/mock/homeContent.js` via `getExploreContent`.)
 - [ ] **Search UI**: search bar, suggestion rows, results list (mock),
       distinct empty-results vs error states. Blueprint: PRD 5.7,
       SCREEN_INVENTORY 10, 19.
