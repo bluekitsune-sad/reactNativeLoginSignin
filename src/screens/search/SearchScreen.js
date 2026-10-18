@@ -119,10 +119,7 @@ const SearchScreen = ({ navigation }) => {
   };
 
   const openResult = (merchant) => {
-    navigation.navigate("ProfilePlaceholder", {
-      title: merchant.name,
-      message: `${merchant.category} · ${merchant.floor}. Merchant detail is coming soon.`,
-    });
+    navigation.navigate("MerchantDetail", { merchantId: merchant.id });
   };
 
   const showResults = status === "ready";

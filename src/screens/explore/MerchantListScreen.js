@@ -130,10 +130,7 @@ const MerchantListScreen = ({ navigation, route }) => {
   }, [selectedMall.slug, kind, available]);
 
   const openMerchant = (merchant) => {
-    navigation.navigate("ProfilePlaceholder", {
-      title: merchant.name,
-      message: `${merchant.category}${merchant.cuisine ? ` · ${merchant.cuisine}` : ""} · ${merchant.floor}. Merchant detail is coming soon.`,
-    });
+    navigation.navigate("MerchantDetail", { merchantId: merchant.id });
   };
 
   const renderMerchant = ({ item }) => (

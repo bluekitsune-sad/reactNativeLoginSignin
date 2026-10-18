@@ -147,10 +147,16 @@ Rules for the factory:
       load-more retry, pull-to-refresh, capability-unavailable and
       empty-list states. Extra mock merchants added so lists span
       multiple pages.)
-- [ ] **Merchant detail page**: name, logo, category, floor/location,
+- [x] **Merchant detail page**: name, logo, category, floor/location,
       hours + open-now status, active offers, tags, contact placeholder,
       map-destination link placeholder. Blueprint: PRD 5.4, SCREEN_INVENTORY
-      23.
+      23. (Done: `MerchantDetailScreen` registered as `MerchantDetail`,
+      mall-scoped via `getMerchantDetail` mock resolver — initials logo
+      placeholder (branding blocked), open-now StatusChip + hours card,
+      tags, active offers with expired ones filtered upstream, placeholder
+      contact rows with an approval note, map-destination and menu
+      placeholder rows. Entry points rewired: merchant lists and search
+      results now open the detail page.)
 - [ ] **Menu/product list + item detail** for a mock merchant (sections,
       item cards, price display with tabular numerals). Blueprint:
       SCREEN_INVENTORY 24–25.
