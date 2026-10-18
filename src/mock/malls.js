@@ -34,7 +34,7 @@ export const MALLS = [
       retail_discovery: CAPABILITY_STATUS.ENABLED,
       online_ordering: CAPABILITY_STATUS.DEGRADED,
       online_payment: CAPABILITY_STATUS.DISABLED,
-      loyalty: CAPABILITY_STATUS.DISABLED,
+      loyalty: CAPABILITY_STATUS.ENABLED,
       indoor_navigation: CAPABILITY_STATUS.DEGRADED,
       live_parking: CAPABILITY_STATUS.DISABLED,
       events: CAPABILITY_STATUS.ENABLED,

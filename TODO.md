@@ -252,10 +252,19 @@ Rules for the factory:
 
 ### Stage F — rewards and orders (display only; logic is blocked)
 
-- [ ] **Rewards dashboard + ledger list (mock)**: points balance card and
+- [x] **Rewards dashboard + ledger list (mock)**: points balance card and
       ledger rows (earn/redeem/reverse types) from mock data. No earning,
       redemption, or balance logic (loyalty blocked). Blueprint:
-      SCREEN_INVENTORY 57–58, PRD 5.11.
+      SCREEN_INVENTORY 57–58, PRD 5.11. (Done: `src/mock/rewards.js`
+      (LuckyOne balance/pending/expiring + EARN/REDEEM/REVERSE ledger
+      incl. a pending entry and a reversal; Harbour Walk empty);
+      Rewards tab rebuilt as the dashboard — balance card with tabular
+      numerals and mock-data disclosure, Activity ledger rows with
+      per-type icons/points signs and a Pending chip, empty-ledger state.
+      Capability-gated on loyalty: unavailable state when DISABLED;
+      LuckyOne's mock loyalty flipped to ENABLED so the preview is
+      reachable, Harbour Walk stays DISABLED to show gating. No
+      earn/redeem logic.)
 - [ ] **Order history + order detail timeline (mock)**: list of mock orders
       and a status timeline using the PRD state names; clear pending vs
       confirmed states. No checkout or payments (blocked). Blueprint:
