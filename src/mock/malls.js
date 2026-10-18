@@ -38,7 +38,7 @@ export const MALLS = [
       indoor_navigation: CAPABILITY_STATUS.DEGRADED,
       live_parking: CAPABILITY_STATUS.DISABLED,
       events: CAPABILITY_STATUS.ENABLED,
-      seat_sessions: CAPABILITY_STATUS.DISABLED,
+      seat_sessions: CAPABILITY_STATUS.ENABLED,
       reservations: CAPABILITY_STATUS.DISABLED,
       digital_coupons: CAPABILITY_STATUS.ENABLED,
     },

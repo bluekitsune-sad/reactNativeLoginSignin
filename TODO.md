@@ -205,11 +205,20 @@ Rules for the factory:
       "scan to sit" card reflecting the `seat_sessions` capability —
       disabled/unavailable state when either capability is off. Explore's
       Food court directory entry now opens it.)
-- [ ] **Seat session screens (mock flow)**: scan-permission explainer,
+- [x] **Seat session screens (mock flow)**: scan-permission explainer,
       seat confirmation, active session card, ended/expired screen, and
       error states (invalid/occupied/unavailable) driven by mock data.
       Pure presentation — no QR validation, no session rules (open
-      decisions #9/#10). Blueprint: SCREEN_INVENTORY 29–33.
+      decisions #9/#10). Blueprint: SCREEN_INVENTORY 29–33. (Done:
+      `src/mock/seatSessions.js` demo scan targets + `resolveMockScan`
+      standing in for the backend and `createMockSession` for a
+      display-only session; five stack routes — SeatScan (camera-permission
+      explainer + demo codes), SeatConfirm, SeatSession (active card with
+      end/expiry actions), SeatSessionEnd (ended vs expired), SeatHelp
+      (invalid/occupied/unavailable/stale copy). Food-court "scan to sit"
+      opens the flow; LuckyOne's `seat_sessions` mock capability flipped to
+      ENABLED so the preview is reachable (Harbour Walk stays DISABLED to
+      show gating). No session rules enforced.)
 
 ### Stage E — maps and events (placeholder assets; no live positioning)
 

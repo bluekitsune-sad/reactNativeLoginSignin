@@ -11,9 +11,9 @@ import { useMallManagement } from "../../utils";
 /**
  * Food-court overview (SCREEN_INVENTORY 28) on mock data: venue summary and
  * a mock seating-zone list with static seat counts. The "scan to sit" entry
- * point is a placeholder that reflects the seat_sessions capability — no QR
- * validation or session rules here (blocked on open decisions #9/#10).
- * Capability-gated: DISABLED food_court shows an unavailable state.
+ * point reflects the seat_sessions capability and opens the mock seat-session
+ * flow — no QR validation or session rules here (blocked on open decisions
+ * #9/#10). Capability-gated: DISABLED food_court shows an unavailable state.
  */
 const FoodCourtScreen = ({ navigation }) => {
   const { selectedMall } = useMallManagement();
@@ -53,12 +53,8 @@ const FoodCourtScreen = ({ navigation }) => {
     );
   }
 
-  const openScanPlaceholder = () => {
-    navigation.navigate("ProfilePlaceholder", {
-      title: "Scan to sit",
-      message:
-        "QR scanning starts a food-court seat session. The scan flow is arriving in the next update.",
-    });
+  const openScanFlow = () => {
+    navigation.navigate("SeatScan");
   };
 
   return (
@@ -79,7 +75,7 @@ const FoodCourtScreen = ({ navigation }) => {
 
         <SectionHeader title="Scan to sit" style={styles.section} />
         {seatSessionsOn ? (
-          <Card onPress={openScanPlaceholder}>
+          <Card onPress={openScanFlow}>
             <View style={styles.scanRow}>
               <Ionicons
                 name="qr-code-outline"

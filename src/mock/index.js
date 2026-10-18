@@ -32,6 +32,14 @@ import {
   getOfferHeadline,
   getOfferValidity,
 } from "./offers";
+import {
+  MOCK_SCAN_TARGETS,
+  MOCK_SESSION_PREVIEW_MINUTES,
+  SCAN_OUTCOMES,
+  SEAT_HELP_COPY,
+  createMockSession,
+  resolveMockScan,
+} from "./seatSessions";
 
 export {
   MALLS,
@@ -67,4 +75,10 @@ export {
   getOfferValidity,
   getSuggestions,
   searchMerchants,
+  MOCK_SCAN_TARGETS,
+  MOCK_SESSION_PREVIEW_MINUTES,
+  SCAN_OUTCOMES,
+  SEAT_HELP_COPY,
+  createMockSession,
+  resolveMockScan,
 };

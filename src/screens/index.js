@@ -5,6 +5,11 @@ import ExploreScreen from "./explore/ExploreScreen";
 import MerchantListScreen from "./explore/MerchantListScreen";
 import FavoritesScreen from "./favorites/FavoritesScreen";
 import FoodCourtScreen from "./foodCourt/FoodCourtScreen";
+import SeatConfirmScreen from "./foodCourt/SeatConfirmScreen";
+import SeatHelpScreen from "./foodCourt/SeatHelpScreen";
+import SeatScanScreen from "./foodCourt/SeatScanScreen";
+import SeatSessionEndScreen from "./foodCourt/SeatSessionEndScreen";
+import SeatSessionScreen from "./foodCourt/SeatSessionScreen";
 import HomeScreen from "./home/HomeScreen";
 import MallSelectorScreen from "./mall/MallSelectorScreen";
 import MapScreen from "./map/MapScreen";
@@ -33,6 +38,11 @@ export {
   OfferDetailScreen,
   FavoritesScreen,
   FoodCourtScreen,
+  SeatScanScreen,
+  SeatConfirmScreen,
+  SeatSessionScreen,
+  SeatSessionEndScreen,
+  SeatHelpScreen,
   MapScreen,
   RewardsScreen,
   ProfileScreen,

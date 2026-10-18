@@ -14,6 +14,11 @@ import {
   OfferDetailScreen,
   FavoritesScreen,
   FoodCourtScreen,
+  SeatScanScreen,
+  SeatConfirmScreen,
+  SeatSessionScreen,
+  SeatSessionEndScreen,
+  SeatHelpScreen,
   ProfilePlaceholderScreen,
   SettingsScreen,
   SearchScreen,
@@ -59,6 +64,11 @@ const Navigators = () => {
                 <Stack.Screen name="OfferDetail" component={OfferDetailScreen} />
                 <Stack.Screen name="Favorites" component={FavoritesScreen} />
                 <Stack.Screen name="FoodCourt" component={FoodCourtScreen} />
+                <Stack.Screen name="SeatScan" component={SeatScanScreen} />
+                <Stack.Screen name="SeatConfirm" component={SeatConfirmScreen} />
+                <Stack.Screen name="SeatSession" component={SeatSessionScreen} />
+                <Stack.Screen name="SeatSessionEnd" component={SeatSessionEndScreen} />
+                <Stack.Screen name="SeatHelp" component={SeatHelpScreen} />
                 {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
                 {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
               </>
