@@ -261,7 +261,10 @@ const HomeScreen = ({ navigation }) => {
           offers={discounts}
           onSelect={(offer) => navigation.navigate("OfferDetail", { offerId: offer.id })}
         />
-        <EventsSection events={events} onSelect={() => goExplore(navigation)} />
+        <EventsSection
+          events={events}
+          onSelect={(event) => navigation.navigate("EventDetail", { eventId: event.id })}
+        />
         <TopSellingSection topSelling={topSelling} onSelect={() => goExplore(navigation)} />
         {!hasContent ? (
           <EmptyState
