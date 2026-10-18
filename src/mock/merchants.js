@@ -1,5 +1,6 @@
 import { CAPABILITY_STATUS } from "../constants";
-import { isCapabilityVisible, isOfferActive } from "./homeContent";
+import { isCapabilityVisible } from "./homeContent";
+import { getActiveOffersForMerchant } from "./offers";
 
 /**
  * Mock merchant directory for mall-scoped search (PRD 5.7, SCREEN_INVENTORY
@@ -446,184 +447,114 @@ export const fetchMerchantListPage = ({ mallSlug, capabilityMap, kind, page = 1 
     }, LIST_LATENCY_MS);
   });
 
-const offerActiveUntil = "2099-12-31T23:59:59Z";
-
 /**
  * Detail-page enrichment per merchant (PRD 5.4, SCREEN_INVENTORY 23):
- * description, hours summary, placeholder contact details and active
- * offers. Contact values are non-production placeholders; real merchant
- * contact publication needs owner/merchant approval (PRD: "contact
- * details when approved"). Offers carry `endsAt` so expired entries are
- * hidden the same way the backend would.
+ * description, hours summary and placeholder contact details. Contact
+ * values are non-production placeholders; real merchant contact
+ * publication needs owner/merchant approval (PRD: "contact details when
+ * approved"). Active offers are resolved from the shared offer catalogue
+ * (`./offers`), not stored here.
  */
 export const MERCHANT_DETAILS = {
   "lucky-m-1": {
     description: "Pakistani classics, family seating and daily buffets in the food court.",
     hours: "Daily · 10:00 – 22:00",
     contact: { phone: "+92 21 3456 7890", email: "hello@spiceroute.example" },
-    offers: [
-      {
-        id: "lucky-m-1-off-1",
-        label: "20% OFF",
-        title: "20% off lunch combos",
-        endsAt: offerActiveUntil,
-      },
-      {
-        id: "lucky-m-1-off-expired",
-        label: "50% OFF",
-        title: "Expired offer (hidden)",
-        endsAt: "2020-01-01T00:00:00Z",
-      },
-    ],
   },
   "lucky-m-2": {
     description: "Quick Chinese noodles and rice bowls.",
     hours: "Daily · 11:00 – 22:00",
     contact: { phone: "+92 21 3456 7891", email: null },
-    offers: [
-      {
-        id: "lucky-m-2-off-1",
-        label: "BOGO",
-        title: "Buy 1 get 1 on selected bowls",
-        endsAt: offerActiveUntil,
-      },
-    ],
   },
   "lucky-m-3": {
     description: "Everyday fashion and seasonal drops.",
     hours: "Mon–Sun · 10:00 – 22:00",
     contact: { phone: "+92 21 3456 7892", email: "support@demofashion.example" },
-    offers: [
-      {
-        id: "lucky-m-3-off-1",
-        label: "BOGO",
-        title: "Buy 1 get 1 on select footwear",
-        endsAt: offerActiveUntil,
-      },
-    ],
   },
   "lucky-m-4": {
     description: "Phones, laptops and accessories.",
     hours: "Mon–Sun · 10:00 – 22:00",
     contact: { phone: "+92 21 3456 7893", email: null },
-    offers: [],
   },
   "lucky-m-5": {
     description: "Beauty treatments and skincare services.",
     hours: "Tue–Sun · 11:00 – 21:00",
     contact: { phone: "+92 21 3456 7894", email: "bookings@bloombeauty.example" },
-    offers: [],
   },
   "lucky-m-6": {
     description: "Fresh karahi, BBQ and family dinners.",
     hours: "Daily · 12:00 – 23:00",
     contact: { phone: "+92 21 3456 7895", email: null },
-    offers: [],
   },
   "lucky-m-7": {
     description: "Smash burgers, fries and combo meals.",
     hours: "Daily · 11:00 – 23:00",
     contact: { phone: "+92 21 3456 7896", email: null },
-    offers: [
-      {
-        id: "lucky-m-7-off-1",
-        label: "COMBO",
-        title: "Burger + fries combo deal",
-        endsAt: offerActiveUntil,
-      },
-    ],
   },
   "lucky-m-8": {
     description: "Cakes, slices and frozen desserts.",
     hours: "Daily · 10:00 – 22:00",
     contact: { phone: "+92 21 3456 7897", email: "orders@sweettooth.example" },
-    offers: [],
   },
   "lucky-m-9": {
     description: "Karak chai, coffee and light bites.",
     hours: "Daily · 09:00 – 23:00",
     contact: { phone: "+92 21 3456 7898", email: null },
-    offers: [],
   },
   "lucky-m-10": {
     description: "Toys, games and gifts for kids.",
     hours: "Mon–Sun · 10:00 – 22:00",
     contact: { phone: "+92 21 3456 7899", email: null },
-    offers: [
-      {
-        id: "lucky-m-10-off-1",
-        label: "BOGO",
-        title: "Buy 1 get 1 on board games",
-        endsAt: offerActiveUntil,
-      },
-    ],
   },
   "lucky-m-11": {
     description: "Books, stationery and study supplies.",
     hours: "Mon–Sun · 10:00 – 22:00",
     contact: { phone: "+92 21 3456 7900", email: "hello@pageandspine.example" },
-    offers: [],
   },
   "lucky-m-12": {
     description: "Sneakers and sportswear from global brands.",
     hours: "Mon–Sun · 10:00 – 22:00",
     contact: { phone: "+92 21 3456 7901", email: null },
-    offers: [],
   },
   "lucky-m-13": {
     description: "Fresh produce, pantry staples and bakery.",
     hours: "Daily · 08:00 – 23:00",
     contact: { phone: "+92 21 3456 7902", email: null },
-    offers: [],
   },
   "lucky-m-14": {
     description: "Fine gold and jewellery for every occasion.",
     hours: "Mon–Sun · 10:00 – 22:00",
     contact: { phone: "+92 21 3456 7903", email: "care@zarina.example" },
-    offers: [],
   },
   "harbour-m-1": {
     description: "Curated fashion from local designers.",
     hours: "Daily · 11:00 – 22:00",
     contact: { phone: "+92 21 3456 7904", email: "hello@harbourboutique.example" },
-    offers: [
-      {
-        id: "harbour-m-1-off-1",
-        label: "15% OFF",
-        title: "15% off summer collection",
-        endsAt: offerActiveUntil,
-      },
-    ],
   },
   "harbour-m-2": {
     description: "Home décor, furniture and living essentials.",
     hours: "Daily · 11:00 – 22:00",
     contact: { phone: "+92 21 3456 7905", email: null },
-    offers: [],
   },
   "harbour-m-3": {
     description: "Pakistani comfort food by the promenade.",
     hours: "Daily · 11:00 – 22:00",
     contact: { phone: "+92 21 3456 7906", email: null },
-    offers: [],
   },
   "harbour-m-4": {
     description: "Vinyl, instruments and audio gear.",
     hours: "Daily · 12:00 – 22:00",
     contact: { phone: "+92 21 3456 7907", email: null },
-    offers: [],
   },
   "harbour-m-5": {
     description: "Small-batch coffee roasted on site.",
     hours: "Daily · 08:00 – 22:00",
     contact: { phone: "+92 21 3456 7908", email: "brew@coastalcoffee.example" },
-    offers: [],
   },
   "harbour-m-6": {
     description: "Training gear and athleisure.",
     hours: "Daily · 11:00 – 22:00",
     contact: { phone: "+92 21 3456 7909", email: null },
-    offers: [],
   },
 };
 
@@ -638,7 +569,8 @@ export const getMerchantInitials = (name) =>
 /**
  * Resolve a merchant detail record for the detail screen (PRD 5.4,
  * SCREEN_INVENTORY 23). Mall-scoped: returns null when the merchant
- * doesn't belong to the given mall. Expired offers are filtered out.
+ * doesn't belong to the given mall. Active offers are resolved from the
+ * shared offer catalogue; expired ones are hidden.
  */
 export const getMerchantDetail = (mallSlug, merchantId) => {
   const merchant = (MOCK_MERCHANTS[mallSlug] || []).find((item) => item.id === merchantId);
@@ -646,11 +578,10 @@ export const getMerchantDetail = (mallSlug, merchantId) => {
     return null;
   }
   const details = MERCHANT_DETAILS[merchantId] || {};
-  const offers = (details.offers || []).filter((offer) => isOfferActive(offer));
   return {
     ...merchant,
     ...details,
-    offers,
+    offers: getActiveOffersForMerchant(merchantId),
     logoInitials: getMerchantInitials(merchant.name),
   };
 };

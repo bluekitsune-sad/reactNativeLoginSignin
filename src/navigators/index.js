@@ -11,6 +11,7 @@ import {
   MenuItemScreen,
   MerchantListScreen,
   MenuScreen,
+  OfferDetailScreen,
   ProfilePlaceholderScreen,
   SettingsScreen,
   SearchScreen,
@@ -51,6 +52,7 @@ const Navigators = () => {
               <Stack.Screen name="MerchantDetail" component={MerchantDetailScreen} />
               <Stack.Screen name="Menu" component={MenuScreen} />
               <Stack.Screen name="MenuItem" component={MenuItemScreen} />
+              <Stack.Screen name="OfferDetail" component={OfferDetailScreen} />
               {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
               {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
             </>

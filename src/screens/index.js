@@ -9,6 +9,7 @@ import MapScreen from "./map/MapScreen";
 import MenuItemScreen from "./merchant/MenuItemScreen";
 import MenuScreen from "./merchant/MenuScreen";
 import MerchantDetailScreen from "./merchant/MerchantDetailScreen";
+import OfferDetailScreen from "./offer/OfferDetailScreen";
 import ProfilePlaceholderScreen from "./profile/ProfilePlaceholderScreen";
 import ProfileScreen from "./profile/ProfileScreen";
 import SettingsScreen from "./profile/SettingsScreen";
@@ -27,6 +28,7 @@ export {
   MerchantDetailScreen,
   MenuScreen,
   MenuItemScreen,
+  OfferDetailScreen,
   MapScreen,
   RewardsScreen,
   ProfileScreen,

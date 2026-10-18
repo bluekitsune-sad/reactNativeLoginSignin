@@ -165,9 +165,16 @@ Rules for the factory:
       (PKR grouping) with `fontVariant: tabular-nums`, sold-out chip and
       availability status, browse-only notes (ordering blocked). Merchant
       detail "View menu" row now opens the menu.)
-- [ ] **Offer detail + terms sheet**: discount types (%, fixed, BOGO) as
+- [x] **Offer detail + terms sheet**: discount types (%, fixed, BOGO) as
       mock offers with dates/eligibility/terms shown; expired offers hidden.
-      Blueprint: PRD 5.8, SCREEN_INVENTORY 26.
+      Blueprint: PRD 5.8, SCREEN_INVENTORY 26. (Done: shared offer
+      catalogue `src/mock/offers.js` (PERCENTAGE/FIXED_AMOUNT/BOGO with
+      validity, eligibility, terms; expired hidden by every resolver —
+      Home discounts and merchant offers now resolve into it, removing
+      the earlier duplicated offer summaries). `OfferDetailScreen`
+      registered as `OfferDetail`: headline by type, merchant link,
+      validity dates, eligibility list, terms bottom sheet; expired id
+      shows an unavailable state. No redemption logic.)
 - [ ] **Favorites tab**: local favorites (AsyncStorage) for mock merchants,
       empty state. Blueprint: SCREEN_INVENTORY 27.
 - [x] **Organic top-selling section** on Home using MOCK numbers with the

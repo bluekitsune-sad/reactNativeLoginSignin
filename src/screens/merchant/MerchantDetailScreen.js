@@ -123,9 +123,7 @@ const MerchantDetailScreen = ({ navigation, route }) => {
                 key={offer.id}
                 title={offer.title}
                 leading={<Badge label={offer.label} tone="sponsored" style={styles.offerBadge} />}
-                onPress={() =>
-                  openPlaceholder("Offer detail", "Offer terms and eligibility will appear here.")
-                }
+                onPress={() => navigation.navigate("OfferDetail", { offerId: offer.id })}
                 style={styles.row}
               />
             ))}

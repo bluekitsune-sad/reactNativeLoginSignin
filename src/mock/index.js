@@ -22,6 +22,15 @@ import {
   getSuggestions,
   searchMerchants,
 } from "./merchants";
+import {
+  MOCK_OFFERS,
+  OFFER_TYPES,
+  formatOfferDate,
+  getActiveOffersForMerchant,
+  getOfferById,
+  getOfferHeadline,
+  getOfferValidity,
+} from "./offers";
 
 export {
   MALLS,
@@ -35,16 +44,23 @@ export {
   LIST_PAGE_SIZE,
   MERCHANT_DETAILS,
   MOCK_MENUS,
+  MOCK_OFFERS,
+  OFFER_TYPES,
   PRICE_BAND_LABELS,
   applyMerchantFilters,
   collectFilterOptions,
   countActiveFilters,
   fetchMerchantListPage,
+  formatOfferDate,
   formatPrice,
+  getActiveOffersForMerchant,
   getMerchantDetail,
   getMerchantInitials,
   getMenuForMerchant,
   getMenuItemById,
+  getOfferById,
+  getOfferHeadline,
+  getOfferValidity,
   getSuggestions,
   searchMerchants,
 };
