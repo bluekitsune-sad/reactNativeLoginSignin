@@ -9,7 +9,8 @@ ordering scaffold (sign‑in flow implemented); **it is now becoming the
 MallMate multi‑mall app** (see below). TypeScript is introduced incrementally
 (`tsconfig.json` with `allowJs`); new type files live in `src/types/`.
 `npm run lint` (ESLint) and `npm run typecheck` (`tsc --noEmit`) exist; there
-is still no test suite — tests are on the backlog.
+is a `test` script (`npm test`, `jest-expo`) with first suites under
+`src/*/__tests__/`.
 
 Entry point: `App.js` → loads fonts → renders `src/navigators/index.js`.
 
@@ -53,10 +54,12 @@ npm run web          # expo start --web
 ```
 
 There is now a `lint` script (ESLint + Prettier via `eslint-config-universe`,
-`npm run lint`) and `npm run typecheck` (`tsc --noEmit`); still no `test`
-script. Do not claim verification you cannot perform; at minimum re-read the
-files you changed and keep JSX/imports consistent, and run `npm run lint`
-(legacy files emit warnings — only introduce no new errors).
+`npm run lint`), `npm run typecheck` (`tsc --noEmit`) and a `test` script
+(`jest-expo` preset, `npm test`; AsyncStorage is mapped to its jest mock via
+`moduleNameMapper` in `package.json`). Do not claim verification you cannot
+perform; at minimum re-read the files you changed and keep JSX/imports
+consistent, and run `npm run lint` (legacy files emit warnings — only
+introduce no new errors) plus `npm test` when you touch covered code.
 
 ## Architecture rules
 
