@@ -12,6 +12,7 @@ import SeatSessionEndScreen from "./foodCourt/SeatSessionEndScreen";
 import SeatSessionScreen from "./foodCourt/SeatSessionScreen";
 import HomeScreen from "./home/HomeScreen";
 import MallSelectorScreen from "./mall/MallSelectorScreen";
+import FloorMapScreen from "./map/FloorMapScreen";
 import MapScreen from "./map/MapScreen";
 import MenuItemScreen from "./merchant/MenuItemScreen";
 import MenuScreen from "./merchant/MenuScreen";
@@ -44,6 +45,7 @@ export {
   SeatSessionEndScreen,
   SeatHelpScreen,
   MapScreen,
+  FloorMapScreen,
   RewardsScreen,
   ProfileScreen,
   ProfilePlaceholderScreen,
