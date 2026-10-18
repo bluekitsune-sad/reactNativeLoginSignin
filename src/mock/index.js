@@ -41,6 +41,7 @@ import {
   getOfferHeadline,
   getOfferValidity,
 } from "./offers";
+import { LEDGER_META, LEDGER_TYPES, MOCK_REWARDS, getRewardsOverview } from "./rewards";
 import {
   MOCK_SCAN_TARGETS,
   MOCK_SESSION_PREVIEW_MINUTES,
@@ -67,6 +68,10 @@ export {
   getPoiIcon,
   getZoneStatus,
   toEventSummary,
+  LEDGER_META,
+  LEDGER_TYPES,
+  MOCK_REWARDS,
+  getRewardsOverview,
   getHomeSections,
   getExploreContent,
   isCapabilityVisible,
