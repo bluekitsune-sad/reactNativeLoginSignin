@@ -240,3 +240,5 @@ done today:  > todoAgent Ran (2026-10-17 12:58 UTC): done — loaded Inter fonts
 done today:  > todoAgent Ran (2026-10-17 19:31 UTC): done — home content sections (categories/featured/discounts/events); Explore landing with directories + category grid; Search UI with suggestions and distinct empty/error states; Filter bottom sheet (category/cuisine/open-now/floor/price) on Search; organic top-selling section with mandatory app-orders-only disclosure
 
 done today:  > todoAgent Ran (2026-10-18 13:36 UTC): done — restaurant+outlet lists w/ mock pagination; merchant detail; menu list + item detail; offer detail + terms sheet; local favorites
+
+done today:  > todoAgent Ran (2026-10-18 17:09 UTC): done — food-court overview w/ mock seating zones; seat-session mock flow (scan/confirm/session/end/help); floor selector + static floor map w/ POI pins; events list + event detail; rewards dashboard + ledger
