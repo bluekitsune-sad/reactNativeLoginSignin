@@ -22,6 +22,7 @@ import {
   ProfilePlaceholderScreen,
   SettingsScreen,
   SearchScreen,
+  FloorMapScreen,
   // RegisterPhoneScreen,
   // VerificationScreen,
 } from "../screens";
@@ -69,6 +70,7 @@ const Navigators = () => {
                 <Stack.Screen name="SeatSession" component={SeatSessionScreen} />
                 <Stack.Screen name="SeatSessionEnd" component={SeatSessionEndScreen} />
                 <Stack.Screen name="SeatHelp" component={SeatHelpScreen} />
+                <Stack.Screen name="FloorMap" component={FloorMapScreen} />
                 {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
                 {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
               </>

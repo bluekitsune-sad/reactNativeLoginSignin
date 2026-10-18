@@ -222,9 +222,17 @@ Rules for the factory:
 
 ### Stage E — maps and events (placeholder assets; no live positioning)
 
-- [ ] **Floor selector + static floor map**: floor list, placeholder map
+- [x] **Floor selector + static floor map**: floor list, placeholder map
       image with POI pins, and a clear "map data unavailable" state.
-      Blueprint: SCREEN_INVENTORY 43–44, 50; PRD 5.12.
+      Blueprint: SCREEN_INVENTORY 43–44, 50; PRD 5.12. (Done:
+      `src/mock/floors.js` (LuckyOne floors G/1/2/3 with
+      percentage-positioned POI pins, Terrace unpublished; Harbour Walk
+      floors all unpublished); `FloorMapScreen` stack route — floor chips,
+      dashed placeholder plan with tappable POI pins + detail card,
+      "map data unavailable" card for unpublished floors, "Limited" chip
+      when indoor_navigation is DEGRADED, unavailable state when DISABLED,
+      and an explicit no-live-positioning disclaimer. Map tab is now a
+      capability-gated landing that opens the floor map.)
 - [ ] **Destination search + route preview (mock)**: search POIs, show
       destination detail, manual start-point picker, static route preview.
       Never claim live positioning. Blueprint: SCREEN_INVENTORY 45–49.

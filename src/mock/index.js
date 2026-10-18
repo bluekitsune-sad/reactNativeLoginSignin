@@ -1,3 +1,4 @@
+import { FLOORS, POI_ICONS, getFloorPlan, getPoiIcon } from "./floors";
 import { FOOD_COURTS, getFoodCourtOverview, getZoneStatus } from "./foodCourt";
 import {
   HOME_CONTENT,
@@ -44,9 +45,13 @@ import {
 export {
   MALLS,
   FOOD_COURTS,
+  FLOORS,
+  POI_ICONS,
   HOME_CONTENT,
   getContentForMall,
+  getFloorPlan,
   getFoodCourtOverview,
+  getPoiIcon,
   getZoneStatus,
   getHomeSections,
   getExploreContent,
