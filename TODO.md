@@ -275,10 +275,20 @@ Rules for the factory:
       LuckyOne's mock loyalty flipped to ENABLED so the preview is
       reachable, Harbour Walk stays DISABLED to show gating. No
       earn/redeem logic.)
-- [ ] **Order history + order detail timeline (mock)**: list of mock orders
+- [x] **Order history + order detail timeline (mock)**: list of mock orders
       and a status timeline using the PRD state names; clear pending vs
       confirmed states. No checkout or payments (blocked). Blueprint:
-      PRD 5.10, SCREEN_INVENTORY 40–41.
+      PRD 5.10, SCREEN_INVENTORY 40–41. (Done: `src/mock/orders.js` (four
+      LuckyOne mock orders covering in-progress PREPARING, completed,
+      cancelled and payment-failed flows; states/timeline use the PRD 5.10
+      names with `ORDER_STATE_META` labels/tones and an "expected next
+      step" hint for active orders; capability-gated on online_ordering —
+      Harbour Walk DISABLED shows the unavailable state).
+      `OrderHistoryScreen` + `OrderDetailScreen` stack routes — history
+      rows with current-state StatusChip, detail with status timeline
+      (current step chip + pending next step), items with tabular-nums
+      totals, preview-build notes. Profile → Orders now opens the real
+      history screen. No checkout, payment or transition logic.)
 
 ### Stage G — quality and polish
 

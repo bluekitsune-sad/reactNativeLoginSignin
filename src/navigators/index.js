@@ -29,6 +29,8 @@ import {
   DestinationDetailScreen,
   StartPointSelectScreen,
   RoutePreviewScreen,
+  OrderHistoryScreen,
+  OrderDetailScreen,
   // RegisterPhoneScreen,
   // VerificationScreen,
 } from "../screens";
@@ -83,6 +85,8 @@ const Navigators = () => {
                 <Stack.Screen name="DestinationDetail" component={DestinationDetailScreen} />
                 <Stack.Screen name="StartPointSelect" component={StartPointSelectScreen} />
                 <Stack.Screen name="RoutePreview" component={RoutePreviewScreen} />
+                <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
+                <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
                 {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
                 {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
               </>

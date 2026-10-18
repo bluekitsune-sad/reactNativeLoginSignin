@@ -18,10 +18,7 @@ const PROFILE_ROWS = [
     title: "Orders",
     subtitle: "Order history and tracking",
     icon: "receipt-outline",
-    placeholder: {
-      title: "Orders",
-      message: "Your order history will appear here once ordering is available.",
-    },
+    route: "OrderHistory",
   },
   {
     key: "favorites",
