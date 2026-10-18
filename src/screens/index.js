@@ -4,6 +4,7 @@ import SignupScreen from "./SignupScreen";
 import ExploreScreen from "./explore/ExploreScreen";
 import MerchantListScreen from "./explore/MerchantListScreen";
 import FavoritesScreen from "./favorites/FavoritesScreen";
+import FoodCourtScreen from "./foodCourt/FoodCourtScreen";
 import HomeScreen from "./home/HomeScreen";
 import MallSelectorScreen from "./mall/MallSelectorScreen";
 import MapScreen from "./map/MapScreen";
@@ -31,6 +32,7 @@ export {
   MenuItemScreen,
   OfferDetailScreen,
   FavoritesScreen,
+  FoodCourtScreen,
   MapScreen,
   RewardsScreen,
   ProfileScreen,

@@ -13,6 +13,7 @@ import {
   MenuScreen,
   OfferDetailScreen,
   FavoritesScreen,
+  FoodCourtScreen,
   ProfilePlaceholderScreen,
   SettingsScreen,
   SearchScreen,
@@ -57,6 +58,7 @@ const Navigators = () => {
                 <Stack.Screen name="MenuItem" component={MenuItemScreen} />
                 <Stack.Screen name="OfferDetail" component={OfferDetailScreen} />
                 <Stack.Screen name="Favorites" component={FavoritesScreen} />
+                <Stack.Screen name="FoodCourt" component={FoodCourtScreen} />
                 {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
                 {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
               </>
