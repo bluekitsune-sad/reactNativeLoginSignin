@@ -24,6 +24,8 @@ import MenuItemScreen from "./merchant/MenuItemScreen";
 import MenuScreen from "./merchant/MenuScreen";
 import MerchantDetailScreen from "./merchant/MerchantDetailScreen";
 import OfferDetailScreen from "./offer/OfferDetailScreen";
+import OrderDetailScreen from "./orders/OrderDetailScreen";
+import OrderHistoryScreen from "./orders/OrderHistoryScreen";
 import ProfilePlaceholderScreen from "./profile/ProfilePlaceholderScreen";
 import ProfileScreen from "./profile/ProfileScreen";
 import SettingsScreen from "./profile/SettingsScreen";
@@ -43,6 +45,8 @@ export {
   MenuScreen,
   MenuItemScreen,
   OfferDetailScreen,
+  OrderHistoryScreen,
+  OrderDetailScreen,
   FavoritesScreen,
   EventsScreen,
   EventDetailScreen,

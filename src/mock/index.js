@@ -49,6 +49,15 @@ import {
   getOfferHeadline,
   getOfferValidity,
 } from "./offers";
+import {
+  MOCK_ORDERS,
+  ORDER_STATES,
+  ORDER_STATE_META,
+  formatOrderDateTime,
+  getOrderById,
+  getOrderList,
+  isTerminalOrderState,
+} from "./orders";
 import { LEDGER_META, LEDGER_TYPES, MOCK_REWARDS, getRewardsOverview } from "./rewards";
 import {
   MOCK_SCAN_TARGETS,
@@ -113,6 +122,13 @@ export {
   getOfferValidity,
   getSuggestions,
   searchMerchants,
+  MOCK_ORDERS,
+  ORDER_STATES,
+  ORDER_STATE_META,
+  formatOrderDateTime,
+  getOrderById,
+  getOrderList,
+  isTerminalOrderState,
   MOCK_SCAN_TARGETS,
   MOCK_SESSION_PREVIEW_MINUTES,
   SCAN_OUTCOMES,
