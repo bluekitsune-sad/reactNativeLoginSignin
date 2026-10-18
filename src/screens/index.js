@@ -2,6 +2,7 @@ import ForgotPasswordScreen from "./ForgotPasswordScreen";
 import SigninScreen from "./SigninScreen";
 import SignupScreen from "./SignupScreen";
 import ExploreScreen from "./explore/ExploreScreen";
+import MerchantListScreen from "./explore/MerchantListScreen";
 import HomeScreen from "./home/HomeScreen";
 import MallSelectorScreen from "./mall/MallSelectorScreen";
 import MapScreen from "./map/MapScreen";
@@ -19,6 +20,7 @@ export {
   ForgotPasswordScreen,
   HomeScreen,
   ExploreScreen,
+  MerchantListScreen,
   MapScreen,
   RewardsScreen,
   ProfileScreen,

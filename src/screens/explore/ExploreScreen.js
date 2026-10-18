@@ -9,14 +9,6 @@ import { getExploreContent } from "../../mock";
 import { useMallManagement } from "../../utils";
 
 const DIRECTORY_PLACEHOLDERS = {
-  restaurants: {
-    title: "Restaurants",
-    message: "The full restaurant list for this mall will appear here.",
-  },
-  outlets: {
-    title: "Outlets",
-    message: "The full outlet list for this mall will appear here.",
-  },
   "food-court": {
     title: "Food court",
     message: "Food-court zones and vendors will appear here.",
@@ -31,6 +23,11 @@ const DIRECTORY_PLACEHOLDERS = {
   },
 };
 
+const DIRECTORY_ROUTES = {
+  restaurants: "RestaurantList",
+  outlets: "OutletList",
+};
+
 const CATEGORY_PLACEHOLDER = {
   title: "Category",
   message: "Merchants in this category will appear here.",
@@ -43,7 +40,11 @@ const ExploreScreen = ({ navigation }) => {
     selectedMall.capabilities || {},
   );
 
-  const openPlaceholder = (entry) => {
+  const openDirectory = (entry) => {
+    if (entry.key && DIRECTORY_ROUTES[entry.key]) {
+      navigation.navigate(DIRECTORY_ROUTES[entry.key]);
+      return;
+    }
     const fallback = { title: entry.title, message: "Merchants in this section will appear here." };
     const placeholder =
       entry.key && DIRECTORY_PLACEHOLDERS[entry.key] ? DIRECTORY_PLACEHOLDERS[entry.key] : fallback;
@@ -90,7 +91,7 @@ const ExploreScreen = ({ navigation }) => {
                 leading={
                   <Ionicons name={entry.icon} size={22} color={MallMateTheme.color.primary} />
                 }
-                onPress={() => openPlaceholder(entry)}
+                onPress={() => openDirectory(entry)}
                 style={styles.row}
               />
             ))}

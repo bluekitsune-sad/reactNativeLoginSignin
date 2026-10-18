@@ -136,9 +136,17 @@ Rules for the factory:
       result set; filtering is pure client-side via
       `applyMerchantFilters`. Filtered-empty is a distinct state from
       unfiltered empty.)
-- [ ] **Restaurant list + outlet list screens** with pagination pattern and
+- [x] **Restaurant list + outlet list screens** with pagination pattern and
       loading/empty/error states (mock pages). Blueprint: SCREEN_INVENTORY
-      21–22.
+      21–22. (Done: shared `MerchantListScreen` registered as
+      `RestaurantList`/`OutletList` stack routes; Explore directories for
+      restaurants/outlets now navigate there. Mock
+      `fetchMerchantListPage` paginates capability-gated merchants
+      (page size 4, simulated latency, first attempt per mall+kind fails
+      once so error+retry is reachable); infinite scroll with inline
+      load-more retry, pull-to-refresh, capability-unavailable and
+      empty-list states. Extra mock merchants added so lists span
+      multiple pages.)
 - [ ] **Merchant detail page**: name, logo, category, floor/location,
       hours + open-now status, active offers, tags, contact placeholder,
       map-destination link placeholder. Blueprint: PRD 5.4, SCREEN_INVENTORY

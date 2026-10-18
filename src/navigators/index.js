@@ -7,6 +7,7 @@ import {
   SignupScreen,
   ForgotPasswordScreen,
   MallSelectorScreen,
+  MerchantListScreen,
   ProfilePlaceholderScreen,
   SettingsScreen,
   SearchScreen,
@@ -34,6 +35,16 @@ const Navigators = () => {
               <Stack.Screen name="ProfilePlaceholder" component={ProfilePlaceholderScreen} />
               <Stack.Screen name="Settings" component={SettingsScreen} />
               <Stack.Screen name="Search" component={SearchScreen} />
+              <Stack.Screen
+                name="RestaurantList"
+                component={MerchantListScreen}
+                initialParams={{ kind: "restaurants" }}
+              />
+              <Stack.Screen
+                name="OutletList"
+                component={MerchantListScreen}
+                initialParams={{ kind: "outlets" }}
+              />
               {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
               {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
             </>
