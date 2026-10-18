@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerMeta: {
     flex: 1,
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     borderColor: MallMateTheme.color.border,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   logoText: {
     color: MallMateTheme.color.primary,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     marginTop: MallMateTheme.spacing.md,
   },
   tag: {
-    marginRight: 0,
+    marginEnd: 0,
   },
   section: {
     marginTop: MallMateTheme.spacing.lg,
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     marginTop: MallMateTheme.spacing.xs,
   },
   offerBadge: {
-    marginRight: 0,
+    marginEnd: 0,
   },
   mutedNote: {
     color: MallMateTheme.color.textSecondary,

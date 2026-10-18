@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     padding: 2,
     borderRadius: 3,
     position: "absolute",
-    left: MallMateTheme.spacing.xl,
+    start: MallMateTheme.spacing.xl,
   },
   socialButtonsContainer: {
     flexDirection: "row",

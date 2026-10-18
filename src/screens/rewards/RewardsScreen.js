@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   ledgerIcon: {
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   ledgerBody: {
     flex: 1,
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     fontSize: MallMateTheme.typography.bodyLarge.fontSize,
     fontFamily: MallMateTheme.fontFamily.semiBold,
     fontVariant: ["tabular-nums"],
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
   },
   ledgerPointsNegative: {
     color: MallMateTheme.color.textSecondary,

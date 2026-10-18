@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: MallMateTheme.color.surfaceElevated,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   logoPlaceholderText: {
     color: MallMateTheme.color.primary,

@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   headerBody: {
     flex: 1,
-    marginLeft: MallMateTheme.spacing.lg,
+    marginStart: MallMateTheme.spacing.lg,
   },
   displayName: {
     color: MallMateTheme.color.textPrimary,

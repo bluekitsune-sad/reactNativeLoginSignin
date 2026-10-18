@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerMeta: {
     flex: 1,
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   },
   statusBody: {
     flex: 1,
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   merchant: {
     color: MallMateTheme.color.textPrimary,
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   timelineGutter: {
     width: 16,
     alignItems: "center",
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   timelineDot: {
     width: 10,
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   currentChip: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
   },
   itemsCard: {
     marginBottom: 0,
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textPrimary,
     fontSize: MallMateTheme.typography.body.fontSize,
     fontFamily: MallMateTheme.fontFamily.regular,
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   itemPrice: {
     color: MallMateTheme.color.textSecondary,

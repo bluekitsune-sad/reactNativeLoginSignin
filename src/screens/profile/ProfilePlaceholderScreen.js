@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textPrimary,
     fontSize: MallMateTheme.typography.h3.fontSize,
     fontFamily: MallMateTheme.fontFamily.semiBold,
-    marginRight: MallMateTheme.touchTarget.min,
+    marginEnd: MallMateTheme.touchTarget.min,
   },
   headerSpacer: {
     width: MallMateTheme.touchTarget.min,

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     marginBottom: MallMateTheme.spacing.sm,
   },
   chip: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
   },
   title: {
     color: MallMateTheme.color.textPrimary,

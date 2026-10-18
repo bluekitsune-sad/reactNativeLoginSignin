@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerMeta: {
     flex: 1,
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: MallMateTheme.color.primary,
     marginTop: 6,
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   summaryDotEnd: {
     backgroundColor: MallMateTheme.color.highlight,
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     width: 2,
     height: 16,
     backgroundColor: MallMateTheme.color.border,
-    marginLeft: 4,
+    marginStart: 4,
     marginVertical: 4,
   },
   sectionTitle: {
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     backgroundColor: MallMateTheme.color.surface,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   stepNumberText: {
     color: MallMateTheme.color.primary,

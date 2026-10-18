@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   searchWrapper: {
     flex: 1,
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
   filterButton: {
     minHeight: MallMateTheme.touchTarget.min,
     minWidth: MallMateTheme.touchTarget.min,
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: MallMateTheme.radius.control,
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
   filterCountBadge: {
     position: "absolute",
     top: 4,
-    right: 4,
+    end: 4,
     minWidth: 16,
     height: 16,
     borderRadius: 8,
