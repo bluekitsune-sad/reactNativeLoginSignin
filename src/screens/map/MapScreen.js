@@ -9,8 +9,9 @@ import { useMallManagement } from "../../utils";
 
 /**
  * Map tab landing: capability-gated entry to the static floor map
- * preview (SCREEN_INVENTORY 43–44). Routing, destination search and live
- * positioning arrive in later Stage E tasks.
+ * (SCREEN_INVENTORY 43–44) and destination search / route preview
+ * (SCREEN_INVENTORY 45–49). Live positioning and real routing arrive
+ * with mall map integration.
  */
 const MapScreen = ({ navigation }) => {
   const { selectedMall } = useMallManagement();
@@ -43,10 +44,19 @@ const MapScreen = ({ navigation }) => {
           onPress={() => navigation.navigate("FloorMap")}
           style={styles.row}
         />
+        <ListRow
+          title="Find a destination"
+          subtitle="Search places and preview a static route"
+          leading={
+            <Ionicons name="navigate-outline" size={22} color={MallMateTheme.color.primary} />
+          }
+          onPress={() => navigation.navigate("DestinationSearch")}
+          style={styles.row}
+        />
         <Card style={styles.noteCard}>
           <Text style={styles.note}>
-            Preview build — static floor plans only. Destination search, route preview and live
-            positioning aren't enabled yet.
+            Preview build — static floor plans and illustrative route steps only. Live indoor
+            positioning and turn-by-turn navigation aren't enabled yet.
           </Text>
         </Card>
       </ScrollView>

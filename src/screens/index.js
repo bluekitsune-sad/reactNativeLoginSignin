@@ -14,8 +14,12 @@ import SeatSessionEndScreen from "./foodCourt/SeatSessionEndScreen";
 import SeatSessionScreen from "./foodCourt/SeatSessionScreen";
 import HomeScreen from "./home/HomeScreen";
 import MallSelectorScreen from "./mall/MallSelectorScreen";
+import DestinationDetailScreen from "./map/DestinationDetailScreen";
+import DestinationSearchScreen from "./map/DestinationSearchScreen";
 import FloorMapScreen from "./map/FloorMapScreen";
 import MapScreen from "./map/MapScreen";
+import RoutePreviewScreen from "./map/RoutePreviewScreen";
+import StartPointSelectScreen from "./map/StartPointSelectScreen";
 import MenuItemScreen from "./merchant/MenuItemScreen";
 import MenuScreen from "./merchant/MenuScreen";
 import MerchantDetailScreen from "./merchant/MerchantDetailScreen";
@@ -50,6 +54,10 @@ export {
   SeatHelpScreen,
   MapScreen,
   FloorMapScreen,
+  DestinationSearchScreen,
+  DestinationDetailScreen,
+  StartPointSelectScreen,
+  RoutePreviewScreen,
   RewardsScreen,
   ProfileScreen,
   ProfilePlaceholderScreen,
