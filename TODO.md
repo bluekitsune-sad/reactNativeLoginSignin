@@ -305,8 +305,13 @@ Rules for the factory:
 - [ ] **i18n groundwork**: `expo-localization` + string catalog (English),
       RTL-ready layout audit of new screens (no hardcoded left/right where
       avoidable). Full Urdu translation is a later decision. PRD section 10.
-- [ ] **App identity**: rename app (app.json) to MallMate, placeholder
-      icon/splash, remove `user_logsignin`.
+- [x] **App identity**: rename app (app.json) to MallMate, placeholder
+      icon/splash, remove `user_logsignin`. (Done: app.json `name` →
+      "MallMate", `slug` → "mallmate", `userInterfaceStyle` → dark;
+      splash + adaptive-icon background retinted to Midnight Graphite
+      `#101418` to match Theme.js. Existing placeholder icon/splash images
+      kept — real branding is blocked pending owner permission.
+      package.json `name` → "mallmate".)
 - [ ] **Accessibility pass on new MallMate screens**: 44–48px targets,
       dynamic-type friendly layouts, no color-only status, accessible
       labels on icon buttons. Blueprint: DESIGN_SYSTEM rules.
@@ -413,8 +418,10 @@ P0 — App is broken / blocking
 - [ ] Consider TypeScript migration for screens/services.
 - [ ] Add `react-native-reanimated` / gesture handler setup notes if the stack
       navigator needs them.
-- [ ] Review `app.json` (icon/splash/name `user_logsignin`) and rename the
-      package to match the product.
+- [x] Review `app.json` (icon/splash/name `user_logsignin`) and rename the
+      package to match the product. (Done via the MallMate "App identity"
+      item above — app.json + package.json renamed, splash/adaptive
+      backgrounds themed.)
 - [ ] `expo-doctor` still flags pre‑existing version drift (`expo`,
       `lottie-react-native`, `react-native`, `react-native-safe-area-context`)
       — align them with `npx expo install --check` when convenient.
