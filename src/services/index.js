@@ -1,10 +1,11 @@
-import StaticImageService from './StaticImageService';
-import AuthenicationService from './AuthenticationService';
-import StorageService from './StorageService';
-import RestaurantService from './RestaurantService';
-import CartService from './CartService';
-import FoodService from './FoodService';
-import BookmarkService from './BookmarkService';
+import AuthenicationService from "./AuthenticationService";
+import BookmarkService from "./BookmarkService";
+import CartService from "./CartService";
+import FoodService from "./FoodService";
+import RestaurantService from "./RestaurantService";
+import StaticImageService from "./StaticImageService";
+import StorageService from "./StorageService";
+import ApiClient from "./apiClient";
 
 export {
   StaticImageService,
@@ -14,4 +15,5 @@ export {
   CartService,
   FoodService,
   BookmarkService,
+  ApiClient,
 };

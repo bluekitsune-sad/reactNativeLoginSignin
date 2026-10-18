@@ -232,3 +232,13 @@ MIT — see [LICENSE](./LICENSE).
 
 todoAgent Ran (2026-10-15): done — added ESLint + Prettier (eslint-config-universe) with npm run lint
 > todoAgent Ran (2026-10-16): done — introduced TypeScript incrementally (tsconfig with allowJs, src/types/mallmate.ts entity types from the ERD, npm run typecheck)
+
+done today:  > todoAgent Ran (2026-10-17 12:58 UTC): done — loaded Inter fonts (@expo-google-fonts/inter); MallMate base component kit; bottom tab navigation with post-login Main flow; Mall selector + MallContext with mock LuckyOne data; capability-driven home skeleton
+
+> todoAgent Ran (2026-10-17 16:30 UTC): done — typed API client helper (apiClient + ApiEnvelope types); re-skin auth screens to MallMate theme; Profile tab with placeholder rows; Settings + notification preference toggles; multi-mall mock data + hardened switching
+
+done today:  > todoAgent Ran (2026-10-17 19:31 UTC): done — home content sections (categories/featured/discounts/events); Explore landing with directories + category grid; Search UI with suggestions and distinct empty/error states; Filter bottom sheet (category/cuisine/open-now/floor/price) on Search; organic top-selling section with mandatory app-orders-only disclosure
+
+done today:  > todoAgent Ran (2026-10-18 13:36 UTC): done — restaurant+outlet lists w/ mock pagination; merchant detail; menu list + item detail; offer detail + terms sheet; local favorites
+
+done today:  > todoAgent Ran (2026-10-18 17:09 UTC): done — food-court overview w/ mock seating zones; seat-session mock flow (scan/confirm/session/end/help); floor selector + static floor map w/ POI pins; events list + event detail; rewards dashboard + ledger

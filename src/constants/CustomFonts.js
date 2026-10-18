@@ -1,3 +1,10 @@
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+} from "@expo-google-fonts/inter";
+
 export default {
   "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
   "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -8,4 +15,8 @@ export default {
   "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
   "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
   "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
 };

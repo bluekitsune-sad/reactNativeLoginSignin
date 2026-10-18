@@ -24,107 +24,247 @@ Rules for the factory:
 
 ### Stage A — foundation
 
-- [ ] **Load the Inter font family** for MallMate typography (bundled TTF
+- [x] **Load the Inter font family** for MallMate typography (bundled TTF
       or `@expo-google-fonts/inter`) in `App.js`, exposed through
-      `Fonts.js`. Blueprint: `04-mobile/DESIGN_SYSTEM.md`.
-- [ ] **MallMate base component kit** in `src/components/mallmate/`:
+      `Fonts.js`. Blueprint: `04-mobile/DESIGN_SYSTEM.md`. (Done via
+      `@expo-google-fonts/inter`: Inter 400/500/600/700 added to
+      `CustomFonts.js` so `App.js`'s `useFonts` loads them; names exposed in
+      `Fonts.js`; `Theme.js` `fontFamily` now maps to the concrete loaded
+      font names.)
+- [x] **MallMate base component kit** in `src/components/mallmate/`:
       Button (default/pressed/disabled/loading), TextInput, Card,
       SectionHeader, ListRow, Badge ("Sponsored"/"Featured"), StatusChip,
       EmptyState, ErrorState (with retry), LoadingState. Theme theming from
       `Theme.js` only; 44–48px touch targets; export via the barrel.
-      Blueprint: `04-mobile/DESIGN_SYSTEM.md` component states.
-- [ ] **Bottom tab navigation**: Home | Explore | Map | Rewards | Profile
+      Blueprint: `04-mobile/DESIGN_SYSTEM.md` component states. (Done: all
+      10 components + `mallmate/index.js` barrel, re-exported from
+      `src/components/index.js`; pressed/disabled/loading/focused/invalid
+      states implemented per the design system.)
+- [x] **Bottom tab navigation**: Home | Explore | Map | Rewards | Profile
       with placeholder screens (`src/screens/home/HomeScreen.js`, etc.),
       keeping the existing auth stack; after successful sign-in navigate to
       the tabs. Blueprint: `04-mobile/SCREEN_INVENTORY.md`, PRD section 4.
-- [ ] **Mall selector screen** with mock data for one mall (LuckyOne:
+      (Done: `MainTabNavigator` with themed tab bar + Ionicons; placeholders
+      under `src/screens/{home,explore,map,rewards,profile}/`; stack screen
+      `Main`; `SigninScreen` uses `navigation.replace("Main")` on success.)
+- [x] **Mall selector screen** with mock data for one mall (LuckyOne:
       name/logo/hours); persist the selection in a small `MallContext`
-      readable by other screens. Blueprint: PRD section 5.2.
-- [ ] **Capability-driven home skeleton**: render only ENABLED capability
+      readable by other screens. Blueprint: PRD section 5.2. (Done:
+      `src/mock/malls.js` (LuckyOne + mock capability map, logo as
+      placeholder initial — real branding is blocked pending permission),
+      `MallProvider`/`useMallManagement` in `src/utils/mallData.js` with
+      AsyncStorage persistence via new `StorageService` mall helpers,
+      `MallSelectorScreen` stack route, current-mall bar on Home.)
+- [x] **Capability-driven home skeleton**: render only ENABLED capability
       cards for the selected mall (use `src/constants/Capabilities.js` and
       mock config); hide DISABLED, label DEGRADED. Blueprint: PRD 5.3.
-- [ ] **Typed API client helper**: axios wrapper using `ApiContants` base
+      (Done: `CapabilityMeta` title/description/icon registry +
+      `CapabilityCard` kit component with "Limited" StatusChip for
+      DEGRADED; Home grids ENABLED/DEGRADED cards from the selected
+      mall's mock capability map, hides DISABLED, empty fallback.)
+- [x] **Typed API client helper**: axios wrapper using `ApiContants` base
       URL and the services error envelope `{status, message, data}`;
-      document it in AGENTS.md. Blueprint: `03-api/API_SPEC.md`.
+      document it in AGENTS.md. Blueprint: `03-api/API_SPEC.md`. (Done:
+      `src/services/apiClient.js` — shared axios instance + `get`/`post`/
+      `put`/`patch`/`del` that never throw and always resolve to the
+      envelope; typed as `ApiEnvelope` in `src/types/api.ts`; barrel
+      export; usage documented in AGENTS.md "API client helper".)
 
 ### Stage B — identity and profile
 
-- [ ] **Re-skin the auth screens** (Signin, Signup, ForgotPassword) to the
+- [x] **Re-skin the auth screens** (Signin, Signup, ForgotPassword) to the
       MallMate theme + Inter (replace Colors.js usage with `Theme.js` on
       those screens only; behaviour unchanged). Blueprint: DESIGN_SYSTEM.
-- [ ] **Profile tab**: profile header (mock user), rows for Orders,
+      (Done: all three screens use `MallMateTheme` tokens + Inter via
+      `Theme.fontFamily`; dark Midnight Graphite background, emerald
+      primary CTAs via the kit `Button` (loading state kept), 44–48px
+      back targets; validation, service calls and navigation unchanged.)
+- [x] **Profile tab**: profile header (mock user), rows for Orders,
       Favorites, Settings, Help, Privacy — placeholders that navigate.
-      Blueprint: SCREEN_INVENTORY 60–64.
-- [ ] **Settings + notification preferences**: static toggles with marketing
-      consent wording; local state only. Blueprint: PRD 5.15.
+      Blueprint: SCREEN_INVENTORY 60–64. (Done: profile header shows the
+      signed-in user (or a mock guest) with avatar initial; ListRow
+      entries for Orders/Favorites/Settings/Help/Privacy navigate to a
+      shared `ProfilePlaceholderScreen` stack route.)
+- [x] **Settings + notification preferences**: static toggles with marketing
+      consent wording; local state only. Blueprint: PRD 5.15. (Done:
+      `SettingsScreen` with local `useState` toggles for order/payment
+      updates, loyalty activity, event reminders, merchant alerts, plus an
+      optional marketing-offers consent row; Profile → Settings navigates
+      there. No persistence or backend sync yet.)
 
 ### Stage C — home and discovery
 
-- [ ] **Multi-mall mock data + switching**: add a second mock mall with a
+- [x] **Multi-mall mock data + switching**: add a second mock mall with a
       different capability map; switching refreshes mall-scoped screens,
       shows the new mall identity, and never leaks previous-mall content.
-      Blueprint: PRD 5.2, SCREEN_INVENTORY flow "Switch mall".
-- [ ] **Home content sections (mock)**: category shortcuts,
+      Blueprint: PRD 5.2, SCREEN_INVENTORY flow "Switch mall". (Done:
+      second mock mall `Harbour Walk Plaza` with a retail/events-only
+      capability map; `selectMall` always re-resolves from `MALLS` by
+      slug; Home remounts its content via `key={slug}` and shows the new
+      name/address/hours.)
+- [x] **Home content sections (mock)**: category shortcuts,
       featured/sponsored carousel with visible "Sponsored" badge, active
       discounts section, events section — all driven by mock data and
       capability flags. Blueprint: SCREEN_INVENTORY 11–16, PRD 5.5.
-- [ ] **Explore landing**: categories grid/list + entries to restaurant and
-      outlet lists. Blueprint: SCREEN_INVENTORY 18.
-- [ ] **Search UI**: search bar, suggestion rows, results list (mock),
+      (Done: `src/mock/homeContent.js` holds per-mall mock categories,
+      sponsored/featured campaigns, discounts and events; each entry is
+      capability-gated and expired campaigns/offers are filtered by date;
+      HomeScreen renders Browse chips, a Featured carousel with mandatory
+      Sponsored/Featured badges, Active discounts and Events sections —
+      tapping any of them routes to the Explore tab placeholder for now.)
+- [x] **Explore landing**: categories grid/list + entries to restaurant and
+      outlet lists. Blueprint: SCREEN_INVENTORY 18. (Done: ExploreScreen
+      shows a mall-scoped search entry point, capability-gated directory
+      ListRows — Restaurants, Outlets, Food court, Offers, Events — and a
+      category grid; entries route to the existing placeholder stack screen
+      until list screens land. Mock explore directories/categories added per
+      mall in `src/mock/homeContent.js` via `getExploreContent`.)
+- [x] **Search UI**: search bar, suggestion rows, results list (mock),
       distinct empty-results vs error states. Blueprint: PRD 5.7,
-      SCREEN_INVENTORY 10, 19.
-- [ ] **Filter bottom sheet**: category, cuisine, open-now, floor, price —
+      SCREEN_INVENTORY 10, 19. (Done: `SearchScreen` stack route with kit
+      TextInput, debounced mock search over per-mall merchants
+      (`src/mock/merchants.js` — name/category/cuisine/tags/offer keywords,
+      capability-gated), suggestion rows when idle, Loading/Error/Empty
+      states; query `!error` simulates a recoverable failure so the error +
+      retry path is reachable. Explore's search bar now opens Search.)
+- [x] **Filter bottom sheet**: category, cuisine, open-now, floor, price —
       mock filtering applied client-side; "clear filters" affordance.
-      Blueprint: SCREEN_INVENTORY 20.
-- [ ] **Restaurant list + outlet list screens** with pagination pattern and
+      Blueprint: SCREEN_INVENTORY 20. (Done: kit `FilterSheet` Modal
+      bottom sheet with pill option groups + Clear all/Show N footer;
+      Search results gained a Filters button with active-count badge and a
+      Clear-filters text action. Options are derived from the current mock
+      result set; filtering is pure client-side via
+      `applyMerchantFilters`. Filtered-empty is a distinct state from
+      unfiltered empty.)
+- [x] **Restaurant list + outlet list screens** with pagination pattern and
       loading/empty/error states (mock pages). Blueprint: SCREEN_INVENTORY
-      21–22.
-- [ ] **Merchant detail page**: name, logo, category, floor/location,
+      21–22. (Done: shared `MerchantListScreen` registered as
+      `RestaurantList`/`OutletList` stack routes; Explore directories for
+      restaurants/outlets now navigate there. Mock
+      `fetchMerchantListPage` paginates capability-gated merchants
+      (page size 4, simulated latency, first attempt per mall+kind fails
+      once so error+retry is reachable); infinite scroll with inline
+      load-more retry, pull-to-refresh, capability-unavailable and
+      empty-list states. Extra mock merchants added so lists span
+      multiple pages.)
+- [x] **Merchant detail page**: name, logo, category, floor/location,
       hours + open-now status, active offers, tags, contact placeholder,
       map-destination link placeholder. Blueprint: PRD 5.4, SCREEN_INVENTORY
-      23.
-- [ ] **Menu/product list + item detail** for a mock merchant (sections,
+      23. (Done: `MerchantDetailScreen` registered as `MerchantDetail`,
+      mall-scoped via `getMerchantDetail` mock resolver — initials logo
+      placeholder (branding blocked), open-now StatusChip + hours card,
+      tags, active offers with expired ones filtered upstream, placeholder
+      contact rows with an approval note, map-destination and menu
+      placeholder rows. Entry points rewired: merchant lists and search
+      results now open the detail page.)
+- [x] **Menu/product list + item detail** for a mock merchant (sections,
       item cards, price display with tabular numerals). Blueprint:
-      SCREEN_INVENTORY 24–25.
-- [ ] **Offer detail + terms sheet**: discount types (%, fixed, BOGO) as
+      SCREEN_INVENTORY 24–25. (Done: `MenuScreen` + `MenuItemScreen`
+      registered as `Menu`/`MenuItem`; mock menus with sections/items for
+      four LuckyOne merchants (`src/mock/menus.js`), `formatPrice`
+      (PKR grouping) with `fontVariant: tabular-nums`, sold-out chip and
+      availability status, browse-only notes (ordering blocked). Merchant
+      detail "View menu" row now opens the menu.)
+- [x] **Offer detail + terms sheet**: discount types (%, fixed, BOGO) as
       mock offers with dates/eligibility/terms shown; expired offers hidden.
-      Blueprint: PRD 5.8, SCREEN_INVENTORY 26.
-- [ ] **Favorites tab**: local favorites (AsyncStorage) for mock merchants,
-      empty state. Blueprint: SCREEN_INVENTORY 27.
-- [ ] **Organic top-selling section** on Home using MOCK numbers with the
+      Blueprint: PRD 5.8, SCREEN_INVENTORY 26. (Done: shared offer
+      catalogue `src/mock/offers.js` (PERCENTAGE/FIXED_AMOUNT/BOGO with
+      validity, eligibility, terms; expired hidden by every resolver —
+      Home discounts and merchant offers now resolve into it, removing
+      the earlier duplicated offer summaries). `OfferDetailScreen`
+      registered as `OfferDetail`: headline by type, merchant link,
+      validity dates, eligibility list, terms bottom sheet; expired id
+      shows an unavailable state. No redemption logic.)
+- [x] **Favorites tab**: local favorites (AsyncStorage) for mock merchants,
+      empty state. Blueprint: SCREEN_INVENTORY 27. (Done: it's a stack
+      screen, not a new bottom tab — the tab bar order is fixed by the
+      blueprint. `FavoritesProvider` context persists merchant ids via
+      `StorageService` ("favoriteMerchantIds"); merchant detail header
+      heart toggles a favorite; Profile → Favorites opens the list
+      (mall-scoped rows, remove via trailing heart, empty state explains
+      how to save).)
+- [x] **Organic top-selling section** on Home using MOCK numbers with the
       mandatory disclosure ("based on app orders only"), separated
       restaurant vs retail. Presentation only — no ranking logic (blocked).
-      Blueprint: PRD 5.6, SCREEN_INVENTORY 13.
+      Blueprint: PRD 5.6, SCREEN_INVENTORY 13. (Done: `topSelling` mock
+      block per mall in `src/mock/homeContent.js` (disclosure + separate
+      restaurant/retail lists), capability-gated via `getHomeSections`;
+      HomeScreen "Popular now" section renders ranked mock rows with the
+      mandatory "Based on completed app orders only… Not total mall sales"
+      disclosure. No ranking computation.)
 
 ### Stage D — food court (presentation only; session logic is blocked)
 
-- [ ] **Food-court overview**: mock seating map/zone list, "scan to sit"
+- [x] **Food-court overview**: mock seating map/zone list, "scan to sit"
       entry point (placeholder), capability-gated. Blueprint:
-      SCREEN_INVENTORY 28.
-- [ ] **Seat session screens (mock flow)**: scan-permission explainer,
+      SCREEN_INVENTORY 28. (Done: `src/mock/foodCourt.js` (LuckyOne venue +
+      zones with static seat counts, `getFoodCourtOverview` capability-gated
+      on `food_court`, `getZoneStatus` Open/Busy/Full from mock counts);
+      `FoodCourtScreen` stack route with venue summary, mock-data
+      disclosure, zone cards with accessible-seating badges, and a
+      "scan to sit" card reflecting the `seat_sessions` capability —
+      disabled/unavailable state when either capability is off. Explore's
+      Food court directory entry now opens it.)
+- [x] **Seat session screens (mock flow)**: scan-permission explainer,
       seat confirmation, active session card, ended/expired screen, and
       error states (invalid/occupied/unavailable) driven by mock data.
       Pure presentation — no QR validation, no session rules (open
-      decisions #9/#10). Blueprint: SCREEN_INVENTORY 29–33.
+      decisions #9/#10). Blueprint: SCREEN_INVENTORY 29–33. (Done:
+      `src/mock/seatSessions.js` demo scan targets + `resolveMockScan`
+      standing in for the backend and `createMockSession` for a
+      display-only session; five stack routes — SeatScan (camera-permission
+      explainer + demo codes), SeatConfirm, SeatSession (active card with
+      end/expiry actions), SeatSessionEnd (ended vs expired), SeatHelp
+      (invalid/occupied/unavailable/stale copy). Food-court "scan to sit"
+      opens the flow; LuckyOne's `seat_sessions` mock capability flipped to
+      ENABLED so the preview is reachable (Harbour Walk stays DISABLED to
+      show gating). No session rules enforced.)
 
 ### Stage E — maps and events (placeholder assets; no live positioning)
 
-- [ ] **Floor selector + static floor map**: floor list, placeholder map
+- [x] **Floor selector + static floor map**: floor list, placeholder map
       image with POI pins, and a clear "map data unavailable" state.
-      Blueprint: SCREEN_INVENTORY 43–44, 50; PRD 5.12.
+      Blueprint: SCREEN_INVENTORY 43–44, 50; PRD 5.12. (Done:
+      `src/mock/floors.js` (LuckyOne floors G/1/2/3 with
+      percentage-positioned POI pins, Terrace unpublished; Harbour Walk
+      floors all unpublished); `FloorMapScreen` stack route — floor chips,
+      dashed placeholder plan with tappable POI pins + detail card,
+      "map data unavailable" card for unpublished floors, "Limited" chip
+      when indoor_navigation is DEGRADED, unavailable state when DISABLED,
+      and an explicit no-live-positioning disclaimer. Map tab is now a
+      capability-gated landing that opens the floor map.)
 - [ ] **Destination search + route preview (mock)**: search POIs, show
       destination detail, manual start-point picker, static route preview.
       Never claim live positioning. Blueprint: SCREEN_INVENTORY 45–49.
-- [ ] **Events list + event detail** on mock events (title, image, time,
+- [x] **Events list + event detail** on mock events (title, image, time,
       location, registration-link placeholder; expired events hidden).
-      Blueprint: PRD 5.14, SCREEN_INVENTORY 54–55.
+      Blueprint: PRD 5.14, SCREEN_INVENTORY 54–55. (Done:
+      `src/mock/events.js` shared catalogue (LuckyOne market/workshop +
+      Harbour Walk art walk + one expired fixture; `getEventList`
+      capability-gated with expired filtered, `getEventById` resolves
+      active-only). `EventsScreen` + `EventDetailScreen` stack routes —
+      placeholder banners (icon + tone, no real creative assets),
+      detail with time/location/organizer/capacity card, About section
+      and a Register/tickets placeholder row (handoff not wired — 56).
+      Home Events section and Explore's Events directory now open the
+      real screens; Home events resolve from the catalogue, removing the
+      duplicated light summaries.)
 
 ### Stage F — rewards and orders (display only; logic is blocked)
 
-- [ ] **Rewards dashboard + ledger list (mock)**: points balance card and
+- [x] **Rewards dashboard + ledger list (mock)**: points balance card and
       ledger rows (earn/redeem/reverse types) from mock data. No earning,
       redemption, or balance logic (loyalty blocked). Blueprint:
-      SCREEN_INVENTORY 57–58, PRD 5.11.
+      SCREEN_INVENTORY 57–58, PRD 5.11. (Done: `src/mock/rewards.js`
+      (LuckyOne balance/pending/expiring + EARN/REDEEM/REVERSE ledger
+      incl. a pending entry and a reversal; Harbour Walk empty);
+      Rewards tab rebuilt as the dashboard — balance card with tabular
+      numerals and mock-data disclosure, Activity ledger rows with
+      per-type icons/points signs and a Pending chip, empty-ledger state.
+      Capability-gated on loyalty: unavailable state when DISABLED;
+      LuckyOne's mock loyalty flipped to ENABLED so the preview is
+      reachable, Harbour Walk stays DISABLED to show gating. No
+      earn/redeem logic.)
 - [ ] **Order history + order detail timeline (mock)**: list of mock orders
       and a status timeline using the PRD state names; clear pending vs
       confirmed states. No checkout or payments (blocked). Blueprint:

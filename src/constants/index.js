@@ -1,15 +1,16 @@
+import ApiContants from "./ApiContants";
+import { CAPABILITY_STATUS, CAPABILITIES } from "./Capabilities";
+import CAPABILITY_META from "./CapabilityMeta";
 import Colors from "./Colors";
-import Images from "./Images";
+import CountryCode from "./CountryCode";
+import CustomFonts from "./CustomFonts";
 import Fonts from "./Fonts";
 import General from "./General";
-import CountryCode from "./CountryCode";
-import ApiContants from "./ApiContants";
+import Images from "./Images";
 import Mock from "./Mock";
-import CustomFonts from "./CustomFonts";
+import MallMateTheme from "./Theme";
 import food_data from "./fooddata";
 import restaurant_data from "./resdata";
-import MallMateTheme from "./Theme";
-import { CAPABILITY_STATUS, CAPABILITIES } from "./Capabilities";
 
 export {
   Colors,
@@ -25,4 +26,5 @@ export {
   MallMateTheme,
   CAPABILITY_STATUS,
   CAPABILITIES,
+  CAPABILITY_META,
 };
