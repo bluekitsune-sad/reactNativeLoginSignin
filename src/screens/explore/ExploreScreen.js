@@ -9,10 +9,6 @@ import { getExploreContent } from "../../mock";
 import { useMallManagement } from "../../utils";
 
 const DIRECTORY_PLACEHOLDERS = {
-  "food-court": {
-    title: "Food court",
-    message: "Food-court zones and vendors will appear here.",
-  },
   offers: {
     title: "Offers",
     message: "All active offers and coupons will appear here.",
@@ -26,6 +22,7 @@ const DIRECTORY_PLACEHOLDERS = {
 const DIRECTORY_ROUTES = {
   restaurants: "RestaurantList",
   outlets: "OutletList",
+  "food-court": "FoodCourt",
 };
 
 const CATEGORY_PLACEHOLDER = {

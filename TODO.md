@@ -195,9 +195,16 @@ Rules for the factory:
 
 ### Stage D — food court (presentation only; session logic is blocked)
 
-- [ ] **Food-court overview**: mock seating map/zone list, "scan to sit"
+- [x] **Food-court overview**: mock seating map/zone list, "scan to sit"
       entry point (placeholder), capability-gated. Blueprint:
-      SCREEN_INVENTORY 28.
+      SCREEN_INVENTORY 28. (Done: `src/mock/foodCourt.js` (LuckyOne venue +
+      zones with static seat counts, `getFoodCourtOverview` capability-gated
+      on `food_court`, `getZoneStatus` Open/Busy/Full from mock counts);
+      `FoodCourtScreen` stack route with venue summary, mock-data
+      disclosure, zone cards with accessible-seating badges, and a
+      "scan to sit" card reflecting the `seat_sessions` capability —
+      disabled/unavailable state when either capability is off. Explore's
+      Food court directory entry now opens it.)
 - [ ] **Seat session screens (mock flow)**: scan-permission explainer,
       seat confirmation, active session card, ended/expired screen, and
       error states (invalid/occupied/unavailable) driven by mock data.

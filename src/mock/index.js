@@ -1,3 +1,4 @@
+import { FOOD_COURTS, getFoodCourtOverview, getZoneStatus } from "./foodCourt";
 import {
   HOME_CONTENT,
   getContentForMall,
@@ -34,8 +35,11 @@ import {
 
 export {
   MALLS,
+  FOOD_COURTS,
   HOME_CONTENT,
   getContentForMall,
+  getFoodCourtOverview,
+  getZoneStatus,
   getHomeSections,
   getExploreContent,
   isCapabilityVisible,
