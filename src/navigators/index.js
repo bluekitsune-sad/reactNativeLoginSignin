@@ -8,7 +8,9 @@ import {
   ForgotPasswordScreen,
   MallSelectorScreen,
   MerchantDetailScreen,
+  MenuItemScreen,
   MerchantListScreen,
+  MenuScreen,
   ProfilePlaceholderScreen,
   SettingsScreen,
   SearchScreen,
@@ -47,6 +49,8 @@ const Navigators = () => {
                 initialParams={{ kind: "outlets" }}
               />
               <Stack.Screen name="MerchantDetail" component={MerchantDetailScreen} />
+              <Stack.Screen name="Menu" component={MenuScreen} />
+              <Stack.Screen name="MenuItem" component={MenuItemScreen} />
               {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
               {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
             </>

@@ -6,6 +6,8 @@ import MerchantListScreen from "./explore/MerchantListScreen";
 import HomeScreen from "./home/HomeScreen";
 import MallSelectorScreen from "./mall/MallSelectorScreen";
 import MapScreen from "./map/MapScreen";
+import MenuItemScreen from "./merchant/MenuItemScreen";
+import MenuScreen from "./merchant/MenuScreen";
 import MerchantDetailScreen from "./merchant/MerchantDetailScreen";
 import ProfilePlaceholderScreen from "./profile/ProfilePlaceholderScreen";
 import ProfileScreen from "./profile/ProfileScreen";
@@ -23,6 +25,8 @@ export {
   ExploreScreen,
   MerchantListScreen,
   MerchantDetailScreen,
+  MenuScreen,
+  MenuItemScreen,
   MapScreen,
   RewardsScreen,
   ProfileScreen,

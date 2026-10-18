@@ -141,9 +141,7 @@ const MerchantDetailScreen = ({ navigation, route }) => {
           title="View menu"
           subtitle="Sections, items and prices"
           leading={<Ionicons name="book-outline" size={20} color={MallMateTheme.color.primary} />}
-          onPress={() =>
-            openPlaceholder("Menu", "The menu and product list for this merchant are coming soon.")
-          }
+          onPress={() => navigation.navigate("Menu", { merchantId: merchant.id })}
           style={styles.row}
         />
 

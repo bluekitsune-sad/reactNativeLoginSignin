@@ -157,9 +157,14 @@ Rules for the factory:
       contact rows with an approval note, map-destination and menu
       placeholder rows. Entry points rewired: merchant lists and search
       results now open the detail page.)
-- [ ] **Menu/product list + item detail** for a mock merchant (sections,
+- [x] **Menu/product list + item detail** for a mock merchant (sections,
       item cards, price display with tabular numerals). Blueprint:
-      SCREEN_INVENTORY 24–25.
+      SCREEN_INVENTORY 24–25. (Done: `MenuScreen` + `MenuItemScreen`
+      registered as `Menu`/`MenuItem`; mock menus with sections/items for
+      four LuckyOne merchants (`src/mock/menus.js`), `formatPrice`
+      (PKR grouping) with `fontVariant: tabular-nums`, sold-out chip and
+      availability status, browse-only notes (ordering blocked). Merchant
+      detail "View menu" row now opens the menu.)
 - [ ] **Offer detail + terms sheet**: discount types (%, fixed, BOGO) as
       mock offers with dates/eligibility/terms shown; expired offers hidden.
       Blueprint: PRD 5.8, SCREEN_INVENTORY 26.
