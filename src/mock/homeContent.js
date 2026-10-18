@@ -1,4 +1,5 @@
 import { CAPABILITY_STATUS } from "../constants";
+import { getEventList } from "./events";
 
 /**
  * Mock home-feed content per mall (PRD 5.5 featured placements, 5.8
@@ -108,26 +109,6 @@ export const HOME_CONTENT = {
         label: "50% OFF",
         capability: "retail_discovery",
         endsAt: "2020-01-15T00:00:00Z",
-      },
-    ],
-    events: [
-      {
-        id: "lucky-event-1",
-        title: "Weekend pop-up market",
-        subtitle: "Local makers and food stalls",
-        when: "Sat & Sun · 2 PM – 10 PM",
-        location: "Central atrium",
-        capability: "events",
-        endsAt: farFuture,
-      },
-      {
-        id: "lucky-event-2",
-        title: "Kids craft workshop",
-        subtitle: "Free entry, limited seats",
-        when: "Every Saturday · 4 PM",
-        location: "Activity zone, Level 3",
-        capability: "events",
-        endsAt: farFuture,
       },
     ],
     topSelling: {
@@ -273,17 +254,6 @@ export const HOME_CONTENT = {
         endsAt: farFuture,
       },
     ],
-    events: [
-      {
-        id: "harbour-event-1",
-        title: "Waterfront art walk",
-        subtitle: "Local artists along the promenade",
-        when: "Sunday · 5 PM – 9 PM",
-        location: "Promenade",
-        capability: "events",
-        endsAt: farFuture,
-      },
-    ],
     topSelling: {
       disclosure: "Based on completed app orders only (last 7 days). Not total mall sales.",
       restaurants: [],
@@ -409,9 +379,9 @@ export const getHomeSections = (mallSlug, capabilityMap, now = new Date()) => {
   const discounts = (content.discounts || []).filter(
     (offer) => isCapabilityVisible(capabilityMap, offer.capability) && isOfferActive(offer, now),
   );
-  const events = (content.events || []).filter(
-    (event) => isCapabilityVisible(capabilityMap, event.capability) && isOfferActive(event, now),
-  );
+  // Events resolve from the shared catalogue (src/mock/events.js) — the
+  // same source the Events list/detail screens use (PRD 5.14).
+  const events = getEventList(mallSlug, capabilityMap, now);
   let topSelling = null;
   const rawTop = content.topSelling;
   if (rawTop) {

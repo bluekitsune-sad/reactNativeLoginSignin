@@ -236,9 +236,19 @@ Rules for the factory:
 - [ ] **Destination search + route preview (mock)**: search POIs, show
       destination detail, manual start-point picker, static route preview.
       Never claim live positioning. Blueprint: SCREEN_INVENTORY 45–49.
-- [ ] **Events list + event detail** on mock events (title, image, time,
+- [x] **Events list + event detail** on mock events (title, image, time,
       location, registration-link placeholder; expired events hidden).
-      Blueprint: PRD 5.14, SCREEN_INVENTORY 54–55.
+      Blueprint: PRD 5.14, SCREEN_INVENTORY 54–55. (Done:
+      `src/mock/events.js` shared catalogue (LuckyOne market/workshop +
+      Harbour Walk art walk + one expired fixture; `getEventList`
+      capability-gated with expired filtered, `getEventById` resolves
+      active-only). `EventsScreen` + `EventDetailScreen` stack routes —
+      placeholder banners (icon + tone, no real creative assets),
+      detail with time/location/organizer/capacity card, About section
+      and a Register/tickets placeholder row (handoff not wired — 56).
+      Home Events section and Explore's Events directory now open the
+      real screens; Home events resolve from the catalogue, removing the
+      duplicated light summaries.)
 
 ### Stage F — rewards and orders (display only; logic is blocked)
 

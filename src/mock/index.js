@@ -1,3 +1,11 @@
+import {
+  EVENT_ICONS,
+  MOCK_EVENTS,
+  getEventById,
+  getEventIcon,
+  getEventList,
+  toEventSummary,
+} from "./events";
 import { FLOORS, POI_ICONS, getFloorPlan, getPoiIcon } from "./floors";
 import { FOOD_COURTS, getFoodCourtOverview, getZoneStatus } from "./foodCourt";
 import {
@@ -44,15 +52,21 @@ import {
 
 export {
   MALLS,
+  EVENT_ICONS,
   FOOD_COURTS,
   FLOORS,
+  MOCK_EVENTS,
   POI_ICONS,
   HOME_CONTENT,
   getContentForMall,
+  getEventById,
+  getEventIcon,
+  getEventList,
   getFloorPlan,
   getFoodCourtOverview,
   getPoiIcon,
   getZoneStatus,
+  toEventSummary,
   getHomeSections,
   getExploreContent,
   isCapabilityVisible,

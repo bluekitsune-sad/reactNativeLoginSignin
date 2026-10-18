@@ -14,6 +14,8 @@ import {
   OfferDetailScreen,
   FavoritesScreen,
   FoodCourtScreen,
+  EventsScreen,
+  EventDetailScreen,
   SeatScanScreen,
   SeatConfirmScreen,
   SeatSessionScreen,
@@ -65,6 +67,8 @@ const Navigators = () => {
                 <Stack.Screen name="OfferDetail" component={OfferDetailScreen} />
                 <Stack.Screen name="Favorites" component={FavoritesScreen} />
                 <Stack.Screen name="FoodCourt" component={FoodCourtScreen} />
+                <Stack.Screen name="Events" component={EventsScreen} />
+                <Stack.Screen name="EventDetail" component={EventDetailScreen} />
                 <Stack.Screen name="SeatScan" component={SeatScanScreen} />
                 <Stack.Screen name="SeatConfirm" component={SeatConfirmScreen} />
                 <Stack.Screen name="SeatSession" component={SeatSessionScreen} />

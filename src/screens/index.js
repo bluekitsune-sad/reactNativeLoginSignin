@@ -1,6 +1,8 @@
 import ForgotPasswordScreen from "./ForgotPasswordScreen";
 import SigninScreen from "./SigninScreen";
 import SignupScreen from "./SignupScreen";
+import EventDetailScreen from "./events/EventDetailScreen";
+import EventsScreen from "./events/EventsScreen";
 import ExploreScreen from "./explore/ExploreScreen";
 import MerchantListScreen from "./explore/MerchantListScreen";
 import FavoritesScreen from "./favorites/FavoritesScreen";
@@ -38,6 +40,8 @@ export {
   MenuItemScreen,
   OfferDetailScreen,
   FavoritesScreen,
+  EventsScreen,
+  EventDetailScreen,
   FoodCourtScreen,
   SeatScanScreen,
   SeatConfirmScreen,
