@@ -33,6 +33,14 @@ import {
   searchMerchants,
 } from "./merchants";
 import {
+  DESTINATION_SUGGESTIONS,
+  buildRoutePreview,
+  getDestinationById,
+  getDestinationSuggestions,
+  getStartPoints,
+  searchDestinations,
+} from "./navigation";
+import {
   MOCK_OFFERS,
   OFFER_TYPES,
   formatOfferDate,
@@ -81,6 +89,12 @@ export {
   MERCHANT_DETAILS,
   MOCK_MENUS,
   MOCK_OFFERS,
+  DESTINATION_SUGGESTIONS,
+  buildRoutePreview,
+  getDestinationById,
+  getDestinationSuggestions,
+  getStartPoints,
+  searchDestinations,
   OFFER_TYPES,
   PRICE_BAND_LABELS,
   applyMerchantFilters,

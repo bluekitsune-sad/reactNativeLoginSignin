@@ -233,9 +233,19 @@ Rules for the factory:
       when indoor_navigation is DEGRADED, unavailable state when DISABLED,
       and an explicit no-live-positioning disclaimer. Map tab is now a
       capability-gated landing that opens the floor map.)
-- [ ] **Destination search + route preview (mock)**: search POIs, show
+- [x] **Destination search + route preview (mock)**: search POIs, show
       destination detail, manual start-point picker, static route preview.
       Never claim live positioning. Blueprint: SCREEN_INVENTORY 45–49.
+      (Done: `src/mock/navigation.js` (published-POI destinations, curated
+      start points, deterministic static route steps; "!error" query
+      simulates a recoverable search failure; capability-gated on
+      indoor_navigation). Four stack routes — DestinationSearch (idle
+      suggestions + debounced search + empty/error states),
+      DestinationDetail (category/floor card + "Get directions"),
+      StartPointSelect (manual start picker, explainer that live
+      positioning is off), RoutePreview (from/to summary card + numbered
+      directions + preview-build note). Map tab gained a "Find a
+      destination" entry. No pathfinding, no live positioning.)
 - [x] **Events list + event detail** on mock events (title, image, time,
       location, registration-link placeholder; expired events hidden).
       Blueprint: PRD 5.14, SCREEN_INVENTORY 54–55. (Done:

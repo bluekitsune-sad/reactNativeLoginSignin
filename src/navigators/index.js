@@ -25,6 +25,10 @@ import {
   SettingsScreen,
   SearchScreen,
   FloorMapScreen,
+  DestinationSearchScreen,
+  DestinationDetailScreen,
+  StartPointSelectScreen,
+  RoutePreviewScreen,
   // RegisterPhoneScreen,
   // VerificationScreen,
 } from "../screens";
@@ -75,6 +79,10 @@ const Navigators = () => {
                 <Stack.Screen name="SeatSessionEnd" component={SeatSessionEndScreen} />
                 <Stack.Screen name="SeatHelp" component={SeatHelpScreen} />
                 <Stack.Screen name="FloorMap" component={FloorMapScreen} />
+                <Stack.Screen name="DestinationSearch" component={DestinationSearchScreen} />
+                <Stack.Screen name="DestinationDetail" component={DestinationDetailScreen} />
+                <Stack.Screen name="StartPointSelect" component={StartPointSelectScreen} />
+                <Stack.Screen name="RoutePreview" component={RoutePreviewScreen} />
                 {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
                 {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
               </>
