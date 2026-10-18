@@ -292,9 +292,16 @@ Rules for the factory:
 
 ### Stage G — quality and polish
 
-- [ ] **Jest setup** (`jest-expo`) + first tests: typed API client envelope
+- [x] **Jest setup** (`jest-expo`) + first tests: typed API client envelope
       helper and `MallContext` switching; `npm test` script. Blueprint:
-      `07-delivery/ROADMAP_AND_BACKLOG.md` Phase 1.
+      `07-delivery/ROADMAP_AND_BACKLOG.md` Phase 1. (Done: `jest-expo@~50`
+      preset + `jest`, `react-test-renderer`, `@testing-library/react-native`
+      devDependencies; `npm test` script; AsyncStorage mapped to its jest
+      mock via `moduleNameMapper`. First suites: `src/services/__tests__/
+      apiClient.test.js` (envelope passthrough/wrapping, never-throws
+      failure paths, method/data wiring — axios mocked) and
+      `src/utils/__tests__/mallData.test.js` (default mall, slug switch,
+      unknown-slug ignored, object re-resolution). 12 tests, all passing.)
 - [ ] **i18n groundwork**: `expo-localization` + string catalog (English),
       RTL-ready layout audit of new screens (no hardcoded left/right where
       avoidable). Full Urdu translation is a later decision. PRD section 10.

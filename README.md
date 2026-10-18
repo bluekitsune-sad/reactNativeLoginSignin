@@ -181,8 +181,8 @@ The expected sign‑in payload shape:
 | `npm run web` | Start the web build. |
 | `npm run typecheck` | Run `tsc --noEmit` over the incremental TypeScript setup. |
 | `npm run lint` | Run ESLint (with Prettier rules via `eslint-config-universe`). |
+| `npm test` | Run the Jest test suite (`jest-expo` preset). |
 
-There is currently **no** test script — see [TODO.md](./TODO.md).
 `npm run lint` reports pre-existing style warnings on legacy files; they are
 non-blocking (warning level) pending a repo-wide `--fix` pass.
 
