@@ -242,3 +242,5 @@ done today:  > todoAgent Ran (2026-10-17 19:31 UTC): done — home content secti
 done today:  > todoAgent Ran (2026-10-18 13:36 UTC): done — restaurant+outlet lists w/ mock pagination; merchant detail; menu list + item detail; offer detail + terms sheet; local favorites
 
 done today:  > todoAgent Ran (2026-10-18 17:09 UTC): done — food-court overview w/ mock seating zones; seat-session mock flow (scan/confirm/session/end/help); floor selector + static floor map w/ POI pins; events list + event detail; rewards dashboard + ledger
+
+done today:  > todoAgent Ran (2026-10-18 19:58 UTC): done — destination search + route preview (45-49), order history + detail timeline (40-41), jest setup + first tests, app identity rename to MallMate, i18n groundwork + RTL audit
