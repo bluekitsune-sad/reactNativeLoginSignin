@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     borderRadius: MallMateTheme.radius.control / 2,
     paddingHorizontal: MallMateTheme.spacing.sm,
     paddingVertical: MallMateTheme.spacing.xs,
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   discountLabel: {
     color: MallMateTheme.color.background,
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
     padding: MallMateTheme.spacing.md,
   },
   eventIcon: {
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
     marginTop: 2,
   },
   eventBody: {
@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
     borderColor: MallMateTheme.color.primary,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   topRank: {
     color: MallMateTheme.color.primary,

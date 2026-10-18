@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     backgroundColor: MallMateTheme.color.surfaceElevated,
   },
   searchPlaceholder: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
     color: MallMateTheme.color.textMuted,
     fontSize: MallMateTheme.typography.body.fontSize,
     fontFamily: MallMateTheme.fontFamily.regular,

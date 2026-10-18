@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    marginRight: MallMateTheme.spacing.xs,
+    marginEnd: MallMateTheme.spacing.xs,
   },
   label: {
     fontSize: MallMateTheme.typography.caption.fontSize,

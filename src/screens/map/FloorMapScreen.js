@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerMeta: {
     flex: 1,
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: PIN_SIZE,
     height: PIN_SIZE,
-    marginLeft: -PIN_SIZE / 2,
+    marginStart: -PIN_SIZE / 2,
     marginTop: -PIN_SIZE / 2,
     borderRadius: PIN_SIZE / 2,
     borderWidth: 1,

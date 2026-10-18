@@ -302,9 +302,26 @@ Rules for the factory:
       failure paths, method/data wiring — axios mocked) and
       `src/utils/__tests__/mallData.test.js` (default mall, slug switch,
       unknown-slug ignored, object re-resolution). 12 tests, all passing.)
-- [ ] **i18n groundwork**: `expo-localization` + string catalog (English),
+- [x] **i18n groundwork**: `expo-localization` + string catalog (English),
       RTL-ready layout audit of new screens (no hardcoded left/right where
       avoidable). Full Urdu translation is a later decision. PRD section 10.
+      (Done: `expo-localization` installed (config plugin added to
+      app.json); `src/i18n/` with the English catalog `en.js` (grouped
+      common/mall/search/orders/rewards keys with `{placeholder}`
+      interpolation) and a `t()` helper that detects the device locale,
+      falls back to English, returns the key for unknown strings and never
+      throws; `isRTL()` for known RTL language codes. RTL audit: all
+      marginLeft/Right + paddingLeft/Right in the MallMate kit and new
+      screens converted to logical marginStart/End + paddingStart/End (32
+      files); two absolute left/right offsets (Signin logo, search filter
+      badge) converted to start/end. Map POI pin coordinates stay physical
+      (data positions). `t()` covered by unit tests. Screens still render
+      English literals directly — adopting `t()` screen-by-screen is
+      follow-up work when translations land.)
+- [ ] **Adopt `t()` across MallMate screens**: the i18n groundwork ships
+      the catalog + helper but screens still render English literals;
+      migrate them to `t()` keys (one area per task) when a second
+      language is actually scheduled.
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
       "MallMate", `slug` → "mallmate", `userInterfaceStyle` → dark;

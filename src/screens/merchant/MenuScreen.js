@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerBody: {
     flex: 1,
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     fontFamily: MallMateTheme.fontFamily.medium,
   },
   soldOut: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
   },
   itemDescription: {
     color: MallMateTheme.color.textSecondary,
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     gap: MallMateTheme.spacing.xs,
   },
   tag: {
-    marginRight: 0,
+    marginEnd: 0,
   },
   browseNote: {
     color: MallMateTheme.color.textMuted,

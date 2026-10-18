@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: MallMateTheme.color.surfaceElevated,
   },
   leading: {
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   body: {
     flex: 1,
@@ -79,10 +79,10 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   trailing: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
   },
   chevron: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
   },
 });
 

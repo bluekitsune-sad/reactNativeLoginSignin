@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textPrimary,
     fontSize: MallMateTheme.typography.h3.fontSize,
     fontFamily: MallMateTheme.fontFamily.semiBold,
-    marginRight: MallMateTheme.touchTarget.min,
+    marginEnd: MallMateTheme.touchTarget.min,
   },
   headerSpacer: {
     width: MallMateTheme.touchTarget.min,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   rowBody: {
     flex: 1,
-    paddingRight: MallMateTheme.spacing.md,
+    paddingEnd: MallMateTheme.spacing.md,
   },
   rowTitle: {
     color: MallMateTheme.color.textPrimary,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   switch: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
   },
   footnote: {
     color: MallMateTheme.color.textMuted,

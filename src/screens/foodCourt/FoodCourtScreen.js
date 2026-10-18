@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerMeta: {
     flex: 1,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     fontFamily: MallMateTheme.fontFamily.semiBold,
   },
   heroChip: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
   },
   heroMeta: {
     color: MallMateTheme.color.textSecondary,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   scanIcon: {
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   scanBody: {
     flex: 1,
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textPrimary,
     fontSize: MallMateTheme.typography.bodyLarge.fontSize,
     fontFamily: MallMateTheme.fontFamily.medium,
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   zoneDescription: {
     color: MallMateTheme.color.textSecondary,
