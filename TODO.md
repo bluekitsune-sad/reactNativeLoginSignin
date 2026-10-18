@@ -175,8 +175,14 @@ Rules for the factory:
       registered as `OfferDetail`: headline by type, merchant link,
       validity dates, eligibility list, terms bottom sheet; expired id
       shows an unavailable state. No redemption logic.)
-- [ ] **Favorites tab**: local favorites (AsyncStorage) for mock merchants,
-      empty state. Blueprint: SCREEN_INVENTORY 27.
+- [x] **Favorites tab**: local favorites (AsyncStorage) for mock merchants,
+      empty state. Blueprint: SCREEN_INVENTORY 27. (Done: it's a stack
+      screen, not a new bottom tab — the tab bar order is fixed by the
+      blueprint. `FavoritesProvider` context persists merchant ids via
+      `StorageService` ("favoriteMerchantIds"); merchant detail header
+      heart toggles a favorite; Profile → Favorites opens the list
+      (mall-scoped rows, remove via trailing heart, empty state explains
+      how to save).)
 - [x] **Organic top-selling section** on Home using MOCK numbers with the
       mandatory disclosure ("based on app orders only"), separated
       restaurant vs retail. Presentation only — no ranking logic (blocked).

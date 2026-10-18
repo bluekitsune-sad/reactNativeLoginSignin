@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Badge, Card, EmptyState, ListRow, SectionHeader, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
 import { getMerchantDetail } from "../../mock";
-import { useMallManagement } from "../../utils";
+import { useFavorites, useMallManagement } from "../../utils";
 
 /**
  * Merchant detail page (PRD 5.4, SCREEN_INVENTORY 23) on mock data:
@@ -15,11 +15,14 @@ import { useMallManagement } from "../../utils";
  * ones hidden upstream), tags, placeholder contact details, a
  * map-destination placeholder row and a menu placeholder row (menu screen
  * is a follow-up task). Mall-scoped: resolves against the selected mall.
+ * Header heart toggles local favorites (SCREEN_INVENTORY 27).
  */
 const MerchantDetailScreen = ({ navigation, route }) => {
   const merchantId = route?.params?.merchantId;
   const { selectedMall } = useMallManagement();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const merchant = getMerchantDetail(selectedMall.slug, merchantId);
+  const favorited = isFavorite(merchantId);
 
   const header = (
     <View style={styles.header}>
@@ -35,6 +38,22 @@ const MerchantDetailScreen = ({ navigation, route }) => {
       <Text style={styles.headerMeta} numberOfLines={1}>
         {selectedMall.name}
       </Text>
+      {merchant ? (
+        <Pressable
+          onPress={() => toggleFavorite(merchantId)}
+          accessibilityRole="button"
+          accessibilityLabel={favorited ? "Remove from favorites" : "Add to favorites"}
+          accessibilityState={{ selected: favorited }}
+          hitSlop={MallMateTheme.spacing.sm}
+          style={styles.favoriteButton}
+        >
+          <Ionicons
+            name={favorited ? "heart" : "heart-outline"}
+            size={26}
+            color={favorited ? MallMateTheme.color.error : MallMateTheme.color.textPrimary}
+          />
+        </Pressable>
+      ) : null}
     </View>
   );
 
@@ -199,6 +218,12 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textSecondary,
     fontSize: MallMateTheme.typography.caption.fontSize,
     fontFamily: MallMateTheme.fontFamily.regular,
+  },
+  favoriteButton: {
+    minHeight: MallMateTheme.touchTarget.min,
+    minWidth: MallMateTheme.touchTarget.min,
+    alignItems: "center",
+    justifyContent: "center",
   },
   content: {
     padding: MallMateTheme.spacing.lg,

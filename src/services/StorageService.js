@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const USER_KEY = "user";
 const SELECTED_MALL_KEY = "selectedMallSlug";
+const FAVORITE_IDS_KEY = "favoriteMerchantIds";
 
 const setFirstTimeUse = () => {
   return AsyncStorage.setItem("isFirstTimeUse", "true");
@@ -36,6 +37,23 @@ const removeSelectedMallSlug = () => {
   return AsyncStorage.removeItem(SELECTED_MALL_KEY);
 };
 
+const getFavoriteIds = async () => {
+  const stored = await AsyncStorage.getItem(FAVORITE_IDS_KEY);
+  if (!stored) {
+    return [];
+  }
+  try {
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed.filter((id) => typeof id === "string") : [];
+  } catch {
+    return [];
+  }
+};
+
+const setFavoriteIds = (ids) => {
+  return AsyncStorage.setItem(FAVORITE_IDS_KEY, JSON.stringify(ids ?? []));
+};
+
 export default {
   setFirstTimeUse,
   getFirstTimeUse,
@@ -45,4 +63,6 @@ export default {
   setSelectedMallSlug,
   getSelectedMallSlug,
   removeSelectedMallSlug,
+  getFavoriteIds,
+  setFavoriteIds,
 };

@@ -28,10 +28,7 @@ const PROFILE_ROWS = [
     title: "Favorites",
     subtitle: "Saved merchants and offers",
     icon: "heart-outline",
-    placeholder: {
-      title: "Favorites",
-      message: "Save merchants you love and find them here.",
-    },
+    route: "Favorites",
   },
   {
     key: "settings",
