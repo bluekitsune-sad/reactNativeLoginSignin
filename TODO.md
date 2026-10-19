@@ -520,9 +520,15 @@ P0 — App is broken / blocking
       package to match the product. (Done via the MallMate "App identity"
       item above — app.json + package.json renamed, splash/adaptive
       backgrounds themed.)
-- [ ] `expo-doctor` still flags pre‑existing version drift (`expo`,
+- [x] `expo-doctor` still flags pre‑existing version drift (`expo`,
       `lottie-react-native`, `react-native`, `react-native-safe-area-context`)
-      — align them with `npx expo install --check` when convenient.
+      — align them with `npx expo install --check` when convenient. (Done:
+      `npx expo install --check` → `--fix` aligned all four to the Expo
+      SDK 50 expected versions — `expo@~50.0.20`, `lottie-react-native@6.5.1`,
+      `react-native@0.73.6`, `react-native-safe-area-context@4.8.2`; a
+      follow-up `--check` reports "Dependencies are up to date". Verified:
+      lint 0/0, typecheck clean, 34/34 tests, web export compiles and the
+      home screenshot still renders.)
 
 ---
 
