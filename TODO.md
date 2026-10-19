@@ -414,8 +414,9 @@ P0 — App is broken / blocking
 
 ## P2 — State, storage & auth hardening
 
-- [ ] Replace/upgrade `useUserManagement` (`src/utils/userData.js`) with a
+- [x] Replace/upgrade `useUserManagement` (`src/utils/userData.js`) with a
       Context or Redux store so the logged‑in user is shared across screens.
+      (Stale duplicate — already done via the React Context entry below.)
 - [x] **Fix `StorageService`:**
   - `setUser` now `JSON.stringify`s before writing.
   - `getUser` reads the same `"user"` key and `JSON.parse`s the result.
@@ -430,9 +431,15 @@ P0 — App is broken / blocking
 - [ ] Persist the token and restore session on app launch; wire
       `refreshToken()` and auth headers (`utils/Generator.js#authHeader`) into
       the services (currently commented out).
-- [ ] Decide on a state library (Redux Toolkit vs React Query vs Context) and
+- [x] Decide on a state library (Redux Toolkit vs React Query vs Context) and
       remove the commented‑out `react-redux` / `src/actions` leftovers in
-      `FoodCard.js` and `RestaurantCard.js`.
+      `FoodCard.js` and `RestaurantCard.js`. (Done: Context is the decision —
+      `UserProvider`/`MallProvider`/`FavoritesProvider` are mounted in
+      `src/navigators/index.js` and `react-redux` is not installed (AGENTS.md:
+      "Redux was removed"). Dead `useDispatch`/`useSelector`/`../actions`
+      imports and their commented dispatch/selector bodies were removed from
+      `FoodCard.js` and `RestaurantCard.js`; the local console-stub cart/
+      bookmark handlers they guarded are unchanged.)
 
 ## P3 — API & data cleanup
 

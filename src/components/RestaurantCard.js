@@ -4,8 +4,6 @@ import { Colors, Fonts } from "../constants";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StaticImageService } from "../services";
-// import { useDispatch, useSelector } from "react-redux";
-// import { BookmarkAction } from "../actions";
 import { Display } from "../utils";
 
 const RestaurantCard = ({
@@ -17,21 +15,11 @@ const RestaurantCard = ({
   time,
   navigate,
 }) => {
-  // const dispatch = useDispatch();
-
   // console.log(poster);
 
   const isBookmarked = "isbooked";
-  // const isBookmarked = useSelector(
-  //   (state) =>
-  //     state?.bookmarkState?.bookmarks?.filter(
-  //       (item) => item?.restaurantId === id
-  //     )?.length > 0
-  // );
   const addBookmark = () => console.log("add bookmark");
-  // dispatch(BookmarkAction.addBookmark({ restaurantId: id }));
   const removeBookmark = () => console.log("remove bookmark");
-  // dispatch(BookmarkAction.removeBookmark({ restaurantId: id }));
   return (
     <TouchableOpacity
       style={styles.container}

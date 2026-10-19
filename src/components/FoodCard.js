@@ -4,26 +4,15 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { ApiContants, Colors, Fonts } from "../constants";
 import { StaticImageService } from "../services";
 import { Display } from "../utils";
-// import { useDispatch } from "react-redux";
-// import { useSelector } from "react-redux";
-// import { CartAction } from "../actions";
 
 const FoodCard = ({ id, name, description, price, image, navigate }) => {
-  // const dispatch = useDispatch();
   const itemCount = 1;
-  // const itemCount = useSelector(
-  //   (state) =>
-  //     state?.cartState?.cart?.cartItems?.find((item) => item?.foodId === id)
-  //       ?.count
-  // );
 
   console.log("image" + image);
   console.log(name);
 
   const addToCart = (foodId) => console.log("add to cart");
-  // dispatch(CartAction.addToCart({ foodId }));
   const removeFromCart = (foodId) => console.log("remove from cart");
-  // dispatch(CartAction.removeFromCart({ foodId }));
 
   return (
     <View style={styles.container}>

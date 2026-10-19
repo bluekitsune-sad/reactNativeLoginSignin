@@ -86,9 +86,11 @@ introduce no new errors) plus `npm test` when you touch covered code.
   `src/constants/Theme.js` instead (see the MallMate section).
 - **Styling** is `StyleSheet.create` at the bottom of each component file, using
   `Display.setWidth/setHeight` for relative sizing.
-- **State:** Redux was removed; commented‑out `useDispatch`/`useSelector` and
-  `src/actions` imports are leftovers. Current state lives in local `useState`
-  plus the `useUserManagement` hook in `src/utils/userData.js`.
+- **State:** Redux was removed (and the old commented‑out
+  `useDispatch`/`useSelector`/`src/actions` leftovers have been cleaned up).
+  Current state lives in local `useState` plus React Context providers
+  (`useUserManagement` in `src/utils/userData.js`, plus the mall and
+  favorites contexts).
 
 ### API client helper (`src/services/apiClient.js`)
 
@@ -131,12 +133,10 @@ if (res.status) {
 ## Known landmines (read before editing)
 
 1. **Dead third‑party API:** `countryflags.io` in `ApiContants.COUNTRY_FLAG`.
-2. **No `src/actions` directory** even though commented code imports from it
-   (`FoodCard.js`, `RestaurantCard.js`).
-3. **`AuthenticationService.login`** still does a GET with the credentials
+2. **`AuthenticationService.login`** still does a GET with the credentials
    JSON‑stringified into the URL path (see TODO P3) — do not copy that pattern
    into new services.
-4. **Web build:** `webpack.config.js` maps node's `crypto` to `false` so
+3. **Web build:** `webpack.config.js` maps node's `crypto` to `false` so
    Expo web compiles (`expo-modules-core/uuid`). Do not delete it.
 
 Previously documented and now fixed (do not regress): icons come from
@@ -147,7 +147,9 @@ configurable via `EXPO_PUBLIC_BACKEND_URL` / `app.json` `extra.backendUrl`
 (`expo-constants`); `StorageService` serializes with `JSON.stringify`/
 `JSON.parse` on the shared `"user"` key; `useUserManagement` is a React
 Context (`UserProvider`) shared across screens; `SignupScreen` and
-`ForgotPasswordScreen` exist and are registered in the navigator.
+`ForgotPasswordScreen` exist and are registered in the navigator; the
+commented‑out `react-redux`/`src/actions` leftovers in `FoodCard.js` and
+`RestaurantCard.js` are removed (state is Context + local `useState`).
 
 ## Conventions
 
