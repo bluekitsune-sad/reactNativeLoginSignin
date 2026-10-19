@@ -393,14 +393,22 @@ P0 — App is broken / blocking
 - [x] `ForgotPasswordScreen` — created (email lookup via `checkUserExist`)
       and registered in the navigator.
 - [ ] `RegisterPhoneScreen` + `VerificationScreen` (still stubbed as comments
-      in `src/navigators/index.js` and `src/screens/index.js`).
+      in `src/navigators/index.js` and `src/screens/index.js`). (Skipped
+      2026-10-19: no phone/OTP endpoints exist in `ApiContants`/
+      `AuthenticationService` and nothing in the signup flow references a
+      phone step — building it would mean inventing the verification flow
+      and hook points. Needs owner input on the intended flow first.)
 - [ ] Post‑login main flow: home / restaurants, restaurant detail, food detail,
       cart, bookmarks, profile. Components already exist
       (`RestaurantCard`, `RestaurantMediumCard`, `FoodCard`, `WelcomeCard`,
       `CategoryMenuItem`, `CategoryListItem`) but no screens use them.
       There is also no screen to navigate to after a successful sign‑in yet.
-- [ ] Wire social sign‑in buttons (Facebook / Google) or hide them until real
-      auth exists.
+- [x] Wire social sign‑in buttons (Facebook / Google) or hide them until real
+      auth exists. (Done via the "hide" option: no social auth provider is
+      integrated, so the "OR / Connect with Facebook / Connect with Google"
+      block and its dead styles/imports were removed from `SigninScreen`.
+      `Images.FACEBOOK`/`Images.GOOGLE` assets and constants are kept for a
+      future re-wire.)
 - [ ] Country code picker screen (`CountryCode.js` + `FlagItem.js` are ready;
       note `countryflags.io` is dead — use emoji flags or a bundled image set).
 

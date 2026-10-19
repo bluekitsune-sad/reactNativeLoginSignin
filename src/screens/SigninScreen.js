@@ -1,18 +1,10 @@
 import { Ionicons, Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button, Separator, ToggleButton } from "../components";
-import { Images, MallMateTheme } from "../constants";
+import { MallMateTheme } from "../constants";
 import { AuthenicationService } from "../services";
 import useUserManagement from "../utils/userData";
 
@@ -137,23 +129,6 @@ const SigninScreen = ({ navigation }) => {
           Sign Up
         </Text>
       </View>
-      <Text style={styles.orText}>OR</Text>
-      <TouchableOpacity style={styles.socialButton} activeOpacity={0.8}>
-        <View style={styles.socialButtonsContainer}>
-          <View style={styles.signinButtonLogoContainer}>
-            <Image source={Images.FACEBOOK} style={styles.signinButtonLogo} />
-          </View>
-          <Text style={styles.socialSigninButtonText}>Connect with Facebook</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.socialButton} activeOpacity={0.8}>
-        <View style={styles.socialButtonsContainer}>
-          <View style={styles.signinButtonLogoContainer}>
-            <Image source={Images.GOOGLE} style={styles.signinButtonLogo} />
-          </View>
-          <Text style={styles.socialSigninButtonText}>Connect with Google</Text>
-        </View>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -262,47 +237,6 @@ const styles = StyleSheet.create({
     fontFamily: MallMateTheme.fontFamily.semiBold,
     color: MallMateTheme.color.primary,
     marginLeft: MallMateTheme.spacing.xs,
-  },
-  orText: {
-    ...MallMateTheme.typography.label,
-    fontFamily: MallMateTheme.fontFamily.medium,
-    color: MallMateTheme.color.textMuted,
-    alignSelf: "center",
-    marginBottom: MallMateTheme.spacing.md,
-  },
-  socialButton: {
-    backgroundColor: MallMateTheme.color.surfaceElevated,
-    paddingVertical: MallMateTheme.spacing.lg,
-    marginHorizontal: MallMateTheme.spacing.lg,
-    borderRadius: MallMateTheme.radius.control,
-    borderWidth: 1,
-    borderColor: MallMateTheme.color.border,
-    marginBottom: MallMateTheme.spacing.md,
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: MallMateTheme.touchTarget.ideal,
-  },
-  signinButtonLogo: {
-    height: 18,
-    width: 18,
-  },
-  signinButtonLogoContainer: {
-    backgroundColor: MallMateTheme.color.textPrimary,
-    padding: 2,
-    borderRadius: 3,
-    position: "absolute",
-    start: MallMateTheme.spacing.xl,
-  },
-  socialButtonsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-  },
-  socialSigninButtonText: {
-    color: MallMateTheme.color.textPrimary,
-    ...MallMateTheme.typography.label,
-    fontFamily: MallMateTheme.fontFamily.medium,
   },
   toggleContainer: {
     flexDirection: "row",
