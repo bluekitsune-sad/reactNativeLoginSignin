@@ -183,8 +183,7 @@ The expected sign‑in payload shape:
 | `npm run lint` | Run ESLint (with Prettier rules via `eslint-config-universe`). |
 | `npm test` | Run the Jest test suite (`jest-expo` preset). |
 
-`npm run lint` reports pre-existing style warnings on legacy files; they are
-non-blocking (warning level) pending a repo-wide `--fix` pass.
+`npm run lint` is a clean baseline (0 errors, 0 warnings) — keep it that way.
 
 ## Contributing
 
@@ -244,3 +243,5 @@ done today:  > todoAgent Ran (2026-10-18 13:36 UTC): done — restaurant+outlet 
 done today:  > todoAgent Ran (2026-10-18 17:09 UTC): done — food-court overview w/ mock seating zones; seat-session mock flow (scan/confirm/session/end/help); floor selector + static floor map w/ POI pins; events list + event detail; rewards dashboard + ledger
 
 done today:  > todoAgent Ran (2026-10-18 19:58 UTC): done — destination search + route preview (45-49), order history + detail timeline (40-41), jest setup + first tests, app identity rename to MallMate, i18n groundwork + RTL audit
+
+done today:  > todoAgent Ran (2026-10-19 16:42 UTC): done — accessibility pass on MallMate screens (header roles, mall-card selected state, POI-pin hit areas, dynamic-type badge); hid social sign-in buttons until real auth exists; removed react-redux/src/actions leftovers (state = Context); clean ESLint baseline (174 warnings → 0); AuthenticationService + sign-in flow tests (5 suites, 34 passing)

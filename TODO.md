@@ -347,9 +347,11 @@ Rules for the factory:
       search filter-count badge uses `minHeight` + padding so it can't
       clip at large font scales. Verified: `npm run lint` (0 errors;
       changed files clean), `npm run typecheck`, `npm test` — 18/18.)
-- [ ] **Screenshots for new screens**: extend `scripts/capture-screens.mjs`
-      to walk the MallMate screens (tabs, merchant, offer) into `output/`
-      once the local capture pipeline works (workflow pending).
+- [ ] **Screenshots for new screens**: create the capture script
+      (`scripts/capture-screens.mjs` does NOT exist yet — earlier wording
+      assumed it did) to walk the MallMate screens (tabs, merchant, offer)
+      into `output/` once the local capture pipeline works (workflow
+      pending; needs a device/emulator or Expo web runner).
 
 ### Blocked — do NOT implement until the owner decides
 
@@ -402,7 +404,12 @@ P0 — App is broken / blocking
       cart, bookmarks, profile. Components already exist
       (`RestaurantCard`, `RestaurantMediumCard`, `FoodCard`, `WelcomeCard`,
       `CategoryMenuItem`, `CategoryListItem`) but no screens use them.
-      There is also no screen to navigate to after a successful sign‑in yet.
+      (Item text corrected 2026-10-19: sign‑in DOES navigate now —
+      `SigninScreen` replaces into the MallMate `Main` tab navigator. What's
+      missing is a legacy restaurant/cart flow that consumes those scaffold
+      components. Needs owner direction: build the legacy flow, or retire
+      this item and the unused components now that MallMate covers
+      discovery.)
 - [x] Wire social sign‑in buttons (Facebook / Google) or hide them until real
       auth exists. (Done via the "hide" option: no social auth provider is
       integrated, so the "OR / Connect with Facebook / Connect with Google"
