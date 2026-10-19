@@ -413,6 +413,9 @@ P0 — App is broken / blocking
       `AuthenticationService` and nothing in the signup flow references a
       phone step — building it would mean inventing the verification flow
       and hook points. Needs owner input on the intended flow first.)
+      (2026-10-19 later run: a provisional implementation was briefly
+      committed to `work` by mistake and reverted in the next commit —
+      nothing ships until the flow question in issue #9 is answered.)
 - [ ] Post‑login main flow: home / restaurants, restaurant detail, food detail,
       cart, bookmarks, profile. Components already exist
       (`RestaurantCard`, `RestaurantMediumCard`, `FoodCard`, `WelcomeCard`,
