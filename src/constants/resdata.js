@@ -64,12 +64,7 @@ const restaurant_data = [
       poster: require("../assets/poster/sd/dominos.png"),
       cover: require("../assets/gallery/square/sd/dominospizza.png"),
     },
-    categories: [
-      "Non-Veg Pizza",
-      "Veg Pizza",
-      "Pizza Mania",
-      "Sides and Beverages",
-    ],
+    categories: ["Non-Veg Pizza", "Veg Pizza", "Pizza Mania", "Sides and Beverages"],
   },
   {
     id: "103",

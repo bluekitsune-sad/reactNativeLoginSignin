@@ -1,15 +1,13 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
+
 import { Colors, Fonts } from "../constants";
 import { Display } from "../utils";
 import Separator from "./Separator";
 
 const FlagItem = ({ code, name, dial_code, flag, onPress }) => {
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => onPress({ code, name, dial_code })}
-    >
+    <TouchableOpacity style={styles.container} onPress={() => onPress({ code, name, dial_code })}>
       <View style={styles.subContainer}>
         <Text>{flag}</Text>
         <Separator width={10} />

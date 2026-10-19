@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { TouchableOpacity, Animated, StyleSheet, Easing } from "react-native";
+import { TouchableOpacity, Animated, Easing } from "react-native";
+
 import { Colors } from "../constants";
 
 const containerStyle = (size, isActive) => ({
@@ -24,7 +25,7 @@ const toggleStyle = (size, animatedValue) => ({
 
 const ToggleButton = ({ size }) => {
   const [isActive, setIsActive] = useState(false);
-  const [animatedValue, setAnimatedValue] = useState(new Animated.Value(0));
+  const [animatedValue] = useState(new Animated.Value(0));
 
   const toggleHandle = () => {
     Animated.timing(animatedValue, {

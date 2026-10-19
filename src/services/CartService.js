@@ -1,16 +1,17 @@
-import { ApiContants } from "../constants";
 import axios from "axios";
+
+import { ApiContants } from "../constants";
 // import { authHeader } from "../utils/Generator";
 // import { getToken } from "../Store";
 
 const getCartItems = async () => {
   console.log(`CartService | getCartItems`);
   try {
-    let response = await axios.get(
+    const response = await axios.get(
       `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.CART}`,
       {
         // headers: authHeader(getToken()),
-      }
+      },
     );
     if (response?.status === 200) {
       return {
@@ -24,7 +25,7 @@ const getCartItems = async () => {
         message: `Cart data not found`,
       };
     }
-  } catch (error) {
+  } catch (_error) {
     return {
       status: false,
       message: `Cart data not found`,
@@ -35,12 +36,12 @@ const getCartItems = async () => {
 const addToCart = async ({ foodId }) => {
   console.log(`CartService | addToCart`);
   try {
-    let response = await axios.post(
+    const response = await axios.post(
       `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.CART}/${foodId}`,
       {},
       {
         // headers: authHeader(getToken()),
-      }
+      },
     );
     if (response?.status === 200) {
       return {
@@ -66,11 +67,11 @@ const addToCart = async ({ foodId }) => {
 const removeFromCart = async ({ foodId }) => {
   console.log(`CartService | removeFromCart`);
   try {
-    let response = await axios.delete(
+    const response = await axios.delete(
       `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.CART}/${foodId}`,
       {
         // headers: authHeader(getToken()),
-      }
+      },
     );
     if (response?.status === 200) {
       return {
@@ -84,7 +85,7 @@ const removeFromCart = async ({ foodId }) => {
         message: `Item removed from failed`,
       };
     }
-  } catch (error) {
+  } catch (_error) {
     return {
       status: false,
       message: `Item removed from failed`,

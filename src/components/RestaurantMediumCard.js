@@ -1,17 +1,11 @@
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+
 import { Colors, Fonts, Images } from "../constants";
-import { StaticImageService } from "../services";
 import { Display } from "../utils";
 
-const RestaurantMediumCard = ({
-  name,
-  images: { logo },
-  time,
-  distance,
-  tags,
-}) => {
+const RestaurantMediumCard = ({ name, images: { logo }, time, distance, tags }) => {
   return (
     <View style={styles.container}>
       <View>
@@ -33,17 +27,11 @@ const RestaurantMediumCard = ({
         <Text style={styles.tagsText}>{tags?.join(" • ")}</Text>
         <View style={styles.deliveryDetailsContainer}>
           <View style={styles.rowAndCenter}>
-            <Image
-              source={Images.DELIVERY_CHARGE}
-              style={styles.deliveryDetailsIcon}
-            />
+            <Image source={Images.DELIVERY_CHARGE} style={styles.deliveryDetailsIcon} />
             <Text style={styles.deliveryDetailsText}>Free Delivery</Text>
           </View>
           <View style={styles.rowAndCenter}>
-            <Image
-              source={Images.DELIVERY_TIME}
-              style={styles.deliveryDetailsIcon}
-            />
+            <Image source={Images.DELIVERY_TIME} style={styles.deliveryDetailsIcon} />
             <Text style={styles.deliveryDetailsText}>{time} min</Text>
           </View>
           <View style={styles.rowAndCenter}>

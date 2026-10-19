@@ -457,9 +457,17 @@ P0 — App is broken / blocking
 ## P4 — Tooling & quality
 
 - [x] Add ESLint (`eslint-config-universe` or similar) + `npm run lint`.
-- [ ] Bring the existing codebase to a clean lint baseline: run
+- [x] Bring the existing codebase to a clean lint baseline: run
       `npx eslint . --fix` (clears ~260 of the ~275 current warnings) and
-      fix the remainder by hand.
+      fix the remainder by hand. (Done: baseline was 174 warnings / 0
+      errors; `npx eslint . --fix` cleared 159; the 15 leftovers were
+      fixed by hand — unused imports removed from `FoodCard`,
+      `RestaurantCard`, `RestaurantMediumCard`, `WelcomeCard`,
+      `ToggleButton`; unused `setAnimatedValue` setter dropped in
+      `ToggleButton`; unused catch args renamed to `_error` in
+      `Bookmark`/`Cart`/`Food`/`Restaurant` services. `npm run lint` now
+      reports 0 errors and 0 warnings; AGENTS.md verification note
+      updated to match.)
 - [ ] Add tests (Jest + `@testing-library/react-native`) for services and the
       sign‑in flow; add `npm test`.
 - [ ] Consider TypeScript migration for screens/services.

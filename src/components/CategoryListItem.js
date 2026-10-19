@@ -1,14 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+
 import { Colors, Fonts } from "../constants";
 
 const CategoryListItem = ({ name, isActive, selectCategory }) => {
   return (
     <View style={styles.container}>
       <Text
-        style={
-          isActive ? styles.activeCategoryText : styles.inActiveCategoryText
-        }
+        style={isActive ? styles.activeCategoryText : styles.inActiveCategoryText}
         onPress={() => selectCategory(name)}
       >
         {name}

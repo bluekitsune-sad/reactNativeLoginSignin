@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { ApiContants, Colors, Fonts } from "../constants";
-import { StaticImageService } from "../services";
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+
+import { Colors, Fonts } from "../constants";
 import { Display } from "../utils";
 
 const FoodCard = ({ id, name, description, price, image, navigate }) => {

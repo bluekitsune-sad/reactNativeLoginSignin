@@ -58,8 +58,9 @@ There is now a `lint` script (ESLint + Prettier via `eslint-config-universe`,
 (`jest-expo` preset, `npm test`; AsyncStorage is mapped to its jest mock via
 `moduleNameMapper` in `package.json`). Do not claim verification you cannot
 perform; at minimum re-read the files you changed and keep JSX/imports
-consistent, and run `npm run lint` (legacy files emit warnings — only
-introduce no new errors) plus `npm test` when you touch covered code.
+consistent, and run `npm run lint` (the codebase is at a clean baseline —
+0 errors and 0 warnings; keep it that way) plus `npm test` when you touch
+covered code.
 
 ## Architecture rules
 

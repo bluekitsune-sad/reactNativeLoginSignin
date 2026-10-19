@@ -1,16 +1,17 @@
-import { ApiContants } from "../constants";
 import axios from "axios";
+
+import { ApiContants } from "../constants";
 // import { authHeader } from "../utils/Generator";
 // import { getToken } from "../Store";
 
 const getBookmarks = async () => {
   console.log(`BookmarkService | getBookmarks`);
   try {
-    let response = await axios.get(
+    const response = await axios.get(
       `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.BOOKMARK_LIST}`,
       {
         // headers: authHeader(getToken()),
-      }
+      },
     );
     if (response?.status === 200) {
       return {
@@ -24,7 +25,7 @@ const getBookmarks = async () => {
         message: `Bookmark data not found`,
       };
     }
-  } catch (error) {
+  } catch (_error) {
     return {
       status: false,
       message: `Bookmark data not found`,
@@ -35,12 +36,12 @@ const getBookmarks = async () => {
 const addBookmark = async ({ restaurantId }) => {
   console.log(`BookmarkService | addBookmark`);
   try {
-    let response = await axios.post(
+    const response = await axios.post(
       `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.BOOKMARK_LIST}/${restaurantId}`,
       {},
       {
         // headers: authHeader(getToken()),
-      }
+      },
     );
     if (response?.status === 200) {
       return {
@@ -66,11 +67,11 @@ const addBookmark = async ({ restaurantId }) => {
 const removeBookmark = async ({ restaurantId }) => {
   console.log(`BookmarkService | removeBookmark`);
   try {
-    let response = await axios.delete(
+    const response = await axios.delete(
       `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.BOOKMARK_LIST}/${restaurantId}`,
       {
         // headers: authHeader(getToken()),
-      }
+      },
     );
     if (response?.status === 200) {
       return {
@@ -84,7 +85,7 @@ const removeBookmark = async ({ restaurantId }) => {
         message: `Bookmark removing failed`,
       };
     }
-  } catch (error) {
+  } catch (_error) {
     return {
       status: false,
       message: `Bookmark removing failed`,

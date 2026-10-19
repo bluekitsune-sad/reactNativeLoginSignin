@@ -89,8 +89,7 @@ const food_data = [
     category: "Desserts",
     description:
       "An iconic premium dessert option. Can be bought as an add-on to make it a 'full meal' or simply as an indulgence.",
-    ingredients:
-      "Soft serve mix (100% diary), Hazelnut brownie, Hot fudge topping.",
+    ingredients: "Soft serve mix (100% diary), Hazelnut brownie, Hot fudge topping.",
   },
   {
     id: "2008",
@@ -99,8 +98,7 @@ const food_data = [
     price: 160.0,
     image: require("../assets/gallery/square/sd/mcflurrychococrunch.png"),
     category: "Desserts",
-    description:
-      "Milk-based frozen dessert with chocolate crispies and chocolate dip.",
+    description: "Milk-based frozen dessert with chocolate crispies and chocolate dip.",
     ingredients: "Milk fat, Chocolate.",
   },
   {
@@ -347,8 +345,7 @@ const food_data = [
     image: require("../assets/gallery/square/sd/veggiesupreme.png"),
     category: "Pizzas",
     description: "",
-    ingredients:
-      "Black Olives, Green Capsicum, Mushroom, Onion, Red Paprika, Sweet Corn",
+    ingredients: "Black Olives, Green Capsicum, Mushroom, Onion, Red Paprika, Sweet Corn",
   },
   {
     id: "2040",
@@ -368,8 +365,7 @@ const food_data = [
     image: require("../assets/gallery/square/sd/italianchickenfeast.png"),
     category: "Pizzas",
     description: "",
-    ingredients:
-      "Chicken Sausage, Chicken Pepperoni, Sweet Corn, Black Olive, Jalapeno",
+    ingredients: "Chicken Sausage, Chicken Pepperoni, Sweet Corn, Black Olive, Jalapeno",
   },
   {
     id: "2042",
@@ -379,8 +375,7 @@ const food_data = [
     image: require("../assets/gallery/square/sd/zestychickenpocket.png"),
     category: "Sides",
     description: "",
-    ingredients:
-      "Freshly Baked Pocket Stuffed With Chicken, Veggies & Smoked Texas Garlic Sauce",
+    ingredients: "Freshly Baked Pocket Stuffed With Chicken, Veggies & Smoked Texas Garlic Sauce",
   },
   {
     id: "2043",

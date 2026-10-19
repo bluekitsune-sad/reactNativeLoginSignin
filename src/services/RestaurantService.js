@@ -1,11 +1,12 @@
-import { ApiContants } from "../constants";
 import axios from "axios";
+
+import { ApiContants } from "../constants";
 
 const getRestaurants = async () => {
   console.log(`RestaurantsService | getRestaurants`);
   try {
-    let restaurantResponse = await axios.get(
-      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.ALL_RESTAURANTS}`
+    const restaurantResponse = await axios.get(
+      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.ALL_RESTAURANTS}`,
     );
     if (restaurantResponse?.status === 200) {
       return {
@@ -19,7 +20,7 @@ const getRestaurants = async () => {
         message: `Restaurant data not found`,
       };
     }
-  } catch (error) {
+  } catch (_error) {
     return {
       status: false,
       message: `Restaurant data not found`,
@@ -30,8 +31,8 @@ const getRestaurants = async () => {
 const getOneRestaurantById = async (restaurantId) => {
   console.log(`RestaurantsService | getOneRestaurantById`);
   try {
-    let restaurantResponse = await axios.get(
-      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.ALL_RESTAURANTS}/${restaurantId}`
+    const restaurantResponse = await axios.get(
+      `${ApiContants.BACKEND_API.BASE_API_URL}${ApiContants.BACKEND_API.ALL_RESTAURANTS}/${restaurantId}`,
     );
     if (restaurantResponse?.status === 200) {
       return {
@@ -45,7 +46,7 @@ const getOneRestaurantById = async (restaurantId) => {
         message: `Restaurant data not found`,
       };
     }
-  } catch (error) {
+  } catch (_error) {
     return {
       status: false,
       message: `Restaurant data not found`,

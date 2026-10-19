@@ -1,31 +1,19 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { Colors, Fonts } from "../constants";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StaticImageService } from "../services";
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+
+import { Colors, Fonts } from "../constants";
 import { Display } from "../utils";
 
-const RestaurantCard = ({
-  id,
-  name,
-  images: { poster },
-  tags,
-  distance,
-  time,
-  navigate,
-}) => {
+const RestaurantCard = ({ id, name, images: { poster }, tags, distance, time, navigate }) => {
   // console.log(poster);
 
   const isBookmarked = "isbooked";
   const addBookmark = () => console.log("add bookmark");
   const removeBookmark = () => console.log("remove bookmark");
   return (
-    <TouchableOpacity
-      style={styles.container}
-      activeOpacity={0.8}
-      onPress={() => navigate(id)}
-    >
+    <TouchableOpacity style={styles.container} activeOpacity={0.8} onPress={() => navigate(id)}>
       <Ionicons
         name={isBookmarked ? "bookmark" : "bookmark-outline"}
         color={Colors.DEFAULT_YELLOW}
@@ -49,19 +37,11 @@ const RestaurantCard = ({
         </View>
         <View style={styles.rowAndCenter}>
           <View style={styles.timeAndDistanceContainer}>
-            <Ionicons
-              name="location-outline"
-              color={Colors.DEFAULT_YELLOW}
-              size={15}
-            />
+            <Ionicons name="location-outline" color={Colors.DEFAULT_YELLOW} size={15} />
             <Text style={styles.timeAndDistanceText}>{distance}</Text>
           </View>
           <View style={styles.timeAndDistanceContainer}>
-            <Ionicons
-              name="ios-time-outline"
-              color={Colors.DEFAULT_YELLOW}
-              size={15}
-            />
+            <Ionicons name="ios-time-outline" color={Colors.DEFAULT_YELLOW} size={15} />
             <Text style={styles.timeAndDistanceText}>{time}</Text>
           </View>
         </View>

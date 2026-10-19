@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
+
 import { StorageService } from "../services";
 
 const UserContext = createContext(null);
@@ -26,9 +27,7 @@ export const UserProvider = ({ children }) => {
 const useUserManagement = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error(
-      "useUserManagement must be used within a <UserProvider> (see src/navigators)"
-    );
+    throw new Error("useUserManagement must be used within a <UserProvider> (see src/navigators)");
   }
   return context;
 };

@@ -1,4 +1,4 @@
 module.exports = {
-  extends: 'universe/native',
-  ignorePatterns: ['node_modules/', 'assets/', 'output/', '.github/'],
+  extends: "universe/native",
+  ignorePatterns: ["node_modules/", "assets/", "output/", ".github/"],
 };
