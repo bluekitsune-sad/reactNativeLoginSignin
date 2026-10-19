@@ -1,6 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
+import { Platform } from "react-native";
 
 import {
   SigninScreen,
@@ -41,12 +42,25 @@ import { UserProvider } from "../utils/userData";
 
 const Stack = createStackNavigator();
 
+/**
+ * Web-only deep-link config so browser URLs restore navigation state
+ * (used by the screenshot capture script and useful for direct links on
+ * web). Without a `config`, React Navigation maps path segments to screen
+ * names and query params to route params (`/Main/Home`,
+ * `/MerchantDetail?merchantId=…`). Native behaviour is unchanged — linking
+ * is not enabled there.
+ */
+const linking =
+  Platform.OS === "web" && typeof window !== "undefined" && window.location?.origin
+    ? { prefixes: [window.location.origin] }
+    : undefined;
+
 const Navigators = () => {
   return (
     <UserProvider>
       <MallProvider>
         <FavoritesProvider>
-          <NavigationContainer>
+          <NavigationContainer linking={linking}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <>
                 <Stack.Screen name="Signin" component={SigninScreen} />

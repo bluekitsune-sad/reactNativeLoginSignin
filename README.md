@@ -182,6 +182,7 @@ The expected sign‑in payload shape:
 | `npm run typecheck` | Run `tsc --noEmit` over the incremental TypeScript setup. |
 | `npm run lint` | Run ESLint (with Prettier rules via `eslint-config-universe`). |
 | `npm test` | Run the Jest test suite (`jest-expo` preset). |
+| `npm run capture:screens` | Build the web export and screenshot all MallMate screens into `output/screens/` (needs a local Chrome/Chromium; see `scripts/capture-screens.mjs`). |
 
 `npm run lint` is a clean baseline (0 errors, 0 warnings) — keep it that way.
 

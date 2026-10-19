@@ -347,11 +347,24 @@ Rules for the factory:
       search filter-count badge uses `minHeight` + padding so it can't
       clip at large font scales. Verified: `npm run lint` (0 errors;
       changed files clean), `npm run typecheck`, `npm test` — 18/18.)
-- [ ] **Screenshots for new screens**: create the capture script
+- [x] **Screenshots for new screens**: create the capture script
       (`scripts/capture-screens.mjs` does NOT exist yet — earlier wording
       assumed it did) to walk the MallMate screens (tabs, merchant, offer)
       into `output/` once the local capture pipeline works (workflow
-      pending; needs a device/emulator or Expo web runner).
+      pending; needs a device/emulator or Expo web runner). (Done:
+      `npm run capture:screens` runs the local pipeline with zero new npm
+      dependencies — `expo export:web` (webpack) → tiny static SPA server
+      → headless Chrome/Chromium (`$CHROME_PATH` or a detected system
+      binary) with `--screenshot` per screen. The navigator gained a
+      web-only `linking` config so deep-link URLs (`/Main/Home`,
+      `/MerchantDetail?merchantId=…`) restore navigation state; native
+      behaviour unchanged. Walks 26 screens (tabs, merchant/menu, offer,
+      events, food court, maps/route preview, orders, settings) into
+      `output/screens/` (gitignored), with `--skip-export`/`--only`/
+      `--out` flags and non-zero exit on any failed/tiny capture.
+      Verified end-to-end here: 26/26 PNGs captured and spot-checked as
+      real rendered UI. No CI workflow added — that's still pending a
+      runner decision.)
 
 ### Blocked — do NOT implement until the owner decides
 
