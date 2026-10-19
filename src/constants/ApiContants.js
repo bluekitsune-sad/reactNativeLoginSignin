@@ -18,12 +18,6 @@ const resolveBackendBaseUrl = () => {
 
 const BACKEND_BASE_URL = resolveBackendBaseUrl();
 
-const COUNTRY_FLAG = {
-  BASE_URL: `https://www.countryflags.io`,
-  SIZE: { 16: "16", 24: "24", 32: "32", 48: "48", 64: "64" },
-  STYLE: { FLAT: "flat", SHINY: "shiny" },
-};
-
 const STATIC_IMAGE = {
   BASE_URL: `${BACKEND_BASE_URL}/images`,
   TYPE: { POSTER: "poster", LOGO: "logo", GALLERY: "gallery" },
@@ -45,4 +39,4 @@ const BACKEND_API = {
   BOOKMARK_LIST: "/bookmark",
 };
 
-export default { COUNTRY_FLAG, BACKEND_API, STATIC_IMAGE, BACKEND_BASE_URL };
+export default { BACKEND_API, STATIC_IMAGE, BACKEND_BASE_URL };

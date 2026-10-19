@@ -1,3 +1,7 @@
+// React Navigation's stack navigator requires gesture-handler to be
+// initialized before anything else — keep this import first.
+import "react-native-gesture-handler";
+
 import { useFonts } from "expo-font";
 import React from "react";
 

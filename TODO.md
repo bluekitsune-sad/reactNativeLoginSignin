@@ -504,8 +504,15 @@ P0 — App is broken / blocking
       `react-native-safe-area-context` (wired via `setupFiles`).
       5 suites / 34 tests, all passing.)
 - [ ] Consider TypeScript migration for screens/services.
-- [ ] Add `react-native-reanimated` / gesture handler setup notes if the stack
-      navigator needs them.
+- [x] Add `react-native-reanimated` / gesture handler setup notes if the stack
+      navigator needs them. (Done: audited the need — `@react-navigation/stack`
+      hard-requires `react-native-gesture-handler` (already a dependency) but
+      nothing imported it at the app entry, which is the documented setup;
+      `App.js` now imports it first. Reanimated is not installed and not
+      needed (animations use `Animated` + lottie) — README "Navigation setup
+      notes" documents both, including the Babel-plugin caveat if reanimated
+      is ever added. Verified: lint/typecheck/tests clean and the web export
+      still compiles and renders.)
 - [x] Review `app.json` (icon/splash/name `user_logsignin`) and rename the
       package to match the product. (Done via the MallMate "App identity"
       item above — app.json + package.json renamed, splash/adaptive

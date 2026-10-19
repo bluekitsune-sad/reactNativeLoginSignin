@@ -133,7 +133,9 @@ if (res.status) {
 
 ## Known landmines (read before editing)
 
-1. **Dead third‑party API:** `countryflags.io` in `ApiContants.COUNTRY_FLAG`.
+1. ~~**Dead third‑party API:** `countryflags.io` in `ApiContants.COUNTRY_FLAG`.~~
+   Fixed: `COUNTRY_FLAG` removed; country picker uses emoji flags from
+   `CountryCode.js`.
 2. **`AuthenticationService.login`** still does a GET with the credentials
    JSON‑stringified into the URL path (see TODO P3) — do not copy that pattern
    into new services.

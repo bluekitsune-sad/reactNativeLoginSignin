@@ -1,6 +1,9 @@
+import CountryCodeScreen from "./CountryCodeScreen";
 import ForgotPasswordScreen from "./ForgotPasswordScreen";
+import RegisterPhoneScreen from "./RegisterPhoneScreen";
 import SigninScreen from "./SigninScreen";
 import SignupScreen from "./SignupScreen";
+import VerificationScreen from "./VerificationScreen";
 import EventDetailScreen from "./events/EventDetailScreen";
 import EventsScreen from "./events/EventsScreen";
 import ExploreScreen from "./explore/ExploreScreen";
@@ -31,13 +34,14 @@ import ProfileScreen from "./profile/ProfileScreen";
 import SettingsScreen from "./profile/SettingsScreen";
 import RewardsScreen from "./rewards/RewardsScreen";
 import SearchScreen from "./search/SearchScreen";
-// import RegisterPhoneScreen from "./RegisterPhoneScreen";
-// import VerificationScreen from "./VerificationScreen";
 
 export {
   SigninScreen,
   SignupScreen,
   ForgotPasswordScreen,
+  RegisterPhoneScreen,
+  CountryCodeScreen,
+  VerificationScreen,
   HomeScreen,
   ExploreScreen,
   MerchantListScreen,
@@ -68,6 +72,4 @@ export {
   SettingsScreen,
   MallSelectorScreen,
   SearchScreen,
-  // RegisterPhoneScreen,
-  // VerificationScreen,
 };

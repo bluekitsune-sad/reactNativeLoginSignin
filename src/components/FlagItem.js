@@ -1,19 +1,23 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { Colors, Fonts } from "../constants";
-import { Display } from "../utils";
-import Separator from "./Separator";
+import { MallMateTheme } from "../constants";
 
 const FlagItem = ({ code, name, dial_code, flag, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onPress({ code, name, dial_code })}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => onPress({ code, name, dial_code, flag })}
+      accessibilityRole="button"
+      accessibilityLabel={`${name}, ${dial_code}`}
+    >
       <View style={styles.subContainer}>
-        <Text>{flag}</Text>
-        <Separator width={10} />
-        <Text style={styles.flagText}>{name}</Text>
+        <Text style={styles.flagEmoji}>{flag || "🏳️"}</Text>
+        <Text style={styles.flagText} numberOfLines={1}>
+          {name}
+        </Text>
       </View>
-      <Text style={styles.flagText}>{dial_code}</Text>
+      <Text style={styles.dialCodeText}>{dial_code}</Text>
     </TouchableOpacity>
   );
 };
@@ -23,20 +27,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    minHeight: MallMateTheme.touchTarget.ideal,
+    paddingHorizontal: MallMateTheme.spacing.md,
+    paddingVertical: MallMateTheme.spacing.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: MallMateTheme.color.border,
   },
   subContainer: {
     flexDirection: "row",
     alignItems: "center",
-    width: Display.setWidth(60),
+    flexShrink: 1,
+    marginRight: MallMateTheme.spacing.md,
+  },
+  flagEmoji: {
+    fontSize: 20,
+    marginRight: MallMateTheme.spacing.sm,
   },
   flagText: {
-    fontSize: 14,
-    lineHeight: 14 * 1.4,
-    color: Colors.DEFAULT_BLACK,
-    fontFamily: Fonts.POPPINS_MEDIUM,
-    marginRight: 10,
+    fontSize: MallMateTheme.typography.body.fontSize,
+    lineHeight: MallMateTheme.typography.body.fontSize * 1.4,
+    color: MallMateTheme.color.textPrimary,
+    fontFamily: MallMateTheme.fontFamily.regular,
+    flexShrink: 1,
+  },
+  dialCodeText: {
+    fontSize: MallMateTheme.typography.body.fontSize,
+    color: MallMateTheme.color.textSecondary,
+    fontFamily: MallMateTheme.fontFamily.medium,
   },
 });
 

@@ -46,9 +46,11 @@ const SignupScreen = ({ navigation }) => {
     AuthenicationService.register({ username, email, password }).then((response) => {
       setIsLoading(false);
       if (response?.status) {
-        Alert.alert("Registration successful", "Your account has been created. Please sign in.", [
-          { text: "OK", onPress: () => navigation.navigate("Signin") },
-        ]);
+        Alert.alert(
+          "Registration successful",
+          "Your account has been created. Next, add a phone number for your account.",
+          [{ text: "Continue", onPress: () => navigation.replace("RegisterPhone") }],
+        );
       } else {
         setErrorMessage(response?.message);
       }

@@ -41,6 +41,12 @@ const MIN_PNG_BYTES = 5 * 1024;
  */
 const SCREENS = [
   { name: "signin", path: "/Signin" },
+  { name: "register-phone", path: "/RegisterPhone" },
+  { name: "country-code", path: "/CountryCode" },
+  {
+    name: "verification",
+    path: "/Verification?dialCode=%2B92&phone=3001234567",
+  },
   { name: "home", path: "/Main/Home" },
   { name: "explore", path: "/Main/Explore" },
   { name: "map-tab", path: "/Main/Map" },
@@ -210,9 +216,7 @@ async function main() {
   console.log(`\nUsing browser: ${chromeBin}`);
 
   mkdirSync(outDir, { recursive: true });
-  const targets = args.only
-    ? SCREENS.filter((screen) => args.only.includes(screen.name))
-    : SCREENS;
+  const targets = args.only ? SCREENS.filter((screen) => args.only.includes(screen.name)) : SCREENS;
   if (!targets.length) throw new Error(`No matching screens for --only ${args.only}`);
 
   const server = await startStaticServer(WEB_BUILD, args.port);
@@ -240,7 +244,9 @@ async function main() {
   }
 
   server.close();
-  console.log(`\nCaptured ${successes}/${targets.length} screens into ${path.relative(ROOT, outDir)}/`);
+  console.log(
+    `\nCaptured ${successes}/${targets.length} screens into ${path.relative(ROOT, outDir)}/`,
+  );
   if (failures.length) {
     console.error("Failures:");
     failures.forEach((failure) => console.error(`  - ${failure}`));

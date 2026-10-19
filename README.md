@@ -53,13 +53,26 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 | ---------- | ------ |
 | Framework  | React Native `0.73.4` via Expo SDK `50` |
 | Language   | JavaScript (JSX); TypeScript types added incrementally (`allowJs`) |
-| Navigation | `@react-navigation/native` + `@react-navigation/stack` |
+| Navigation | `@react-navigation/native` + `@react-navigation/stack` + `react-native-gesture-handler` |
 | HTTP       | `axios` |
 | Storage    | `@react-native-async-storage/async-storage` |
 | Animation  | `lottie-react-native`, `Animated` API |
-| Fonts      | `expo-font` (Poppins) |
+| Fonts      | `expo-font` (Inter via `@expo-google-fonts/inter`; legacy Poppins constants unused) |
 | Icons      | `@expo/vector-icons` (Ionicons, Feather, AntDesign, FontAwesome) |
 | Safe area  | `react-native-safe-area-context` |
+
+### Navigation setup notes
+
+- **`react-native-gesture-handler` is required** by
+  `@react-navigation/stack` (it is a hard peer dependency). It is imported
+  as the first line of `App.js` (`import "react-native-gesture-handler";`)
+  so the native gesture driver initializes before any component — do not
+  remove or reorder that import.
+- **`react-native-reanimated` is intentionally not installed.** No screen
+  uses it (animations are the RN `Animated` API + `lottie-react-native`),
+  and it would need a Babel plugin (`react-native-reanimated/plugin`) in
+  `babel.config.js` if it were ever added. Only add it when a screen
+  actually needs layout animations or shared-element transitions.
 
 ## Getting started
 
