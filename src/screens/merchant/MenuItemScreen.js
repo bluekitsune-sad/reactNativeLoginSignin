@@ -63,7 +63,9 @@ const MenuItemScreen = ({ navigation, route }) => {
       <ScrollView contentContainerStyle={styles.content}>
         <Card>
           <Text style={styles.sectionCaption}>{section.title}</Text>
-          <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.name} accessibilityRole="header">
+            {item.name}
+          </Text>
           <View style={styles.statusRow}>
             <StatusChip
               label={item.available ? "Available" : "Sold out"}

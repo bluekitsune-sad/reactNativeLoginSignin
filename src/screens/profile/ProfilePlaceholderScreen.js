@@ -22,7 +22,9 @@ const ProfilePlaceholderScreen = ({ navigation, route }) => {
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </Pressable>
-        <Text style={styles.headerTitle}>{title}</Text>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          {title}
+        </Text>
         <View style={styles.headerSpacer} />
       </View>
       <View style={styles.body}>

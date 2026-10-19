@@ -59,7 +59,9 @@ const ExploreScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Explore</Text>
+          <Text style={styles.headerTitle} accessibilityRole="header">
+            Explore
+          </Text>
           <Text style={styles.headerMeta} numberOfLines={1}>
             {selectedMall.name}
           </Text>

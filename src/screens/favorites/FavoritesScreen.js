@@ -35,7 +35,9 @@ const FavoritesScreen = ({ navigation }) => {
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </Pressable>
         <View style={styles.headerBody}>
-          <Text style={styles.headerTitle}>Favorites</Text>
+          <Text style={styles.headerTitle} accessibilityRole="header">
+            Favorites
+          </Text>
           <Text style={styles.headerMeta} numberOfLines={1}>
             {selectedMall.name}
           </Text>

@@ -199,7 +199,9 @@ const MerchantListScreen = ({ navigation, route }) => {
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </Pressable>
         <View style={styles.headerBody}>
-          <Text style={styles.headerTitle}>{meta.title}</Text>
+          <Text style={styles.headerTitle} accessibilityRole="header">
+            {meta.title}
+          </Text>
           <Text style={styles.headerMeta} numberOfLines={1}>
             {selectedMall.name}
           </Text>

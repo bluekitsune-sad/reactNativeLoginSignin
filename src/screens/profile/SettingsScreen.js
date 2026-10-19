@@ -33,7 +33,9 @@ const SettingsScreen = ({ navigation }) => {
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </Pressable>
-        <Text style={styles.headerTitle}>Settings</Text>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          Settings
+        </Text>
         <View style={styles.headerSpacer} />
       </View>
       <ScrollView contentContainerStyle={styles.content}>

@@ -35,7 +35,9 @@ const SeatConfirmScreen = ({ navigation, route }) => {
               color={MallMateTheme.color.textPrimary}
             />
           </Pressable>
-          <Text style={styles.headerMeta}>Seat confirmation</Text>
+          <Text style={styles.headerMeta} accessibilityRole="header">
+            Seat confirmation
+          </Text>
           <View style={styles.headerSpacer} />
         </View>
         <View style={styles.missingBody}>
@@ -84,7 +86,9 @@ const SeatConfirmScreen = ({ navigation, route }) => {
               style={styles.heroIcon}
             />
             <View style={styles.heroBody}>
-              <Text style={styles.heroTitle}>{seat.label}</Text>
+              <Text style={styles.heroTitle} accessibilityRole="header">
+                {seat.label}
+              </Text>
               <Text style={styles.heroMeta}>
                 {seat.zoneName} · {seat.floor}
               </Text>

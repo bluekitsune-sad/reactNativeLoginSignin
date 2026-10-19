@@ -66,7 +66,9 @@ const EventsScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       {header}
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Events</Text>
+        <Text style={styles.title} accessibilityRole="header">
+          Events
+        </Text>
         <Text style={styles.subtitle}>What's on at {selectedMall.name}</Text>
         {events.length ? (
           <View style={styles.list}>

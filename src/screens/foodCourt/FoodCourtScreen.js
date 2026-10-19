@@ -63,7 +63,9 @@ const FoodCourtScreen = ({ navigation }) => {
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <Card style={styles.hero}>
           <View style={styles.heroTop}>
-            <Text style={styles.heroTitle}>{venue.name}</Text>
+            <Text style={styles.heroTitle} accessibilityRole="header">
+              {venue.name}
+            </Text>
             {degraded ? (
               <StatusChip label="Limited" tone="warning" style={styles.heroChip} />
             ) : null}

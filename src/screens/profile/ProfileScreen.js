@@ -71,7 +71,7 @@ const ProfileScreen = ({ navigation }) => {
             <Text style={styles.avatarText}>{initial}</Text>
           </View>
           <View style={styles.headerBody}>
-            <Text style={styles.displayName} numberOfLines={1}>
+            <Text style={styles.displayName} numberOfLines={1} accessibilityRole="header">
               {displayName}
             </Text>
             <Text style={styles.email} numberOfLines={1}>

@@ -42,7 +42,9 @@ const OrderHistoryScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       {header}
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Your orders</Text>
+        <Text style={styles.title} accessibilityRole="header">
+          Your orders
+        </Text>
 
         {!response.status ? (
           <EmptyState

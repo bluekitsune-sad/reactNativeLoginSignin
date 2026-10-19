@@ -39,7 +39,9 @@ const RewardsScreen = () => {
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <View style={styles.headerRow}>
-          <Text style={styles.headerTitle}>Rewards</Text>
+          <Text style={styles.headerTitle} accessibilityRole="header">
+            Rewards
+          </Text>
           {degraded ? <StatusChip label="Limited" tone="warning" /> : null}
         </View>
         <Text style={styles.headerMeta} numberOfLines={1}>

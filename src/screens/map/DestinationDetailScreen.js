@@ -67,7 +67,9 @@ const DestinationDetailScreen = ({ navigation, route }) => {
             color={MallMateTheme.color.primary}
           />
         </View>
-        <Text style={styles.title}>{destination.name}</Text>
+        <Text style={styles.title} accessibilityRole="header">
+          {destination.name}
+        </Text>
         <Text style={styles.category}>{destination.category}</Text>
 
         <Card style={styles.detailsCard}>

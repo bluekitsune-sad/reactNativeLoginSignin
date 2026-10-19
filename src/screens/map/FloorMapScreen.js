@@ -68,7 +68,9 @@ const FloorMapScreen = ({ navigation }) => {
       {header}
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <View style={styles.titleRow}>
-          <Text style={styles.title}>Floor map</Text>
+          <Text style={styles.title} accessibilityRole="header">
+            Floor map
+          </Text>
           {degraded ? <StatusChip label="Limited" tone="warning" /> : null}
         </View>
         {degraded ? (
@@ -124,6 +126,7 @@ const FloorMapScreen = ({ navigation }) => {
                     accessibilityRole="button"
                     accessibilityLabel={`${poi.name}, ${poi.category}`}
                     accessibilityState={{ selected }}
+                    hitSlop={MallMateTheme.spacing.sm}
                     style={[
                       styles.pin,
                       { left: `${poi.x}%`, top: `${poi.y}%` },

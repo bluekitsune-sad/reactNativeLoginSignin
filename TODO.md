@@ -321,7 +321,9 @@ Rules for the factory:
 - [ ] **Adopt `t()` across MallMate screens**: the i18n groundwork ships
       the catalog + helper but screens still render English literals;
       migrate them to `t()` keys (one area per task) when a second
-      language is actually scheduled.
+      language is actually scheduled. (Still gated: open decision #21
+      "English and Urdu at launch?" is unanswered, so no second language
+      is scheduled — do not start until the owner decides.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
       "MallMate", `slug` → "mallmate", `userInterfaceStyle` → dark;
@@ -329,9 +331,22 @@ Rules for the factory:
       `#101418` to match Theme.js. Existing placeholder icon/splash images
       kept — real branding is blocked pending owner permission.
       package.json `name` → "mallmate".)
-- [ ] **Accessibility pass on new MallMate screens**: 44–48px targets,
+- [x] **Accessibility pass on new MallMate screens**: 44–48px targets,
       dynamic-type friendly layouts, no color-only status, accessible
-      labels on icon buttons. Blueprint: DESIGN_SYSTEM rules.
+      labels on icon buttons. Blueprint: DESIGN_SYSTEM rules. (Done: full
+      audit of the mallmate kit + 30 MallMate screens against the
+      DESIGN_SYSTEM rules. Already compliant: icon-only controls all have
+      labels/roles, no color-only status, the Settings `Switch` is
+      labelled, no `allowFontScaling={false}`. Fixed: `accessibilityRole
+      ="header"` on every screen/section title (~25 Texts incl. the kit
+      `SectionHeader`), mall-selector cards now expose
+      `accessibilityState.selected` (via a new `Card` prop passthrough;
+      the decorative checkmark is hidden from screen readers), floor-map
+      POI pins got `hitSlop` (30px → ≥44px touch area), modal backdrops
+      (filters, offer terms) got `accessibilityRole="button"`, and the
+      search filter-count badge uses `minHeight` + padding so it can't
+      clip at large font scales. Verified: `npm run lint` (0 errors;
+      changed files clean), `npm run typecheck`, `npm test` — 18/18.)
 - [ ] **Screenshots for new screens**: extend `scripts/capture-screens.mjs`
       to walk the MallMate screens (tabs, merchant, offer) into `output/`
       once the local capture pipeline works (workflow pending).

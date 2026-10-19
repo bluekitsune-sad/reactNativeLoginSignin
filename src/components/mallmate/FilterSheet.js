@@ -59,7 +59,12 @@ const FilterSheet = ({
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable style={styles.backdrop} onPress={onClose} accessibilityLabel="Close filters" />
+      <Pressable
+        style={styles.backdrop}
+        onPress={onClose}
+        accessibilityRole="button"
+        accessibilityLabel="Close filters"
+      />
       <View style={styles.sheet} accessibilityViewIsModal>
         <View style={styles.handle} />
         <View style={styles.header}>

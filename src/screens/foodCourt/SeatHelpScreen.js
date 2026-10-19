@@ -45,7 +45,9 @@ const SeatHelpScreen = ({ navigation, route }) => {
             color={MallMateTheme.color.error}
             style={styles.icon}
           />
-          <Text style={styles.title}>{copy.title}</Text>
+          <Text style={styles.title} accessibilityRole="header">
+            {copy.title}
+          </Text>
           <Text style={styles.message}>{copy.message}</Text>
           {seat ? (
             <Text style={styles.seatMeta}>

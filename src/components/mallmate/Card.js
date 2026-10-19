@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 
 import { MallMateTheme } from "../../constants";
 
-const Card = ({ children, onPress, unavailable = false, style }) => {
+const Card = ({ children, onPress, unavailable = false, accessibilityState, style }) => {
   if (!onPress) {
     return <View style={[styles.card, unavailable && styles.unavailable, style]}>{children}</View>;
   }
@@ -11,6 +11,7 @@ const Card = ({ children, onPress, unavailable = false, style }) => {
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
+      accessibilityState={accessibilityState}
       style={({ pressed }) => [
         styles.card,
         pressed && styles.pressed,

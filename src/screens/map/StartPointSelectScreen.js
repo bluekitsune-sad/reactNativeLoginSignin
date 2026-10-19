@@ -37,7 +37,7 @@ const StartPointSelectScreen = ({ navigation, route }) => {
       >
         <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
       </Pressable>
-      <Text style={styles.headerMeta} numberOfLines={1}>
+      <Text style={styles.headerMeta} numberOfLines={1} accessibilityRole="header">
         Choose your start point
       </Text>
       <View style={styles.headerSpacer} />

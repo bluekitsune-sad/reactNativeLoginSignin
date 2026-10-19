@@ -57,7 +57,9 @@ const SeatSessionEndScreen = ({ navigation, route }) => {
             color={reason === "ended" ? MallMateTheme.color.primary : MallMateTheme.color.highlight}
             style={styles.icon}
           />
-          <Text style={styles.title}>{copy.title}</Text>
+          <Text style={styles.title} accessibilityRole="header">
+            {copy.title}
+          </Text>
           <Text style={styles.message}>{copy.message}</Text>
           {seat ? (
             <Text style={styles.seatMeta}>

@@ -34,7 +34,7 @@ const MenuScreen = ({ navigation, route }) => {
         <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
       </Pressable>
       <View style={styles.headerBody}>
-        <Text style={styles.headerTitle} numberOfLines={1}>
+        <Text style={styles.headerTitle} numberOfLines={1} accessibilityRole="header">
           {merchant ? `${merchant.name} menu` : "Menu"}
         </Text>
         <Text style={styles.headerMeta} numberOfLines={1}>

@@ -41,7 +41,9 @@ const MallSelectorScreen = ({ navigation }) => {
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </Pressable>
-        <Text style={styles.headerTitle}>Choose a mall</Text>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          Choose a mall
+        </Text>
         <View style={styles.headerSpacer} />
       </View>
       <FlatList
@@ -51,7 +53,11 @@ const MallSelectorScreen = ({ navigation }) => {
         renderItem={({ item }) => {
           const isSelected = item.slug === selectedMall.slug;
           return (
-            <Card onPress={() => onSelect(item)} style={styles.card}>
+            <Card
+              onPress={() => onSelect(item)}
+              accessibilityState={{ selected: isSelected }}
+              style={styles.card}
+            >
               <View style={styles.cardRow}>
                 <View style={styles.logoPlaceholder}>
                   <Text style={styles.logoPlaceholderText}>{item.name.charAt(0)}</Text>
@@ -66,7 +72,8 @@ const MallSelectorScreen = ({ navigation }) => {
                     name="checkmark-circle"
                     size={24}
                     color={MallMateTheme.color.primary}
-                    accessibilityLabel="Selected"
+                    accessibilityElementsHidden
+                    importantForAccessibility="no"
                   />
                 ) : null}
               </View>

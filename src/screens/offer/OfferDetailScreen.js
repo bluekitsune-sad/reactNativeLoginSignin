@@ -61,7 +61,9 @@ const OfferDetailScreen = ({ navigation, route }) => {
       {header}
       <ScrollView contentContainerStyle={styles.content}>
         <Card>
-          <Text style={styles.headline}>{getOfferHeadline(offer)}</Text>
+          <Text style={styles.headline} accessibilityRole="header">
+            {getOfferHeadline(offer)}
+          </Text>
           <Text style={styles.title}>{offer.title}</Text>
           <Pressable
             onPress={() => navigation.navigate("MerchantDetail", { merchantId: offer.merchantId })}
@@ -129,6 +131,7 @@ const OfferDetailScreen = ({ navigation, route }) => {
         <Pressable
           style={styles.backdrop}
           onPress={() => setTermsVisible(false)}
+          accessibilityRole="button"
           accessibilityLabel="Close terms"
         />
         <View style={styles.sheet} accessibilityViewIsModal>

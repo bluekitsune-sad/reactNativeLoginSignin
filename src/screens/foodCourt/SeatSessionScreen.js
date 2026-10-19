@@ -68,7 +68,9 @@ const SeatSessionScreen = ({ navigation, route }) => {
               style={styles.heroIcon}
             />
             <View style={styles.heroBody}>
-              <Text style={styles.heroTitle}>Session active</Text>
+              <Text style={styles.heroTitle} accessibilityRole="header">
+                Session active
+              </Text>
               <StatusChip label="Ongoing" tone="success" style={styles.heroChip} />
             </View>
           </View>

@@ -86,7 +86,9 @@ const MerchantDetailScreen = ({ navigation, route }) => {
               <Text style={styles.logoText}>{merchant.logoInitials}</Text>
             </View>
             <View style={styles.heroBody}>
-              <Text style={styles.name}>{merchant.name}</Text>
+              <Text style={styles.name} accessibilityRole="header">
+                {merchant.name}
+              </Text>
               <Text style={styles.category}>
                 {merchant.category}
                 {merchant.cuisine ? ` · ${merchant.cuisine}` : ""}

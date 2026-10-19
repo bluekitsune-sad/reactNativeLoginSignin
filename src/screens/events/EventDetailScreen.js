@@ -86,7 +86,9 @@ const EventDetailScreen = ({ navigation, route }) => {
         </View>
 
         <Text style={styles.category}>{event.category}</Text>
-        <Text style={styles.title}>{event.title}</Text>
+        <Text style={styles.title} accessibilityRole="header">
+          {event.title}
+        </Text>
         <Text style={styles.subtitle}>{event.subtitle}</Text>
 
         <Card style={styles.detailsCard}>

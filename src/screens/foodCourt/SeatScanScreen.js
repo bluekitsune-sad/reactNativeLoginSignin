@@ -53,7 +53,9 @@ const SeatScanScreen = ({ navigation }) => {
             color={MallMateTheme.color.primary}
             style={styles.permissionIcon}
           />
-          <Text style={styles.permissionTitle}>Camera access for table codes</Text>
+          <Text style={styles.permissionTitle} accessibilityRole="header">
+            Camera access for table codes
+          </Text>
           <Text style={styles.permissionMessage}>
             MallMate only asks for camera access when you start a scan, and uses it solely to read
             the QR sticker on a food-court table.
