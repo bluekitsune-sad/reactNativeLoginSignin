@@ -468,8 +468,21 @@ P0 — App is broken / blocking
       `Bookmark`/`Cart`/`Food`/`Restaurant` services. `npm run lint` now
       reports 0 errors and 0 warnings; AGENTS.md verification note
       updated to match.)
-- [ ] Add tests (Jest + `@testing-library/react-native`) for services and the
-      sign‑in flow; add `npm test`.
+- [x] Add tests (Jest + `@testing-library/react-native`) for services and the
+      sign‑in flow; add `npm test`. (Done incrementally: `npm test` +
+      jest-expo landed earlier; this pass added
+      `src/services/__tests__/authenticationService.test.js` —
+      register/login/checkUserExist/refreshToken cover validation
+      short-circuits, URL/body/params wiring (including a test that locks
+      the current GET-with-credentials quirk from P3 so a redesign
+      updates it deliberately) and never-throws failure envelopes, axios
+      mocked — plus `src/screens/__tests__/SigninScreen.test.js`: form
+      renders with no social buttons, error message on failed login,
+      submit → `replace("Main")` on success, forgot-password/signup
+      navigation, password-visibility toggle (services mocked, screen
+      wrapped in `UserProvider`). New global `jest.setup.js` mocks
+      `react-native-safe-area-context` (wired via `setupFiles`).
+      5 suites / 34 tests, all passing.)
 - [ ] Consider TypeScript migration for screens/services.
 - [ ] Add `react-native-reanimated` / gesture handler setup notes if the stack
       navigator needs them.
