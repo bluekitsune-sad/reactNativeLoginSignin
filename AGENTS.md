@@ -78,10 +78,11 @@ covered code.
   `../services`), not deep relative paths.
 - **Screens live in `src/screens/`,** registered in `src/navigators/index.js`.
   A screen must be exported from `src/screens/index.js` *and* added to the
-  navigator. Several screens are stubbed as comments (`SignupScreen`,
-  `ForgotPasswordScreen`, `RegisterPhoneScreen`, `VerificationScreen`) — they do
-  not exist yet, and `SigninScreen` already calls `navigation.navigate("Signup")`
-  and `navigate("ForgotPassword")`.
+  navigator. `SignupScreen` and `ForgotPasswordScreen` exist and are
+  registered; only `RegisterPhoneScreen` and `VerificationScreen` remain
+  stubbed as comments (parked on owner question #9), and `SigninScreen`
+  already calls `navigation.navigate("Signup")` and
+  `navigate("ForgotPassword")`.
 - **Network calls only in `src/services/`.** Services return a stable envelope:
   `{ status: boolean, message: string, data?: any }`. Keep that shape.
 - **API paths and base URL come from `src/constants/ApiContants.js`.** Never

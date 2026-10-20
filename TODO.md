@@ -366,6 +366,25 @@ Rules for the factory:
       real rendered UI. No CI workflow added — that's still pending a
       runner decision.)
 
+### Docs debt (found in the 2026-10-20 analysis pass)
+
+- [x] **AGENTS.md stale "stubbed screens" paragraph**: it listed
+      `SignupScreen`/`ForgotPasswordScreen` as non-existent stubs — both exist
+      and are registered; only the phone-verification pair is parked (issue
+      #9). (Found + fixed in the same run.)
+- [ ] **README stale claims**: the features list still advertises "Facebook /
+      Google social sign‑in buttons (UI only, not wired up)" (removed from
+      `SigninScreen` in `7db84a0`), the tech-stack row says React Native
+      `0.73.4` (package.json: `0.73.6`), and the project-structure tree omits
+      `src/mock/`, `src/i18n/` and the `src/components/mallmate/` kit while
+      labelling `constants/` as "mock data". Refresh against the current
+      tree.
+- [ ] **Boot font loading carries legacy weight (gated on the P1 legacy-kit
+      direction)**: `CustomFonts.js` still preloads eight Poppins weights that
+      only unused legacy components (`FoodCard`, `FlagItem`, …) reference — no
+      screen renders them, and MallMate screens use Inter. Trim once the P1
+      "post‑login main flow / retire unused components" question is answered.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
