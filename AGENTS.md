@@ -82,6 +82,10 @@ covered code.
   debt — do not add more).
 - **New MallMate network calls go through the shared API client helper**
   (`src/services/apiClient.js`) — see "API client helper" below.
+- **Mock data lives in `src/mock/`** (barrel‑exported) — that is the single
+  source of truth for preview/demo data. Services are the live‑API path.
+  The legacy scaffold mocks (`resdata.js`, `fooddata.js`, `Mock.js`) were
+  removed as dead code — don't reintroduce them.
 - **Design tokens** are in `src/constants/Colors.js` and `src/constants/Fonts.js`.
   Use them; don't inline hex colors or font names. New MallMate code uses
   `src/constants/Theme.js` instead (see the MallMate section).

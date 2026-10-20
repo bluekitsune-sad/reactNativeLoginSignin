@@ -434,6 +434,10 @@ P0 — App is broken / blocking
       future re-wire.)
 - [ ] Country code picker screen (`CountryCode.js` + `FlagItem.js` are ready;
       note `countryflags.io` is dead — use emoji flags or a bundled image set).
+      (Parked with the phone‑verification flow — issue #9: a provisional
+      CountryCode screen was reverted in commit `22ac53c` because its only
+      entry point is the also‑parked `RegisterPhoneScreen`. Don't rebuild
+      until the flow question in #9 is answered.)
 
 ## P2 — State, storage & auth hardening
 
@@ -472,8 +476,14 @@ P0 — App is broken / blocking
       argument to `axios.get` was removed, behaviour unchanged).
 - [x] Remove the hardcoded `test()` endpoint / dead `ngrok` URLs from
       `AuthenticationService.js`.
-- [ ] Consolidate `resdata.js` / `fooddata.js` / `Mock.js` mock data vs the live
-      API; decide which is the source of truth.
+- [x] Consolidate `resdata.js` / `fooddata.js` / `Mock.js` mock data vs the live
+      API; decide which is the source of truth. (Done: decision documented in
+      AGENTS.md architecture rules — services are the live‑API path and
+      `src/mock/` is the single mock‑data source. The three legacy scaffold
+      files were provably dead — exported from the constants barrel but
+      imported by no screen, component, service, test or script — so they were
+      deleted along with their barrel exports; README's mock‑data bullet now
+      points at `src/mock/`.)
 - [ ] Services ignore auth headers everywhere — add them consistently once token
       storage works.
 

@@ -44,8 +44,10 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 - Reusable UI kit: `Separator`, `ToggleButton`, `WelcomeCard`, `FoodCard`,
   `RestaurantCard`, `RestaurantMediumCard`, `CategoryMenuItem`,
   `CategoryListItem`, `FlagItem`.
-- Mock / seed data for restaurants and food (`src/constants/resdata.js`,
-  `src/constants/fooddata.js`) plus a large local image gallery.
+- MallMate preview data for merchants, menus, offers, events, orders, maps
+  and rewards in `src/mock/` (the single source for mock data; the legacy
+  `resdata`/`fooddata`/`Mock` constants were removed as dead code) plus a
+  large local image gallery.
 
 ## Tech stack
 
