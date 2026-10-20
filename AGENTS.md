@@ -38,7 +38,14 @@ Rules for agents working toward MallMate:
   just to swap tokens.
 - **TypeScript is introduced incrementally** (`allowJs`): new type files are
   `.ts`, existing `.js` files stay as they are unless a TODO item says to
-  convert them.
+  convert them. The first migration slice landed the pattern: services can be
+  renamed to `.ts` and screens to `.tsx` with props typed as
+  `RootStackScreenProps<"Route">` from `src/types/navigation.ts` (keep
+  `RootStackParamList` in sync when converting); everything is `strict`, so
+  converted files need real narrowing (JS kit components may need a JSDoc
+  `@param` to mark props optional — `EmptyState` has one). Converted so far:
+  `src/services/apiClient.ts` and `ProfilePlaceholderScreen.tsx`
+  (`@types/react` is a devDependency — required for any `.tsx`).
 - The blueprint recommends a feature‑folder layout long term
   (`01-architecture/PROJECT_STRUCTURE.md`); keep new screens organized under
   `src/screens/<area>/` so a later restructure is cheap.
@@ -81,7 +88,7 @@ covered code.
   hardcode a new host inside a service (the existing hardcoded IPs are legacy
   debt — do not add more).
 - **New MallMate network calls go through the shared API client helper**
-  (`src/services/apiClient.js`) — see "API client helper" below.
+  (`src/services/apiClient.ts`) — see "API client helper" below.
 - **Mock data lives in `src/mock/`** (barrel‑exported) — that is the single
   source of truth for preview/demo data. Services are the live‑API path.
   The legacy scaffold mocks (`resdata.js`, `fooddata.js`, `Mock.js`) were
@@ -97,7 +104,7 @@ covered code.
   (`useUserManagement` in `src/utils/userData.js`, plus the mall and
   favorites contexts).
 
-### API client helper (`src/services/apiClient.js`)
+### API client helper (`src/services/apiClient.ts`)
 
 New MallMate network code should use the shared typed axios wrapper instead of
 calling `axios` directly:

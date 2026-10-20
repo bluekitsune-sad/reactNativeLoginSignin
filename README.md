@@ -54,7 +54,7 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 | Layer      | Choice |
 | ---------- | ------ |
 | Framework  | React Native `0.73.4` via Expo SDK `50` |
-| Language   | JavaScript (JSX); TypeScript types added incrementally (`allowJs`) |
+| Language   | JavaScript (JSX); TypeScript converted file-by-file (`allowJs`, first slice: `apiClient.ts`, `ProfilePlaceholderScreen.tsx`) |
 | Navigation | `@react-navigation/native` + `@react-navigation/stack` + `react-native-gesture-handler` |
 | HTTP       | `axios` |
 | Storage    | `@react-native-async-storage/async-storage` |

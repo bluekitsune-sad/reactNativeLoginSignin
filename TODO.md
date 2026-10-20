@@ -516,7 +516,20 @@ P0 — App is broken / blocking
       wrapped in `UserProvider`). New global `jest.setup.js` mocks
       `react-native-safe-area-context` (wired via `setupFiles`).
       5 suites / 34 tests, all passing.)
-- [ ] Consider TypeScript migration for screens/services.
+- [x] Consider TypeScript migration for screens/services. (Done: decision =
+      migrate file-by-file under `strict`; the first slice lands the pattern —
+      `src/services/apiClient.js` → `apiClient.ts` (typed envelope helpers,
+      `unknown` payload/catch narrowing via type guards) and
+      `ProfilePlaceholderScreen` → `.tsx` typed with
+      `RootStackScreenProps<"ProfilePlaceholder">` from the new
+      `src/types/navigation.ts` (`RootStackParamList` mirroring the root
+      stack routes + params). Added the missing `@types/react` devDependency
+      (required for any `.tsx`) and a JSDoc optional-props signature on the
+      kit `EmptyState` so its inferred props match real usage. Barrels and
+      the navigator are untouched — extensionless imports resolve `.ts`/`.tsx`
+      in tsc/jest/Metro. Remaining screens/services stay JS until touched;
+      future slices follow the AGENTS.md note. Verified: lint 0/0 (ESLint
+      covers `.ts`/`.tsx`), typecheck clean, 34/34 tests.)
 - [x] Add `react-native-reanimated` / gesture handler setup notes if the stack
       navigator needs them. (Done: audited the need — `@react-navigation/stack`
       hard-requires `react-native-gesture-handler` (already a dependency) but

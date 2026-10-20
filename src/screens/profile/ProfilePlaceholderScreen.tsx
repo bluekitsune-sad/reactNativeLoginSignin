@@ -5,10 +5,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { EmptyState } from "../../components";
 import { MallMateTheme } from "../../constants";
+import type { RootStackScreenProps } from "../../types";
 
-const ProfilePlaceholderScreen = ({ navigation, route }) => {
-  const title = route?.params?.title ?? "Coming soon";
-  const message = route?.params?.message ?? "This section is on the way.";
+/**
+ * First screen converted to TypeScript (TODO "Consider TypeScript migration
+ * for screens/services"): props typed via `RootStackScreenProps` from
+ * `src/types/navigation.ts`. Sibling screens stay JS until converted.
+ */
+const ProfilePlaceholderScreen = ({
+  navigation,
+  route,
+}: RootStackScreenProps<"ProfilePlaceholder">) => {
+  const title = route.params?.title ?? "Coming soon";
+  const message = route.params?.message ?? "This section is on the way.";
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>

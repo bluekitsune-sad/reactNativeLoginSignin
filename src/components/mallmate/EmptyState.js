@@ -3,6 +3,13 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { MallMateTheme } from "../../constants";
 
+/**
+ * Centered empty-state block. The optional `style` prop is documented so
+ * TypeScript (converted `.tsx` callers) sees every prop as optional — the
+ * runtime behaviour is unchanged.
+ *
+ * @param {{icon?: any, title?: any, message?: any, style?: any}} props
+ */
 const EmptyState = ({ icon, title, message, style }) => (
   <View style={[styles.wrapper, style]}>
     {icon ? <View style={styles.icon}>{icon}</View> : null}
