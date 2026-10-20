@@ -372,13 +372,14 @@ Rules for the factory:
       `SignupScreen`/`ForgotPasswordScreen` as non-existent stubs — both exist
       and are registered; only the phone-verification pair is parked (issue
       #9). (Found + fixed in the same run.)
-- [ ] **README stale claims**: the features list still advertises "Facebook /
+- [x] **README stale claims**: the features list still advertised "Facebook /
       Google social sign‑in buttons (UI only, not wired up)" (removed from
-      `SigninScreen` in `7db84a0`), the tech-stack row says React Native
-      `0.73.4` (package.json: `0.73.6`), and the project-structure tree omits
+      `SigninScreen` in `7db84a0`), the tech-stack row said React Native
+      `0.73.4` (package.json: `0.73.6`), and the project-structure tree omitted
       `src/mock/`, `src/i18n/` and the `src/components/mallmate/` kit while
-      labelling `constants/` as "mock data". Refresh against the current
-      tree.
+      labelling `constants/` as "mock data". (Found + fixed the same run:
+      dead bullet dropped, version row corrected to `0.73.6`, tree refreshed
+      against the current `src/` layout.)
 - [ ] **Boot font loading carries legacy weight (gated on the P1 legacy-kit
       direction)**: `CustomFonts.js` still preloads eight Poppins weights that
       only unused legacy components (`FoodCard`, `FlagItem`, …) reference — no

@@ -33,7 +33,6 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
   Password screen (email lookup via `user-exist`).
 - Shared user state through a React Context (`UserProvider` +
   `useUserManagement`), persisted to `AsyncStorage`.
-- Facebook / Google social sign‑in buttons (UI only, not wired up).
 - Authentication service (`register`, `login`, `checkUserExist`, `refreshToken`)
   built on `axios`.
 - Additional services ready to use: `RestaurantService`, `FoodService`,
@@ -53,7 +52,7 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 
 | Layer      | Choice |
 | ---------- | ------ |
-| Framework  | React Native `0.73.4` via Expo SDK `50` |
+| Framework  | React Native `0.73.6` via Expo SDK `50` |
 | Language   | JavaScript (JSX); TypeScript converted file-by-file (`allowJs`, first slice: `apiClient.ts`, `ProfilePlaceholderScreen.tsx`) |
 | Navigation | `@react-navigation/native` + `@react-navigation/stack` + `react-native-gesture-handler` |
 | HTTP       | `axios` |
@@ -162,14 +161,16 @@ The expected sign‑in payload shape:
 ├── package.json
 ├── assets/                    # Expo icons / splash images
 └── src/
-    ├── assets/                # Fonts (Poppins), images, gallery, posters, logos
-    ├── components/            # Reusable UI (FoodCard, RestaurantCard, ...)
-    ├── constants/             # Colors, Fonts, Images, ApiContants, mock data
-    ├── navigators/            # React Navigation stack (Signin, Signup, ForgotPassword)
-    ├── screens/               # App screens (SigninScreen, SignupScreen, ...)
+    ├── assets/                # Poppins TTFs (legacy), images, gallery, posters, logos
+    ├── components/            # UI kit: mallmate/ (MallMate) + legacy FoodCard/RestaurantCard
+    ├── constants/             # Colors, Fonts, Images, ApiContants, Theme, Capabilities
+    ├── i18n/                  # English string catalog + t() helper
+    ├── mock/                  # MallMate preview data (merchants, offers, events, ...)
+    ├── navigators/            # Root stack + MallMate bottom tabs (Main), context providers
+    ├── screens/               # Auth + MallMate screens (home, explore, map, rewards, ...)
     ├── services/              # axios API services + AsyncStorage wrapper
-    ├── types/                 # Incremental TypeScript entity types (MallMate)
-    └── utils/                 # Display helpers, auth header, user state context
+    ├── types/                 # TypeScript types (entities, API envelope, navigation)
+    └── utils/                 # Display helpers, user/mall/favorites contexts
 ```
 
 ### Key modules
