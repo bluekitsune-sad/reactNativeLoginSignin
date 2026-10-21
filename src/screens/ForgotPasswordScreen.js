@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button, Separator } from "../components";
 import { MallMateTheme } from "../constants";
+import { t } from "../i18n";
 import { AuthenicationService } from "../services";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,22 +22,20 @@ const ForgotPasswordScreen = ({ navigation }) => {
     setErrorMessage("");
     setInfoMessage("");
     if (!email) {
-      setErrorMessage("Please enter your email address");
+      setErrorMessage(t("auth.enterEmail"));
       return;
     }
     if (!EMAIL_REGEX.test(email)) {
-      setErrorMessage("Please enter a valid email address");
+      setErrorMessage(t("auth.validEmail"));
       return;
     }
     setIsLoading(true);
     AuthenicationService.checkUserExist("email", email).then((response) => {
       setIsLoading(false);
       if (response?.status) {
-        setInfoMessage(
-          "If an account exists for this email, password reset instructions will be sent to it.",
-        );
+        setInfoMessage(t("auth.resetSentIfAccount"));
       } else {
-        setErrorMessage(response?.message || "No account found with this email");
+        setErrorMessage(response?.message || t("auth.noAccountWithEmail"));
       }
     });
   };
@@ -53,17 +52,15 @@ const ForgotPasswordScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           style={styles.backButton}
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Forgot Password</Text>
+        <Text style={styles.headerTitle}>{t("auth.forgotPassword")}</Text>
       </View>
-      <Text style={styles.title}>Reset your password</Text>
-      <Text style={styles.content}>
-        Enter the email associated with your account and we will send you reset instructions
-      </Text>
+      <Text style={styles.title}>{t("auth.forgotPasswordTitle")}</Text>
+      <Text style={styles.content}>{t("auth.forgotPasswordSubtitle")}</Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputSubContainer}>
           <Feather
@@ -73,21 +70,21 @@ const ForgotPasswordScreen = ({ navigation }) => {
             style={styles.inputIcon}
           />
           <TextInput
-            placeholder="Email"
+            placeholder={t("auth.email")}
             placeholderTextColor={MallMateTheme.color.textMuted}
             selectionColor={MallMateTheme.color.primary}
             autoCapitalize="none"
             keyboardType="email-address"
             style={styles.inputText}
             onChangeText={(text) => setEmail(text)}
-            accessibilityLabel="Email"
+            accessibilityLabel={t("auth.email")}
           />
         </View>
       </View>
       <Text style={styles.errorMessage}>{errorMessage}</Text>
       <Text style={styles.infoMessage}>{infoMessage}</Text>
       <Button
-        label="Send Instructions"
+        label={t("auth.sendInstructions")}
         onPress={resetPassword}
         loading={isLoading}
         style={styles.resetButton}
@@ -98,7 +95,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
           onPress={() => navigation.navigate("Signin")}
           accessibilityRole="button"
         >
-          Back to Sign In
+          {t("auth.backToSignIn")}
         </Text>
       </View>
     </View>
@@ -128,7 +125,7 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textPrimary,
     flex: 1,
     textAlign: "center",
-    marginRight: MallMateTheme.touchTarget.min,
+    marginEnd: MallMateTheme.touchTarget.min,
   },
   title: {
     ...MallMateTheme.typography.h2,
@@ -160,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputIcon: {
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   inputText: {
     fontSize: MallMateTheme.typography.bodyLarge.fontSize,

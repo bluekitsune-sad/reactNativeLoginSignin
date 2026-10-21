@@ -320,10 +320,18 @@ Rules for the factory:
       follow-up work when translations land.)
 - [ ] **Adopt `t()` across MallMate screens**: the i18n groundwork ships
       the catalog + helper but screens still render English literals;
-      migrate them to `t()` keys (one area per task) when a second
-      language is actually scheduled. (Still gated: open decision #21
-      "English and Urdu at launch?" is unanswered, so no second language
-      is scheduled — do not start until the owner decides.)
+      migrate them to `t()` keys (one area per task). (Decision made:
+      owner answered "sure add language translations" on issue #9, so
+      English + Urdu is scheduled per PRD 10. Progress: the Urdu catalog
+      `src/i18n/ur.js` now ships — mirrors `en.js` key-for-key with
+      placeholder parity enforced by tests, registered in `CATALOGS`, and
+      `t()` accepts an optional locale override. The auth area (Signin,
+      Signup, ForgotPassword) is fully migrated to `t()` keys, including
+      validation strings, accessibility labels and the registration
+      alert — plus their remaining physical marginRight/Left margins
+      converted to marginEnd/Start for RTL. Remaining areas: Home,
+      Explore, Search, Maps, Food court, Rewards, Orders, Profile,
+      Settings, Events, and the mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
       "MallMate", `slug` → "mallmate", `userInterfaceStyle` → dark;

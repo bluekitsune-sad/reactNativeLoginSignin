@@ -1,16 +1,17 @@
 import { getLocales } from "expo-localization";
 
 import { en } from "./en";
+import { ur } from "./ur";
 
 /**
- * i18n groundwork (PRD section 10): device-locale detection via
- * expo-localization plus a tiny `t()` lookup over the English catalog.
- * Only English ships for now — full Urdu translation (and RTL force-flip)
- * is a later decision. `t` never throws: unknown keys return the key so
- * missing strings are visible but non-fatal.
+ * i18n (PRD section 10 — English and Urdu at launch): device-locale
+ * detection via expo-localization plus a tiny `t()` lookup over the
+ * shipped catalogs. `t` never throws: unknown keys fall back to English,
+ * then to the key itself, so missing strings are visible but non-fatal.
  */
-const CATALOGS = {
+export const CATALOGS = {
   en,
+  ur,
 };
 
 const DEFAULT_LOCALE = "en";
@@ -38,10 +39,11 @@ export const isRTL = () => {
 /**
  * Look up `key` (dot path, e.g. "common.retry") in the active catalog and
  * interpolate `{placeholders}` from `params`. Falls back to English, then
- * to the key itself.
+ * to the key itself. Pass `locale` to force a catalog (e.g. a future
+ * in-app language setting); otherwise the device locale decides.
  */
-export const t = (key, params) => {
-  const catalog = CATALOGS[getLocale()] || CATALOGS[DEFAULT_LOCALE];
+export const t = (key, params, locale) => {
+  const catalog = CATALOGS[locale] || CATALOGS[getLocale()] || CATALOGS[DEFAULT_LOCALE];
   const path = String(key).split(".");
   let value = catalog;
   for (const segment of path) {
@@ -62,5 +64,5 @@ export const t = (key, params) => {
   );
 };
 
-export { en };
+export { en, ur };
 export default t;
