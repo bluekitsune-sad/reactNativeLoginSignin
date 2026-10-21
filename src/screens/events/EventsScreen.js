@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState } from "../../components";
 import { CAPABILITY_STATUS, MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getEventIcon, getEventList } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -34,7 +35,7 @@ const EventsScreen = ({ navigation }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
@@ -55,8 +56,8 @@ const EventsScreen = ({ navigation }) => {
           icon={
             <Ionicons name="calendar-outline" size={48} color={MallMateTheme.color.textMuted} />
           }
-          title="Events unavailable"
-          message={`This mall doesn't list events in the app right now.`}
+          title={t("events.unavailableTitle")}
+          message={t("events.unavailableMessage")}
         />
       </SafeAreaView>
     );
@@ -67,9 +68,9 @@ const EventsScreen = ({ navigation }) => {
       {header}
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <Text style={styles.title} accessibilityRole="header">
-          Events
+          {t("events.title")}
         </Text>
-        <Text style={styles.subtitle}>What's on at {selectedMall.name}</Text>
+        <Text style={styles.subtitle}>{t("events.subtitle", { mall: selectedMall.name })}</Text>
         {events.length ? (
           <View style={styles.list}>
             {events.map((event) => (
@@ -112,8 +113,8 @@ const EventsScreen = ({ navigation }) => {
             icon={
               <Ionicons name="calendar-outline" size={48} color={MallMateTheme.color.textMuted} />
             }
-            title="No upcoming events"
-            message="New events will appear here when the mall publishes them."
+            title={t("events.emptyTitle")}
+            message={t("events.emptyMessage")}
           />
         )}
       </ScrollView>

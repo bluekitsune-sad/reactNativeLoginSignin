@@ -333,9 +333,11 @@ Rules for the factory:
       (RegisterPhone/Verification/CountryPicker) also shipped on t() keys
       (`otp.*`), and the Profile area (Profile, Settings,
       ProfilePlaceholder) is migrated on `profile.*` keys (rows use
-      title/subtitle key pairs translated at render). Remaining areas:
-      Home, Explore, Search, Maps, Food court, Rewards, Orders, Events,
-      and the mallmate kit defaults.)
+      title/subtitle key pairs translated at render), followed by the
+      Events area (Events + EventDetail) on `events.*` keys (interpolated
+      mall/organizer/capacity strings). Remaining areas:
+      Home, Explore, Search, Maps, Food court, Rewards, Orders, and the
+      mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
       "MallMate", `slug` → "mallmate", `userInterfaceStyle` → dark;

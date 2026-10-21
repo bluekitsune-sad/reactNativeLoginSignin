@@ -117,6 +117,26 @@ export const ur = {
     comingSoon: "جلد آ رہا ہے",
     comingSoonMessage: "یہ حصہ جلد آ رہا ہے۔",
   },
+  events: {
+    title: "تقریبات",
+    subtitle: "{mall} میں کیا ہو رہا ہے",
+    unavailableTitle: "تقریبات دستیاب نہیں",
+    unavailableMessage: "اس مال میں ایپ میں فی الحال کوئی تقریب درج نہیں.",
+    emptyTitle: "کوئی آنے والی تقریب نہیں",
+    emptyMessage: "جب مال نئی تقریبات شائع کرے گا تو وہ یہاں نظر آئیں گی.",
+    detailUnavailableTitle: "تقریب دستیاب نہیں",
+    detailUnavailableMessage:
+      "یہ تقریب ختم ہو چکی ہو سکتی ہے یا اب فہرست میں نہیں. تقریبات کی فہرست میں دیکھیں کہ آگے کیا ہے.",
+    organisedBy: "منتظم: {organizer}",
+    capacity: "{capacity} مہمانوں تک محدود",
+    about: "تعریف",
+    registerTitle: "رجسٹریشن / ٹکٹیں",
+    registerSubtitle: "منتظم کا لنک ملنے پر کھلے گا",
+    registerNote: "رجسٹریشن لنک پلیس ہولڈر — ابھی کوئی بیرونی لنک نہیں.",
+    registrationPlaceholderTitle: "رجسٹریشن",
+    registrationPlaceholderMessage:
+      "بیرونی رجسٹریشن یا ٹکٹ کے لنک یہاں کھلیں گے جب منتظم فراہم کر دے.",
+  },
 };
 
 export default ur;

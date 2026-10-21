@@ -119,6 +119,26 @@ export const en = {
     comingSoon: "Coming soon",
     comingSoonMessage: "This section is on the way.",
   },
+  events: {
+    title: "Events",
+    subtitle: "What's on at {mall}",
+    unavailableTitle: "Events unavailable",
+    unavailableMessage: "This mall doesn't list events in the app right now.",
+    emptyTitle: "No upcoming events",
+    emptyMessage: "New events will appear here when the mall publishes them.",
+    detailUnavailableTitle: "Event unavailable",
+    detailUnavailableMessage:
+      "This event may have ended or is no longer listed. Check the events list for what's coming up.",
+    organisedBy: "Organised by {organizer}",
+    capacity: "Limited to {capacity} guests",
+    about: "About",
+    registerTitle: "Register / tickets",
+    registerSubtitle: "Opens once the organiser provides a link",
+    registerNote: "Registration link placeholder — no external handoff yet.",
+    registrationPlaceholderTitle: "Registration",
+    registrationPlaceholderMessage:
+      "External registration or ticket links open here once the organiser provides them.",
+  },
 };
 
 export default en;

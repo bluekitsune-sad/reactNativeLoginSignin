@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState, ListRow, SectionHeader } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getEventById, getEventIcon } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -31,7 +32,7 @@ const EventDetailScreen = ({ navigation, route }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
@@ -52,8 +53,8 @@ const EventDetailScreen = ({ navigation, route }) => {
           icon={
             <Ionicons name="calendar-outline" size={48} color={MallMateTheme.color.textMuted} />
           }
-          title="Event unavailable"
-          message="This event may have ended or is no longer listed. Check the events list for what's coming up."
+          title={t("events.detailUnavailableTitle")}
+          message={t("events.detailUnavailableMessage")}
         />
       </SafeAreaView>
     );
@@ -61,8 +62,8 @@ const EventDetailScreen = ({ navigation, route }) => {
 
   const openRegistrationPlaceholder = () => {
     navigation.navigate("ProfilePlaceholder", {
-      title: "Registration",
-      message: "External registration or ticket links open here once the organiser provides them.",
+      title: t("events.registrationPlaceholderTitle"),
+      message: t("events.registrationPlaceholderMessage"),
     });
   };
 
@@ -117,7 +118,9 @@ const EventDetailScreen = ({ navigation, route }) => {
               color={MallMateTheme.color.primary}
               style={styles.detailIcon}
             />
-            <Text style={styles.detailText}>Organised by {event.organizer}</Text>
+            <Text style={styles.detailText}>
+              {t("events.organisedBy", { organizer: event.organizer })}
+            </Text>
           </View>
           {event.capacity ? (
             <View style={styles.detailRow}>
@@ -127,25 +130,27 @@ const EventDetailScreen = ({ navigation, route }) => {
                 color={MallMateTheme.color.primary}
                 style={styles.detailIcon}
               />
-              <Text style={styles.detailText}>Limited to {event.capacity} guests</Text>
+              <Text style={styles.detailText}>
+                {t("events.capacity", { capacity: event.capacity })}
+              </Text>
             </View>
           ) : null}
         </Card>
 
-        <SectionHeader title="About" style={styles.section} />
+        <SectionHeader title={t("events.about")} style={styles.section} />
         <Card>
           <Text style={styles.description}>{event.description}</Text>
         </Card>
 
-        <SectionHeader title="Registration" style={styles.section} />
+        <SectionHeader title={t("events.registrationPlaceholderTitle")} style={styles.section} />
         <ListRow
-          title="Register / tickets"
-          subtitle="Opens once the organiser provides a link"
+          title={t("events.registerTitle")}
+          subtitle={t("events.registerSubtitle")}
           leading={<Ionicons name="ticket-outline" size={20} color={MallMateTheme.color.primary} />}
           onPress={openRegistrationPlaceholder}
           style={styles.row}
         />
-        <Text style={styles.note}>Registration link placeholder — no external handoff yet.</Text>
+        <Text style={styles.note}>{t("events.registerNote")}</Text>
       </ScrollView>
     </SafeAreaView>
   );
