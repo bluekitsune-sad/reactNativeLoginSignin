@@ -331,12 +331,16 @@ Rules for the factory:
       physical marginRight/Left margins
       converted to marginEnd/Start for RTL. The phone-OTP screens
       (RegisterPhone/Verification/CountryPicker) also shipped on t() keys
-      (`otp.*`), and the Profile area (Profile, Settings,
+      (      `otp.*`), and the Profile area (Profile, Settings,
       ProfilePlaceholder) is migrated on `profile.*` keys (rows use
       title/subtitle key pairs translated at render), followed by the
       Events area (Events + EventDetail) on `events.*` keys (interpolated
-      mall/organizer/capacity strings). Remaining areas:
-      Home, Explore, Search, Maps, Food court, Rewards, Orders, and the
+      mall/organizer/capacity strings), then the Home area (HomeScreen +
+      MallSelectorScreen) on `home.*` keys plus new `mall.*` hours/choose
+      strings (section headers, badge/scope labels, mall-bar a11y
+      interpolation, empty states; mock data strings stay in the mock
+      catalogues). Remaining areas:
+      Explore, Search, Maps, Food court, Rewards, Orders, and the
       mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
