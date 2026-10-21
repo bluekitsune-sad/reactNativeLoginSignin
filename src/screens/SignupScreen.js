@@ -1,14 +1,6 @@
 import { Ionicons, Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button, Separator } from "../components";
@@ -47,9 +39,9 @@ const SignupScreen = ({ navigation }) => {
     AuthenicationService.register({ username, email, password }).then((response) => {
       setIsLoading(false);
       if (response?.status) {
-        Alert.alert(t("auth.registrationSuccess"), t("auth.registrationSuccessBody"), [
-          { text: t("auth.ok"), onPress: () => navigation.navigate("Signin") },
-        ]);
+        // Decided flow (issue #9): register -> OTP -> app. The phone
+        // step sends a mock OTP; Verification enters the app.
+        navigation.navigate("RegisterPhone", { flow: "register", username });
       } else {
         setErrorMessage(response?.message);
       }

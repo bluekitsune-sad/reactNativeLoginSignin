@@ -85,6 +85,28 @@ describe("SigninScreen", () => {
     });
   });
 
+  it("routes suspicious usernames through the Verification step (issue #9 flow)", async () => {
+    const navigation = createNavigation();
+    AuthenicationService.login.mockResolvedValue({
+      status: true,
+      message: "ok",
+      data: { username: "suspicious-user" },
+    });
+    const { getByLabelText, getByRole } = renderScreen(navigation);
+
+    fireEvent.changeText(getByLabelText("Username"), "suspicious-user");
+    fireEvent.changeText(getByLabelText("Password"), "secret");
+    fireEvent.press(getByRole("button", { name: "Sign In" }));
+
+    await waitFor(() =>
+      expect(navigation.replace).toHaveBeenCalledWith("Verification", {
+        flow: "login",
+        destination: "suspicious-user",
+      }),
+    );
+    expect(navigation.replace).not.toHaveBeenCalledWith("Main");
+  });
+
   it("navigates to the forgot-password and signup screens", () => {
     const navigation = createNavigation();
     const { getByText } = renderScreen(navigation);

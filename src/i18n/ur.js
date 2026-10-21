@@ -62,9 +62,26 @@ export const ur = {
     resetSentIfAccount:
       "اگر اس ای میل کا کوئی اکاؤنٹ موجود ہے تو ری سیٹ ہدایت اسی پر بھیجی جائے گی",
     noAccountWithEmail: "اس ای میل پر کوئی اکاؤنٹ نہیں ملا",
-    registrationSuccess: "رجسٹریشن کامیاب",
-    registrationSuccessBody: "آپ کا اکاؤنٹ بنا دیا گیا ہے۔ براہ کرم سائن ان کریں۔",
-    ok: "ٹھیک ہے",
+  },
+  otp: {
+    phoneTitle: "اپنا فون نمبر شامل کریں",
+    phoneSubtitle: "اکاؤنٹ کیحفاظت کے لیے ہم SMS کے ذریعے تصدیقی کوڈ بھیجتے ہیں۔",
+    countryLabel: "ملک",
+    phoneLabel: "فون نمبر",
+    continueLabel: "جاری رکھیں",
+    verifyTitle: "تصدیقی کوڈ درج کریں",
+    verifySubtitle: "{destination} کو بھیجا گیا 6 ہندسوں کا کوڈ درج کریں",
+    codeLabel: "6 ہندسوں کا کوڈ",
+    verifyLabel: "تصدیق کریں",
+    resend: "کوڈ دوبارہ بھیجیں",
+    demoCodeNote: "پیشگی ورژن — کوئی SMS نہیں بھیجا جاتا۔ آپ کا کوڈ ہے {code}۔",
+    loginReviewNote:
+      "اس سائن ان کو مزید جانچ کے لیے نشاندہ کیا گیا ہے، اس لیے تصدیقی مرحلہ درکار ہے۔",
+    searchCountry: "ملک تلاش کریں",
+    noCountryResults: "آپ کی تلاش سے مطابق ملک نہیں ملا",
+    invalidCode: "وہ کوڈ درست نہیں",
+    sendFailed: "کوڈ بھیجنا ناکام ہوا۔ دوبارہ کوشش کریں۔",
+    requiredPhone: "اپنا فون نمبر درج کریں",
   },
 };
 

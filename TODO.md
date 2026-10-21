@@ -327,9 +327,11 @@ Rules for the factory:
       placeholder parity enforced by tests, registered in `CATALOGS`, and
       `t()` accepts an optional locale override. The auth area (Signin,
       Signup, ForgotPassword) is fully migrated to `t()` keys, including
-      validation strings, accessibility labels and the registration
-      alert — plus their remaining physical marginRight/Left margins
-      converted to marginEnd/Start for RTL. Remaining areas: Home,
+      validation strings and accessibility labels — plus their remaining
+      physical marginRight/Left margins
+      converted to marginEnd/Start for RTL. The phone-OTP screens
+      (RegisterPhone/Verification/CountryPicker) also shipped on t() keys
+      (`otp.*`). Remaining areas: Home,
       Explore, Search, Maps, Food court, Rewards, Orders, Profile,
       Settings, Events, and the mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
@@ -441,7 +443,7 @@ P0 — App is broken / blocking
       and registered in the navigator.
 - [x] `ForgotPasswordScreen` — created (email lookup via `checkUserExist`)
       and registered in the navigator.
-- [ ] `RegisterPhoneScreen` + `VerificationScreen` (still stubbed as comments
+- [x] `RegisterPhoneScreen` + `VerificationScreen` (still stubbed as comments
       in `src/navigators/index.js` and `src/screens/index.js`). (Skipped
       2026-10-19: no phone/OTP endpoints exist in `ApiContants`/
       `AuthenticationService` and nothing in the signup flow references a
@@ -455,6 +457,19 @@ P0 — App is broken / blocking
       for otp → app". Build as a presentation-only mock flow on the seat
       session precedent: OTP send/verify stand-ins in `src/mock/`, no real
       validation rules, country picker via `CountryCode.js` + `FlagItem`.)
+      (Done 2026-10-21: `src/mock/otp.js` stand-ins — `sendMockOtp`
+      (demo code `123456`, `!error` destination fails recoverably),
+      `verifyMockOtp` (6-digit demo code only), `isSuspiciousLogin`
+      (usernames containing "sus" stand in for the backend risk check).
+      Three stack routes — `RegisterPhone` (country row via `CountryPicker`,
+      phone entry, mock send), `CountryPicker` (searchable bundled
+      `CountryCode` list rendered with `FlagItem`, selection merged back
+      into RegisterPhone), `Verification` (6-digit entry, resend, on-screen
+      demo-code note, review-note for the login flow). Signup success now
+      navigates RegisterPhone → Verification → Main with a mock session;
+      Signin routes suspicious usernames through Verification and everyone
+      else straight to Main. New screens use `t()` (`otp.*` keys, en+ur).
+      No SMS, no real validation, no backend endpoints.)
 - [x] Post‑login main flow: home / restaurants, restaurant detail, food detail,
       cart, bookmarks, profile. Components already exist
       (`RestaurantCard`, `RestaurantMediumCard`, `FoodCard`, `WelcomeCard`,
@@ -482,7 +497,7 @@ P0 — App is broken / blocking
       block and its dead styles/imports were removed from `SigninScreen`.
       `Images.FACEBOOK`/`Images.GOOGLE` assets and constants are kept for a
       future re-wire.)
-- [ ] Country code picker screen (`CountryCode.js` + `FlagItem.js` are ready;
+- [x] Country code picker screen (`CountryCode.js` + `FlagItem.js` are ready;
       note `countryflags.io` is dead — use emoji flags or a bundled image set).
       (Parked with the phone‑verification flow — issue #9: a provisional
       CountryCode screen was reverted in commit `22ac53c` because its only
@@ -490,7 +505,11 @@ P0 — App is broken / blocking
       flow is now decided (register → OTP → app; login → OTP only when the
       backend flags a suspicious attempt) — build the picker together with
       the OTP screens. `FlagItem` was kept and restyled to MallMate theme
-      fonts/logical margins during the legacy removal.)
+      fonts/logical margins during the legacy removal.) (Done 2026-10-21
+      with the OTP flow: `CountryPickerScreen` stack route — searchable
+      filter over the bundled `CountryCode` list (emoji flags, no remote
+      flag service), rows rendered with `FlagItem`, selection merged back
+      into `RegisterPhone`. Entry point: the country row on RegisterPhone.)
 
 ## P2 — State, storage & auth hardening
 
@@ -666,3 +685,8 @@ P0 — App is broken / blocking
       services, `General.js`, `Fonts.js`, Poppins TTFs, unused images
       (incl. the ~58MB gallery/logo/poster trees) and the unused
       `lottie-react-native` dependency; barrels, README and AGENTS updated.
+- [x] Phone-OTP auth flow (presentation-only) built on the owner's decided
+      flow from issue #9: `src/mock/otp.js` stand-ins, `RegisterPhone` +
+      `CountryPicker` + `Verification` stack routes, Signup rewired to
+      register → OTP → app, Signin routes suspicious usernames through the
+      OTP step. No SMS, no real validation, no backend endpoints.

@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Separator, ToggleButton } from "../components";
 import { MallMateTheme } from "../constants";
 import { t } from "../i18n";
+import { isSuspiciousLogin } from "../mock";
 import { AuthenicationService } from "../services";
 import useUserManagement from "../utils/userData";
 
@@ -30,7 +31,14 @@ const SigninScreen = ({ navigation }) => {
       setIsLoading(false);
       if (response?.status) {
         updateUser(response?.data);
-        navigation.replace("Main");
+        // Decided flow (issue #9): logins the backend flags as suspicious
+        // take an extra OTP step (mock rule in src/mock/otp.js); everyone
+        // else proceeds straight to the app.
+        if (isSuspiciousLogin(username)) {
+          navigation.replace("Verification", { flow: "login", destination: username });
+        } else {
+          navigation.replace("Main");
+        }
       } else {
         setErrorMessage(response?.message);
       }

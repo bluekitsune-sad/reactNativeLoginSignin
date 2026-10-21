@@ -58,6 +58,7 @@ import {
   getOrderList,
   isTerminalOrderState,
 } from "./orders";
+import { DEMO_OTP_CODE, isSuspiciousLogin, sendMockOtp, verifyMockOtp } from "./otp";
 import { LEDGER_META, LEDGER_TYPES, MOCK_REWARDS, getRewardsOverview } from "./rewards";
 import {
   MOCK_SCAN_TARGETS,
@@ -104,6 +105,10 @@ export {
   getDestinationSuggestions,
   getStartPoints,
   searchDestinations,
+  DEMO_OTP_CODE,
+  isSuspiciousLogin,
+  sendMockOtp,
+  verifyMockOtp,
   OFFER_TYPES,
   PRICE_BAND_LABELS,
   applyMerchantFilters,

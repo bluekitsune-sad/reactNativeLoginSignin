@@ -7,6 +7,9 @@ import {
   SigninScreen,
   SignupScreen,
   ForgotPasswordScreen,
+  RegisterPhoneScreen,
+  VerificationScreen,
+  CountryPickerScreen,
   MallSelectorScreen,
   MerchantDetailScreen,
   MenuItemScreen,
@@ -32,8 +35,6 @@ import {
   RoutePreviewScreen,
   OrderHistoryScreen,
   OrderDetailScreen,
-  // RegisterPhoneScreen,
-  // VerificationScreen,
 } from "../screens";
 import MainTabNavigator from "./MainTabNavigator";
 import { FavoritesProvider } from "../utils/favorites";
@@ -66,6 +67,9 @@ const Navigators = () => {
                 <Stack.Screen name="Signin" component={SigninScreen} />
                 <Stack.Screen name="Signup" component={SignupScreen} />
                 <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+                <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} />
+                <Stack.Screen name="Verification" component={VerificationScreen} />
+                <Stack.Screen name="CountryPicker" component={CountryPickerScreen} />
                 <Stack.Screen name="Main" component={MainTabNavigator} />
                 <Stack.Screen name="MallSelector" component={MallSelectorScreen} />
                 <Stack.Screen name="ProfilePlaceholder" component={ProfilePlaceholderScreen} />
@@ -101,8 +105,6 @@ const Navigators = () => {
                 <Stack.Screen name="RoutePreview" component={RoutePreviewScreen} />
                 <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
                 <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
-                {/* <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} /> */}
-                {/* <Stack.Screen name="Verification" component={VerificationScreen} /> */}
               </>
             </Stack.Navigator>
           </NavigationContainer>

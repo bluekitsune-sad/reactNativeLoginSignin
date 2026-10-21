@@ -64,9 +64,26 @@ export const en = {
     resetSentIfAccount:
       "If an account exists for this email, password reset instructions will be sent to it.",
     noAccountWithEmail: "No account found with this email",
-    registrationSuccess: "Registration successful",
-    registrationSuccessBody: "Your account has been created. Please sign in.",
-    ok: "OK",
+  },
+  otp: {
+    phoneTitle: "Add your phone number",
+    phoneSubtitle: "We send a verification code by SMS to keep your account secure.",
+    countryLabel: "Country",
+    phoneLabel: "Phone number",
+    continueLabel: "Continue",
+    verifyTitle: "Enter the verification code",
+    verifySubtitle: "Enter the 6-digit code sent to {destination}",
+    codeLabel: "6-digit code",
+    verifyLabel: "Verify",
+    resend: "Resend code",
+    demoCodeNote: "Preview build — no SMS is sent. Your code is {code}.",
+    loginReviewNote:
+      "This sign-in was flagged for extra review, so a verification step is required.",
+    searchCountry: "Search countries",
+    noCountryResults: "No countries match your search",
+    invalidCode: "That code is not valid",
+    sendFailed: "Could not send the code. Try again.",
+    requiredPhone: "Enter your phone number",
   },
 };
 
