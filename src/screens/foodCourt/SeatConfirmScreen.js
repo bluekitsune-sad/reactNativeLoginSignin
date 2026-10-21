@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Button, Card, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { createMockSession } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -25,7 +26,7 @@ const SeatConfirmScreen = ({ navigation, route }) => {
           <Pressable
             onPress={() => navigation.goBack()}
             accessibilityRole="button"
-            accessibilityLabel="Go back"
+            accessibilityLabel={t("common.goBack")}
             hitSlop={MallMateTheme.spacing.sm}
             style={styles.backButton}
           >
@@ -36,16 +37,14 @@ const SeatConfirmScreen = ({ navigation, route }) => {
             />
           </Pressable>
           <Text style={styles.headerMeta} accessibilityRole="header">
-            Seat confirmation
+            {t("foodCourt.confirmTitleHeader")}
           </Text>
           <View style={styles.headerSpacer} />
         </View>
         <View style={styles.missingBody}>
-          <Text style={styles.missingMessage}>
-            No seat was resolved from that scan. Please scan a table code again.
-          </Text>
+          <Text style={styles.missingMessage}>{t("foodCourt.missingSeatMessage")}</Text>
           <Button
-            label="Scan again"
+            label={t("foodCourt.scanAgain")}
             onPress={() => navigation.goBack()}
             style={styles.missingButton}
           />
@@ -65,7 +64,7 @@ const SeatConfirmScreen = ({ navigation, route }) => {
         <Pressable
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >
@@ -92,23 +91,24 @@ const SeatConfirmScreen = ({ navigation, route }) => {
               <Text style={styles.heroMeta}>
                 {seat.zoneName} · {seat.floor}
               </Text>
-              <StatusChip label="Available" tone="success" style={styles.heroChip} />
+              <StatusChip label={t("foodCourt.available")} tone="success" style={styles.heroChip} />
             </View>
           </View>
         </Card>
 
         <Card style={styles.confirmCard}>
-          <Text style={styles.confirmTitle}>Start a seat session here?</Text>
-          <Text style={styles.confirmMessage}>
-            Confirm you are at this table to start a session. You can end it any time from the
-            session card. This preview does not validate scans or enforce session rules yet.
-          </Text>
+          <Text style={styles.confirmTitle}>{t("foodCourt.startPrompt")}</Text>
+          <Text style={styles.confirmMessage}>{t("foodCourt.startPromptMessage")}</Text>
         </Card>
 
         <View style={styles.actions}>
-          <Button label="Yes, start session" onPress={startSession} style={styles.action} />
           <Button
-            label="Scan a different table"
+            label={t("foodCourt.yesStartSession")}
+            onPress={startSession}
+            style={styles.action}
+          />
+          <Button
+            label={t("foodCourt.scanDifferentTable")}
             variant="secondary"
             onPress={() => navigation.goBack()}
             style={styles.action}

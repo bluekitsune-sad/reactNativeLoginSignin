@@ -5,18 +5,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Button, Card } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { useMallManagement } from "../../utils";
 
 const OUTCOME_COPY = {
   ended: {
     icon: "checkmark-circle-outline",
-    title: "Session ended",
-    message: "Thanks — your seat session has ended and the table is free for the next guest.",
+    titleKey: "foodCourt.endedTitle",
+    messageKey: "foodCourt.endedMessage",
   },
   expired: {
     icon: "hourglass-outline",
-    title: "Session expired",
-    message: "Your seat session ran out. Scan the table code again if you're still sitting there.",
+    titleKey: "foodCourt.expiredTitle",
+    messageKey: "foodCourt.expiredMessage",
   },
 };
 
@@ -38,7 +39,7 @@ const SeatSessionEndScreen = ({ navigation, route }) => {
         <Pressable
           onPress={() => navigation.navigate("FoodCourt")}
           accessibilityRole="button"
-          accessibilityLabel="Back to food court"
+          accessibilityLabel={t("foodCourt.backToFoodCourt")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >
@@ -58,9 +59,9 @@ const SeatSessionEndScreen = ({ navigation, route }) => {
             style={styles.icon}
           />
           <Text style={styles.title} accessibilityRole="header">
-            {copy.title}
+            {t(copy.titleKey)}
           </Text>
-          <Text style={styles.message}>{copy.message}</Text>
+          <Text style={styles.message}>{t(copy.messageKey)}</Text>
           {seat ? (
             <Text style={styles.seatMeta}>
               {seat.label} · {seat.zoneName}
@@ -68,7 +69,7 @@ const SeatSessionEndScreen = ({ navigation, route }) => {
           ) : null}
         </Card>
         <Button
-          label="Back to food court"
+          label={t("foodCourt.backToFoodCourt")}
           onPress={() => navigation.navigate("FoodCourt")}
           style={styles.action}
         />

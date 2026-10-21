@@ -354,9 +354,15 @@ Rules for the factory:
       on a new `maps.*` group (tab landing, floor selector + POI pins,
       destination search/detail, manual start picker, static route
       preview + disclaimers; reuses common.goBack / search.* state
-      strings / mall.mapsUnavailable where the copy matched).
+      strings / mall.mapsUnavailable where the copy matched), then the
+      Food court area (FoodCourtScreen + the five seat-session screens)
+      on a new `foodCourt.*` group (venue overview, scan-to-sit gating,
+      seating zones with interpolated seat counts, camera-permission
+      explainer + demo codes, confirm/start, active-session card,
+      ended/expired outcomes via key pairs, help actions; mock
+      SEAT_HELP_COPY / zone status labels stay in the mock).
       Remaining areas:
-      Food court, Rewards, Orders, and the
+      Rewards, Orders, and the
       mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
