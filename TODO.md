@@ -331,7 +331,7 @@ Rules for the factory:
       physical marginRight/Left margins
       converted to marginEnd/Start for RTL. The phone-OTP screens
       (RegisterPhone/Verification/CountryPicker) also shipped on t() keys
-      (      `otp.*`), and the Profile area (Profile, Settings,
+      (`otp.*`), and the Profile area (Profile, Settings,
       ProfilePlaceholder) is migrated on `profile.*` keys (rows use
       title/subtitle key pairs translated at render), followed by the
       Events area (Events + EventDetail) on `events.*` keys (interpolated
@@ -343,9 +343,14 @@ Rules for the factory:
       MerchantListScreen) on `explore.*` keys (search entry, directory/
       category placeholders, open/closed chip, paging footer with
       singular/plural list-end, loading/error interpolations; mock
-      directory titles and LIST_KIND_META copy stay in the mock).
+      directory titles and LIST_KIND_META copy stay in the mock), then
+      the Search area (SearchScreen — the kit `FilterSheet` stays for
+      the kit-defaults pass) on the extended `search.*` keys (suggestion
+      header, searching/error states, interpolated no-results message,
+      filtered-empty state, singular/plural results count, clear-filter
+      actions, filter-button a11y, open-now subtitle tag).
       Remaining areas:
-      Search, Maps, Food court, Rewards, Orders, and the
+      Maps, Food court, Rewards, Orders, and the
       mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →

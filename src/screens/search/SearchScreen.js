@@ -13,6 +13,7 @@ import {
   TextInput,
 } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import {
   EMPTY_FILTERS,
   PRICE_BAND_LABELS,
@@ -131,7 +132,7 @@ const SearchScreen = ({ navigation }) => {
         <Pressable
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >
@@ -141,7 +142,7 @@ const SearchScreen = ({ navigation }) => {
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder={`Search ${selectedMall.name}`}
+            placeholder={t("search.placeholder", { mall: selectedMall.name })}
             autoCapitalize="none"
             autoCorrect={false}
             style={styles.searchInput}
@@ -152,7 +153,9 @@ const SearchScreen = ({ navigation }) => {
             onPress={openSheet}
             accessibilityRole="button"
             accessibilityLabel={
-              activeFilterCount ? `Filters, ${activeFilterCount} active` : "Open filters"
+              activeFilterCount
+                ? t("search.filtersActiveA11y", { count: activeFilterCount })
+                : t("search.openFiltersA11y")
             }
             style={({ pressed }) => [styles.filterButton, pressed && styles.filterButtonPressed]}
           >
@@ -178,7 +181,7 @@ const SearchScreen = ({ navigation }) => {
       >
         {status === "idle" ? (
           <>
-            <SectionHeader title="Try searching for" />
+            <SectionHeader title={t("search.trySearching")} />
             <View style={styles.suggestionList}>
               {suggestions.map((suggestion) => (
                 <ListRow
@@ -200,12 +203,12 @@ const SearchScreen = ({ navigation }) => {
           </>
         ) : null}
 
-        {status === "loading" ? <LoadingState message="Searching…" /> : null}
+        {status === "loading" ? <LoadingState message={t("search.searching")} /> : null}
 
         {status === "error" ? (
           <ErrorState
-            title="Search failed"
-            message={errorMessage || "Something went wrong while searching."}
+            title={t("search.searchFailed")}
+            message={errorMessage || t("search.errorMessage")}
             onRetry={() => runSearch(query)}
           />
         ) : null}
@@ -213,16 +216,16 @@ const SearchScreen = ({ navigation }) => {
         {showResults && rawResults.length === 0 ? (
           <EmptyState
             icon={<Ionicons name="search-outline" size={48} color={MallMateTheme.color.primary} />}
-            title="No results"
-            message={`Nothing at ${selectedMall.name} matches “${query.trim()}”. Try another keyword.`}
+            title={t("search.noResults")}
+            message={t("search.noResultsMessage", { mall: selectedMall.name, query: query.trim() })}
           />
         ) : null}
 
         {showResults && rawResults.length > 0 && filteredResults.length === 0 ? (
           <EmptyState
             icon={<Ionicons name="options-outline" size={48} color={MallMateTheme.color.primary} />}
-            title="No matches with these filters"
-            message="Try removing a filter to see more results."
+            title={t("search.noFilterMatchesTitle")}
+            message={t("search.noFilterMatchesMessage")}
           />
         ) : null}
 
@@ -230,18 +233,21 @@ const SearchScreen = ({ navigation }) => {
           <>
             <View style={styles.resultsHeader}>
               <SectionHeader
-                title={`${filteredResults.length} result${filteredResults.length === 1 ? "" : "s"}`}
+                title={t(
+                  filteredResults.length === 1 ? "search.resultsOne" : "search.resultsMany",
+                  { count: filteredResults.length },
+                )}
                 style={styles.resultsHeaderSection}
               />
               {filtersApply ? (
                 <Pressable
                   onPress={clearFilters}
                   accessibilityRole="button"
-                  accessibilityLabel="Clear all filters"
+                  accessibilityLabel={t("search.clearFiltersA11y")}
                   hitSlop={MallMateTheme.spacing.sm}
                   style={styles.clearFilters}
                 >
-                  <Text style={styles.clearFiltersText}>Clear filters</Text>
+                  <Text style={styles.clearFiltersText}>{t("search.clearFilters")}</Text>
                 </Pressable>
               ) : null}
             </View>
@@ -250,7 +256,7 @@ const SearchScreen = ({ navigation }) => {
                 <ListRow
                   key={merchant.id}
                   title={merchant.name}
-                  subtitle={`${merchant.category}${merchant.cuisine ? ` · ${merchant.cuisine}` : ""} · ${merchant.floor}${merchant.openNow ? " · Open now" : ""}`}
+                  subtitle={`${merchant.category}${merchant.cuisine ? ` · ${merchant.cuisine}` : ""} · ${merchant.floor}${merchant.openNow ? ` · ${t("search.openNow")}` : ""}`}
                   leading={
                     <Ionicons
                       name="storefront-outline"
