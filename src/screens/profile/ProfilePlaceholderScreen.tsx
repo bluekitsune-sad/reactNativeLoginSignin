@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { EmptyState } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import type { RootStackScreenProps } from "../../types";
 
 /**
@@ -16,8 +17,8 @@ const ProfilePlaceholderScreen = ({
   navigation,
   route,
 }: RootStackScreenProps<"ProfilePlaceholder">) => {
-  const title = route.params?.title ?? "Coming soon";
-  const message = route.params?.message ?? "This section is on the way.";
+  const title = route.params?.title ?? t("profile.comingSoon");
+  const message = route.params?.message ?? t("profile.comingSoonMessage");
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
@@ -25,7 +26,7 @@ const ProfilePlaceholderScreen = ({
         <Pressable
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >

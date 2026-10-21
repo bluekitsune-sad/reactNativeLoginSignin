@@ -331,9 +331,11 @@ Rules for the factory:
       physical marginRight/Left margins
       converted to marginEnd/Start for RTL. The phone-OTP screens
       (RegisterPhone/Verification/CountryPicker) also shipped on t() keys
-      (`otp.*`). Remaining areas: Home,
-      Explore, Search, Maps, Food court, Rewards, Orders, Profile,
-      Settings, Events, and the mallmate kit defaults.)
+      (`otp.*`), and the Profile area (Profile, Settings,
+      ProfilePlaceholder) is migrated on `profile.*` keys (rows use
+      title/subtitle key pairs translated at render). Remaining areas:
+      Home, Explore, Search, Maps, Food court, Rewards, Orders, Events,
+      and the mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
       "MallMate", `slug` → "mallmate", `userInterfaceStyle` → dark;
