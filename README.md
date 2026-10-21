@@ -28,25 +28,28 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 ## Features
 
 - Sign In screen with username / password, show/hide password, "Remember me"
-  toggle, loading state (Lottie animation) and inline error message.
+  toggle, loading state and inline error message.
 - Sign Up screen (username / email / password with validation) and a Forgot
   Password screen (email lookup via `user-exist`).
 - Shared user state through a React Context (`UserProvider` +
   `useUserManagement`), persisted to `AsyncStorage`.
 - Authentication service (`register`, `login`, `checkUserExist`, `refreshToken`)
   built on `axios`.
-- Additional services ready to use: `RestaurantService`, `FoodService`,
-  `CartService`, `BookmarkService`, `UserService`, `StorageService`,
-  `StaticImageService`.
+- Services: `AuthenticationService`, `StorageService` and the typed axios
+  `ApiClient` helper (the unused food-ordering services `RestaurantService`,
+  `FoodService`, `CartService`, `BookmarkService`, `UserService` and
+  `StaticImageService` were removed with the legacy scaffold).
 - Local persistence via `AsyncStorage` (`StorageService`).
-- Poppins font family loaded at boot through `expo-font`.
-- Reusable UI kit: `Separator`, `ToggleButton`, `WelcomeCard`, `FoodCard`,
-  `RestaurantCard`, `RestaurantMediumCard`, `CategoryMenuItem`,
-  `CategoryListItem`, `FlagItem`.
+- Inter font family loaded at boot through `expo-font` (the legacy Poppins
+  weights were removed with the food-ordering scaffold).
+- Reusable UI kit in `src/components/mallmate/` (`Button`, `TextInput`,
+  `Card`, `ListRow`, `Badge`, `StatusChip`, `EmptyState`, `ErrorState`,
+  `LoadingState`, `FilterSheet`, …) plus `Separator`, `ToggleButton` and the
+  parked `FlagItem` country-code row.
+- English + Urdu string catalogs with a shared `t()` helper (`src/i18n/`).
 - MallMate preview data for merchants, menus, offers, events, orders, maps
   and rewards in `src/mock/` (the single source for mock data; the legacy
-  `resdata`/`fooddata`/`Mock` constants were removed as dead code) plus a
-  large local image gallery.
+  `resdata`/`fooddata`/`Mock` constants were removed as dead code).
 
 ## Tech stack
 
@@ -57,8 +60,8 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 | Navigation | `@react-navigation/native` + `@react-navigation/stack` + `react-native-gesture-handler` |
 | HTTP       | `axios` |
 | Storage    | `@react-native-async-storage/async-storage` |
-| Animation  | `lottie-react-native`, `Animated` API |
-| Fonts      | `expo-font` (Inter via `@expo-google-fonts/inter`; legacy Poppins constants unused) |
+| Animation  | `Animated` API |
+| Fonts      | `expo-font` (Inter via `@expo-google-fonts/inter`) |
 | Icons      | `@expo/vector-icons` (Ionicons, Feather, AntDesign, FontAwesome) |
 | Safe area  | `react-native-safe-area-context` |
 
@@ -70,7 +73,7 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
   so the native gesture driver initializes before any component — do not
   remove or reorder that import.
 - **`react-native-reanimated` is intentionally not installed.** No screen
-  uses it (animations are the RN `Animated` API + `lottie-react-native`),
+  uses it (animations are the RN `Animated` API),
   and it would need a Babel plugin (`react-native-reanimated/plugin`) in
   `babel.config.js` if it were ever added. Only add it when a screen
   actually needs layout animations or shared-element transitions.
@@ -161,14 +164,14 @@ The expected sign‑in payload shape:
 ├── package.json
 ├── assets/                    # Expo icons / splash images
 └── src/
-    ├── assets/                # Poppins TTFs (legacy), images, gallery, posters, logos
-    ├── components/            # UI kit: mallmate/ (MallMate) + legacy FoodCard/RestaurantCard
-    ├── constants/             # Colors, Fonts, Images, ApiContants, Theme, Capabilities
-    ├── i18n/                  # English string catalog + t() helper
+    ├── assets/                # Retained image assets (social-auth placeholders)
+    ├── components/            # UI kit: mallmate/ components + Separator/ToggleButton/FlagItem
+    ├── constants/             # Colors, Images, ApiContants, Theme, Capabilities, CustomFonts, CountryCode
+    ├── i18n/                  # English + Urdu string catalogs + t() helper
     ├── mock/                  # MallMate preview data (merchants, offers, events, ...)
     ├── navigators/            # Root stack + MallMate bottom tabs (Main), context providers
     ├── screens/               # Auth + MallMate screens (home, explore, map, rewards, ...)
-    ├── services/              # axios API services + AsyncStorage wrapper
+    ├── services/              # axios API services + AsyncStorage wrapper (auth, storage, ApiClient)
     ├── types/                 # TypeScript types (entities, API envelope, navigation)
     └── utils/                 # Display helpers, user/mall/favorites contexts
 ```
@@ -185,7 +188,7 @@ The expected sign‑in payload shape:
 | `src/services/AuthenticationService.js` | Register / login / token refresh. |
 | `src/utils/Display.js` | `setWidth(w)` / `setHeight(h)` percentage helpers. |
 | `src/utils/userData.js` | `UserProvider` + `useUserManagement` context for the current user. |
-| `src/constants/Colors.js` | Design tokens (green primary `#0A8791`, etc.). |
+| `src/constants/Colors.js` | Legacy palette still used by `ToggleButton` (MallMate screens use `Theme.js`). |
 
 ## Available scripts
 

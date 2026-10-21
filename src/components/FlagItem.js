@@ -1,10 +1,15 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { Colors, Fonts } from "../constants";
+import MallMateTheme from "../constants/Theme";
 import { Display } from "../utils";
 import Separator from "./Separator";
 
+/**
+ * Row for the (parked) country-code picker: emoji flag + name + dial
+ * code. Kept as a building block for the phone-OTP flow; uses MallMate
+ * theme fonts and logical margins so it is RTL-ready.
+ */
 const FlagItem = ({ code, name, dial_code, flag, onPress }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={() => onPress({ code, name, dial_code })}>
@@ -34,9 +39,9 @@ const styles = StyleSheet.create({
   flagText: {
     fontSize: 14,
     lineHeight: 14 * 1.4,
-    color: Colors.DEFAULT_BLACK,
-    fontFamily: Fonts.POPPINS_MEDIUM,
-    marginRight: 10,
+    color: MallMateTheme.color.textPrimary,
+    fontFamily: MallMateTheme.fontFamily.medium,
+    marginEnd: 10,
   },
 });
 

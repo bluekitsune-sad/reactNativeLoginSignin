@@ -388,11 +388,17 @@ Rules for the factory:
       labelling `constants/` as "mock data". (Found + fixed the same run:
       dead bullet dropped, version row corrected to `0.73.6`, tree refreshed
       against the current `src/` layout.)
-- [ ] **Boot font loading carries legacy weight (gated on the P1 legacy-kit
+- [x] **Boot font loading carries legacy weight (gated on the P1 legacy-kit
       direction)**: `CustomFonts.js` still preloads eight Poppins weights that
       only unused legacy components (`FoodCard`, `FlagItem`, …) reference — no
       screen renders them, and MallMate screens use Inter. Trim once the P1
       "post‑login main flow / retire unused components" question is answered.
+      (Done 2026-10-21, same run as the legacy-scaffold removal below: the
+      owner answered "remove the legacy stuff" on issue #9, so `CustomFonts.js`
+      now loads only the four Inter weights, the nine Poppins TTFs are
+      deleted, `Fonts.js` (Poppins/Inter name constants) had no remaining
+      consumers and was removed, and the parked `FlagItem` was restyled onto
+      `MallMateTheme` fonts so nothing references Poppins anymore.)
 
 ### Blocked — do NOT implement until the owner decides
 
@@ -444,7 +450,12 @@ P0 — App is broken / blocking
       (2026-10-19 later run: a provisional implementation was briefly
       committed to `work` by mistake and reverted in the next commit —
       nothing ships until the flow question in issue #9 is answered.)
-- [ ] Post‑login main flow: home / restaurants, restaurant detail, food detail,
+      (2026-10-21: the owner ANSWERED the flow on issue #9 — "register →
+      otp → app, login → check if not sus proceed without otp / if sus ask
+      for otp → app". Build as a presentation-only mock flow on the seat
+      session precedent: OTP send/verify stand-ins in `src/mock/`, no real
+      validation rules, country picker via `CountryCode.js` + `FlagItem`.)
+- [x] Post‑login main flow: home / restaurants, restaurant detail, food detail,
       cart, bookmarks, profile. Components already exist
       (`RestaurantCard`, `RestaurantMediumCard`, `FoodCard`, `WelcomeCard`,
       `CategoryMenuItem`, `CategoryListItem`) but no screens use them.
@@ -453,7 +464,18 @@ P0 — App is broken / blocking
       missing is a legacy restaurant/cart flow that consumes those scaffold
       components. Needs owner direction: build the legacy flow, or retire
       this item and the unused components now that MallMate covers
-      discovery.)
+      discovery.) (Retired 2026-10-21: the owner answered "remove the legacy
+      stuff" on issue #9 — MallMate covers discovery, so the legacy flow is
+      not built. Removed in the same pass: the six unused components
+      (`FoodCard`, `RestaurantCard`, `RestaurantMediumCard`, `WelcomeCard`,
+      `CategoryMenuItem`, `CategoryListItem`), the dead services
+      (`RestaurantService`, `FoodService`, `CartService`, `BookmarkService`,
+      `UserService`, `StaticImageService`), `General.js` (onboarding copy),
+      the unused Poppins/image assets including the ~58MB
+      gallery/logo/poster trees, and the unused `lottie-react-native`
+      dependency. Kept: `Separator` + `ToggleButton` (in use), `FlagItem`
+      (parked for the OTP flow), `Images.FACEBOOK`/`GOOGLE` (future social
+      re-wire), `Colors.js` (ToggleButton).)
 - [x] Wire social sign‑in buttons (Facebook / Google) or hide them until real
       auth exists. (Done via the "hide" option: no social auth provider is
       integrated, so the "OR / Connect with Facebook / Connect with Google"
@@ -464,8 +486,11 @@ P0 — App is broken / blocking
       note `countryflags.io` is dead — use emoji flags or a bundled image set).
       (Parked with the phone‑verification flow — issue #9: a provisional
       CountryCode screen was reverted in commit `22ac53c` because its only
-      entry point is the also‑parked `RegisterPhoneScreen`. Don't rebuild
-      until the flow question in #9 is answered.)
+      entry point is the also‑parked `RegisterPhoneScreen`. 2026-10-21: the
+      flow is now decided (register → OTP → app; login → OTP only when the
+      backend flags a suspicious attempt) — build the picker together with
+      the OTP screens. `FlagItem` was kept and restyled to MallMate theme
+      fonts/logical margins during the legacy removal.)
 
 ## P2 — State, storage & auth hardening
 
@@ -636,3 +661,8 @@ P0 — App is broken / blocking
 - [x] ESLint + Prettier introduced (`eslint-config-universe` `universe/native`,
       `.eslintrc.js` + `.prettierrc`) with `npm run lint`; existing style
       debt left as warnings pending a follow-up `--fix` pass.
+- [x] Legacy food-ordering scaffold removed per the owner decision on issue
+      #9 ("remove the legacy stuff"): six unused components, six dead
+      services, `General.js`, `Fonts.js`, Poppins TTFs, unused images
+      (incl. the ~58MB gallery/logo/poster trees) and the unused
+      `lottie-react-native` dependency; barrels, README and AGENTS updated.

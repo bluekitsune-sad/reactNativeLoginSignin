@@ -94,9 +94,11 @@ covered code.
   source of truth for preview/demo data. Services are the live‑API path.
   The legacy scaffold mocks (`resdata.js`, `fooddata.js`, `Mock.js`) were
   removed as dead code — don't reintroduce them.
-- **Design tokens** are in `src/constants/Colors.js` and `src/constants/Fonts.js`.
-  Use them; don't inline hex colors or font names. New MallMate code uses
-  `src/constants/Theme.js` instead (see the MallMate section).
+- **Design tokens**: MallMate code uses `src/constants/Theme.js` (see the
+  MallMate section). The legacy palette lives in `src/constants/Colors.js`
+  (only `ToggleButton` still consumes it); `Fonts.js` was removed with the
+  legacy scaffold — font names come from `Theme.fontFamily`. Don't inline
+  hex colors or font names.
 - **Styling** is `StyleSheet.create` at the bottom of each component file, using
   `Display.setWidth/setHeight` for relative sizing.
 - **State:** Redux was removed (and the old commented‑out
@@ -163,8 +165,9 @@ configurable via `EXPO_PUBLIC_BACKEND_URL` / `app.json` `extra.backendUrl`
 `JSON.parse` on the shared `"user"` key; `useUserManagement` is a React
 Context (`UserProvider`) shared across screens; `SignupScreen` and
 `ForgotPasswordScreen` exist and are registered in the navigator; the
-commented‑out `react-redux`/`src/actions` leftovers in `FoodCard.js` and
-`RestaurantCard.js` are removed (state is Context + local `useState`).
+commented‑out `react-redux`/`src/actions` leftovers in the legacy card
+components are removed (state is Context + local `useState`; those
+components were themselves deleted in the 2026-10-21 legacy removal).
 
 ## Conventions
 
