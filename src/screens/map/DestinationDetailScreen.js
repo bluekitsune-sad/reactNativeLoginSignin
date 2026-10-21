@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Button, Card, EmptyState } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getDestinationById, getPoiIcon } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -28,7 +29,7 @@ const DestinationDetailScreen = ({ navigation, route }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
@@ -49,8 +50,8 @@ const DestinationDetailScreen = ({ navigation, route }) => {
           icon={
             <Ionicons name="location-outline" size={48} color={MallMateTheme.color.textMuted} />
           }
-          title="Destination unavailable"
-          message={response.message || "We couldn't load that destination."}
+          title={t("maps.destinationUnavailableTitle")}
+          message={response.message || t("maps.destinationUnavailableMessage")}
         />
       </SafeAreaView>
     );
@@ -81,7 +82,7 @@ const DestinationDetailScreen = ({ navigation, route }) => {
               style={styles.detailIcon}
             />
             <View style={styles.detailBody}>
-              <Text style={styles.detailLabel}>Floor</Text>
+              <Text style={styles.detailLabel}>{t("maps.floor")}</Text>
               <Text style={styles.detailValue}>{destination.floorName}</Text>
             </View>
           </View>
@@ -93,20 +94,18 @@ const DestinationDetailScreen = ({ navigation, route }) => {
               style={styles.detailIcon}
             />
             <View style={styles.detailBody}>
-              <Text style={styles.detailLabel}>Mall</Text>
+              <Text style={styles.detailLabel}>{t("maps.mall")}</Text>
               <Text style={styles.detailValue}>{selectedMall.name}</Text>
             </View>
           </View>
         </Card>
 
         <Button
-          label="Get directions"
+          label={t("maps.getDirections")}
           onPress={() => navigation.navigate("StartPointSelect", { destinationId: destination.id })}
           style={styles.cta}
         />
-        <Text style={styles.disclaimer}>
-          Preview build — routes are illustrative static steps. No live positioning.
-        </Text>
+        <Text style={styles.disclaimer}>{t("maps.detailDisclaimer")}</Text>
       </ScrollView>
     </SafeAreaView>
   );

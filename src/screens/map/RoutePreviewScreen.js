@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { buildRoutePreview } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -30,14 +31,14 @@ const RoutePreviewScreen = ({ navigation, route }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
         <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
       </Pressable>
       <Text style={styles.headerMeta} numberOfLines={1}>
-        Route preview
+        {t("maps.routePreview")}
       </Text>
       <View style={styles.headerSpacer} />
     </View>
@@ -49,8 +50,8 @@ const RoutePreviewScreen = ({ navigation, route }) => {
         {header}
         <EmptyState
           icon={<Ionicons name="route-outline" size={48} color={MallMateTheme.color.textMuted} />}
-          title="Route unavailable"
-          message={response.message || "We couldn't build that route."}
+          title={t("maps.routeUnavailableTitle")}
+          message={response.message || t("maps.routeUnavailableMessage")}
         />
       </SafeAreaView>
     );
@@ -64,7 +65,7 @@ const RoutePreviewScreen = ({ navigation, route }) => {
           <View style={styles.summaryRow}>
             <View style={styles.summaryDot} />
             <View style={styles.summaryBody}>
-              <Text style={styles.summaryLabel}>From</Text>
+              <Text style={styles.summaryLabel}>{t("maps.from")}</Text>
               <Text style={styles.summaryValue}>
                 {preview.origin.name} · {preview.origin.floorName}
               </Text>
@@ -74,7 +75,7 @@ const RoutePreviewScreen = ({ navigation, route }) => {
           <View style={styles.summaryRow}>
             <View style={[styles.summaryDot, styles.summaryDotEnd]} />
             <View style={styles.summaryBody}>
-              <Text style={styles.summaryLabel}>To</Text>
+              <Text style={styles.summaryLabel}>{t("maps.to")}</Text>
               <Text style={styles.summaryValue}>
                 {preview.destination.name} · {preview.destination.floorName}
               </Text>
@@ -82,7 +83,7 @@ const RoutePreviewScreen = ({ navigation, route }) => {
           </View>
         </Card>
 
-        <Text style={styles.sectionTitle}>Directions</Text>
+        <Text style={styles.sectionTitle}>{t("maps.directions")}</Text>
         <View style={styles.steps}>
           {preview.steps.map((step, index) => (
             <View key={`${index}-${step}`} style={styles.stepRow}>
@@ -95,10 +96,7 @@ const RoutePreviewScreen = ({ navigation, route }) => {
         </View>
 
         <Card style={styles.noteCard}>
-          <Text style={styles.note}>
-            Preview build — these steps are illustrative. Live positioning and turn-by-turn indoor
-            navigation need mall map integration and aren't enabled yet.
-          </Text>
+          <Text style={styles.note}>{t("maps.routeNote")}</Text>
         </Card>
       </ScrollView>
     </SafeAreaView>

@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState, ListRow } from "../../components";
 import { CAPABILITY_STATUS, MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { useMallManagement } from "../../utils";
 
 /**
@@ -23,8 +24,8 @@ const MapScreen = ({ navigation }) => {
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
         <EmptyState
           icon={<Ionicons name="map-outline" size={48} color={MallMateTheme.color.textMuted} />}
-          title="Maps unavailable"
-          message={`Indoor maps aren't offered at ${selectedMall.name} yet.`}
+          title={t("mall.mapsUnavailable")}
+          message={t("maps.unavailableMessage", { mall: selectedMall.name })}
         />
       </SafeAreaView>
     );
@@ -34,21 +35,21 @@ const MapScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.headerTitle} accessibilityRole="header">
-          Map
+          {t("maps.title")}
         </Text>
         <Text style={styles.headerMeta} numberOfLines={1}>
           {selectedMall.name}
         </Text>
         <ListRow
-          title="Floor map"
-          subtitle="Browse floors and points of interest"
+          title={t("maps.floorMap")}
+          subtitle={t("maps.floorMapSubtitle")}
           leading={<Ionicons name="map-outline" size={22} color={MallMateTheme.color.primary} />}
           onPress={() => navigation.navigate("FloorMap")}
           style={styles.row}
         />
         <ListRow
-          title="Find a destination"
-          subtitle="Search places and preview a static route"
+          title={t("maps.findDestination")}
+          subtitle={t("maps.findDestinationSubtitle")}
           leading={
             <Ionicons name="navigate-outline" size={22} color={MallMateTheme.color.primary} />
           }
@@ -56,10 +57,7 @@ const MapScreen = ({ navigation }) => {
           style={styles.row}
         />
         <Card style={styles.noteCard}>
-          <Text style={styles.note}>
-            Preview build — static floor plans and illustrative route steps only. Live indoor
-            positioning and turn-by-turn navigation aren't enabled yet.
-          </Text>
+          <Text style={styles.note}>{t("maps.tabNote")}</Text>
         </Card>
       </ScrollView>
     </SafeAreaView>

@@ -12,6 +12,7 @@ import {
   TextInput,
 } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getDestinationSuggestions, searchDestinations } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -81,7 +82,7 @@ const DestinationSearchScreen = ({ navigation }) => {
         <Pressable
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >
@@ -91,7 +92,7 @@ const DestinationSearchScreen = ({ navigation }) => {
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder="Where are you headed?"
+            placeholder={t("maps.destinationPlaceholder")}
             autoCapitalize="none"
             autoCorrect={false}
             style={styles.searchInput}
@@ -105,7 +106,7 @@ const DestinationSearchScreen = ({ navigation }) => {
       >
         {status === "idle" ? (
           <>
-            <SectionHeader title="Popular places" />
+            <SectionHeader title={t("maps.popularPlaces")} />
             <View style={styles.list}>
               {suggestions.map((suggestion) => (
                 <ListRow
@@ -133,19 +134,19 @@ const DestinationSearchScreen = ({ navigation }) => {
                     color={MallMateTheme.color.textMuted}
                   />
                 }
-                title="No destinations yet"
-                message={`Indoor destinations haven't been published for ${selectedMall.name} yet.`}
+                title={t("maps.noDestinationsTitle")}
+                message={t("maps.noDestinationsMessage", { mall: selectedMall.name })}
               />
             ) : null}
           </>
         ) : null}
 
-        {status === "loading" ? <LoadingState message="Searching…" /> : null}
+        {status === "loading" ? <LoadingState message={t("search.searching")} /> : null}
 
         {status === "error" ? (
           <ErrorState
-            title="Search failed"
-            message={errorMessage || "Something went wrong while searching."}
+            title={t("search.searchFailed")}
+            message={errorMessage || t("search.errorMessage")}
             onRetry={() => runSearch(query)}
           />
         ) : null}
@@ -153,14 +154,18 @@ const DestinationSearchScreen = ({ navigation }) => {
         {showResults && results.length === 0 ? (
           <EmptyState
             icon={<Ionicons name="search-outline" size={48} color={MallMateTheme.color.primary} />}
-            title="No results"
-            message={`Nothing on the published maps matches “${query.trim()}”. Try another keyword.`}
+            title={t("search.noResults")}
+            message={t("maps.noRouteMatchesMessage", { query: query.trim() })}
           />
         ) : null}
 
         {showResults && results.length > 0 ? (
           <>
-            <SectionHeader title={`${results.length} result${results.length === 1 ? "" : "s"}`} />
+            <SectionHeader
+              title={t(results.length === 1 ? "search.resultsOne" : "search.resultsMany", {
+                count: results.length,
+              })}
+            />
             <View style={styles.list}>
               {results.map((destination) => (
                 <ListRow
@@ -184,9 +189,7 @@ const DestinationSearchScreen = ({ navigation }) => {
           </>
         ) : null}
 
-        <Text style={styles.disclaimer}>
-          Static preview — routes are illustrative. No live positioning or turn-by-turn navigation.
-        </Text>
+        <Text style={styles.disclaimer}>{t("maps.searchDisclaimer")}</Text>
       </ScrollView>
     </SafeAreaView>
   );

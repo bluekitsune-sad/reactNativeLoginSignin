@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState, ListRow } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getDestinationById, getStartPoints } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -31,14 +32,14 @@ const StartPointSelectScreen = ({ navigation, route }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
         <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
       </Pressable>
       <Text style={styles.headerMeta} numberOfLines={1} accessibilityRole="header">
-        Choose your start point
+        {t("maps.chooseStartPoint")}
       </Text>
       <View style={styles.headerSpacer} />
     </View>
@@ -50,11 +51,9 @@ const StartPointSelectScreen = ({ navigation, route }) => {
         {header}
         <EmptyState
           icon={<Ionicons name="walk-outline" size={48} color={MallMateTheme.color.textMuted} />}
-          title="No start points available"
+          title={t("maps.noStartPointsTitle")}
           message={
-            startResponse.status === false
-              ? startResponse.message
-              : "We couldn't find any published start points for this mall yet."
+            startResponse.status === false ? startResponse.message : t("maps.noStartPointsMessage")
           }
         />
       </SafeAreaView>
@@ -65,12 +64,9 @@ const StartPointSelectScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       {header}
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
-        <Text style={styles.intro}>
-          Live positioning isn't available in this preview — tell us where you are and we'll show a
-          static route.
-        </Text>
+        <Text style={styles.intro}>{t("maps.startPointIntro")}</Text>
         <Card style={styles.destinationCard}>
-          <Text style={styles.destinationLabel}>Destination</Text>
+          <Text style={styles.destinationLabel}>{t("maps.destinationLabel")}</Text>
           <Text style={styles.destinationName}>
             {destination.name} · {destination.floorName}
           </Text>
@@ -94,9 +90,7 @@ const StartPointSelectScreen = ({ navigation, route }) => {
             />
           ))}
         </View>
-        <Text style={styles.disclaimer}>
-          Static preview — no live positioning or turn-by-turn navigation.
-        </Text>
+        <Text style={styles.disclaimer}>{t("maps.staticPreviewDisclaimer")}</Text>
       </ScrollView>
     </SafeAreaView>
   );

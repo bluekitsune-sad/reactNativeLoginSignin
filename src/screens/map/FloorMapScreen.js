@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState, SectionHeader, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getFloorPlan, getPoiIcon } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -32,7 +33,7 @@ const FloorMapScreen = ({ navigation }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
@@ -51,8 +52,8 @@ const FloorMapScreen = ({ navigation }) => {
         {header}
         <EmptyState
           icon={<Ionicons name="map-outline" size={48} color={MallMateTheme.color.textMuted} />}
-          title="Indoor maps unavailable"
-          message="This mall doesn't offer indoor maps in the app right now."
+          title={t("maps.indoorUnavailableTitle")}
+          message={t("maps.indoorUnavailableMessage")}
         />
       </SafeAreaView>
     );
@@ -69,17 +70,13 @@ const FloorMapScreen = ({ navigation }) => {
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <View style={styles.titleRow}>
           <Text style={styles.title} accessibilityRole="header">
-            Floor map
+            {t("maps.floorMap")}
           </Text>
-          {degraded ? <StatusChip label="Limited" tone="warning" /> : null}
+          {degraded ? <StatusChip label={t("maps.limited")} tone="warning" /> : null}
         </View>
-        {degraded ? (
-          <Text style={styles.limitedNote}>
-            Indoor maps are running in limited mode — some floor data may be missing.
-          </Text>
-        ) : null}
+        {degraded ? <Text style={styles.limitedNote}>{t("maps.limitedNote")}</Text> : null}
 
-        <SectionHeader title="Choose a floor" style={styles.section} />
+        <SectionHeader title={t("maps.chooseFloor")} style={styles.section} />
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -92,7 +89,7 @@ const FloorMapScreen = ({ navigation }) => {
                 key={floor.id}
                 onPress={() => selectFloor(floor)}
                 accessibilityRole="button"
-                accessibilityLabel={`Show ${floor.name}`}
+                accessibilityLabel={t("maps.showFloorA11y", { floor: floor.name })}
                 accessibilityState={{ selected }}
                 style={({ pressed }) => [
                   styles.floorChip,
@@ -114,9 +111,9 @@ const FloorMapScreen = ({ navigation }) => {
             <View
               style={styles.plan}
               accessible
-              accessibilityLabel={`Static floor plan preview for ${selectedFloor.name}`}
+              accessibilityLabel={t("maps.planPreviewA11y", { floor: selectedFloor.name })}
             >
-              <Text style={styles.planWatermark}>Static floor plan · preview</Text>
+              <Text style={styles.planWatermark}>{t("maps.planWatermark")}</Text>
               {selectedFloor.pois.map((poi) => {
                 const selected = poi.id === selectedPoiId;
                 return (
@@ -124,7 +121,10 @@ const FloorMapScreen = ({ navigation }) => {
                     key={poi.id}
                     onPress={() => setSelectedPoiId(selected ? null : poi.id)}
                     accessibilityRole="button"
-                    accessibilityLabel={`${poi.name}, ${poi.category}`}
+                    accessibilityLabel={t("maps.poiPinA11y", {
+                      name: poi.name,
+                      category: poi.category,
+                    })}
                     accessibilityState={{ selected }}
                     hitSlop={MallMateTheme.spacing.sm}
                     style={[
@@ -152,7 +152,7 @@ const FloorMapScreen = ({ navigation }) => {
                 </Text>
               </Card>
             ) : (
-              <Text style={styles.hint}>Tap a pin to see what's there.</Text>
+              <Text style={styles.hint}>{t("maps.poiHint")}</Text>
             )}
           </>
         ) : (
@@ -163,17 +163,16 @@ const FloorMapScreen = ({ navigation }) => {
               color={MallMateTheme.color.highlight}
               style={styles.unavailableIcon}
             />
-            <Text style={styles.unavailableTitle}>Map data unavailable</Text>
+            <Text style={styles.unavailableTitle}>{t("maps.mapDataUnavailable")}</Text>
             <Text style={styles.unavailableMessage}>
-              A floor plan for {selectedFloor?.name ?? "this floor"} hasn't been published yet. Try
-              another floor or check with guest services.
+              {t("maps.mapDataUnavailableMessage", {
+                floor: selectedFloor?.name ?? t("maps.thisFloor"),
+              })}
             </Text>
           </Card>
         )}
 
-        <Text style={styles.disclaimer}>
-          Static preview — no live positioning, routing or turn-by-turn navigation.
-        </Text>
+        <Text style={styles.disclaimer}>{t("maps.floorDisclaimer")}</Text>
       </ScrollView>
     </SafeAreaView>
   );

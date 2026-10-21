@@ -348,9 +348,15 @@ Rules for the factory:
       the kit-defaults pass) on the extended `search.*` keys (suggestion
       header, searching/error states, interpolated no-results message,
       filtered-empty state, singular/plural results count, clear-filter
-      actions, filter-button a11y, open-now subtitle tag).
+      actions, filter-button a11y, open-now subtitle tag), then the Maps
+      area (MapScreen, FloorMapScreen, DestinationSearchScreen,
+      DestinationDetailScreen, StartPointSelectScreen, RoutePreviewScreen)
+      on a new `maps.*` group (tab landing, floor selector + POI pins,
+      destination search/detail, manual start picker, static route
+      preview + disclaimers; reuses common.goBack / search.* state
+      strings / mall.mapsUnavailable where the copy matched).
       Remaining areas:
-      Maps, Food court, Rewards, Orders, and the
+      Food court, Rewards, Orders, and the
       mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
