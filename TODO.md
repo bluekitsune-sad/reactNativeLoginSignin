@@ -339,8 +339,13 @@ Rules for the factory:
       MallSelectorScreen) on `home.*` keys plus new `mall.*` hours/choose
       strings (section headers, badge/scope labels, mall-bar a11y
       interpolation, empty states; mock data strings stay in the mock
-      catalogues). Remaining areas:
-      Explore, Search, Maps, Food court, Rewards, Orders, and the
+      catalogues), then the Explore area (ExploreScreen +
+      MerchantListScreen) on `explore.*` keys (search entry, directory/
+      category placeholders, open/closed chip, paging footer with
+      singular/plural list-end, loading/error interpolations; mock
+      directory titles and LIST_KIND_META copy stay in the mock).
+      Remaining areas:
+      Search, Maps, Food court, Rewards, Orders, and the
       mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
