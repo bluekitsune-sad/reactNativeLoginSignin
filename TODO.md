@@ -360,9 +360,15 @@ Rules for the factory:
       seating zones with interpolated seat counts, camera-permission
       explainer + demo codes, confirm/start, active-session card,
       ended/expired outcomes via key pairs, help actions; mock
-      SEAT_HELP_COPY / zone status labels stay in the mock).
+      SEAT_HELP_COPY / zone status labels stay in the mock), then the
+      Rewards area (RewardsScreen) on the `rewards.*` keys (unavailable
+      state with mall interpolation, balance-card labels + a11y point
+      counts, pending/expiring chips with interpolated counts and date,
+      mock disclosure, Activity header and empty-ledger message; reused
+      `maps.limited` for the degraded chip; mock ledger titles/contexts
+      stay in the mock).
       Remaining areas:
-      Rewards, Orders, and the
+      Orders, and the
       mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →

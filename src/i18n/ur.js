@@ -192,6 +192,20 @@ export const ur = {
     title: "انعامات",
     emptyLedger: "ابھی کوئی سرگرمی نہیں",
     basedOnAppOrders: "صرف مکمل شدہ ایپ آرڈرز پر مبنی۔ کل مال کی فروخت نہیں۔",
+    unavailableTitle: "انعامات دستیاب نہیں",
+    unavailableMessage: "{mall} میں فی الحال لائلٹی انعامات دستیاب نہیں ہیں۔",
+    balanceLabel: "پوائنٹس بیلنس",
+    pointsCount: "{count} پوائنٹس",
+    pointsCountPlus: "پلاس {count} پوائنٹس",
+    pendingPoints: "{count} پوائنٹس زیر التوا",
+    expiring: "میعاد ختمہونے والے",
+    expiringSoon: "{date} تک {count} پوائنٹس کی میعاد ختم ہو رہی ہے۔",
+    mockDisclosure:
+      "نمونہ پیشگی منظر — بیلنس اور پوائنٹس ڈیمو اقدار ہیں۔ کمائی اور تبادلے کی تصدیق سرور پر ہوتی ہے اور اس بلڈ میں فعال نہیں ہے۔",
+    activity: "سرگرمی",
+    pending: "زیر التوا",
+    emptyLedgerMessage:
+      "ابھی کوئی پوائنٹس سرگرمی نہیں۔ اہلیت والی خریداری کے بعد سرگرمی یہاں نظر آئے گی۔",
   },
   auth: {
     signIn: "سائن ان",

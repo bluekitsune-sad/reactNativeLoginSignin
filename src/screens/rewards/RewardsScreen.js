@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState, SectionHeader, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { LEDGER_META, getRewardsOverview } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -28,8 +29,8 @@ const RewardsScreen = () => {
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
         <EmptyState
           icon={<Ionicons name="gift-outline" size={48} color={MallMateTheme.color.textMuted} />}
-          title="Rewards unavailable"
-          message={`Loyalty rewards aren't offered at ${selectedMall.name} yet.`}
+          title={t("rewards.unavailableTitle")}
+          message={t("rewards.unavailableMessage", { mall: selectedMall.name })}
         />
       </SafeAreaView>
     );
@@ -40,37 +41,42 @@ const RewardsScreen = () => {
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <View style={styles.headerRow}>
           <Text style={styles.headerTitle} accessibilityRole="header">
-            Rewards
+            {t("rewards.title")}
           </Text>
-          {degraded ? <StatusChip label="Limited" tone="warning" /> : null}
+          {degraded ? <StatusChip label={t("maps.limited")} tone="warning" /> : null}
         </View>
         <Text style={styles.headerMeta} numberOfLines={1}>
           {selectedMall.name}
         </Text>
 
         <Card style={styles.balanceCard}>
-          <Text style={styles.balanceLabel}>Points balance</Text>
-          <Text style={styles.balanceValue} accessibilityLabel={`${rewards.balance} points`}>
+          <Text style={styles.balanceLabel}>{t("rewards.balanceLabel")}</Text>
+          <Text
+            style={styles.balanceValue}
+            accessibilityLabel={t("rewards.pointsCount", { count: rewards.balance })}
+          >
             {rewards.balance.toLocaleString()}
           </Text>
           {rewards.pending > 0 ? (
-            <Text style={styles.balanceMeta}>{rewards.pending} points pending</Text>
+            <Text style={styles.balanceMeta}>
+              {t("rewards.pendingPoints", { count: rewards.pending })}
+            </Text>
           ) : null}
           {rewards.expiringSoon ? (
             <View style={styles.expiringRow}>
-              <StatusChip label="Expiring" tone="warning" />
+              <StatusChip label={t("rewards.expiring")} tone="warning" />
               <Text style={styles.expiringText}>
-                {rewards.expiringSoon.points} points expire by {rewards.expiringSoon.byDate}
+                {t("rewards.expiringSoon", {
+                  count: rewards.expiringSoon.points,
+                  date: rewards.expiringSoon.byDate,
+                })}
               </Text>
             </View>
           ) : null}
-          <Text style={styles.disclosure}>
-            Mock preview — balances and points are demo values. Earning and redemption are validated
-            server-side and aren't active in this build.
-          </Text>
+          <Text style={styles.disclosure}>{t("rewards.mockDisclosure")}</Text>
         </Card>
 
-        <SectionHeader title="Activity" style={styles.section} />
+        <SectionHeader title={t("rewards.activity")} style={styles.section} />
         {rewards.ledger.length ? (
           <View style={styles.ledger}>
             {rewards.ledger.map((entry) => {
@@ -92,7 +98,11 @@ const RewardsScreen = () => {
                         {entry.context}
                       </Text>
                       {entry.status === "PENDING" ? (
-                        <StatusChip label="Pending" tone="warning" style={styles.ledgerChip} />
+                        <StatusChip
+                          label={t("rewards.pending")}
+                          tone="warning"
+                          style={styles.ledgerChip}
+                        />
                       ) : null}
                     </View>
                     <Text
@@ -100,7 +110,10 @@ const RewardsScreen = () => {
                         styles.ledgerPoints,
                         entry.points < 0 ? styles.ledgerPointsNegative : null,
                       ]}
-                      accessibilityLabel={`${entry.points > 0 ? "plus " : ""}${entry.points} points`}
+                      accessibilityLabel={t(
+                        entry.points > 0 ? "rewards.pointsCountPlus" : "rewards.pointsCount",
+                        { count: entry.points },
+                      )}
                     >
                       {meta.sign}
                       {entry.points}
@@ -112,9 +125,7 @@ const RewardsScreen = () => {
           </View>
         ) : (
           <Card>
-            <Text style={styles.emptyLedger}>
-              No points activity yet. Activity will appear here after qualifying purchases.
-            </Text>
+            <Text style={styles.emptyLedger}>{t("rewards.emptyLedgerMessage")}</Text>
           </Card>
         )}
       </ScrollView>

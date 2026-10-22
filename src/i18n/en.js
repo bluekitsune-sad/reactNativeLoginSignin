@@ -193,6 +193,20 @@ export const en = {
     title: "Rewards",
     emptyLedger: "No activity yet",
     basedOnAppOrders: "Based on completed app orders only. Not total mall sales.",
+    unavailableTitle: "Rewards unavailable",
+    unavailableMessage: "Loyalty rewards aren't offered at {mall} yet.",
+    balanceLabel: "Points balance",
+    pointsCount: "{count} points",
+    pointsCountPlus: "plus {count} points",
+    pendingPoints: "{count} points pending",
+    expiring: "Expiring",
+    expiringSoon: "{count} points expire by {date}",
+    mockDisclosure:
+      "Mock preview — balances and points are demo values. Earning and redemption are validated server-side and aren't active in this build.",
+    activity: "Activity",
+    pending: "Pending",
+    emptyLedgerMessage:
+      "No points activity yet. Activity will appear here after qualifying purchases.",
   },
   auth: {
     signIn: "Sign In",
