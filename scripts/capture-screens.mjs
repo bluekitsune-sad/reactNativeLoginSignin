@@ -36,11 +36,23 @@ const MIN_PNG_BYTES = 5 * 1024;
 
 /**
  * Screens to capture: name → deep-link path. Mock data drives most of the
- * app, so ids are stable fixtures from `src/mock/`. The tab bar, merchant
- * and offer screens are the core set called out in TODO.md.
+ * app, so ids are stable fixtures from `src/mock/`. The list mirrors every
+ * route registered in `src/navigators/index.js` (tabs plus root stack);
+ * parameterised screens link to the params their callers actually pass, and
+ * screens whose params are objects (seat confirm/session) are captured in
+ * their designed missing-param state — query params arrive as strings, so
+ * an object fixture cannot round-trip through a URL.
  */
 const SCREENS = [
   { name: "signin", path: "/Signin" },
+  { name: "signup", path: "/Signup" },
+  { name: "forgot-password", path: "/ForgotPassword" },
+  { name: "register-phone", path: "/RegisterPhone?flow=register&username=testuser" },
+  { name: "country-picker", path: "/CountryPicker" },
+  {
+    name: "verification",
+    path: "/Verification?flow=register&username=testuser&destination=%2B923001234567",
+  },
   { name: "home", path: "/Main/Home" },
   { name: "explore", path: "/Main/Explore" },
   { name: "map-tab", path: "/Main/Map" },
@@ -49,6 +61,7 @@ const SCREENS = [
   { name: "mall-selector", path: "/MallSelector" },
   { name: "search", path: "/Search?q=pizza" },
   { name: "restaurant-list", path: "/RestaurantList?kind=restaurants" },
+  { name: "outlet-list", path: "/OutletList?kind=outlets" },
   { name: "merchant-detail", path: "/MerchantDetail?merchantId=lucky-m-1" },
   { name: "menu", path: "/Menu?merchantId=lucky-m-1" },
   { name: "menu-item", path: "/MenuItem?merchantId=lucky-m-1&itemId=lucky-m-1-i1" },
@@ -58,6 +71,10 @@ const SCREENS = [
   { name: "event-detail", path: "/EventDetail?eventId=lucky-event-1" },
   { name: "food-court", path: "/FoodCourt" },
   { name: "seat-scan", path: "/SeatScan" },
+  { name: "seat-confirm", path: "/SeatConfirm" },
+  { name: "seat-session", path: "/SeatSession" },
+  { name: "seat-session-end", path: "/SeatSessionEnd?reason=expired" },
+  { name: "seat-help", path: "/SeatHelp?outcome=OCCUPIED" },
   { name: "floor-map", path: "/FloorMap" },
   { name: "destination-search", path: "/DestinationSearch" },
   { name: "destination-detail", path: "/DestinationDetail?destinationId=lz-2-foodcourt" },
@@ -72,6 +89,7 @@ const SCREENS = [
   { name: "order-history", path: "/OrderHistory" },
   { name: "order-detail", path: "/OrderDetail?orderId=mm-order-1042" },
   { name: "settings", path: "/Settings" },
+  { name: "profile-placeholder", path: "/ProfilePlaceholder" },
 ];
 
 const MIME = {

@@ -475,13 +475,21 @@ Rules for the factory:
       under Auth with every field optional — matching how each screen
       defaults missing params; `country` typed `unknown` for the
       CountryPicker merge, `flow` narrowed to `"register" | "login"`.)
-- [ ] **Screenshot script misses 11 registered routes**:
+- [x] **Screenshot script misses 11 registered routes**:
       `scripts/capture-screens.mjs` SCREENS still lists the 26 paths from
       2026-10-19 — no `Signup`, `ForgotPassword`, `RegisterPhone`,
       `Verification`, `CountryPicker`, `ProfilePlaceholder`, `OutletList`,
       or the four seat-session screens (`SeatConfirm`/`SeatSession`/
       `SeatSessionEnd`/`SeatHelp`) that registered later. Extend the list;
       the capture pipeline itself works (verified 26/26 when it shipped).
+      (Done 2026-10-22: all 11 added with caller-accurate query params —
+      OTP screens carry `flow`/`username`/`destination`, `OutletList`
+      `kind=outlets`, `SeatHelp` a real `outcome` key, `SeatSessionEnd`
+      `reason=expired`; `SeatConfirm`/`SeatSession` capture their designed
+      missing-param states since object fixtures can't round-trip a URL
+      query. Verified end-to-end in this environment: `node
+      scripts/capture-screens.mjs` exported the web build and captured
+      37/37 screens >5KB.)
 - [ ] **Three unreferenced i18n keys**: `common.noLivePositioning`,
       `mall.switchMall` and `rewards.basedOnAppOrders` are exported by
       `en.js` + `ur.js` but referenced nowhere outside `src/i18n/`
