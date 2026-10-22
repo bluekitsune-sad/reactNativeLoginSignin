@@ -465,13 +465,16 @@ Rules for the factory:
       lists the real registered surface — auth + phone-OTP screens, the
       five bottom tabs, and their stack screens — instead of the removed
       food-ordering flow.)
-- [ ] **`RootStackParamList` misses the OTP routes**: the map's own doc
+- [x] **`RootStackParamList` misses the OTP routes**: the map's own doc
       comment says it mirrors `src/navigators/index.js`, yet
       `RegisterPhone`, `CountryPicker` and `Verification` (registered with
       the phone-OTP flow) are absent — converting those screens to `.tsx`
       would not type. Add them with the params callers actually pass
       (`flow: "register" | "login"`, `username`, `destination`, merged
-      `country` as `unknown`).
+      `country` as `unknown`). (Done 2026-10-22: the three routes added
+      under Auth with every field optional — matching how each screen
+      defaults missing params; `country` typed `unknown` for the
+      CountryPicker merge, `flow` narrowed to `"register" | "login"`.)
 - [ ] **Screenshot script misses 11 registered routes**:
       `scripts/capture-screens.mjs` SCREENS still lists the 26 paths from
       2026-10-19 — no `Signup`, `ForgotPassword`, `RegisterPhone`,

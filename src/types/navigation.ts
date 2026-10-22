@@ -15,6 +15,11 @@ export type RootStackParamList = {
   Signin: undefined;
   Signup: undefined;
   ForgotPassword: undefined;
+  // Phone-OTP flow (all fields optional — screens default every one)
+  RegisterPhone: { flow?: "register" | "login"; username?: string; country?: unknown } | undefined;
+  CountryPicker: undefined;
+  Verification:
+    { flow?: "register" | "login"; destination?: string; username?: string } | undefined;
   // Shell
   Main: undefined;
   MallSelector: undefined;
