@@ -450,6 +450,37 @@ Rules for the factory:
       consumers and was removed, and the parked `FlagItem` was restyled onto
       `MallMateTheme` fonts so nothing references Poppins anymore.)
 
+### Quality debt (found in the 2026-10-22 analysis pass)
+
+- [ ] **README intro still describes the removed food-ordering scaffold**:
+      the opening paragraph (lines 3–10) calls this "A food-ordering style
+      mobile app" whose "shipped flow today is a Sign In screen … for the rest
+      of the food-ordering experience (restaurants, food, cart, bookmarks)",
+      plus a three-screens status note — but that scaffold was deleted on
+      2026-10-21 and the Features section right below says those
+      services/components were removed. Rewrite the intro/status around
+      MallMate and the current screen set.
+- [ ] **`RootStackParamList` misses the OTP routes**: the map's own doc
+      comment says it mirrors `src/navigators/index.js`, yet
+      `RegisterPhone`, `CountryPicker` and `Verification` (registered with
+      the phone-OTP flow) are absent — converting those screens to `.tsx`
+      would not type. Add them with the params callers actually pass
+      (`flow: "register" | "login"`, `username`, `destination`, merged
+      `country` as `unknown`).
+- [ ] **Screenshot script misses 11 registered routes**:
+      `scripts/capture-screens.mjs` SCREENS still lists the 26 paths from
+      2026-10-19 — no `Signup`, `ForgotPassword`, `RegisterPhone`,
+      `Verification`, `CountryPicker`, `ProfilePlaceholder`, `OutletList`,
+      or the four seat-session screens (`SeatConfirm`/`SeatSession`/
+      `SeatSessionEnd`/`SeatHelp`) that registered later. Extend the list;
+      the capture pipeline itself works (verified 26/26 when it shipped).
+- [ ] **Three unreferenced i18n keys**: `common.noLivePositioning`,
+      `mall.switchMall` and `rewards.basedOnAppOrders` are exported by
+      `en.js` + `ur.js` but referenced nowhere outside `src/i18n/`
+      (grep-verified across js/ts/tsx/mjs). Wire them where the copy
+      matches or drop them from both catalogs (the parity test follows
+      `en`).
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
