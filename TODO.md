@@ -529,6 +529,14 @@ Rules for the factory:
       en+ur mirrored (parity tests pass), 0 unreferenced keys of 293,
       offer-detail/favorites captures byte-identical to before (values
       unchanged — zero visual regression).)
+- [ ] **README "Backend configuration" section is duplicated**: the same
+      content is stated twice back-to-back (lines ~111–128 vs ~129–155)
+      — precedence list (env var → app.json → localhost fallback),
+      app.json snippet and the "All endpoints … derived from this base
+      URL" sentence all appear twice, and the first JSON snippet is a
+      bare `"extra": {…}` fragment while the second is the full
+      `{"expo": {…}}` object. Keep one merged version (the fuller one,
+      minus the redundant sentences).
 
 ### Blocked — do NOT implement until the owner decides
 
