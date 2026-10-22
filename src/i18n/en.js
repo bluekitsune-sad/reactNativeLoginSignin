@@ -77,6 +77,33 @@ export const en = {
     loadFailedTitle: "Couldn't load {list}",
     loadFailedMessage: "Something went wrong while loading this list.",
   },
+  offer: {
+    headerTitle: "Offer details",
+    unavailableTitle: "Offer no longer available",
+    unavailableMessage:
+      "This offer has expired or doesn't exist. Browse active offers on the home screen.",
+    openMerchantA11y: "Open {merchant}",
+    activeChip: "Active offer",
+    eligibility: "Eligibility",
+    termsSection: "Terms",
+    viewTerms: "View full terms",
+    termsCountOne: "{count} term",
+    termsCountMany: "{count} terms",
+    checkoutNote:
+      "Offers are validated at checkout when ordering is enabled — this screen is display-only.",
+    sheetTitle: "Offer terms",
+    closeTermsA11y: "Close terms",
+    noExtraTerms: "No extra terms for this offer.",
+    validityLabel: "Validity: {validity}",
+  },
+  favorites: {
+    emptyTitle: "No favorites yet",
+    emptyMessage:
+      "Tap the heart on a merchant page to save it here. Favorites at {mall} will appear in this list.",
+    savedOne: "Saved on this device · {count} merchant",
+    savedMany: "Saved on this device · {count} merchants",
+    removeA11y: "Remove {merchant} from favorites",
+  },
   maps: {
     title: "Map",
     unavailableMessage: "Indoor maps aren't offered at {mall} yet.",

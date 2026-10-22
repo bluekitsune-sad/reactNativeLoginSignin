@@ -76,6 +76,32 @@ export const ur = {
     loadFailedTitle: "{list} لوڈ نہیں ہو سکے",
     loadFailedMessage: "اس فہرست کو لوڈ کرتے وقت کچھ غلط ہو گیا۔",
   },
+  offer: {
+    headerTitle: "آفر کی تفصیلات",
+    unavailableTitle: "آفر دستیاب نہیں",
+    unavailableMessage: "یہ آفر ختم ہو چکا ہے یا موجود نہیں۔ ہوم اسکرین پر فعال آفرز دیکھیں۔",
+    openMerchantA11y: "{merchant} کھولیں",
+    activeChip: "فعال آفر",
+    eligibility: "اہلیت",
+    termsSection: "شرائط",
+    viewTerms: "مکمل شرائط دیکھیں",
+    termsCountOne: "{count} شرط",
+    termsCountMany: "{count} شرائط",
+    checkoutNote:
+      "آرڈر فعال ہونے پر آفرز چیک آؤٹ پر تصدیق کیے جاتے ہیں — یہ اسکرین صرف دیکھنے کے لیے ہے۔",
+    sheetTitle: "آفر کی شرائط",
+    closeTermsA11y: "شرائط بند کریں",
+    noExtraTerms: "اس آفر کے لیے کوئی اضافی شرائط نہیں۔",
+    validityLabel: "میعاد: {validity}",
+  },
+  favorites: {
+    emptyTitle: "ابھی کوئی پسندیدہ نہیں",
+    emptyMessage:
+      "یہاں محفوظ کرنے کے لیے مرچنٹ کے صفحے پر دل پر ٹیپ کریں۔ {mall} کے پسندیدہ اس فہرست میں نظر آئیں گے۔",
+    savedOne: "اس ڈیوائس پر محفوظ · {count} مرچنٹ",
+    savedMany: "اس ڈیوائس پر محفوظ · {count} مرچنٹس",
+    removeA11y: "{merchant} کو پسندیدہ سے ہٹائیں",
+  },
   maps: {
     title: "نقشہ",
     unavailableMessage: "{mall} میں فی الحال اندرونی نقشے دستیاب نہیں۔",

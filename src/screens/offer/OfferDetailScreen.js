@@ -26,14 +26,14 @@ const OfferDetailScreen = ({ navigation, route }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
         <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
       </Pressable>
       <Text style={styles.headerMeta} numberOfLines={1}>
-        Offer details
+        {t("offer.headerTitle")}
       </Text>
     </View>
   );
@@ -46,8 +46,8 @@ const OfferDetailScreen = ({ navigation, route }) => {
           icon={
             <Ionicons name="pricetag-outline" size={48} color={MallMateTheme.color.textMuted} />
           }
-          title="Offer no longer available"
-          message="This offer has expired or doesn't exist. Browse active offers on the home screen."
+          title={t("offer.unavailableTitle")}
+          message={t("offer.unavailableMessage")}
         />
       </SafeAreaView>
     );
@@ -69,7 +69,7 @@ const OfferDetailScreen = ({ navigation, route }) => {
           <Pressable
             onPress={() => navigation.navigate("MerchantDetail", { merchantId: offer.merchantId })}
             accessibilityRole="button"
-            accessibilityLabel={`Open ${offer.merchantName}`}
+            accessibilityLabel={t("offer.openMerchantA11y", { merchant: offer.merchantName })}
             style={({ pressed }) => [styles.merchantRow, pressed && styles.merchantRowPressed]}
           >
             <Ionicons
@@ -83,14 +83,14 @@ const OfferDetailScreen = ({ navigation, route }) => {
           </Pressable>
           {offer.description ? <Text style={styles.description}>{offer.description}</Text> : null}
           <View style={styles.statusRow}>
-            <StatusChip label="Active offer" tone="success" />
+            <StatusChip label={t("offer.activeChip")} tone="success" />
             {validity ? <Text style={styles.validity}>{validity}</Text> : null}
           </View>
         </Card>
 
         {eligibility.length ? (
           <>
-            <SectionHeader title="Eligibility" style={styles.section} />
+            <SectionHeader title={t("offer.eligibility")} style={styles.section} />
             <Card>
               {eligibility.map((line) => (
                 <View key={line} style={styles.bulletRow}>
@@ -107,10 +107,14 @@ const OfferDetailScreen = ({ navigation, route }) => {
           </>
         ) : null}
 
-        <SectionHeader title="Terms" style={styles.section} />
+        <SectionHeader title={t("offer.termsSection")} style={styles.section} />
         <ListRow
-          title="View full terms"
-          subtitle={`${terms.length} term${terms.length === 1 ? "" : "s"}`}
+          title={t("offer.viewTerms")}
+          subtitle={
+            terms.length === 1
+              ? t("offer.termsCountOne", { count: terms.length })
+              : t("offer.termsCountMany", { count: terms.length })
+          }
           leading={
             <Ionicons name="document-text-outline" size={20} color={MallMateTheme.color.primary} />
           }
@@ -118,9 +122,7 @@ const OfferDetailScreen = ({ navigation, route }) => {
           style={styles.row}
         />
 
-        <Text style={styles.note}>
-          Offers are validated at checkout when ordering is enabled — this screen is display-only.
-        </Text>
+        <Text style={styles.note}>{t("offer.checkoutNote")}</Text>
       </ScrollView>
 
       <Modal
@@ -133,16 +135,16 @@ const OfferDetailScreen = ({ navigation, route }) => {
           style={styles.backdrop}
           onPress={() => setTermsVisible(false)}
           accessibilityRole="button"
-          accessibilityLabel="Close terms"
+          accessibilityLabel={t("offer.closeTermsA11y")}
         />
         <View style={styles.sheet} accessibilityViewIsModal>
           <View style={styles.sheetHandle} />
           <View style={styles.sheetHeader}>
-            <Text style={styles.sheetTitle}>Offer terms</Text>
+            <Text style={styles.sheetTitle}>{t("offer.sheetTitle")}</Text>
             <Pressable
               onPress={() => setTermsVisible(false)}
               accessibilityRole="button"
-              accessibilityLabel="Close terms"
+              accessibilityLabel={t("offer.closeTermsA11y")}
               hitSlop={MallMateTheme.spacing.sm}
               style={styles.sheetClose}
             >
@@ -163,9 +165,11 @@ const OfferDetailScreen = ({ navigation, route }) => {
                 </View>
               ))
             ) : (
-              <Text style={styles.bulletText}>No extra terms for this offer.</Text>
+              <Text style={styles.bulletText}>{t("offer.noExtraTerms")}</Text>
             )}
-            {validity ? <Text style={styles.sheetValidity}>Validity: {validity}</Text> : null}
+            {validity ? (
+              <Text style={styles.sheetValidity}>{t("offer.validityLabel", { validity })}</Text>
+            ) : null}
           </ScrollView>
           <Button
             label={t("common.close")}

@@ -501,22 +501,34 @@ Rules for the factory:
       per-mall mock copy in `homeContent.js` and every map surface ships
       its own tailored disclaimer (`maps.tabNote`/`floorDisclaimer`/
       `searchDisclaimer`/`detailDisclaimer`/`staticPreviewDisclaimer`/
-      `routeNote`). A full unused-key audit of all 278 keys found four
-      more of the same class, also fixed: `rewards.emptyLedger` wired as
+      `routeNote`). A full unused-key audit of all 278 keys plus a
+      key-by-key grep found five more of the same class, also fixed:
+      `rewards.emptyLedger` wired as
       the kit `EmptyState` title on the empty ledger (matches the
       OrderHistory title+message pattern), `common.close` wired to the
       hardcoded `label="Close"` in the offer terms sheet,
       `common.cancel`/`common.save`/`mall.selectedMall` dropped (no
       consumers; selection already shown by checkmark + a11yState).
       Re-audit: 0 unreferenced keys of 276. New debt from this audit
-      queued below.)
-- [ ] **Hardcoded English strings in two un-translated screens**: the
+      queued below. (Count note: the pass handled 8 dead keys total —
+      3 wired, 5 dropped.)
+- [x] **Hardcoded English strings in two un-translated screens**: the
       Offer detail terms sheet still renders "No extra terms for this
       offer.", "Validity: …" and two `accessibilityLabel="Close terms"`
       strings, and Favorites shows "Saved on this device · …" — none go
       through `t()`. (Found while auditing unreferenced i18n keys; the
       sheet's Close button was fixed in that pass — the rest wants a
-      small offer/favorites t() migration with en+ur keys.)
+      small offer/favorites t() migration with en+ur keys.) (Done
+      2026-10-22: full t() migration of both screens — new `offer.*`
+      group (header, unavailable state, merchant a11y, Active chip,
+      Eligibility/Terms sections, view-terms row + One/Many term count,
+      checkout note, sheet title/close a11y/no-extra-terms/validity
+      label) and `favorites.*` group (empty title/message with {mall},
+      saved One/Many count, remove-from-favorites a11y); header title
+      reuses `profile.favorites`, back buttons reuse `common.goBack`.
+      en+ur mirrored (parity tests pass), 0 unreferenced keys of 293,
+      offer-detail/favorites captures byte-identical to before (values
+      unchanged — zero visual regression).)
 
 ### Blocked — do NOT implement until the owner decides
 
