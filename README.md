@@ -1,13 +1,18 @@
-# React Native Login / Sign In (Expo)
+# MallMate (Expo)
 
-A food‑ordering style mobile app built with **Expo** and **React Navigation**. The
-shipped flow today is a Sign In screen backed by a REST backend, with a full set of
-reusable components, services and constants already in place for the rest of the
-food‑ordering experience (restaurants, food, cart, bookmarks).
+**MallMate** is a multi‑mall smart shopping, navigation, dining and loyalty
+app (pilot: LuckyOne Mall, Karachi), built with **Expo** and **React
+Navigation**. This repository is the mobile client: an auth flow backed by a
+REST backend, plus the MallMate app shell — all MallMate screens currently
+run on preview data from `src/mock/`.
 
-> Status: **work in progress.** The `Signin`, `Signup` and `ForgotPassword`
-> screens are registered in the navigator — see [TODO.md](./TODO.md) for the
-> remaining screens and known gaps.
+> Status: **work in progress.** The app signs you in (`Signin`, `Signup`,
+> `ForgotPassword`, phone‑OTP `RegisterPhone`/`Verification`) and drops you
+> into the MallMate shell: **Home, Explore, Map, Rewards, Profile** tabs with
+> their stack screens — mall selector, search + filters, restaurant/outlet
+> lists, merchant/menu/offer detail, favorites, food court + seat sessions,
+> floor map + destination search/route preview, events, order history,
+> settings. See [TODO.md](./TODO.md) for remaining work and known gaps.
 
 ---
 

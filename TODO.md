@@ -452,14 +452,19 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-22 analysis pass)
 
-- [ ] **README intro still describes the removed food-ordering scaffold**:
+- [x] **README intro still describes the removed food-ordering scaffold**:
       the opening paragraph (lines 3–10) calls this "A food-ordering style
       mobile app" whose "shipped flow today is a Sign In screen … for the rest
       of the food-ordering experience (restaurants, food, cart, bookmarks)",
       plus a three-screens status note — but that scaffold was deleted on
       2026-10-21 and the Features section right below says those
       services/components were removed. Rewrite the intro/status around
-      MallMate and the current screen set.
+      MallMate and the current screen set. (Done 2026-10-22: title is now
+      "MallMate (Expo)", the intro describes the multi-mall client with
+      MallMate screens on `src/mock/` preview data, and the status note
+      lists the real registered surface — auth + phone-OTP screens, the
+      five bottom tabs, and their stack screens — instead of the removed
+      food-ordering flow.)
 - [ ] **`RootStackParamList` misses the OTP routes**: the map's own doc
       comment says it mirrors `src/navigators/index.js`, yet
       `RegisterPhone`, `CountryPicker` and `Verification` (registered with
