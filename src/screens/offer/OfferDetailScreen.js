@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Button, Card, EmptyState, ListRow, SectionHeader, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getOfferById, getOfferHeadline, getOfferValidity } from "../../mock";
 
 /**
@@ -167,7 +168,7 @@ const OfferDetailScreen = ({ navigation, route }) => {
             {validity ? <Text style={styles.sheetValidity}>Validity: {validity}</Text> : null}
           </ScrollView>
           <Button
-            label="Close"
+            label={t("common.close")}
             variant="secondary"
             onPress={() => setTermsVisible(false)}
             style={styles.sheetButton}

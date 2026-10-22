@@ -229,6 +229,7 @@ const HomeScreen = ({ navigation }) => {
             {selectedMall.address} · {hoursSummary(selectedMall)}
           </Text>
         </View>
+        <Text style={styles.mallBarAction}>{t("mall.switchMall")}</Text>
         <Ionicons name="chevron-down" size={20} color={MallMateTheme.color.textMuted} />
       </Pressable>
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
@@ -309,6 +310,12 @@ const styles = StyleSheet.create({
     fontSize: MallMateTheme.typography.caption.fontSize,
     fontFamily: MallMateTheme.fontFamily.regular,
     marginTop: 2,
+  },
+  mallBarAction: {
+    color: MallMateTheme.color.textSecondary,
+    fontSize: MallMateTheme.typography.caption.fontSize,
+    fontFamily: MallMateTheme.fontFamily.medium,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   content: {
     padding: MallMateTheme.spacing.lg,

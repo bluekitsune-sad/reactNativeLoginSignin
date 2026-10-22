@@ -490,12 +490,33 @@ Rules for the factory:
       query. Verified end-to-end in this environment: `node
       scripts/capture-screens.mjs` exported the web build and captured
       37/37 screens >5KB.)
-- [ ] **Three unreferenced i18n keys**: `common.noLivePositioning`,
+- [x] **Three unreferenced i18n keys**: `common.noLivePositioning`,
       `mall.switchMall` and `rewards.basedOnAppOrders` are exported by
       `en.js` + `ur.js` but referenced nowhere outside `src/i18n/`
       (grep-verified across js/ts/tsx/mjs). Wire them where the copy
       matches or drop them from both catalogs (the parity test follows
-      `en`).
+      `en`). (Done 2026-10-22: `mall.switchMall` wired as the visible
+      label on Home's switch-mall bar; `rewards.basedOnAppOrders` and
+      `common.noLivePositioning` dropped — the top-selling disclosure is
+      per-mall mock copy in `homeContent.js` and every map surface ships
+      its own tailored disclaimer (`maps.tabNote`/`floorDisclaimer`/
+      `searchDisclaimer`/`detailDisclaimer`/`staticPreviewDisclaimer`/
+      `routeNote`). A full unused-key audit of all 278 keys found four
+      more of the same class, also fixed: `rewards.emptyLedger` wired as
+      the kit `EmptyState` title on the empty ledger (matches the
+      OrderHistory title+message pattern), `common.close` wired to the
+      hardcoded `label="Close"` in the offer terms sheet,
+      `common.cancel`/`common.save`/`mall.selectedMall` dropped (no
+      consumers; selection already shown by checkmark + a11yState).
+      Re-audit: 0 unreferenced keys of 276. New debt from this audit
+      queued below.)
+- [ ] **Hardcoded English strings in two un-translated screens**: the
+      Offer detail terms sheet still renders "No extra terms for this
+      offer.", "Validity: …" and two `accessibilityLabel="Close terms"`
+      strings, and Favorites shows "Saved on this device · …" — none go
+      through `t()`. (Found while auditing unreferenced i18n keys; the
+      sheet's Close button was fixed in that pass — the rest wants a
+      small offer/favorites t() migration with en+ur keys.)
 
 ### Blocked — do NOT implement until the owner decides
 

@@ -124,9 +124,7 @@ const RewardsScreen = () => {
             })}
           </View>
         ) : (
-          <Card>
-            <Text style={styles.emptyLedger}>{t("rewards.emptyLedgerMessage")}</Text>
-          </Card>
+          <EmptyState title={t("rewards.emptyLedger")} message={t("rewards.emptyLedgerMessage")} />
         )}
       </ScrollView>
     </SafeAreaView>
@@ -242,11 +240,6 @@ const styles = StyleSheet.create({
   },
   ledgerPointsNegative: {
     color: MallMateTheme.color.textSecondary,
-  },
-  emptyLedger: {
-    color: MallMateTheme.color.textSecondary,
-    fontSize: MallMateTheme.typography.body.fontSize,
-    fontFamily: MallMateTheme.fontFamily.regular,
   },
 });
 

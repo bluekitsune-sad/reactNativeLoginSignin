@@ -8,12 +8,9 @@ export const en = {
   common: {
     goBack: "Go back",
     retry: "Retry",
-    cancel: "Cancel",
-    save: "Save",
     close: "Close",
     loading: "Loading…",
     mockDataNote: "Preview build — mock data. Not connected to live services yet.",
-    noLivePositioning: "No live positioning or turn-by-turn navigation.",
     somethingWentWrong: "Something went wrong",
     limited: "Limited",
     filters: "Filters",
@@ -32,7 +29,6 @@ export const en = {
   },
   mall: {
     switchMall: "Switch mall",
-    selectedMall: "Selected mall",
     mapsUnavailable: "Maps unavailable",
     chooseMall: "Choose a mall",
     hoursUnavailable: "Hours unavailable",
@@ -221,7 +217,6 @@ export const en = {
   rewards: {
     title: "Rewards",
     emptyLedger: "No activity yet",
-    basedOnAppOrders: "Based on completed app orders only. Not total mall sales.",
     unavailableTitle: "Rewards unavailable",
     unavailableMessage: "Loyalty rewards aren't offered at {mall} yet.",
     balanceLabel: "Points balance",

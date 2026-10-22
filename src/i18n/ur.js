@@ -7,12 +7,9 @@ export const ur = {
   common: {
     goBack: "واپس جائیں",
     retry: "دوبارہ کوشش کریں",
-    cancel: "منسوخ کریں",
-    save: "محفوظ کریں",
     close: "بند کریں",
     loading: "لوڈ ہو رہا ہے…",
     mockDataNote: "پیشگی ورژن — ڈیٹا نمونوی (mock) ہے۔ ابھی لائیو سروسز سے منسلک نہیں۔",
-    noLivePositioning: "کوئی لائیو مقام کی نشاندہی یا قدم‌بہ‌قدم رہنمائی نہیں۔",
     somethingWentWrong: "کچھ غلط ہو گیا",
     limited: "محدود",
     filters: "فلٹرز",
@@ -31,7 +28,6 @@ export const ur = {
   },
   mall: {
     switchMall: "مال تبدیل کریں",
-    selectedMall: "منتخب مال",
     mapsUnavailable: "نقشے دستیاب نہیں",
     chooseMall: "مال منتخب کریں",
     hoursUnavailable: "اوقات دستیاب نہیں",
@@ -220,7 +216,6 @@ export const ur = {
   rewards: {
     title: "انعامات",
     emptyLedger: "ابھی کوئی سرگرمی نہیں",
-    basedOnAppOrders: "صرف مکمل شدہ ایپ آرڈرز پر مبنی۔ کل مال کی فروخت نہیں۔",
     unavailableTitle: "انعامات دستیاب نہیں",
     unavailableMessage: "{mall} میں فی الحال لائلٹی انعامات دستیاب نہیں ہیں۔",
     balanceLabel: "پوائنٹس بیلنس",
