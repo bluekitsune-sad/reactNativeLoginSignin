@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState, ListRow, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { ORDER_STATE_META, formatOrderDateTime, getOrderList } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -25,7 +26,7 @@ const OrderHistoryScreen = ({ navigation }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
@@ -43,7 +44,7 @@ const OrderHistoryScreen = ({ navigation }) => {
       {header}
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <Text style={styles.title} accessibilityRole="header">
-          Your orders
+          {t("orders.title")}
         </Text>
 
         {!response.status ? (
@@ -51,7 +52,7 @@ const OrderHistoryScreen = ({ navigation }) => {
             icon={
               <Ionicons name="receipt-outline" size={48} color={MallMateTheme.color.textMuted} />
             }
-            title="Orders unavailable"
+            title={t("orders.unavailableTitle")}
             message={response.message}
           />
         ) : null}
@@ -59,8 +60,8 @@ const OrderHistoryScreen = ({ navigation }) => {
         {response.status && orders.length === 0 ? (
           <EmptyState
             icon={<Ionicons name="receipt-outline" size={48} color={MallMateTheme.color.primary} />}
-            title="No orders yet"
-            message={`Orders from ${selectedMall.name} will appear here after you place one.`}
+            title={t("orders.empty")}
+            message={t("orders.emptyMessage", { mall: selectedMall.name })}
           />
         ) : null}
 
@@ -93,10 +94,7 @@ const OrderHistoryScreen = ({ navigation }) => {
 
         {response.status && orders.length > 0 ? (
           <Card style={styles.noteCard}>
-            <Text style={styles.note}>
-              Preview build — these are mock orders on mock data. Checkout, payments and live status
-              updates aren't enabled yet.
-            </Text>
+            <Text style={styles.note}>{t("orders.mockDisclosure")}</Text>
           </Card>
         ) : null}
       </ScrollView>

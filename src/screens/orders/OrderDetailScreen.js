@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { formatOrderDateTime, getOrderById } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -26,14 +27,14 @@ const OrderDetailScreen = ({ navigation, route }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
         <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
       </Pressable>
       <Text style={styles.headerMeta} numberOfLines={1} accessibilityRole="header">
-        Order {order?.code || ""}
+        {t("orders.orderHeader", { code: order?.code || "" })}
       </Text>
       <View style={styles.headerSpacer} />
     </View>
@@ -45,8 +46,8 @@ const OrderDetailScreen = ({ navigation, route }) => {
         {header}
         <EmptyState
           icon={<Ionicons name="receipt-outline" size={48} color={MallMateTheme.color.textMuted} />}
-          title="Order unavailable"
-          message={response.message || "We couldn't load that order."}
+          title={t("orders.detailUnavailableTitle")}
+          message={response.message || t("orders.detailUnavailableMessage")}
         />
       </SafeAreaView>
     );
@@ -70,7 +71,7 @@ const OrderDetailScreen = ({ navigation, route }) => {
         </View>
         <Text style={styles.statusDescription}>{order.currentMeta.description}</Text>
 
-        <Text style={styles.sectionTitle}>Status timeline</Text>
+        <Text style={styles.sectionTitle}>{t("orders.timeline")}</Text>
         <Card style={styles.timelineCard}>
           {order.history.map((entry, index) => {
             const isCurrent = index === order.history.length - 1;
@@ -89,7 +90,7 @@ const OrderDetailScreen = ({ navigation, route }) => {
                 </View>
                 {isCurrent ? (
                   <StatusChip
-                    label="Current"
+                    label={t("orders.current")}
                     tone={order.currentMeta.tone}
                     style={styles.currentChip}
                   />
@@ -106,33 +107,30 @@ const OrderDetailScreen = ({ navigation, route }) => {
                 <Text style={styles.timelineStatePending}>
                   {order.nextState.split("_").join(" ")}
                 </Text>
-                <Text style={styles.timelineTime}>Expected next step (preview only)</Text>
+                <Text style={styles.timelineTime}>{t("orders.expectedNextStep")}</Text>
               </View>
             </View>
           ) : null}
         </Card>
 
-        <Text style={styles.sectionTitle}>Items</Text>
+        <Text style={styles.sectionTitle}>{t("orders.items")}</Text>
         <Card style={styles.itemsCard}>
           {order.itemLines.map((item) => (
             <View key={item.name} style={styles.itemRow}>
               <Text style={styles.itemName}>
-                {item.name} × {item.qty}
+                {t("orders.itemLine", { name: item.name, qty: item.qty })}
               </Text>
               <Text style={styles.itemPrice}>{item.lineLabel}</Text>
             </View>
           ))}
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Total</Text>
+            <Text style={styles.totalLabel}>{t("orders.total")}</Text>
             <Text style={styles.totalValue}>{order.totalLabel}</Text>
           </View>
         </Card>
 
         <Card style={styles.noteCard}>
-          <Text style={styles.note}>
-            Preview build — mock order on mock data. Payment proof, cancellations, refunds and live
-            tracking aren't enabled yet.
-          </Text>
+          <Text style={styles.note}>{t("orders.detailNote")}</Text>
         </Card>
       </ScrollView>
     </SafeAreaView>

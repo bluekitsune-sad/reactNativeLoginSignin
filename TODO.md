@@ -366,10 +366,15 @@ Rules for the factory:
       counts, pending/expiring chips with interpolated counts and date,
       mock disclosure, Activity header and empty-ledger message; reused
       `maps.limited` for the degraded chip; mock ledger titles/contexts
-      stay in the mock).
+      stay in the mock), then the Orders area (OrderHistoryScreen +
+      OrderDetailScreen) on the `orders.*` keys (list title/empty with
+      mall interpolation, mock disclosure, order-code header,
+      unavailable states, timeline/items section titles, Current and
+      expected-next-step copy, interpolated item lines and Total label;
+      mock ORDER_STATE_META labels/descriptions, state codes, fulfilment
+      and service messages stay in the mock).
       Remaining areas:
-      Orders, and the
-      mallmate kit defaults.)
+      the mallmate kit defaults.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
       "MallMate", `slug` → "mallmate", `userInterfaceStyle` → dark;

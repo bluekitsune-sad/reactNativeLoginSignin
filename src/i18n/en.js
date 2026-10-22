@@ -188,6 +188,20 @@ export const en = {
     title: "Your orders",
     empty: "No orders yet",
     timeline: "Status timeline",
+    emptyMessage: "Orders from {mall} will appear here after you place one.",
+    unavailableTitle: "Orders unavailable",
+    mockDisclosure:
+      "Preview build — these are mock orders on mock data. Checkout, payments and live status updates aren't enabled yet.",
+    orderHeader: "Order {code}",
+    detailUnavailableTitle: "Order unavailable",
+    detailUnavailableMessage: "We couldn't load that order.",
+    current: "Current",
+    expectedNextStep: "Expected next step (preview only)",
+    items: "Items",
+    itemLine: "{name} × {qty}",
+    total: "Total",
+    detailNote:
+      "Preview build — mock order on mock data. Payment proof, cancellations, refunds and live tracking aren't enabled yet.",
   },
   rewards: {
     title: "Rewards",

@@ -187,6 +187,20 @@ export const ur = {
     title: "آپ کے آرڈرز",
     empty: "ابھی کوئی آرڈر نہیں",
     timeline: "صورتحال کی سلسلہ‌وار",
+    emptyMessage: "{mall} کے آرڈرز آپ کے پہلے آرڈر کے بعد یہاں نظر آئیں گے۔",
+    unavailableTitle: "آرڈرز دستیاب نہیں",
+    mockDisclosure:
+      "پیشگی ورژن — یہ نمونہ آرڈرز ہیں، ان کا ڈیٹا نمونوی (mock) ہے۔ چیک آؤٹ، ادائیگیاں اور لائیو صورتحال کی اپ ڈیٹس فی الحال فعال نہیں ہیں۔",
+    orderHeader: "آرڈر {code}",
+    detailUnavailableTitle: "آرڈر دستیاب نہیں",
+    detailUnavailableMessage: "یہ آرڈر لوڈ نہیں ہو سکا۔",
+    current: "موجودہ",
+    expectedNextStep: "توقع کردہ اگلا قدم (صرف پیشگی منظر)",
+    items: "اشیاء",
+    itemLine: "{name} کی {qty} عدد",
+    total: "کل",
+    detailNote:
+      "پیشگی ورژن — یہ نمونہ آرڈر ہے، اس کا ڈیٹا نمونوی (mock) ہے۔ ادائیگی کا ثبوت، منسوخی، واپسی اور لائیو پیروی فی الحال فعال نہیں ہے۔",
   },
   rewards: {
     title: "انعامات",
