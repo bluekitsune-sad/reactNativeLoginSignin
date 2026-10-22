@@ -2,8 +2,9 @@ import React from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 
-const LoadingState = ({ message = "Loading…", style }) => (
+const LoadingState = ({ message = t("common.loading"), style }) => (
   <View style={[styles.wrapper, style]}>
     <ActivityIndicator
       size="large"

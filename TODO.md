@@ -318,7 +318,7 @@ Rules for the factory:
       (data positions). `t()` covered by unit tests. Screens still render
       English literals directly — adopting `t()` screen-by-screen is
       follow-up work when translations land.)
-- [ ] **Adopt `t()` across MallMate screens**: the i18n groundwork ships
+- [x] **Adopt `t()` across MallMate screens**: the i18n groundwork ships
       the catalog + helper but screens still render English literals;
       migrate them to `t()` keys (one area per task). (Decision made:
       owner answered "sure add language translations" on issue #9, so
@@ -372,9 +372,16 @@ Rules for the factory:
       unavailable states, timeline/items section titles, Current and
       expected-next-step copy, interpolated item lines and Total label;
       mock ORDER_STATE_META labels/descriptions, state codes, fulfilment
-      and service messages stay in the mock).
-      Remaining areas:
-      the mallmate kit defaults.)
+      and service messages stay in the mock), then the mallmate kit
+      defaults (ErrorState default title/retry, LoadingState default
+      message, Button loading a11y, CapabilityCard degraded chip, and
+      the FilterSheet that earlier passes deferred — sheet title, close
+      a11y on backdrop + button, Category/Cuisine/Open now/Floor/Price
+      group titles, open-now pills, Any option, Clear all / Show N /
+      Apply footer) on new generic `common.*` keys. Done: every MallMate
+      screen and kit default renders via `t()`; new strings added later
+      go straight into `en.js` + `ur.js` (parity enforced by tests).
+      Mock-catalogue strings stay untranslated by design.)
 - [x] **App identity**: rename app (app.json) to MallMate, placeholder
       icon/splash, remove `user_logsignin`. (Done: app.json `name` →
       "MallMate", `slug` → "mallmate", `userInterfaceStyle` → dark;

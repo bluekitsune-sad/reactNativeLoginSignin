@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import Card from "./Card";
 import StatusChip from "./StatusChip";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 
 const CapabilityCard = ({ title, description, icon, degraded = false }) => (
   <Card style={styles.card}>
@@ -16,7 +17,9 @@ const CapabilityCard = ({ title, description, icon, degraded = false }) => (
         accessibilityElementsHidden
         importantForAccessibility="no"
       />
-      {degraded ? <StatusChip label="Limited" tone="warning" style={styles.chip} /> : null}
+      {degraded ? (
+        <StatusChip label={t("common.limited")} tone="warning" style={styles.chip} />
+      ) : null}
     </View>
     <Text style={styles.title}>{title}</Text>
     {description ? <Text style={styles.description}>{description}</Text> : null}

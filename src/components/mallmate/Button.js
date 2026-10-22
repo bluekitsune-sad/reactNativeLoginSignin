@@ -2,6 +2,7 @@ import React from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
 
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 
 const variants = {
   primary: {
@@ -59,7 +60,7 @@ const Button = ({
           color={
             variant === "primary" ? MallMateTheme.color.background : MallMateTheme.color.primary
           }
-          accessibilityLabel="Loading"
+          accessibilityLabel={t("common.loading")}
         />
       ) : (
         <Text style={[styles.label, (variants[variant] || variants.primary).label]}>{label}</Text>

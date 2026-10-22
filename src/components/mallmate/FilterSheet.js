@@ -4,6 +4,7 @@ import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-nati
 
 import Button from "./Button";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 
 const OptionPill = ({ label, selected, onPress }) => (
   <Pressable
@@ -19,7 +20,7 @@ const OptionPill = ({ label, selected, onPress }) => (
   </Pressable>
 );
 
-const OptionGroup = ({ title, options, selected, onSelect, anyLabel = "Any" }) => {
+const OptionGroup = ({ title, options, selected, onSelect, anyLabel = t("common.filterAny") }) => {
   if (!options.length) {
     return null;
   }
@@ -63,16 +64,16 @@ const FilterSheet = ({
         style={styles.backdrop}
         onPress={onClose}
         accessibilityRole="button"
-        accessibilityLabel="Close filters"
+        accessibilityLabel={t("common.closeFilters")}
       />
       <View style={styles.sheet} accessibilityViewIsModal>
         <View style={styles.handle} />
         <View style={styles.header}>
-          <Text style={styles.title}>Filters</Text>
+          <Text style={styles.title}>{t("common.filters")}</Text>
           <Pressable
             onPress={onClose}
             accessibilityRole="button"
-            accessibilityLabel="Close filters"
+            accessibilityLabel={t("common.closeFilters")}
             hitSlop={MallMateTheme.spacing.sm}
             style={styles.closeButton}
           >
@@ -81,33 +82,33 @@ const FilterSheet = ({
         </View>
         <ScrollView contentContainerStyle={styles.body}>
           <OptionGroup
-            title="Category"
+            title={t("common.filterCategory")}
             options={options.categories}
             selected={filters.category}
             onSelect={(value) => onChange({ ...filters, category: value })}
           />
           <OptionGroup
-            title="Cuisine"
+            title={t("common.filterCuisine")}
             options={options.cuisines}
             selected={filters.cuisine}
             onSelect={(value) => onChange({ ...filters, cuisine: value })}
           />
           <View style={styles.group}>
-            <Text style={styles.groupTitle}>Open now</Text>
+            <Text style={styles.groupTitle}>{t("common.filterOpenNow")}</Text>
             <OptionPill
-              label={filters.openNow ? "Open now only" : "Show all"}
+              label={filters.openNow ? t("common.filterOpenNowOnly") : t("common.filterShowAll")}
               selected={filters.openNow}
               onPress={toggleOpenNow}
             />
           </View>
           <OptionGroup
-            title="Floor"
+            title={t("common.filterFloor")}
             options={options.floors}
             selected={filters.floor}
             onSelect={(value) => onChange({ ...filters, floor: value })}
           />
           <OptionGroup
-            title="Price"
+            title={t("common.filterPrice")}
             options={options.priceBands}
             selected={filters.priceBand}
             onSelect={(value) => onChange({ ...filters, priceBand: value })}
@@ -115,13 +116,17 @@ const FilterSheet = ({
         </ScrollView>
         <View style={styles.footer}>
           <Button
-            label="Clear all"
+            label={t("common.clearAll")}
             onPress={onClear}
             variant="secondary"
             style={styles.footerBtn}
           />
           <Button
-            label={resultCount != null ? `Show ${resultCount}` : "Apply"}
+            label={
+              resultCount != null
+                ? t("common.showCount", { count: resultCount })
+                : t("common.apply")
+            }
             onPress={onApply}
             style={styles.footerBtn}
           />
