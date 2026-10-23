@@ -529,14 +529,22 @@ Rules for the factory:
       en+ur mirrored (parity tests pass), 0 unreferenced keys of 293,
       offer-detail/favorites captures byte-identical to before (values
       unchanged — zero visual regression).)
-- [ ] **README "Backend configuration" section is duplicated**: the same
+- [x] **README "Backend configuration" section is duplicated**: the same
       content is stated twice back-to-back (lines ~111–128 vs ~129–155)
       — precedence list (env var → app.json → localhost fallback),
       app.json snippet and the "All endpoints … derived from this base
       URL" sentence all appear twice, and the first JSON snippet is a
       bare `"extra": {…}` fragment while the second is the full
       `{"expo": {…}}` object. Keep one merged version (the fuller one,
-      minus the redundant sentences).
+      minus the redundant sentences). (Done 2026-10-23: kept the fuller
+      version — full `{"expo": {…}}` snippet, env-var launch example,
+      `expo-constants` precedence wording — dropped the duplicate
+      fragment/precedence list; the endpoints sentence now lists only
+      the auth paths still wired in `ApiContants`/`AuthenticationService`
+      (`/api/register`, `/api/getUser/`, `/api/user-exist`,
+      `/api/refresh-token`) since the cart/food/bookmark services were
+      deleted in the legacy removal. Markdown-only change — verified by
+      re-read; lint/typecheck don't cover `.md`.)
 
 ### Blocked — do NOT implement until the owner decides
 
