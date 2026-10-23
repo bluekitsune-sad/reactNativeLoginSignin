@@ -567,14 +567,21 @@ Rules for the factory:
       `npm run typecheck`, `npm test` — 49/49 incl. a new ProfileScreen
       test asserting `removeUser` runs and navigation resets to
       Signin.)
-- [ ] **Dead `ApiContants` keys left over from the legacy removal**:
+- [x] **Dead `ApiContants` keys left over from the legacy removal**:
       `STATIC_IMAGE` (whole block), `ALL_RESTAURANTS`, `CART`, `FOOD`,
       `BOOKMARK_LIST`, `USER` and `ADDUSER` have zero consumers
       (grep-verified across `src/`, `scripts/`, `App.js`) since the
       restaurant/food/cart/bookmark/user services were deleted on
       2026-10-21. Remove them, keeping `BASE_API_URL`, `REGISTER`,
       `LOGIN`, `USER_EXIST` and `REFRESH_TOKEN` (used by
-      `AuthenticationService` + `ApiClient`).
+      `AuthenticationService` + `ApiClient`). (Done 2026-10-23: removed
+      the `STATIC_IMAGE` block and the six dead endpoint keys; the
+      default export is now `{ BACKEND_API, BACKEND_BASE_URL }` —
+      `BACKEND_BASE_URL` kept since it builds `BASE_API_URL` and is the
+      documented root-URL escape hatch. AGENTS.md's stale "unique keys"
+      note reworded (it still named the removed keys). Re-grep: zero
+      references outside TODO/README history. Verified: `npm run lint`
+      (0/0), `npm run typecheck`, `npm test` — 49/49.)
 - [ ] **Dead first-time-use helpers in `StorageService`**:
       `setFirstTimeUse`/`getFirstTimeUse` (the `"isFirstTimeUse"` key)
       have zero consumers — leftovers from the removed onboarding

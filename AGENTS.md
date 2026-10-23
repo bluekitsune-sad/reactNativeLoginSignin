@@ -159,7 +159,8 @@ if (res.status) {
 Previously documented and now fixed (do not regress): icons come from
 `@expo/vector-icons`; `SigninScreen` calls `useUserManagement` at the top level
 with `response?.data` and declares it only once; `ApiContants.js` has unique
-keys (`ALL_RESTAURANTS`, `RESTAURANT`, `BOOKMARK`); the backend URL is
+keys (duplicate keys fixed long ago; the dead legacy endpoint keys were
+removed in 2026-10-23 — only the auth paths remain); the backend URL is
 configurable via `EXPO_PUBLIC_BACKEND_URL` / `app.json` `extra.backendUrl`
 (`expo-constants`); `StorageService` serializes with `JSON.stringify`/
 `JSON.parse` on the shared `"user"` key; `useUserManagement` is a React
