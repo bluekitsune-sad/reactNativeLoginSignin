@@ -582,10 +582,14 @@ Rules for the factory:
       note reworded (it still named the removed keys). Re-grep: zero
       references outside TODO/README history. Verified: `npm run lint`
       (0/0), `npm run typecheck`, `npm test` — 49/49.)
-- [ ] **Dead first-time-use helpers in `StorageService`**:
+- [x] **Dead first-time-use helpers in `StorageService`**:
       `setFirstTimeUse`/`getFirstTimeUse` (the `"isFirstTimeUse"` key)
       have zero consumers — leftovers from the removed onboarding
-      scaffold. Remove.
+      scaffold. Remove. (Done 2026-10-23: both helpers removed from
+      `src/services/StorageService.js` after re-grepping `src/`,
+      `scripts/`, `App.js` and config files — zero references outside
+      the service itself. Verified: `npm run lint` (0/0),
+      `npm run typecheck`, `npm test` — 49/49.)
 
 ### Blocked — do NOT implement until the owner decides
 

@@ -4,14 +4,6 @@ const USER_KEY = "user";
 const SELECTED_MALL_KEY = "selectedMallSlug";
 const FAVORITE_IDS_KEY = "favoriteMerchantIds";
 
-const setFirstTimeUse = () => {
-  return AsyncStorage.setItem("isFirstTimeUse", "true");
-};
-
-const getFirstTimeUse = () => {
-  return AsyncStorage.getItem("isFirstTimeUse");
-};
-
 const setUser = (userData) => {
   return AsyncStorage.setItem(USER_KEY, JSON.stringify(userData ?? null));
 };
@@ -55,8 +47,6 @@ const setFavoriteIds = (ids) => {
 };
 
 export default {
-  setFirstTimeUse,
-  getFirstTimeUse,
   setUser,
   getUser,
   removeUser,
