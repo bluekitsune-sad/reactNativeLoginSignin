@@ -546,6 +546,27 @@ Rules for the factory:
       deleted in the legacy removal. Markdown-only change — verified by
       re-read; lint/typecheck don't cover `.md`.)
 
+### Quality debt (found in the 2026-10-23 analysis pass)
+
+- [ ] **No sign-out anywhere**: `UserProvider.resetUser` (clears context
+      state + `StorageService.removeUser`) has zero consumers — a
+      signed-in preview user can never end their session or return to
+      Signin without clearing app storage. Add a Profile "Sign out" row
+      wired to `resetUser` (local state only; no backend call). Pairs
+      with the session-restore item above.
+- [ ] **Dead `ApiContants` keys left over from the legacy removal**:
+      `STATIC_IMAGE` (whole block), `ALL_RESTAURANTS`, `CART`, `FOOD`,
+      `BOOKMARK_LIST`, `USER` and `ADDUSER` have zero consumers
+      (grep-verified across `src/`, `scripts/`, `App.js`) since the
+      restaurant/food/cart/bookmark/user services were deleted on
+      2026-10-21. Remove them, keeping `BASE_API_URL`, `REGISTER`,
+      `LOGIN`, `USER_EXIST` and `REFRESH_TOKEN` (used by
+      `AuthenticationService` + `ApiClient`).
+- [ ] **Dead first-time-use helpers in `StorageService`**:
+      `setFirstTimeUse`/`getFirstTimeUse` (the `"isFirstTimeUse"` key)
+      have zero consumers — leftovers from the removed onboarding
+      scaffold. Remove.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
@@ -673,7 +694,16 @@ P0 — App is broken / blocking
   - Added `removeUser()`; fixed the `AsyncSorage` typo.
 - [ ] Persist the token and restore session on app launch; wire
       `refreshToken()` and auth headers (`utils/Generator.js#authHeader`) into
-      the services (currently commented out).
+      the services (currently commented out). (Skipped 2026-10-23: the
+      token/refresh/header halves need a live backend contract — no flow
+      produces a token today (the mock OTP session is
+      `{username, phone, mockSession: true}`; real login always fails
+      without a backend), so inventing a token/refresh shape would guess
+      the API. The client-only half is itself a UX decision: restoring the
+      persisted user in `UserProvider` is pointless while the app always
+      boots at Signin, and auto-booting into Main needs a sign-out escape
+      hatch (see the 2026-10-23 analysis item on missing sign-out). Needs
+      owner direction.)
 - [x] Decide on a state library (Redux Toolkit vs React Query vs Context) and
       remove the commented‑out `react-redux` / `src/actions` leftovers in
       `FoodCard.js` and `RestaurantCard.js`. (Done: Context is the decision —
