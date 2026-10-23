@@ -591,6 +591,26 @@ Rules for the factory:
       the service itself. Verified: `npm run lint` (0/0),
       `npm run typecheck`, `npm test` — 49/49.)
 
+### Quality debt (found in the 2026-10-23 close-out analysis)
+
+- [ ] **`AuthenticationService` logs raw errors (login can print
+      credentials) + leftover commented `test()` block**: every catch does
+      `console.log(error)` — on a failed `login`, the axios error object
+      carries `config.url`, which embeds the JSON-stringified
+      `{username, password}` (the known GET-in-URL quirk), so credentials
+      are printed to the dev console. Lines 71–88 also still hold the
+      commented-out legacy `test()` block — the "removed dead test()
+      endpoint" fix only commented it out, it was never deleted. Fix:
+      delete the dead block; log only a safe digest (e.g.
+      `console.warn(error?.message)`) or nothing — keep the
+      `{status:false, message}` envelope contract unchanged and update
+      `authenticationService.test.js` if it asserts the logging.
+- [ ] **Dead `removeSelectedMallSlug` in `StorageService`**: zero
+      consumers (grep-verified across `src/`, `scripts/`, `App.js`) — mall
+      selection is only ever set, never removed. Remove the helper (same
+      class as the first-time-use helpers removed 2026-10-23; re-add with
+      a real "reset app data" feature if one lands).
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
