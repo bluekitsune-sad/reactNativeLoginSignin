@@ -322,6 +322,8 @@ export const ur = {
     privacy: "رازداری",
     privacySubtitle: "رازداری اور اکاؤنٹ کنٹرول",
     privacyMessage: "رازداری کے اختیارات اور اکاؤنٹ حذف کرنے کے کنٹرول یہاں ظاہر ہوں گے۔",
+    signOut: "سائن آؤٹ",
+    signOutSubtitle: "اس ڈیوائس پر یہ سیشن ختم کریں",
     notifications: "اطلاعات",
     marketing: "مارکیٹنگ",
     orderUpdates: "آرڈر اور ادائیگی کی اپ ڈیٹس",

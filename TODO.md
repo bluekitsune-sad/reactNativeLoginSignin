@@ -548,12 +548,25 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-23 analysis pass)
 
-- [ ] **No sign-out anywhere**: `UserProvider.resetUser` (clears context
+- [x] **No sign-out anywhere**: `UserProvider.resetUser` (clears context
       state + `StorageService.removeUser`) has zero consumers — a
       signed-in preview user can never end their session or return to
       Signin without clearing app storage. Add a Profile "Sign out" row
       wired to `resetUser` (local state only; no backend call). Pairs
-      with the session-restore item above.
+      with the session-restore item above. (Done 2026-10-23: Profile
+      gained a danger-toned "Sign out" `ListRow` (new optional
+      `titleColor` prop on the kit row, `log-out-outline` icon +
+      `MallMateTheme.color.error`) that calls `resetUser()` and then
+      `navigation.reset({ index: 0, routes: [{ name: "Signin" }] })` —
+      the RESET names a root-stack route, so it bubbles past the tab
+      router (`useOnAction` → `onActionParent`) and clears the whole
+      stack: no back-navigation into a signed-out session. New `t()`
+      keys `profile.signOut`/`signOutSubtitle` in en + ur (parity
+      enforced by tests). Local state only — no backend call, mall and
+      favorites state untouched. Verified: `npm run lint` (0/0),
+      `npm run typecheck`, `npm test` — 49/49 incl. a new ProfileScreen
+      test asserting `removeUser` runs and navigation resets to
+      Signin.)
 - [ ] **Dead `ApiContants` keys left over from the legacy removal**:
       `STATIC_IMAGE` (whole block), `ALL_RESTAURANTS`, `CART`, `FOOD`,
       `BOOKMARK_LIST`, `USER` and `ADDUSER` have zero consumers

@@ -53,11 +53,16 @@ const PROFILE_ROWS = [
 ];
 
 const ProfileScreen = ({ navigation }) => {
-  const { userData } = useUserManagement();
+  const { userData, resetUser } = useUserManagement();
   const user = userData;
   const displayName = user?.username || user?.name || t("profile.guestName");
   const email = user?.email || t("profile.guestEmail");
   const initial = displayName.charAt(0).toUpperCase();
+
+  const handleSignOut = () => {
+    resetUser();
+    navigation.reset({ index: 0, routes: [{ name: "Signin" }] });
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
@@ -96,6 +101,16 @@ const ProfileScreen = ({ navigation }) => {
               style={styles.row}
             />
           ))}
+          <ListRow
+            title={t("profile.signOut")}
+            subtitle={t("profile.signOutSubtitle")}
+            leading={
+              <Ionicons name="log-out-outline" size={22} color={MallMateTheme.color.error} />
+            }
+            titleColor={MallMateTheme.color.error}
+            onPress={handleSignOut}
+            style={styles.signOutRow}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -158,6 +173,9 @@ const styles = StyleSheet.create({
   },
   row: {
     marginBottom: 0,
+  },
+  signOutRow: {
+    marginTop: MallMateTheme.spacing.md,
   },
 });
 

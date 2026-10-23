@@ -2,12 +2,14 @@
 import { fireEvent, render } from "@testing-library/react-native";
 import React from "react";
 
+import { StorageService } from "../../services";
 import { UserProvider } from "../../utils/userData";
 import ProfileScreen from "../profile/ProfileScreen";
 
 const createNavigation = () => ({
   navigate: jest.fn(),
   goBack: jest.fn(),
+  reset: jest.fn(),
 });
 
 const renderScreen = (navigation) =>
@@ -63,5 +65,21 @@ describe("ProfileScreen", () => {
       title: "Privacy",
       message: "Privacy options and account deletion controls will appear here.",
     });
+  });
+
+  it("clears the stored user and resets navigation to Signin on sign out", () => {
+    const removeUserSpy = jest.spyOn(StorageService, "removeUser");
+    const navigation = createNavigation();
+    const { getByText } = renderScreen(navigation);
+
+    fireEvent.press(getByText("Sign out"));
+
+    expect(removeUserSpy).toHaveBeenCalledTimes(1);
+    expect(navigation.reset).toHaveBeenCalledWith({
+      index: 0,
+      routes: [{ name: "Signin" }],
+    });
+
+    removeUserSpy.mockRestore();
   });
 });

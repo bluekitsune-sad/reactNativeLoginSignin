@@ -325,6 +325,8 @@ export const en = {
     privacy: "Privacy",
     privacySubtitle: "Privacy and account controls",
     privacyMessage: "Privacy options and account deletion controls will appear here.",
+    signOut: "Sign out",
+    signOutSubtitle: "End this session on this device",
     notifications: "Notifications",
     marketing: "Marketing",
     orderUpdates: "Order and payment updates",

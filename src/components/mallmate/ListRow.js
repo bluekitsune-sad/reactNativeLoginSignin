@@ -4,12 +4,21 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { MallMateTheme } from "../../constants";
 
-const ListRow = ({ title, subtitle, leading, trailing, showChevron = true, onPress, style }) => {
+const ListRow = ({
+  title,
+  subtitle,
+  leading,
+  trailing,
+  showChevron = true,
+  titleColor = MallMateTheme.color.textPrimary,
+  onPress,
+  style,
+}) => {
   const content = (
     <View style={[styles.row, style]}>
       {leading ? <View style={styles.leading}>{leading}</View> : null}
       <View style={styles.body}>
-        <Text style={styles.title} numberOfLines={1}>
+        <Text style={[styles.title, { color: titleColor }]} numberOfLines={1}>
           {title}
         </Text>
         {subtitle ? (
