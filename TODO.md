@@ -625,6 +625,61 @@ Rules for the factory:
       no test asserted it. Verified: `npm run lint` (0/0),
       `npm run typecheck`, `npm test` — 50/50.)
 
+### Quality debt (found in the 2026-10-24 close-out analysis)
+
+- [ ] **Merchant area never migrated to `t()`** — the "Adopt `t()`
+      across MallMate screens" item claims every MallMate screen renders
+      via `t()`, but `MerchantDetailScreen`/`MenuScreen`/`MenuItemScreen`
+      have no `src/i18n` import and no `merchant`/`menu` key group in
+      `en.js`/`ur.js`. ~30 hardcoded English strings (e.g.
+      `accessibilityLabel="Go back"` — `common.goBack` exists and every
+      other screen uses it; "Open now"/"Closed" — `explore.open/closed`
+      exist; section titles Location/Hours/Active offers/Menu/Contact,
+      "View menu", "Sold out", "Merchant not found"). Migrate the three
+      screens onto new `merchant.*`/`menu.*` keys (en+ur, parity tests).
+- [ ] **AGENTS.md stale screens/conventions claims**: the architecture
+      paragraph still says `RegisterPhoneScreen`/`VerificationScreen`
+      "remain stubbed as comments (parked on owner question #9)" — both
+      shipped 2026-10-21 (plus `CountryPickerScreen`), are exported and
+      registered; and "JavaScript only (`.js`, JSX)" in Conventions
+      contradicts the shipped `apiClient.ts`/`ProfilePlaceholderScreen.tsx`
+      /`src/types/*.ts` and AGENTS.md's own TypeScript-migration note.
+      Rewrite both so agents aren't misled.
+- [ ] **Sign-in "Remember me" toggle is decorative + a11y
+      non-compliant**: `SigninScreen` renders `<ToggleButton size={0.5} />`
+      with no callback; `ToggleButton` keeps `isActive` in its own state
+      and never reports it, so the choice is never persisted or sent to
+      `login()` (which only receives `{username, password}`). The touch
+      target is 32×16px at that size with no `hitSlop` and the control has
+      no `accessibilityLabel`/`accessibilityRole`/`accessibilityState` —
+      violating the 44–48px + labelled-control rules the accessibility
+      pass claims. Either wire it (local persistence only) or drop it from
+      the form and README feature list; fix the target size + labels
+      either way.
+- [ ] **`AuthenicationService` barrel typo propagated to every consumer**:
+      `src/services/index.js` imports/exports the misspelled
+      `AuthenicationService` (file is `AuthenticationService.js`), and
+      Signin/Signup/ForgotPassword screens copy the typo. Importing the
+      correctly-spelled name silently yields `undefined`. Add an
+      `AuthenticationService` alias (keep the old name briefly if needed),
+      update the three screens, drop the typo from the barrel.
+- [ ] **Dead code/dependency sweep**: `src/utils/Generator.js` (exports
+      only `authHeader`, referenced nowhere — not even the utils barrel),
+      `expo-status-bar` in package.json (zero imports; screens use RN's
+      built-in `StatusBar`), `isRTL()` (only its own unit test consumes
+      it), and `isTerminalOrderState` (re-exported from the mock barrel,
+      used by no screen). Remove or wire each; re-verify `npm install`
+      shrinkage is safe for Expo web export.
+- [ ] **README tech-stack row overstates icons**: claims
+      "`@expo/vector-icons` (Ionicons, Feather, AntDesign, FontAwesome)"
+      but `src/` only imports Ionicons + Feather. Correct the row.
+- [ ] **Coverage gap on the trickiest pure logic**: no suite for
+      `StorageService` (JSON round-trip + array validation — historically
+      bug-prone), `fetchMerchantListPage`/`applyMerchantFilters`
+      (pagination + fail-first-attempt state machine), or
+      `FavoritesProvider`. Add focused unit tests; 50/50 currently pass
+      with these uncovered.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
