@@ -615,11 +615,15 @@ Rules for the factory:
       axios-like error carries credentials in `config.url` logs only the
       safe message — no "alice"/"secret" in console output. Verified:
       `npm run lint` (0/0), `npm run typecheck`, `npm test` — 50/50.)
-- [ ] **Dead `removeSelectedMallSlug` in `StorageService`**: zero
+- [x] **Dead `removeSelectedMallSlug` in `StorageService`**: zero
       consumers (grep-verified across `src/`, `scripts/`, `App.js`) — mall
       selection is only ever set, never removed. Remove the helper (same
       class as the first-time-use helpers removed 2026-10-23; re-add with
-      a real "reset app data" feature if one lands).
+      a real "reset app data" feature if one lands). (Done 2026-10-24:
+      helper + its barrel export removed after re-grepping `src/`,
+      `scripts/`, `App.js` — zero references outside the service itself;
+      no test asserted it. Verified: `npm run lint` (0/0),
+      `npm run typecheck`, `npm test` — 50/50.)
 
 ### Blocked — do NOT implement until the owner decides
 

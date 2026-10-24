@@ -25,10 +25,6 @@ const getSelectedMallSlug = () => {
   return AsyncStorage.getItem(SELECTED_MALL_KEY);
 };
 
-const removeSelectedMallSlug = () => {
-  return AsyncStorage.removeItem(SELECTED_MALL_KEY);
-};
-
 const getFavoriteIds = async () => {
   const stored = await AsyncStorage.getItem(FAVORITE_IDS_KEY);
   if (!stored) {
@@ -52,7 +48,6 @@ export default {
   removeUser,
   setSelectedMallSlug,
   getSelectedMallSlug,
-  removeSelectedMallSlug,
   getFavoriteIds,
   setFavoriteIds,
 };
