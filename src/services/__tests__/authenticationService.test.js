@@ -79,6 +79,28 @@ describe("AuthenticationService", () => {
       const response = await AuthenicationService.login({ username: "a", password: "b" });
       expect(response).toEqual({ status: false, message: "Oops! Something went wrong" });
     });
+
+    it("never logs raw error objects (which carry credentials in config.url)", async () => {
+      const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+      const axiosLikeError = new Error("Request failed with status code 500");
+      axiosLikeError.config = {
+        url:
+          ApiContants.BACKEND_API.LOGIN + JSON.stringify({ username: "alice", password: "secret" }),
+      };
+      mockedGet.mockRejectedValue(axiosLikeError);
+      try {
+        await AuthenicationService.login({ username: "alice", password: "secret" });
+        const loggedText = warnSpy.mock.calls.map((call) => call.join(" ")).join("\n");
+        expect(loggedText).not.toContain("secret");
+        expect(loggedText).not.toContain("alice");
+        expect(warnSpy).toHaveBeenCalledWith(
+          "AuthenticationService request failed:",
+          "Request failed with status code 500",
+        );
+      } finally {
+        warnSpy.mockRestore();
+      }
+    });
   });
 
   describe("checkUserExist", () => {

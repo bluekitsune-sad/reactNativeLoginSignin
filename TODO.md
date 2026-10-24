@@ -593,7 +593,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-23 close-out analysis)
 
-- [ ] **`AuthenticationService` logs raw errors (login can print
+- [x] **`AuthenticationService` logs raw errors (login can print
       credentials) + leftover commented `test()` block**: every catch does
       `console.log(error)` — on a failed `login`, the axios error object
       carries `config.url`, which embeds the JSON-stringified
@@ -604,7 +604,17 @@ Rules for the factory:
       delete the dead block; log only a safe digest (e.g.
       `console.warn(error?.message)`) or nothing — keep the
       `{status:false, message}` envelope contract unchanged and update
-      `authenticationService.test.js` if it asserts the logging.
+      `authenticationService.test.js` if it asserts the logging. (Done
+      2026-10-24: deleted the dead `test()` block; all four catches now
+      call a `logAuthError` helper that logs only
+      `console.warn("AuthenticationService request failed:",
+      error?.message)` — never the raw error object, so the credentials
+      embedded in the login error's `config.url` can no longer print to
+      the dev console. Envelope contract unchanged. New regression test
+      in `authenticationService.test.js` asserts a failed login whose
+      axios-like error carries credentials in `config.url` logs only the
+      safe message — no "alice"/"secret" in console output. Verified:
+      `npm run lint` (0/0), `npm run typecheck`, `npm test` — 50/50.)
 - [ ] **Dead `removeSelectedMallSlug` in `StorageService`**: zero
       consumers (grep-verified across `src/`, `scripts/`, `App.js`) — mall
       selection is only ever set, never removed. Remove the helper (same
