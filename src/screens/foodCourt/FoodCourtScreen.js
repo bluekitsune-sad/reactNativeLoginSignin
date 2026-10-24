@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Badge, Card, EmptyState, SectionHeader, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getFoodCourtOverview, getZoneStatus } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -27,7 +28,7 @@ const FoodCourtScreen = ({ navigation }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
@@ -46,8 +47,8 @@ const FoodCourtScreen = ({ navigation }) => {
         {header}
         <EmptyState
           icon={<Ionicons name="cafe-outline" size={48} color={MallMateTheme.color.textMuted} />}
-          title="Food court unavailable"
-          message="This mall doesn't offer the food court in the app right now."
+          title={t("foodCourt.unavailableTitle")}
+          message={t("foodCourt.unavailableMessage")}
         />
       </SafeAreaView>
     );
@@ -63,17 +64,19 @@ const FoodCourtScreen = ({ navigation }) => {
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <Card style={styles.hero}>
           <View style={styles.heroTop}>
-            <Text style={styles.heroTitle}>{venue.name}</Text>
+            <Text style={styles.heroTitle} accessibilityRole="header">
+              {venue.name}
+            </Text>
             {degraded ? (
-              <StatusChip label="Limited" tone="warning" style={styles.heroChip} />
+              <StatusChip label={t("maps.limited")} tone="warning" style={styles.heroChip} />
             ) : null}
           </View>
           <Text style={styles.heroMeta}>{venue.floor}</Text>
           <Text style={styles.heroMeta}>{venue.hours}</Text>
-          <Text style={styles.disclosure}>Mock preview — seating counts are static demo data.</Text>
+          <Text style={styles.disclosure}>{t("foodCourt.mockDisclosure")}</Text>
         </Card>
 
-        <SectionHeader title="Scan to sit" style={styles.section} />
+        <SectionHeader title={t("foodCourt.scanToSit")} style={styles.section} />
         {seatSessionsOn ? (
           <Card onPress={openScanFlow}>
             <View style={styles.scanRow}>
@@ -84,10 +87,8 @@ const FoodCourtScreen = ({ navigation }) => {
                 style={styles.scanIcon}
               />
               <View style={styles.scanBody}>
-                <Text style={styles.scanTitle}>Scan a table code</Text>
-                <Text style={styles.scanSubtitle}>
-                  Point your camera at the QR sticker on a table to start a seat session.
-                </Text>
+                <Text style={styles.scanTitle}>{t("foodCourt.scanTitle")}</Text>
+                <Text style={styles.scanSubtitle}>{t("foodCourt.scanSubtitle")}</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color={MallMateTheme.color.textMuted} />
             </View>
@@ -102,16 +103,14 @@ const FoodCourtScreen = ({ navigation }) => {
                 style={styles.scanIcon}
               />
               <View style={styles.scanBody}>
-                <Text style={styles.scanTitleDisabled}>Scan to sit</Text>
-                <Text style={styles.scanSubtitle}>
-                  Seat sessions aren't enabled at this mall yet.
-                </Text>
+                <Text style={styles.scanTitleDisabled}>{t("foodCourt.scanToSit")}</Text>
+                <Text style={styles.scanSubtitle}>{t("foodCourt.seatSessionsDisabled")}</Text>
               </View>
             </View>
           </Card>
         )}
 
-        <SectionHeader title="Seating zones" style={styles.section} />
+        <SectionHeader title={t("foodCourt.seatingZones")} style={styles.section} />
         {venue.zones.length ? (
           <View style={styles.zones}>
             {venue.zones.map((zone) => {
@@ -126,10 +125,17 @@ const FoodCourtScreen = ({ navigation }) => {
                     <Text style={styles.zoneDescription}>{zone.description}</Text>
                   ) : null}
                   <Text style={styles.zoneCounts}>
-                    {zone.seatsAvailable} of {zone.seatsTotal} seats free
+                    {t("foodCourt.seatsFree", {
+                      available: zone.seatsAvailable,
+                      total: zone.seatsTotal,
+                    })}
                   </Text>
                   {zone.accessible ? (
-                    <Badge label="Accessible seating" tone="neutral" style={styles.zoneBadge} />
+                    <Badge
+                      label={t("foodCourt.accessibleSeating")}
+                      tone="neutral"
+                      style={styles.zoneBadge}
+                    />
                   ) : null}
                 </Card>
               );
@@ -137,9 +143,7 @@ const FoodCourtScreen = ({ navigation }) => {
           </View>
         ) : (
           <Card>
-            <Text style={styles.emptyZones}>
-              Seating zones for this food court are being mapped.
-            </Text>
+            <Text style={styles.emptyZones}>{t("foodCourt.emptyZones")}</Text>
           </Card>
         )}
       </ScrollView>
@@ -163,7 +167,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerMeta: {
     flex: 1,
@@ -193,7 +197,7 @@ const styles = StyleSheet.create({
     fontFamily: MallMateTheme.fontFamily.semiBold,
   },
   heroChip: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
   },
   heroMeta: {
     color: MallMateTheme.color.textSecondary,
@@ -215,7 +219,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   scanIcon: {
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   scanBody: {
     flex: 1,
@@ -252,7 +256,7 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textPrimary,
     fontSize: MallMateTheme.typography.bodyLarge.fontSize,
     fontFamily: MallMateTheme.fontFamily.medium,
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   zoneDescription: {
     color: MallMateTheme.color.textSecondary,

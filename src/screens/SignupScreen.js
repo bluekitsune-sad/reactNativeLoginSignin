@@ -1,18 +1,11 @@
 import { Ionicons, Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button, Separator } from "../components";
 import { MallMateTheme } from "../constants";
+import { t } from "../i18n";
 import { AuthenicationService } from "../services";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -31,24 +24,24 @@ const SignupScreen = ({ navigation }) => {
   const signUp = async () => {
     setErrorMessage("");
     if (!username || !email || !password || !confirmPassword) {
-      setErrorMessage("Please fill up all fields");
+      setErrorMessage(t("auth.fillAllFields"));
       return;
     }
     if (!EMAIL_REGEX.test(email)) {
-      setErrorMessage("Please enter a valid email address");
+      setErrorMessage(t("auth.validEmail"));
       return;
     }
     if (password !== confirmPassword) {
-      setErrorMessage("Passwords do not match");
+      setErrorMessage(t("auth.passwordsNoMatch"));
       return;
     }
     setIsLoading(true);
     AuthenicationService.register({ username, email, password }).then((response) => {
       setIsLoading(false);
       if (response?.status) {
-        Alert.alert("Registration successful", "Your account has been created. Please sign in.", [
-          { text: "OK", onPress: () => navigation.navigate("Signin") },
-        ]);
+        // Decided flow (issue #9): register -> OTP -> app. The phone
+        // step sends a mock OTP; Verification enters the app.
+        navigation.navigate("RegisterPhone", { flow: "register", username });
       } else {
         setErrorMessage(response?.message);
       }
@@ -67,15 +60,15 @@ const SignupScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           style={styles.backButton}
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Sign Up</Text>
+        <Text style={styles.headerTitle}>{t("auth.signUp")}</Text>
       </View>
-      <Text style={styles.title}>Create account</Text>
-      <Text style={styles.content}>Join us and start ordering your favorite food</Text>
+      <Text style={styles.title}>{t("auth.createAccount")}</Text>
+      <Text style={styles.content}>{t("auth.signupSubtitle")}</Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputSubContainer}>
           <Feather
@@ -85,12 +78,12 @@ const SignupScreen = ({ navigation }) => {
             style={styles.inputIcon}
           />
           <TextInput
-            placeholder="Username"
+            placeholder={t("auth.username")}
             placeholderTextColor={MallMateTheme.color.textMuted}
             selectionColor={MallMateTheme.color.primary}
             style={styles.inputText}
             onChangeText={(text) => setUsername(text)}
-            accessibilityLabel="Username"
+            accessibilityLabel={t("auth.username")}
           />
         </View>
       </View>
@@ -104,14 +97,14 @@ const SignupScreen = ({ navigation }) => {
             style={styles.inputIcon}
           />
           <TextInput
-            placeholder="Email"
+            placeholder={t("auth.email")}
             placeholderTextColor={MallMateTheme.color.textMuted}
             selectionColor={MallMateTheme.color.primary}
             autoCapitalize="none"
             keyboardType="email-address"
             style={styles.inputText}
             onChangeText={(text) => setEmail(text)}
-            accessibilityLabel="Email"
+            accessibilityLabel={t("auth.email")}
           />
         </View>
       </View>
@@ -126,12 +119,12 @@ const SignupScreen = ({ navigation }) => {
           />
           <TextInput
             secureTextEntry={!isPasswordShow}
-            placeholder="Password"
+            placeholder={t("auth.password")}
             placeholderTextColor={MallMateTheme.color.textMuted}
             selectionColor={MallMateTheme.color.primary}
             style={styles.inputText}
             onChangeText={(text) => setPassword(text)}
-            accessibilityLabel="Password"
+            accessibilityLabel={t("auth.password")}
           />
           <Feather
             name={isPasswordShow ? "eye" : "eye-off"}
@@ -140,7 +133,7 @@ const SignupScreen = ({ navigation }) => {
             style={styles.inputIcon}
             onPress={() => setIsPasswordShow(!isPasswordShow)}
             accessibilityRole="button"
-            accessibilityLabel={isPasswordShow ? "Hide password" : "Show password"}
+            accessibilityLabel={isPasswordShow ? t("auth.hidePassword") : t("auth.showPassword")}
           />
         </View>
       </View>
@@ -155,12 +148,12 @@ const SignupScreen = ({ navigation }) => {
           />
           <TextInput
             secureTextEntry={!isPasswordShow}
-            placeholder="Confirm password"
+            placeholder={t("auth.confirmPassword")}
             placeholderTextColor={MallMateTheme.color.textMuted}
             selectionColor={MallMateTheme.color.primary}
             style={styles.inputText}
             onChangeText={(text) => setConfirmPassword(text)}
-            accessibilityLabel="Confirm password"
+            accessibilityLabel={t("auth.confirmPassword")}
           />
           <Feather
             name={isPasswordShow ? "eye" : "eye-off"}
@@ -169,20 +162,25 @@ const SignupScreen = ({ navigation }) => {
             style={styles.inputIcon}
             onPress={() => setIsPasswordShow(!isPasswordShow)}
             accessibilityRole="button"
-            accessibilityLabel={isPasswordShow ? "Hide password" : "Show password"}
+            accessibilityLabel={isPasswordShow ? t("auth.hidePassword") : t("auth.showPassword")}
           />
         </View>
       </View>
       <Text style={styles.errorMessage}>{errorMessage}</Text>
-      <Button label="Sign Up" onPress={signUp} loading={isLoading} style={styles.signupButton} />
+      <Button
+        label={t("auth.signUp")}
+        onPress={signUp}
+        loading={isLoading}
+        style={styles.signupButton}
+      />
       <View style={styles.signinContainer}>
-        <Text style={styles.accountText}>Already have an account?</Text>
+        <Text style={styles.accountText}>{t("auth.alreadyHaveAccount")}</Text>
         <Text
           style={styles.signinText}
           onPress={() => navigation.navigate("Signin")}
           accessibilityRole="button"
         >
-          Sign In
+          {t("auth.signIn")}
         </Text>
       </View>
     </View>
@@ -212,7 +210,7 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textPrimary,
     flex: 1,
     textAlign: "center",
-    marginRight: MallMateTheme.touchTarget.min,
+    marginEnd: MallMateTheme.touchTarget.min,
   },
   title: {
     ...MallMateTheme.typography.h2,
@@ -244,7 +242,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputIcon: {
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   inputText: {
     fontSize: MallMateTheme.typography.bodyLarge.fontSize,
@@ -283,7 +281,7 @@ const styles = StyleSheet.create({
     ...MallMateTheme.typography.label,
     fontFamily: MallMateTheme.fontFamily.semiBold,
     color: MallMateTheme.color.primary,
-    marginLeft: MallMateTheme.spacing.xs,
+    marginStart: MallMateTheme.spacing.xs,
   },
 });
 

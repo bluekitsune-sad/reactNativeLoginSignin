@@ -5,21 +5,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Badge, CapabilityCard, Card, EmptyState, SectionHeader } from "../../components";
 import { CAPABILITIES, CAPABILITY_META, CAPABILITY_STATUS, MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getHomeSections } from "../../mock";
 import { useMallManagement } from "../../utils";
 
 const hoursSummary = (mall) => {
   const days = mall.openingHours?.days ?? [];
   if (!days.length) {
-    return "Hours unavailable";
+    return t("mall.hoursUnavailable");
   }
   const uniform = days.every(
     (day) => day.opensAt === days[0].opensAt && day.closesAt === days[0].closesAt,
   );
   if (uniform) {
-    return `Daily ${days[0].opensAt}–${days[0].closesAt}`;
+    return t("mall.hoursDaily", { opensAt: days[0].opensAt, closesAt: days[0].closesAt });
   }
-  return "See weekly hours";
+  return t("mall.hoursSeeWeekly");
 };
 
 const goExplore = (navigation) => navigation.navigate("Explore");
@@ -30,7 +31,7 @@ const CategoryShortcuts = ({ categories, onSelect }) => {
   }
   return (
     <View>
-      <SectionHeader title="Browse" />
+      <SectionHeader title={t("home.browse")} />
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -41,7 +42,7 @@ const CategoryShortcuts = ({ categories, onSelect }) => {
             key={category.key}
             onPress={() => onSelect(category)}
             accessibilityRole="button"
-            accessibilityLabel={`Browse ${category.title}`}
+            accessibilityLabel={t("home.browseCategory", { category: category.title })}
             style={({ pressed }) => [styles.categoryChip, pressed && styles.categoryChipPressed]}
           >
             <Ionicons name={category.icon} size={22} color={MallMateTheme.color.primary} />
@@ -61,7 +62,7 @@ const FeaturedCarousel = ({ items, onSelect }) => {
   }
   return (
     <View>
-      <SectionHeader title="Featured" />
+      <SectionHeader title={t("home.featured")} />
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -70,7 +71,7 @@ const FeaturedCarousel = ({ items, onSelect }) => {
         {items.map((item) => (
           <Card key={item.id} onPress={() => onSelect(item)} style={styles.featuredCard}>
             <Badge
-              label={item.placement === "SPONSORED" ? "Sponsored" : "Featured"}
+              label={item.placement === "SPONSORED" ? t("home.sponsored") : t("home.featured")}
               tone={item.placement === "SPONSORED" ? "sponsored" : "featured"}
               style={styles.featuredBadge}
             />
@@ -96,7 +97,7 @@ const DiscountsSection = ({ offers, onSelect }) => {
   }
   return (
     <View>
-      <SectionHeader title="Active discounts" />
+      <SectionHeader title={t("home.activeDiscounts")} />
       {offers.map((offer) => (
         <Card key={offer.id} onPress={() => onSelect(offer)} style={styles.discountCard}>
           <View style={styles.discountLabelBox}>
@@ -107,7 +108,8 @@ const DiscountsSection = ({ offers, onSelect }) => {
               {offer.title}
             </Text>
             <Text style={styles.discountMerchant} numberOfLines={1}>
-              {offer.merchant} · {offer.scope === "restaurant" ? "Dining" : "Retail"}
+              {offer.merchant} ·{" "}
+              {offer.scope === "restaurant" ? t("home.dining") : t("home.retail")}
             </Text>
           </View>
           <Ionicons name="chevron-forward" size={18} color={MallMateTheme.color.textMuted} />
@@ -123,7 +125,7 @@ const EventsSection = ({ events, onSelect }) => {
   }
   return (
     <View>
-      <SectionHeader title="Events" />
+      <SectionHeader title={t("events.title")} />
       {events.map((event) => (
         <Card key={event.id} onPress={() => onSelect(event)} style={styles.eventCard}>
           <Ionicons
@@ -155,15 +157,15 @@ const TopSellingSection = ({ topSelling, onSelect }) => {
   }
   const { disclosure, restaurants, retail } = topSelling;
   const groups = [
-    { key: "restaurants", title: "Top restaurants", items: restaurants },
-    { key: "retail", title: "Top retail", items: retail },
+    { key: "restaurants", title: t("home.topRestaurants"), items: restaurants },
+    { key: "retail", title: t("home.topRetail"), items: retail },
   ].filter((group) => group.items.length > 0);
   if (!groups.length) {
     return null;
   }
   return (
     <View>
-      <SectionHeader title="Popular now" />
+      <SectionHeader title={t("home.popularNow")} />
       <Text style={styles.disclosure} accessibilityLabel={disclosure}>
         {disclosure}
       </Text>
@@ -216,24 +218,25 @@ const HomeScreen = ({ navigation }) => {
       <Pressable
         onPress={() => navigation.navigate("MallSelector")}
         accessibilityRole="button"
-        accessibilityLabel={`Selected mall: ${selectedMall.name}. Change mall.`}
+        accessibilityLabel={t("home.mallBarAccessibility", { mall: selectedMall.name })}
         style={styles.mallBar}
       >
         <Ionicons name="storefront-outline" size={22} color={MallMateTheme.color.primary} />
         <View style={styles.mallBarBody}>
-          <Text style={styles.mallBarLabel}>Shopping at</Text>
+          <Text style={styles.mallBarLabel}>{t("home.shoppingAt")}</Text>
           <Text style={styles.mallBarName}>{selectedMall.name}</Text>
           <Text style={styles.mallBarMeta} numberOfLines={1}>
             {selectedMall.address} · {hoursSummary(selectedMall)}
           </Text>
         </View>
+        <Text style={styles.mallBarAction}>{t("mall.switchMall")}</Text>
         <Ionicons name="chevron-down" size={20} color={MallMateTheme.color.textMuted} />
       </Pressable>
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <CategoryShortcuts categories={categories} onSelect={() => goExplore(navigation)} />
         <FeaturedCarousel items={featured} onSelect={() => goExplore(navigation)} />
         <View>
-          <SectionHeader title="Services" />
+          <SectionHeader title={t("home.services")} />
           {visibleCapabilities.length ? (
             <View style={styles.grid}>
               {visibleCapabilities.map((key) => {
@@ -251,10 +254,7 @@ const HomeScreen = ({ navigation }) => {
               })}
             </View>
           ) : (
-            <EmptyState
-              title="No services yet"
-              message="This mall has no enabled services right now."
-            />
+            <EmptyState title={t("home.noServicesTitle")} message={t("home.noServicesMessage")} />
           )}
         </View>
         <DiscountsSection
@@ -267,10 +267,7 @@ const HomeScreen = ({ navigation }) => {
         />
         <TopSellingSection topSelling={topSelling} onSelect={() => goExplore(navigation)} />
         {!hasContent ? (
-          <EmptyState
-            title="Nothing new right now"
-            message="Categories, offers and events will appear here when available."
-          />
+          <EmptyState title={t("home.emptyTitle")} message={t("home.emptyMessage")} />
         ) : null}
       </ScrollView>
     </SafeAreaView>
@@ -313,6 +310,12 @@ const styles = StyleSheet.create({
     fontSize: MallMateTheme.typography.caption.fontSize,
     fontFamily: MallMateTheme.fontFamily.regular,
     marginTop: 2,
+  },
+  mallBarAction: {
+    color: MallMateTheme.color.textSecondary,
+    fontSize: MallMateTheme.typography.caption.fontSize,
+    fontFamily: MallMateTheme.fontFamily.medium,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   content: {
     padding: MallMateTheme.spacing.lg,
@@ -386,7 +389,7 @@ const styles = StyleSheet.create({
     borderRadius: MallMateTheme.radius.control / 2,
     paddingHorizontal: MallMateTheme.spacing.sm,
     paddingVertical: MallMateTheme.spacing.xs,
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   discountLabel: {
     color: MallMateTheme.color.background,
@@ -414,7 +417,7 @@ const styles = StyleSheet.create({
     padding: MallMateTheme.spacing.md,
   },
   eventIcon: {
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
     marginTop: 2,
   },
   eventBody: {
@@ -461,7 +464,7 @@ const styles = StyleSheet.create({
     borderColor: MallMateTheme.color.primary,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   topRank: {
     color: MallMateTheme.color.primary,

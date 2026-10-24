@@ -5,7 +5,7 @@ import { MallMateTheme } from "../../constants";
 
 const SectionHeader = ({ title, actionLabel, onAction, style }) => (
   <View style={[styles.row, style]}>
-    <Text style={styles.title} numberOfLines={1}>
+    <Text style={styles.title} numberOfLines={1} accessibilityRole="header">
       {title}
     </Text>
     {actionLabel && onAction ? (

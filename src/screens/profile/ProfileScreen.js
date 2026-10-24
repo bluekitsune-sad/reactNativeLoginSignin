@@ -5,66 +5,64 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ListRow, SectionHeader } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import useUserManagement from "../../utils/userData";
-
-const FALLBACK_USER = {
-  username: "Guest shopper",
-  email: "guest@mallmate.app",
-};
 
 const PROFILE_ROWS = [
   {
     key: "orders",
-    title: "Orders",
-    subtitle: "Order history and tracking",
+    titleKey: "profile.orders",
+    subtitleKey: "profile.ordersSubtitle",
     icon: "receipt-outline",
-    placeholder: {
-      title: "Orders",
-      message: "Your order history will appear here once ordering is available.",
-    },
+    route: "OrderHistory",
   },
   {
     key: "favorites",
-    title: "Favorites",
-    subtitle: "Saved merchants and offers",
+    titleKey: "profile.favorites",
+    subtitleKey: "profile.favoritesSubtitle",
     icon: "heart-outline",
     route: "Favorites",
   },
   {
     key: "settings",
-    title: "Settings",
-    subtitle: "Preferences and notifications",
+    titleKey: "profile.settings",
+    subtitleKey: "profile.settingsSubtitle",
     icon: "settings-outline",
     route: "Settings",
   },
   {
     key: "help",
-    title: "Help",
-    subtitle: "Support and FAQs",
+    titleKey: "profile.help",
+    subtitleKey: "profile.helpSubtitle",
     icon: "help-circle-outline",
     placeholder: {
-      title: "Help",
-      message: "Support articles and contact options will appear here.",
+      titleKey: "profile.help",
+      messageKey: "profile.helpMessage",
     },
   },
   {
     key: "privacy",
-    title: "Privacy",
-    subtitle: "Privacy and account controls",
+    titleKey: "profile.privacy",
+    subtitleKey: "profile.privacySubtitle",
     icon: "shield-checkmark-outline",
     placeholder: {
-      title: "Privacy",
-      message: "Privacy options and account deletion controls will appear here.",
+      titleKey: "profile.privacy",
+      messageKey: "profile.privacyMessage",
     },
   },
 ];
 
 const ProfileScreen = ({ navigation }) => {
-  const { userData } = useUserManagement();
-  const user = userData || FALLBACK_USER;
-  const displayName = user?.username || user?.name || FALLBACK_USER.username;
-  const email = user?.email || FALLBACK_USER.email;
+  const { userData, resetUser } = useUserManagement();
+  const user = userData;
+  const displayName = user?.username || user?.name || t("profile.guestName");
+  const email = user?.email || t("profile.guestEmail");
   const initial = displayName.charAt(0).toUpperCase();
+
+  const handleSignOut = () => {
+    resetUser();
+    navigation.reset({ index: 0, routes: [{ name: "Signin" }] });
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
@@ -74,7 +72,7 @@ const ProfileScreen = ({ navigation }) => {
             <Text style={styles.avatarText}>{initial}</Text>
           </View>
           <View style={styles.headerBody}>
-            <Text style={styles.displayName} numberOfLines={1}>
+            <Text style={styles.displayName} numberOfLines={1} accessibilityRole="header">
               {displayName}
             </Text>
             <Text style={styles.email} numberOfLines={1}>
@@ -82,27 +80,37 @@ const ProfileScreen = ({ navigation }) => {
             </Text>
           </View>
         </View>
-        <SectionHeader title="Account" style={styles.section} />
+        <SectionHeader title={t("profile.account")} style={styles.section} />
         <View style={styles.rows}>
           {PROFILE_ROWS.map((row) => (
             <ListRow
               key={row.key}
-              title={row.title}
-              subtitle={row.subtitle}
+              title={t(row.titleKey)}
+              subtitle={t(row.subtitleKey)}
               leading={<Ionicons name={row.icon} size={22} color={MallMateTheme.color.primary} />}
               onPress={() => {
                 if (row.route) {
                   navigation.navigate(row.route);
                 } else {
                   navigation.navigate("ProfilePlaceholder", {
-                    title: row.placeholder.title,
-                    message: row.placeholder.message,
+                    title: t(row.placeholder.titleKey),
+                    message: t(row.placeholder.messageKey),
                   });
                 }
               }}
               style={styles.row}
             />
           ))}
+          <ListRow
+            title={t("profile.signOut")}
+            subtitle={t("profile.signOutSubtitle")}
+            leading={
+              <Ionicons name="log-out-outline" size={22} color={MallMateTheme.color.error} />
+            }
+            titleColor={MallMateTheme.color.error}
+            onPress={handleSignOut}
+            style={styles.signOutRow}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -144,7 +152,7 @@ const styles = StyleSheet.create({
   },
   headerBody: {
     flex: 1,
-    marginLeft: MallMateTheme.spacing.lg,
+    marginStart: MallMateTheme.spacing.lg,
   },
   displayName: {
     color: MallMateTheme.color.textPrimary,
@@ -165,6 +173,9 @@ const styles = StyleSheet.create({
   },
   row: {
     marginBottom: 0,
+  },
+  signOutRow: {
+    marginTop: MallMateTheme.spacing.md,
   },
 });
 

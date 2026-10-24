@@ -63,7 +63,9 @@ const MenuItemScreen = ({ navigation, route }) => {
       <ScrollView contentContainerStyle={styles.content}>
         <Card>
           <Text style={styles.sectionCaption}>{section.title}</Text>
-          <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.name} accessibilityRole="header">
+            {item.name}
+          </Text>
           <View style={styles.statusRow}>
             <StatusChip
               label={item.available ? "Available" : "Sold out"}
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerMeta: {
     flex: 1,
@@ -167,7 +169,7 @@ const styles = StyleSheet.create({
     marginTop: MallMateTheme.spacing.md,
   },
   tag: {
-    marginRight: 0,
+    marginEnd: 0,
   },
   note: {
     marginTop: MallMateTheme.spacing.lg,

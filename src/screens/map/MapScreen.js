@@ -5,12 +5,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState, ListRow } from "../../components";
 import { CAPABILITY_STATUS, MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { useMallManagement } from "../../utils";
 
 /**
  * Map tab landing: capability-gated entry to the static floor map
- * preview (SCREEN_INVENTORY 43–44). Routing, destination search and live
- * positioning arrive in later Stage E tasks.
+ * (SCREEN_INVENTORY 43–44) and destination search / route preview
+ * (SCREEN_INVENTORY 45–49). Live positioning and real routing arrive
+ * with mall map integration.
  */
 const MapScreen = ({ navigation }) => {
   const { selectedMall } = useMallManagement();
@@ -22,8 +24,8 @@ const MapScreen = ({ navigation }) => {
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
         <EmptyState
           icon={<Ionicons name="map-outline" size={48} color={MallMateTheme.color.textMuted} />}
-          title="Maps unavailable"
-          message={`Indoor maps aren't offered at ${selectedMall.name} yet.`}
+          title={t("mall.mapsUnavailable")}
+          message={t("maps.unavailableMessage", { mall: selectedMall.name })}
         />
       </SafeAreaView>
     );
@@ -32,22 +34,30 @@ const MapScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.headerTitle}>Map</Text>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          {t("maps.title")}
+        </Text>
         <Text style={styles.headerMeta} numberOfLines={1}>
           {selectedMall.name}
         </Text>
         <ListRow
-          title="Floor map"
-          subtitle="Browse floors and points of interest"
+          title={t("maps.floorMap")}
+          subtitle={t("maps.floorMapSubtitle")}
           leading={<Ionicons name="map-outline" size={22} color={MallMateTheme.color.primary} />}
           onPress={() => navigation.navigate("FloorMap")}
           style={styles.row}
         />
+        <ListRow
+          title={t("maps.findDestination")}
+          subtitle={t("maps.findDestinationSubtitle")}
+          leading={
+            <Ionicons name="navigate-outline" size={22} color={MallMateTheme.color.primary} />
+          }
+          onPress={() => navigation.navigate("DestinationSearch")}
+          style={styles.row}
+        />
         <Card style={styles.noteCard}>
-          <Text style={styles.note}>
-            Preview build — static floor plans only. Destination search, route preview and live
-            positioning aren't enabled yet.
-          </Text>
+          <Text style={styles.note}>{t("maps.tabNote")}</Text>
         </Card>
       </ScrollView>
     </SafeAreaView>

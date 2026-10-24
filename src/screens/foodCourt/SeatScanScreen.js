@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, ListRow, SectionHeader } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { MOCK_SCAN_TARGETS, SCAN_OUTCOMES, resolveMockScan } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -34,7 +35,7 @@ const SeatScanScreen = ({ navigation }) => {
         <Pressable
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >
@@ -53,24 +54,20 @@ const SeatScanScreen = ({ navigation }) => {
             color={MallMateTheme.color.primary}
             style={styles.permissionIcon}
           />
-          <Text style={styles.permissionTitle}>Camera access for table codes</Text>
-          <Text style={styles.permissionMessage}>
-            MallMate only asks for camera access when you start a scan, and uses it solely to read
-            the QR sticker on a food-court table.
+          <Text style={styles.permissionTitle} accessibilityRole="header">
+            {t("foodCourt.permissionTitle")}
           </Text>
+          <Text style={styles.permissionMessage}>{t("foodCourt.permissionMessage")}</Text>
         </Card>
 
-        <SectionHeader title="Try a demo scan" style={styles.section} />
-        <Text style={styles.demoNote}>
-          Live camera scanning arrives with the real integration. Pick a demo table code below to
-          preview each outcome.
-        </Text>
+        <SectionHeader title={t("foodCourt.tryDemoScan")} style={styles.section} />
+        <Text style={styles.demoNote}>{t("foodCourt.demoNote")}</Text>
         <View style={styles.rows}>
           {MOCK_SCAN_TARGETS.map((target) => (
             <ListRow
               key={target.code}
               title={target.label}
-              subtitle={`Demo code ${target.code}`}
+              subtitle={t("foodCourt.demoCode", { code: target.code })}
               leading={
                 <Ionicons name="qr-code-outline" size={22} color={MallMateTheme.color.primary} />
               }
@@ -100,7 +97,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerMeta: {
     flex: 1,

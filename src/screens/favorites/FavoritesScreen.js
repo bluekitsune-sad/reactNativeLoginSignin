@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { EmptyState, ListRow } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getMerchantDetail } from "../../mock";
 import { useFavorites, useMallManagement } from "../../utils";
 
@@ -28,14 +29,16 @@ const FavoritesScreen = ({ navigation }) => {
         <Pressable
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </Pressable>
         <View style={styles.headerBody}>
-          <Text style={styles.headerTitle}>Favorites</Text>
+          <Text style={styles.headerTitle} accessibilityRole="header">
+            {t("profile.favorites")}
+          </Text>
           <Text style={styles.headerMeta} numberOfLines={1}>
             {selectedMall.name}
           </Text>
@@ -45,13 +48,15 @@ const FavoritesScreen = ({ navigation }) => {
       {merchants.length === 0 ? (
         <EmptyState
           icon={<Ionicons name="heart-outline" size={48} color={MallMateTheme.color.primary} />}
-          title="No favorites yet"
-          message={`Tap the heart on a merchant page to save it here. Favorites at ${selectedMall.name} will appear in this list.`}
+          title={t("favorites.emptyTitle")}
+          message={t("favorites.emptyMessage", { mall: selectedMall.name })}
         />
       ) : (
         <ScrollView contentContainerStyle={styles.content}>
           <Text style={styles.caption}>
-            Saved on this device · {merchants.length} merchant{merchants.length === 1 ? "" : "s"}
+            {merchants.length === 1
+              ? t("favorites.savedOne", { count: merchants.length })
+              : t("favorites.savedMany", { count: merchants.length })}
           </Text>
           <View style={styles.rows}>
             {merchants.map((merchant) => (
@@ -70,7 +75,7 @@ const FavoritesScreen = ({ navigation }) => {
                   <Pressable
                     onPress={() => toggleFavorite(merchant.id)}
                     accessibilityRole="button"
-                    accessibilityLabel={`Remove ${merchant.name} from favorites`}
+                    accessibilityLabel={t("favorites.removeA11y", { merchant: merchant.name })}
                     hitSlop={MallMateTheme.spacing.sm}
                     style={styles.heartButton}
                   >
@@ -104,7 +109,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerBody: {
     flex: 1,

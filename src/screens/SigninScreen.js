@@ -1,18 +1,12 @@
 import { Ionicons, Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button, Separator, ToggleButton } from "../components";
-import { Images, MallMateTheme } from "../constants";
+import { MallMateTheme } from "../constants";
+import { t } from "../i18n";
+import { isSuspiciousLogin } from "../mock";
 import { AuthenicationService } from "../services";
 import useUserManagement from "../utils/userData";
 
@@ -37,7 +31,14 @@ const SigninScreen = ({ navigation }) => {
       setIsLoading(false);
       if (response?.status) {
         updateUser(response?.data);
-        navigation.replace("Main");
+        // Decided flow (issue #9): logins the backend flags as suspicious
+        // take an extra OTP step (mock rule in src/mock/otp.js); everyone
+        // else proceeds straight to the app.
+        if (isSuspiciousLogin(username)) {
+          navigation.replace("Verification", { flow: "login", destination: username });
+        } else {
+          navigation.replace("Main");
+        }
       } else {
         setErrorMessage(response?.message);
       }
@@ -56,15 +57,15 @@ const SigninScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           style={styles.backButton}
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Sign In</Text>
+        <Text style={styles.headerTitle}>{t("auth.signIn")}</Text>
       </View>
-      <Text style={styles.title}>Welcome</Text>
-      <Text style={styles.content}>Enter your username and password, and enjoy ordering food</Text>
+      <Text style={styles.title}>{t("auth.welcome")}</Text>
+      <Text style={styles.content}>{t("auth.welcomeSubtitle")}</Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputSubContainer}>
           <Feather
@@ -74,12 +75,12 @@ const SigninScreen = ({ navigation }) => {
             style={styles.inputIcon}
           />
           <TextInput
-            placeholder="Username"
+            placeholder={t("auth.username")}
             placeholderTextColor={MallMateTheme.color.textMuted}
             selectionColor={MallMateTheme.color.primary}
             style={styles.inputText}
             onChangeText={(text) => setUsername(text)}
-            accessibilityLabel="Username"
+            accessibilityLabel={t("auth.username")}
           />
         </View>
       </View>
@@ -94,12 +95,12 @@ const SigninScreen = ({ navigation }) => {
           />
           <TextInput
             secureTextEntry={!isPasswordShow}
-            placeholder="Password"
+            placeholder={t("auth.password")}
             placeholderTextColor={MallMateTheme.color.textMuted}
             selectionColor={MallMateTheme.color.primary}
             style={styles.inputText}
             onChangeText={(text) => setPassword(text)}
-            accessibilityLabel="Password"
+            accessibilityLabel={t("auth.password")}
           />
           <Feather
             name={isPasswordShow ? "eye" : "eye-off"}
@@ -108,7 +109,7 @@ const SigninScreen = ({ navigation }) => {
             style={styles.inputIcon}
             onPress={() => setIsPasswordShow(!isPasswordShow)}
             accessibilityRole="button"
-            accessibilityLabel={isPasswordShow ? "Hide password" : "Show password"}
+            accessibilityLabel={isPasswordShow ? t("auth.hidePassword") : t("auth.showPassword")}
           />
         </View>
       </View>
@@ -116,44 +117,32 @@ const SigninScreen = ({ navigation }) => {
       <View style={styles.forgotPasswordContainer}>
         <View style={styles.toggleContainer}>
           <ToggleButton size={0.5} />
-          <Text style={styles.rememberMeText}>Remember me</Text>
+          <Text style={styles.rememberMeText}>{t("auth.rememberMe")}</Text>
         </View>
         <Text
           style={styles.forgotPasswordText}
           onPress={() => navigation.navigate("ForgotPassword")}
           accessibilityRole="button"
         >
-          Forgot Password
+          {t("auth.forgotPassword")}
         </Text>
       </View>
-      <Button label="Sign In" onPress={signIn} loading={isLoading} style={styles.signinButton} />
+      <Button
+        label={t("auth.signIn")}
+        onPress={signIn}
+        loading={isLoading}
+        style={styles.signinButton}
+      />
       <View style={styles.signupContainer}>
-        <Text style={styles.accountText}>Don't have an account?</Text>
+        <Text style={styles.accountText}>{t("auth.noAccount")}</Text>
         <Text
           style={styles.signupText}
           onPress={() => navigation.navigate("Signup")}
           accessibilityRole="button"
         >
-          Sign Up
+          {t("auth.signUp")}
         </Text>
       </View>
-      <Text style={styles.orText}>OR</Text>
-      <TouchableOpacity style={styles.socialButton} activeOpacity={0.8}>
-        <View style={styles.socialButtonsContainer}>
-          <View style={styles.signinButtonLogoContainer}>
-            <Image source={Images.FACEBOOK} style={styles.signinButtonLogo} />
-          </View>
-          <Text style={styles.socialSigninButtonText}>Connect with Facebook</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.socialButton} activeOpacity={0.8}>
-        <View style={styles.socialButtonsContainer}>
-          <View style={styles.signinButtonLogoContainer}>
-            <Image source={Images.GOOGLE} style={styles.signinButtonLogo} />
-          </View>
-          <Text style={styles.socialSigninButtonText}>Connect with Google</Text>
-        </View>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -181,7 +170,7 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textPrimary,
     flex: 1,
     textAlign: "center",
-    marginRight: MallMateTheme.touchTarget.min,
+    marginEnd: MallMateTheme.touchTarget.min,
   },
   title: {
     ...MallMateTheme.typography.h2,
@@ -213,7 +202,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputIcon: {
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   inputText: {
     fontSize: MallMateTheme.typography.bodyLarge.fontSize,
@@ -231,7 +220,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   rememberMeText: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
     ...MallMateTheme.typography.label,
     fontFamily: MallMateTheme.fontFamily.regular,
     color: MallMateTheme.color.textSecondary,
@@ -261,48 +250,7 @@ const styles = StyleSheet.create({
     ...MallMateTheme.typography.label,
     fontFamily: MallMateTheme.fontFamily.semiBold,
     color: MallMateTheme.color.primary,
-    marginLeft: MallMateTheme.spacing.xs,
-  },
-  orText: {
-    ...MallMateTheme.typography.label,
-    fontFamily: MallMateTheme.fontFamily.medium,
-    color: MallMateTheme.color.textMuted,
-    alignSelf: "center",
-    marginBottom: MallMateTheme.spacing.md,
-  },
-  socialButton: {
-    backgroundColor: MallMateTheme.color.surfaceElevated,
-    paddingVertical: MallMateTheme.spacing.lg,
-    marginHorizontal: MallMateTheme.spacing.lg,
-    borderRadius: MallMateTheme.radius.control,
-    borderWidth: 1,
-    borderColor: MallMateTheme.color.border,
-    marginBottom: MallMateTheme.spacing.md,
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: MallMateTheme.touchTarget.ideal,
-  },
-  signinButtonLogo: {
-    height: 18,
-    width: 18,
-  },
-  signinButtonLogoContainer: {
-    backgroundColor: MallMateTheme.color.textPrimary,
-    padding: 2,
-    borderRadius: 3,
-    position: "absolute",
-    left: MallMateTheme.spacing.xl,
-  },
-  socialButtonsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-  },
-  socialSigninButtonText: {
-    color: MallMateTheme.color.textPrimary,
-    ...MallMateTheme.typography.label,
-    fontFamily: MallMateTheme.fontFamily.medium,
+    marginStart: MallMateTheme.spacing.xs,
   },
   toggleContainer: {
     flexDirection: "row",

@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { SectionHeader } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 
 const DEFAULT_PREFERENCES = {
   orderUpdates: true,
@@ -27,58 +28,57 @@ const SettingsScreen = ({ navigation }) => {
         <Pressable
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </Pressable>
-        <Text style={styles.headerTitle}>Settings</Text>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          {t("profile.settings")}
+        </Text>
         <View style={styles.headerSpacer} />
       </View>
       <ScrollView contentContainerStyle={styles.content}>
-        <SectionHeader title="Notifications" />
+        <SectionHeader title={t("profile.notifications")} />
         <View style={styles.card}>
           <SettingRow
-            title="Order and payment updates"
-            subtitle="Status changes for orders you place in the app"
+            title={t("profile.orderUpdates")}
+            subtitle={t("profile.orderUpdatesSubtitle")}
             value={preferences.orderUpdates}
             onValueChange={toggle("orderUpdates")}
           />
           <SettingRow
-            title="Loyalty activity"
-            subtitle="Points earned, redeemed or reversed"
+            title={t("profile.loyaltyActivity")}
+            subtitle={t("profile.loyaltyActivitySubtitle")}
             value={preferences.loyaltyActivity}
             onValueChange={toggle("loyaltyActivity")}
           />
           <SettingRow
-            title="Event reminders"
-            subtitle="Reminders for events you are interested in"
+            title={t("profile.eventReminders")}
+            subtitle={t("profile.eventRemindersSubtitle")}
             value={preferences.eventReminders}
             onValueChange={toggle("eventReminders")}
           />
           <SettingRow
-            title="Merchant alerts"
-            subtitle="Updates from merchants you follow or buy from"
+            title={t("profile.merchantAlerts")}
+            subtitle={t("profile.merchantAlertsSubtitle")}
             value={preferences.merchantAlerts}
             onValueChange={toggle("merchantAlerts")}
             isLast
           />
         </View>
-        <SectionHeader title="Marketing" style={styles.section} />
+        <SectionHeader title={t("profile.marketing")} style={styles.section} />
         <View style={styles.card}>
           <SettingRow
-            title="Marketing offers"
-            subtitle="Promotions, sponsored highlights and mall campaigns. Optional — you can turn this off at any time. Transactional messages about your orders are separate and stay under Order and payment updates."
+            title={t("profile.marketingOffers")}
+            subtitle={t("profile.marketingOffersSubtitle")}
             value={preferences.marketingOffers}
             onValueChange={toggle("marketingOffers")}
             isLast
           />
         </View>
-        <Text style={styles.footnote}>
-          These preferences are stored on this device for now. Server-side notification settings
-          will sync once the backend is connected.
-        </Text>
+        <Text style={styles.footnote}>{t("profile.settingsFootnote")}</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     color: MallMateTheme.color.textPrimary,
     fontSize: MallMateTheme.typography.h3.fontSize,
     fontFamily: MallMateTheme.fontFamily.semiBold,
-    marginRight: MallMateTheme.touchTarget.min,
+    marginEnd: MallMateTheme.touchTarget.min,
   },
   headerSpacer: {
     width: MallMateTheme.touchTarget.min,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   rowBody: {
     flex: 1,
-    paddingRight: MallMateTheme.spacing.md,
+    paddingEnd: MallMateTheme.spacing.md,
   },
   rowTitle: {
     color: MallMateTheme.color.textPrimary,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   switch: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
   },
   footnote: {
     color: MallMateTheme.color.textMuted,

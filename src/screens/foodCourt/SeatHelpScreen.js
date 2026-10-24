@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Button, Card } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { SEAT_HELP_COPY } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -26,7 +27,7 @@ const SeatHelpScreen = ({ navigation, route }) => {
         <Pressable
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >
@@ -45,21 +46,23 @@ const SeatHelpScreen = ({ navigation, route }) => {
             color={MallMateTheme.color.error}
             style={styles.icon}
           />
-          <Text style={styles.title}>{copy.title}</Text>
+          <Text style={styles.title} accessibilityRole="header">
+            {copy.title}
+          </Text>
           <Text style={styles.message}>{copy.message}</Text>
           {seat ? (
             <Text style={styles.seatMeta}>
-              Scanned {seat.label} · {seat.zoneName}
+              {t("foodCourt.scannedSeat", { label: seat.label, zone: seat.zoneName })}
             </Text>
           ) : null}
         </Card>
         <Button
-          label="Scan again"
+          label={t("foodCourt.scanAgain")}
           onPress={() => navigation.navigate("SeatScan")}
           style={styles.action}
         />
         <Button
-          label="Back to food court"
+          label={t("foodCourt.backToFoodCourt")}
           variant="secondary"
           onPress={() => navigation.navigate("FoodCourt")}
           style={styles.action}
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerMeta: {
     flex: 1,

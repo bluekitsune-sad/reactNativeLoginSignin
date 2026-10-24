@@ -9,7 +9,8 @@ ordering scaffold (sign‑in flow implemented); **it is now becoming the
 MallMate multi‑mall app** (see below). TypeScript is introduced incrementally
 (`tsconfig.json` with `allowJs`); new type files live in `src/types/`.
 `npm run lint` (ESLint) and `npm run typecheck` (`tsc --noEmit`) exist; there
-is still no test suite — tests are on the backlog.
+is a `test` script (`npm test`, `jest-expo`) with first suites under
+`src/*/__tests__/`.
 
 Entry point: `App.js` → loads fonts → renders `src/navigators/index.js`.
 
@@ -37,7 +38,14 @@ Rules for agents working toward MallMate:
   just to swap tokens.
 - **TypeScript is introduced incrementally** (`allowJs`): new type files are
   `.ts`, existing `.js` files stay as they are unless a TODO item says to
-  convert them.
+  convert them. The first migration slice landed the pattern: services can be
+  renamed to `.ts` and screens to `.tsx` with props typed as
+  `RootStackScreenProps<"Route">` from `src/types/navigation.ts` (keep
+  `RootStackParamList` in sync when converting); everything is `strict`, so
+  converted files need real narrowing (JS kit components may need a JSDoc
+  `@param` to mark props optional — `EmptyState` has one). Converted so far:
+  `src/services/apiClient.ts` and `ProfilePlaceholderScreen.tsx`
+  (`@types/react` is a devDependency — required for any `.tsx`).
 - The blueprint recommends a feature‑folder layout long term
   (`01-architecture/PROJECT_STRUCTURE.md`); keep new screens organized under
   `src/screens/<area>/` so a later restructure is cheap.
@@ -53,10 +61,13 @@ npm run web          # expo start --web
 ```
 
 There is now a `lint` script (ESLint + Prettier via `eslint-config-universe`,
-`npm run lint`) and `npm run typecheck` (`tsc --noEmit`); still no `test`
-script. Do not claim verification you cannot perform; at minimum re-read the
-files you changed and keep JSX/imports consistent, and run `npm run lint`
-(legacy files emit warnings — only introduce no new errors).
+`npm run lint`), `npm run typecheck` (`tsc --noEmit`) and a `test` script
+(`jest-expo` preset, `npm test`; AsyncStorage is mapped to its jest mock via
+`moduleNameMapper` in `package.json`). Do not claim verification you cannot
+perform; at minimum re-read the files you changed and keep JSX/imports
+consistent, and run `npm run lint` (the codebase is at a clean baseline —
+0 errors and 0 warnings; keep it that way) plus `npm test` when you touch
+covered code.
 
 ## Architecture rules
 
@@ -67,27 +78,36 @@ files you changed and keep JSX/imports consistent, and run `npm run lint`
   `../services`), not deep relative paths.
 - **Screens live in `src/screens/`,** registered in `src/navigators/index.js`.
   A screen must be exported from `src/screens/index.js` *and* added to the
-  navigator. Several screens are stubbed as comments (`SignupScreen`,
-  `ForgotPasswordScreen`, `RegisterPhoneScreen`, `VerificationScreen`) — they do
-  not exist yet, and `SigninScreen` already calls `navigation.navigate("Signup")`
-  and `navigate("ForgotPassword")`.
+  navigator. `SignupScreen` and `ForgotPasswordScreen` exist and are
+  registered; only `RegisterPhoneScreen` and `VerificationScreen` remain
+  stubbed as comments (parked on owner question #9), and `SigninScreen`
+  already calls `navigation.navigate("Signup")` and
+  `navigate("ForgotPassword")`.
 - **Network calls only in `src/services/`.** Services return a stable envelope:
   `{ status: boolean, message: string, data?: any }`. Keep that shape.
 - **API paths and base URL come from `src/constants/ApiContants.js`.** Never
   hardcode a new host inside a service (the existing hardcoded IPs are legacy
   debt — do not add more).
 - **New MallMate network calls go through the shared API client helper**
-  (`src/services/apiClient.js`) — see "API client helper" below.
-- **Design tokens** are in `src/constants/Colors.js` and `src/constants/Fonts.js`.
-  Use them; don't inline hex colors or font names. New MallMate code uses
-  `src/constants/Theme.js` instead (see the MallMate section).
+  (`src/services/apiClient.ts`) — see "API client helper" below.
+- **Mock data lives in `src/mock/`** (barrel‑exported) — that is the single
+  source of truth for preview/demo data. Services are the live‑API path.
+  The legacy scaffold mocks (`resdata.js`, `fooddata.js`, `Mock.js`) were
+  removed as dead code — don't reintroduce them.
+- **Design tokens**: MallMate code uses `src/constants/Theme.js` (see the
+  MallMate section). The legacy palette lives in `src/constants/Colors.js`
+  (only `ToggleButton` still consumes it); `Fonts.js` was removed with the
+  legacy scaffold — font names come from `Theme.fontFamily`. Don't inline
+  hex colors or font names.
 - **Styling** is `StyleSheet.create` at the bottom of each component file, using
   `Display.setWidth/setHeight` for relative sizing.
-- **State:** Redux was removed; commented‑out `useDispatch`/`useSelector` and
-  `src/actions` imports are leftovers. Current state lives in local `useState`
-  plus the `useUserManagement` hook in `src/utils/userData.js`.
+- **State:** Redux was removed (and the old commented‑out
+  `useDispatch`/`useSelector`/`src/actions` leftovers have been cleaned up).
+  Current state lives in local `useState` plus React Context providers
+  (`useUserManagement` in `src/utils/userData.js`, plus the mall and
+  favorites contexts).
 
-### API client helper (`src/services/apiClient.js`)
+### API client helper (`src/services/apiClient.ts`)
 
 New MallMate network code should use the shared typed axios wrapper instead of
 calling `axios` directly:
@@ -127,24 +147,28 @@ if (res.status) {
 
 ## Known landmines (read before editing)
 
-1. **Dead third‑party API:** `countryflags.io` in `ApiContants.COUNTRY_FLAG`.
-2. **No `src/actions` directory** even though commented code imports from it
-   (`FoodCard.js`, `RestaurantCard.js`).
-3. **`AuthenticationService.login`** still does a GET with the credentials
+1. ~~**Dead third‑party API:** `countryflags.io` in `ApiContants.COUNTRY_FLAG`.~~
+   Fixed: `COUNTRY_FLAG` removed; country picker uses emoji flags from
+   `CountryCode.js`.
+2. **`AuthenticationService.login`** still does a GET with the credentials
    JSON‑stringified into the URL path (see TODO P3) — do not copy that pattern
    into new services.
-4. **Web build:** `webpack.config.js` maps node's `crypto` to `false` so
+3. **Web build:** `webpack.config.js` maps node's `crypto` to `false` so
    Expo web compiles (`expo-modules-core/uuid`). Do not delete it.
 
 Previously documented and now fixed (do not regress): icons come from
 `@expo/vector-icons`; `SigninScreen` calls `useUserManagement` at the top level
 with `response?.data` and declares it only once; `ApiContants.js` has unique
-keys (`ALL_RESTAURANTS`, `RESTAURANT`, `BOOKMARK`); the backend URL is
+keys (duplicate keys fixed long ago; the dead legacy endpoint keys were
+removed in 2026-10-23 — only the auth paths remain); the backend URL is
 configurable via `EXPO_PUBLIC_BACKEND_URL` / `app.json` `extra.backendUrl`
 (`expo-constants`); `StorageService` serializes with `JSON.stringify`/
 `JSON.parse` on the shared `"user"` key; `useUserManagement` is a React
 Context (`UserProvider`) shared across screens; `SignupScreen` and
-`ForgotPasswordScreen` exist and are registered in the navigator.
+`ForgotPasswordScreen` exist and are registered in the navigator; the
+commented‑out `react-redux`/`src/actions` leftovers in the legacy card
+components are removed (state is Context + local `useState`; those
+components were themselves deleted in the 2026-10-21 legacy removal).
 
 ## Conventions
 

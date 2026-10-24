@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { ApiContants } from "../constants";
 
 const AuthRequest = axios.create({
@@ -10,15 +11,12 @@ const register = async (user) => {
     return { status: false, message: "Please fill up all fields" };
   }
   try {
-    let requestBody = {
+    const requestBody = {
       username: user?.username,
       email: user?.email,
       password: user?.password,
     };
-    let registerResponse = await AuthRequest.post(
-      ApiContants.BACKEND_API.REGISTER,
-      requestBody
-    );
+    const registerResponse = await AuthRequest.post(ApiContants.BACKEND_API.REGISTER, requestBody);
     return registerResponse?.data;
   } catch (error) {
     console.log(error);
@@ -31,14 +29,12 @@ const login = async (user) => {
     return { status: false, message: "Please fill up all fields" };
   }
   try {
-    let requestBody = JSON.stringify({
+    const requestBody = JSON.stringify({
       username: user?.username,
       password: user?.password,
     });
 
-    let loginResponse = await AuthRequest.get(
-      ApiContants.BACKEND_API.LOGIN + requestBody
-    );
+    const loginResponse = await AuthRequest.get(ApiContants.BACKEND_API.LOGIN + requestBody);
 
     return loginResponse?.data;
   } catch (error) {
@@ -49,11 +45,8 @@ const login = async (user) => {
 
 const checkUserExist = async (type, value) => {
   try {
-    let params = { [type]: value };
-    let userCheckResponse = await AuthRequest.get(
-      ApiContants.BACKEND_API.USER_EXIST,
-      { params }
-    );
+    const params = { [type]: value };
+    const userCheckResponse = await AuthRequest.get(ApiContants.BACKEND_API.USER_EXIST, { params });
     return userCheckResponse?.data;
   } catch (error) {
     console.log(error);
@@ -63,9 +56,7 @@ const checkUserExist = async (type, value) => {
 
 const refreshToken = async () => {
   try {
-    let tokenResponse = await AuthRequest.post(
-      ApiContants.BACKEND_API.REFRESH_TOKEN
-    );
+    const tokenResponse = await AuthRequest.post(ApiContants.BACKEND_API.REFRESH_TOKEN);
     if (tokenResponse?.status === 200) {
       return { status: true, data: tokenResponse?.data };
     } else {

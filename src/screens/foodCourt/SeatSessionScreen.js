@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Button, Card, SectionHeader, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { useMallManagement } from "../../utils";
 
 const formatTime = (iso) => {
@@ -30,8 +31,11 @@ const SeatSessionScreen = ({ navigation, route }) => {
     return (
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
         <View style={styles.body}>
-          <Text style={styles.missingMessage}>No active seat session.</Text>
-          <Button label="Back to food court" onPress={() => navigation.navigate("FoodCourt")} />
+          <Text style={styles.missingMessage}>{t("foodCourt.noActiveSession")}</Text>
+          <Button
+            label={t("foodCourt.backToFoodCourt")}
+            onPress={() => navigation.navigate("FoodCourt")}
+          />
         </View>
       </SafeAreaView>
     );
@@ -47,7 +51,7 @@ const SeatSessionScreen = ({ navigation, route }) => {
         <Pressable
           onPress={() => navigation.navigate("FoodCourt")}
           accessibilityRole="button"
-          accessibilityLabel="Back to food court"
+          accessibilityLabel={t("foodCourt.backToFoodCourt")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >
@@ -68,8 +72,10 @@ const SeatSessionScreen = ({ navigation, route }) => {
               style={styles.heroIcon}
             />
             <View style={styles.heroBody}>
-              <Text style={styles.heroTitle}>Session active</Text>
-              <StatusChip label="Ongoing" tone="success" style={styles.heroChip} />
+              <Text style={styles.heroTitle} accessibilityRole="header">
+                {t("foodCourt.sessionActive")}
+              </Text>
+              <StatusChip label={t("foodCourt.ongoing")} tone="success" style={styles.heroChip} />
             </View>
           </View>
           <Text style={styles.seatLabel}>{session.seat?.label}</Text>
@@ -78,31 +84,27 @@ const SeatSessionScreen = ({ navigation, route }) => {
           </Text>
           <View style={styles.timesRow}>
             <View style={styles.timeBox}>
-              <Text style={styles.timeLabel}>Started</Text>
+              <Text style={styles.timeLabel}>{t("foodCourt.started")}</Text>
               <Text style={styles.timeValue}>{formatTime(session.startedAt)}</Text>
             </View>
             <View style={styles.timeBox}>
-              <Text style={styles.timeLabel}>Preview until</Text>
+              <Text style={styles.timeLabel}>{t("foodCourt.previewUntil")}</Text>
               <Text style={styles.timeValue}>{formatTime(session.expiresAt)}</Text>
             </View>
           </View>
-          <Text style={styles.disclosure}>
-            Preview only — sessions aren't enforced or validated in this build.
-          </Text>
+          <Text style={styles.disclosure}>{t("foodCourt.sessionDisclosure")}</Text>
         </Card>
 
-        <SectionHeader title="Manage" style={styles.section} />
+        <SectionHeader title={t("foodCourt.manage")} style={styles.section} />
         <Card>
-          <Text style={styles.manageMessage}>
-            End your session when you leave the table so the seat frees up for the next guest.
-          </Text>
+          <Text style={styles.manageMessage}>{t("foodCourt.manageMessage")}</Text>
           <Button
-            label="End session"
+            label={t("foodCourt.endSession")}
             onPress={() => goToOutcome("ended")}
             style={styles.manageButton}
           />
           <Button
-            label="Simulate expiry"
+            label={t("foodCourt.simulateExpiry")}
             variant="secondary"
             onPress={() => goToOutcome("expired")}
             style={styles.manageButton}
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerMeta: {
     flex: 1,
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   heroIcon: {
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   heroBody: {
     flex: 1,

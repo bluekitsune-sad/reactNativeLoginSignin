@@ -5,21 +5,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { MALLS } from "../../mock/malls";
 import { useMallManagement } from "../../utils";
 
 const hoursSummary = (mall) => {
   const days = mall.openingHours?.days ?? [];
   if (!days.length) {
-    return "Hours unavailable";
+    return t("mall.hoursUnavailable");
   }
   const uniform = days.every(
     (day) => day.opensAt === days[0].opensAt && day.closesAt === days[0].closesAt,
   );
   if (uniform) {
-    return `Daily ${days[0].opensAt}–${days[0].closesAt}`;
+    return t("mall.hoursDaily", { opensAt: days[0].opensAt, closesAt: days[0].closesAt });
   }
-  return "See weekly hours";
+  return t("mall.hoursSeeWeekly");
 };
 
 const MallSelectorScreen = ({ navigation }) => {
@@ -36,12 +37,14 @@ const MallSelectorScreen = ({ navigation }) => {
         <Pressable
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           hitSlop={MallMateTheme.spacing.sm}
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </Pressable>
-        <Text style={styles.headerTitle}>Choose a mall</Text>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          {t("mall.chooseMall")}
+        </Text>
         <View style={styles.headerSpacer} />
       </View>
       <FlatList
@@ -51,7 +54,11 @@ const MallSelectorScreen = ({ navigation }) => {
         renderItem={({ item }) => {
           const isSelected = item.slug === selectedMall.slug;
           return (
-            <Card onPress={() => onSelect(item)} style={styles.card}>
+            <Card
+              onPress={() => onSelect(item)}
+              accessibilityState={{ selected: isSelected }}
+              style={styles.card}
+            >
               <View style={styles.cardRow}>
                 <View style={styles.logoPlaceholder}>
                   <Text style={styles.logoPlaceholderText}>{item.name.charAt(0)}</Text>
@@ -66,7 +73,8 @@ const MallSelectorScreen = ({ navigation }) => {
                     name="checkmark-circle"
                     size={24}
                     color={MallMateTheme.color.primary}
-                    accessibilityLabel="Selected"
+                    accessibilityElementsHidden
+                    importantForAccessibility="no"
                   />
                 ) : null}
               </View>
@@ -116,7 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: MallMateTheme.color.surfaceElevated,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.md,
+    marginEnd: MallMateTheme.spacing.md,
   },
   logoPlaceholderText: {
     color: MallMateTheme.color.primary,

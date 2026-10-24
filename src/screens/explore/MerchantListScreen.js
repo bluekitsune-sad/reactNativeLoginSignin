@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { EmptyState, ErrorState, ListRow, LoadingState, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { LIST_KIND_META, fetchMerchantListPage, isCapabilityVisible } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -140,7 +141,7 @@ const MerchantListScreen = ({ navigation, route }) => {
       leading={<Ionicons name={meta.icon} size={20} color={MallMateTheme.color.primary} />}
       trailing={
         <StatusChip
-          label={item.openNow ? "Open" : "Closed"}
+          label={item.openNow ? t("explore.open") : t("explore.closed")}
           tone={item.openNow ? "success" : "muted"}
         />
       }
@@ -152,9 +153,9 @@ const MerchantListScreen = ({ navigation, route }) => {
   const renderFooter = () => {
     if (loadingMore) {
       return (
-        <View style={styles.footerStatus} accessibilityLabel="Loading more results">
+        <View style={styles.footerStatus} accessibilityLabel={t("explore.loadingMoreA11y")}>
           <ActivityIndicator size="small" color={MallMateTheme.color.primary} />
-          <Text style={styles.footerText}>Loading more…</Text>
+          <Text style={styles.footerText}>{t("explore.loadingMore")}</Text>
         </View>
       );
     }
@@ -165,11 +166,11 @@ const MerchantListScreen = ({ navigation, route }) => {
           <Pressable
             onPress={loadNextPage}
             accessibilityRole="button"
-            accessibilityLabel="Retry loading more results"
+            accessibilityLabel={t("explore.retryLoadingMore")}
             hitSlop={MallMateTheme.spacing.sm}
             style={({ pressed }) => [styles.retryButton, pressed && styles.retryButtonPressed]}
           >
-            <Text style={styles.retryButtonText}>Retry</Text>
+            <Text style={styles.retryButtonText}>{t("common.retry")}</Text>
           </Pressable>
         </View>
       );
@@ -177,7 +178,10 @@ const MerchantListScreen = ({ navigation, route }) => {
     if (!hasMore && items.length > 0) {
       return (
         <Text style={styles.footerEnd}>
-          That's all {total} {total === 1 ? "place" : "places"} at {selectedMall.name}
+          {t(total === 1 ? "explore.listEndOne" : "explore.listEndMany", {
+            total,
+            mall: selectedMall.name,
+          })}
         </Text>
       );
     }
@@ -192,14 +196,16 @@ const MerchantListScreen = ({ navigation, route }) => {
         <Pressable
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t("common.goBack")}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.backButton}
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </Pressable>
         <View style={styles.headerBody}>
-          <Text style={styles.headerTitle}>{meta.title}</Text>
+          <Text style={styles.headerTitle} accessibilityRole="header">
+            {meta.title}
+          </Text>
           <Text style={styles.headerMeta} numberOfLines={1}>
             {selectedMall.name}
           </Text>
@@ -213,11 +219,11 @@ const MerchantListScreen = ({ navigation, route }) => {
           message={unavailableMessage}
         />
       ) : status === "loading" ? (
-        <LoadingState message={`Loading ${meta.title.toLowerCase()}…`} />
+        <LoadingState message={t("explore.loadingList", { list: meta.title.toLowerCase() })} />
       ) : status === "error" ? (
         <ErrorState
-          title={`Couldn't load ${meta.title.toLowerCase()}`}
-          message={errorMessage || "Something went wrong while loading this list."}
+          title={t("explore.loadFailedTitle", { list: meta.title.toLowerCase() })}
+          message={errorMessage || t("explore.loadFailedMessage")}
           onRetry={() => loadFirstPage()}
         />
       ) : status === "empty" ? (
@@ -267,7 +273,7 @@ const styles = StyleSheet.create({
     minWidth: MallMateTheme.touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: MallMateTheme.spacing.sm,
+    marginEnd: MallMateTheme.spacing.sm,
   },
   headerBody: {
     flex: 1,

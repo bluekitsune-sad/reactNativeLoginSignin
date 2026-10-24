@@ -3,9 +3,9 @@
  * Source of truth: MallMate_Project_Blueprint/04-mobile/DESIGN_SYSTEM.md
  * (also summarized in MallMate_Project_Blueprint/PRD.md section 8).
  *
- * New MallMate screens and components must use these tokens. The legacy
- * food-ordering screens still use Colors.js / Fonts.js — migrating them is
- * incremental; do not rewrite legacy screens only to swap tokens.
+ * New MallMate screens and components must use these tokens. The only
+ * remaining legacy token consumer is Colors.js (ToggleButton on the sign-in
+ * screen); do not rewrite screens only to swap tokens.
  */
 const MallMateTheme = {
   color: {

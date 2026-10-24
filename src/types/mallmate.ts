@@ -53,12 +53,12 @@ export interface OpeningHours {
   timezone?: string;
   days: OpeningHoursDay[];
   /** Exceptions (holidays, special hours); `date` is "YYYY-MM-DD". */
-  exceptions?: Array<{
+  exceptions?: {
     date: string;
     closed: boolean;
     opensAt?: string;
     closesAt?: string;
-  }>;
+  }[];
 }
 
 /** ERD "Identity and tenancy" → Mall. */

@@ -8,6 +8,9 @@ node_modules/
 dist/
 web-build/
 
+# capture-screens output
+output/
+
 # Native
 *.orig.*
 *.jks

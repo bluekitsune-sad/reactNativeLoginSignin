@@ -1,13 +1,18 @@
-# React Native Login / Sign In (Expo)
+# MallMate (Expo)
 
-A food‑ordering style mobile app built with **Expo** and **React Navigation**. The
-shipped flow today is a Sign In screen backed by a REST backend, with a full set of
-reusable components, services and constants already in place for the rest of the
-food‑ordering experience (restaurants, food, cart, bookmarks).
+**MallMate** is a multi‑mall smart shopping, navigation, dining and loyalty
+app (pilot: LuckyOne Mall, Karachi), built with **Expo** and **React
+Navigation**. This repository is the mobile client: an auth flow backed by a
+REST backend, plus the MallMate app shell — all MallMate screens currently
+run on preview data from `src/mock/`.
 
-> Status: **work in progress.** The `Signin`, `Signup` and `ForgotPassword`
-> screens are registered in the navigator — see [TODO.md](./TODO.md) for the
-> remaining screens and known gaps.
+> Status: **work in progress.** The app signs you in (`Signin`, `Signup`,
+> `ForgotPassword`, phone‑OTP `RegisterPhone`/`Verification`) and drops you
+> into the MallMate shell: **Home, Explore, Map, Rewards, Profile** tabs with
+> their stack screens — mall selector, search + filters, restaurant/outlet
+> lists, merchant/menu/offer detail, favorites, food court + seat sessions,
+> floor map + destination search/route preview, events, order history,
+> settings. See [TODO.md](./TODO.md) for remaining work and known gaps.
 
 ---
 
@@ -28,38 +33,55 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 ## Features
 
 - Sign In screen with username / password, show/hide password, "Remember me"
-  toggle, loading state (Lottie animation) and inline error message.
+  toggle, loading state and inline error message.
 - Sign Up screen (username / email / password with validation) and a Forgot
   Password screen (email lookup via `user-exist`).
 - Shared user state through a React Context (`UserProvider` +
   `useUserManagement`), persisted to `AsyncStorage`.
-- Facebook / Google social sign‑in buttons (UI only, not wired up).
 - Authentication service (`register`, `login`, `checkUserExist`, `refreshToken`)
   built on `axios`.
-- Additional services ready to use: `RestaurantService`, `FoodService`,
-  `CartService`, `BookmarkService`, `UserService`, `StorageService`,
-  `StaticImageService`.
+- Services: `AuthenticationService`, `StorageService` and the typed axios
+  `ApiClient` helper (the unused food-ordering services `RestaurantService`,
+  `FoodService`, `CartService`, `BookmarkService`, `UserService` and
+  `StaticImageService` were removed with the legacy scaffold).
 - Local persistence via `AsyncStorage` (`StorageService`).
-- Poppins font family loaded at boot through `expo-font`.
-- Reusable UI kit: `Separator`, `ToggleButton`, `WelcomeCard`, `FoodCard`,
-  `RestaurantCard`, `RestaurantMediumCard`, `CategoryMenuItem`,
-  `CategoryListItem`, `FlagItem`.
-- Mock / seed data for restaurants and food (`src/constants/resdata.js`,
-  `src/constants/fooddata.js`) plus a large local image gallery.
+- Inter font family loaded at boot through `expo-font` (the legacy Poppins
+  weights were removed with the food-ordering scaffold).
+- Reusable UI kit in `src/components/mallmate/` (`Button`, `TextInput`,
+  `Card`, `ListRow`, `Badge`, `StatusChip`, `EmptyState`, `ErrorState`,
+  `LoadingState`, `FilterSheet`, …) plus `Separator`, `ToggleButton` and the
+  parked `FlagItem` country-code row.
+- English + Urdu string catalogs with a shared `t()` helper (`src/i18n/`).
+- MallMate preview data for merchants, menus, offers, events, orders, maps
+  and rewards in `src/mock/` (the single source for mock data; the legacy
+  `resdata`/`fooddata`/`Mock` constants were removed as dead code).
 
 ## Tech stack
 
 | Layer      | Choice |
 | ---------- | ------ |
-| Framework  | React Native `0.73.4` via Expo SDK `50` |
-| Language   | JavaScript (JSX); TypeScript types added incrementally (`allowJs`) |
-| Navigation | `@react-navigation/native` + `@react-navigation/stack` |
+| Framework  | React Native `0.73.6` via Expo SDK `50` |
+| Language   | JavaScript (JSX); TypeScript converted file-by-file (`allowJs`, first slice: `apiClient.ts`, `ProfilePlaceholderScreen.tsx`) |
+| Navigation | `@react-navigation/native` + `@react-navigation/stack` + `react-native-gesture-handler` |
 | HTTP       | `axios` |
 | Storage    | `@react-native-async-storage/async-storage` |
-| Animation  | `lottie-react-native`, `Animated` API |
-| Fonts      | `expo-font` (Poppins) |
+| Animation  | `Animated` API |
+| Fonts      | `expo-font` (Inter via `@expo-google-fonts/inter`) |
 | Icons      | `@expo/vector-icons` (Ionicons, Feather, AntDesign, FontAwesome) |
 | Safe area  | `react-native-safe-area-context` |
+
+### Navigation setup notes
+
+- **`react-native-gesture-handler` is required** by
+  `@react-navigation/stack` (it is a hard peer dependency). It is imported
+  as the first line of `App.js` (`import "react-native-gesture-handler";`)
+  so the native gesture driver initializes before any component — do not
+  remove or reorder that import.
+- **`react-native-reanimated` is intentionally not installed.** No screen
+  uses it (animations are the RN `Animated` API),
+  and it would need a Babel plugin (`react-native-reanimated/plugin`) in
+  `babel.config.js` if it were ever added. Only add it when a screen
+  actually needs layout animations or shared-element transitions.
 
 ## Getting started
 
@@ -86,26 +108,7 @@ npm run web        # start in the browser
 
 ## Backend configuration
 
-The API base URL is resolved in `src/constants/ApiContants.js` with the
-following precedence:
-
-1. `EXPO_PUBLIC_BACKEND_URL` environment variable (e.g.
-   `EXPO_PUBLIC_BACKEND_URL=http://192.168.1.10:3001 npm start`)
-2. `extra.backendUrl` in `app.json`
-3. Fallback: `http://localhost:3001`
-
-To point the app at your machine, edit `app.json`:
-
-```json
-"extra": {
-  "backendUrl": "http://192.168.0.103:3001"
-}
-```
-
-All endpoints (`/api/register`, `/api/getUser/`, `/api/cart`, `/api/bookmark`,
-`/api/getfood`, …) are derived from this constant.
-The API base URL is no longer hardcoded. It is resolved in
-`src/constants/ApiContants.js` in this order:
+The API base URL is resolved in `src/constants/ApiContants.js` in this order:
 
 1. `EXPO_PUBLIC_BACKEND_URL` environment variable (highest priority).
 2. `expo.extra.backendUrl` from `app.json` (via `expo-constants`).
@@ -129,8 +132,8 @@ or launch with an env var:
 EXPO_PUBLIC_BACKEND_URL=http://192.168.0.103:3001 npm start
 ```
 
-All endpoints (`/api/register`, `/api/getUser/`, `/api/cart`, `/api/bookmark`,
-`/api/getfood`, …) are derived from this base URL.
+All endpoints (e.g. `/api/register`, `/api/getUser/`, `/api/user-exist`,
+`/api/refresh-token`) are derived from this base URL.
 
 The expected sign‑in payload shape:
 
@@ -147,14 +150,16 @@ The expected sign‑in payload shape:
 ├── package.json
 ├── assets/                    # Expo icons / splash images
 └── src/
-    ├── assets/                # Fonts (Poppins), images, gallery, posters, logos
-    ├── components/            # Reusable UI (FoodCard, RestaurantCard, ...)
-    ├── constants/             # Colors, Fonts, Images, ApiContants, mock data
-    ├── navigators/            # React Navigation stack (Signin, Signup, ForgotPassword)
-    ├── screens/               # App screens (SigninScreen, SignupScreen, ...)
-    ├── services/              # axios API services + AsyncStorage wrapper
-    ├── types/                 # Incremental TypeScript entity types (MallMate)
-    └── utils/                 # Display helpers, auth header, user state context
+    ├── assets/                # Retained image assets (social-auth placeholders)
+    ├── components/            # UI kit: mallmate/ components + Separator/ToggleButton/FlagItem
+    ├── constants/             # Colors, Images, ApiContants, Theme, Capabilities, CustomFonts, CountryCode
+    ├── i18n/                  # English + Urdu string catalogs + t() helper
+    ├── mock/                  # MallMate preview data (merchants, offers, events, ...)
+    ├── navigators/            # Root stack + MallMate bottom tabs (Main), context providers
+    ├── screens/               # Auth + MallMate screens (home, explore, map, rewards, ...)
+    ├── services/              # axios API services + AsyncStorage wrapper (auth, storage, ApiClient)
+    ├── types/                 # TypeScript types (entities, API envelope, navigation)
+    └── utils/                 # Display helpers, user/mall/favorites contexts
 ```
 
 ### Key modules
@@ -169,7 +174,7 @@ The expected sign‑in payload shape:
 | `src/services/AuthenticationService.js` | Register / login / token refresh. |
 | `src/utils/Display.js` | `setWidth(w)` / `setHeight(h)` percentage helpers. |
 | `src/utils/userData.js` | `UserProvider` + `useUserManagement` context for the current user. |
-| `src/constants/Colors.js` | Design tokens (green primary `#0A8791`, etc.). |
+| `src/constants/Colors.js` | Legacy palette still used by `ToggleButton` (MallMate screens use `Theme.js`). |
 
 ## Available scripts
 
@@ -181,10 +186,10 @@ The expected sign‑in payload shape:
 | `npm run web` | Start the web build. |
 | `npm run typecheck` | Run `tsc --noEmit` over the incremental TypeScript setup. |
 | `npm run lint` | Run ESLint (with Prettier rules via `eslint-config-universe`). |
+| `npm test` | Run the Jest test suite (`jest-expo` preset). |
+| `npm run capture:screens` | Build the web export and screenshot all MallMate screens into `output/screens/` (needs a local Chrome/Chromium; see `scripts/capture-screens.mjs`). |
 
-There is currently **no** test script — see [TODO.md](./TODO.md).
-`npm run lint` reports pre-existing style warnings on legacy files; they are
-non-blocking (warning level) pending a repo-wide `--fix` pass.
+`npm run lint` is a clean baseline (0 errors, 0 warnings) — keep it that way.
 
 ## Contributing
 
@@ -242,3 +247,23 @@ done today:  > todoAgent Ran (2026-10-17 19:31 UTC): done — home content secti
 done today:  > todoAgent Ran (2026-10-18 13:36 UTC): done — restaurant+outlet lists w/ mock pagination; merchant detail; menu list + item detail; offer detail + terms sheet; local favorites
 
 done today:  > todoAgent Ran (2026-10-18 17:09 UTC): done — food-court overview w/ mock seating zones; seat-session mock flow (scan/confirm/session/end/help); floor selector + static floor map w/ POI pins; events list + event detail; rewards dashboard + ledger
+
+done today:  > todoAgent Ran (2026-10-18 19:58 UTC): done — destination search + route preview (45-49), order history + detail timeline (40-41), jest setup + first tests, app identity rename to MallMate, i18n groundwork + RTL audit
+
+done today:  > todoAgent Ran (2026-10-19 16:42 UTC): done — accessibility pass on MallMate screens (header roles, mall-card selected state, POI-pin hit areas, dynamic-type badge); hid social sign-in buttons until real auth exists; removed react-redux/src/actions leftovers (state = Context); clean ESLint baseline (174 warnings → 0); AuthenticationService + sign-in flow tests (5 suites, 34 passing)
+
+done today:  > todoAgent Ran (2026-10-19 21:54 UTC): done — screenshots capture pipeline + web deep links (26 screens); gesture-handler entry import + navigation setup notes; Expo SDK 50 dependency drift aligned; provisional phone-verification flow reverted pending owner question #9
+
+done today:  > todoAgent Ran (2026-10-20 14:43 UTC): done — removed dead legacy mocks (resdata/fooddata/Mock) + documented the mock source of truth; TypeScript migration first slice (apiClient.ts + ProfilePlaceholderScreen.tsx + RootStackParamList, @types/react added); fixed stale AGENTS.md screens paragraph and README claims/tree; analysis found 3 doc issues (2 fixed in-run, 1 queued gated on the legacy-kit decision)
+
+done today:  > todoAgent Ran (2026-10-21 15:25 UTC): done — unblocked issue #9 decisions: Urdu catalog + auth screens on t() keys (logical RTL margins); removed legacy food-ordering scaffold (~58MB assets, dead components/services/fonts, lottie dep); phone-OTP mock flow (RegisterPhone/CountryPicker/Verification, register→OTP→app, suspicious-login OTP); Profile + Events areas migrated to t() keys (7 suites, 48 tests, lint/typecheck/web-export clean)
+
+done today:  > todoAgent Ran (2026-10-21 21:03 UTC): done — Stage G t() adoption across 5 screen areas (7 suites, 48 tests, lint/typecheck clean): Home + mall selector on home.*/mall.* keys; Explore + merchant list on explore.* (list-end singular/plural, paging footer); Search on extended search.* (filter a11y, open-now tag; kit FilterSheet deferred to kit-defaults pass); Maps, all six screens, on new maps.* group (floor selector, POI pins, route preview; reuses common.goBack/search.*/mall.mapsUnavailable); Food court, all six seat-flow screens, on new foodCourt.* group (interpolated seat counts + demo codes, ended/expired key pairs; mock SEAT_HELP_COPY/zone labels stay in the mock)
+
+done today:  > todoAgent Ran (2026-10-22 14:39 UTC): done — Stage G t() adoption finished (3 tasks): Rewards area on rewards.* keys (balance card, pending/expiring chips, a11y point counts); Orders area on orders.* keys (history + detail timeline, item lines); mallmate kit defaults incl. the previously deferred FilterSheet on common.* keys — en+ur mirrored, t() item checked off; lint 0/0, typecheck clean, 7 suites/48 tests. MallMate queue empty — analysis added 4 new items to TODO.md (stale README intro, RootStackParamList missing OTP routes, capture-script route gaps, 3 dead i18n keys)
+
+done today:  > todoAgent Ran (2026-10-22 20:56 UTC): done — 5 tasks: README intro/status rewritten for MallMate (scaffold description removed); RootStackParamList gains the 3 phone-OTP routes; capture-screens covers all 37 registered routes (verified 37/37 end-to-end); all 8 dead i18n keys resolved (3 wired, 5 dropped — 0 unreferenced of 276); Offer detail + Favorites fully migrated to t() with new en+ur groups (parity + captures byte-identical). lint 0/0, typecheck clean, 7 suites/48 tests each task. Remaining TODO items need backend coordination — 1 new analysis item queued (duplicated README backend-config section)
+
+done today:  > todoAgent Ran (2026-10-23 14:12 UTC): done — 1 task: README "Backend configuration" section deduplicated (kept the fuller version, listed only auth paths still wired). Remaining MallMate TODO items (token/session persistence, login GET→POST redesign, auth headers) all need a live backend contract — skipped. Analysis added 3 new items to TODO.md: missing sign-out wiring (resetUser has zero consumers), dead ApiContants keys (STATIC_IMAGE, CART, FOOD, etc.), dead StorageService first-time-use helpers. lint 0/0, typecheck clean, 7 suites/48 tests.
+
+done today:  > todoAgent Ran (2026-10-23 20:25 UTC): done — 3 tasks: Profile gained a danger-toned Sign-out row wired to resetUser (clears the stored user + resets the whole stack to Signin so back cannot reopen a signed-out session; new kit ListRow titleColor prop; t() keys en+ur); dead ApiContants keys removed (STATIC_IMAGE block + ALL_RESTAURANTS/CART/FOOD/BOOKMARK_LIST/USER/ADDUSER — only auth paths remain, AGENTS note reworded); dead StorageService first-time-use helpers removed. MallMate queue empty at close-out — remaining items (token/session persistence, login GET→POST, auth headers) all need a live backend contract. Analysis added 2 new items to TODO.md: AuthenticationService logs raw errors (failed login prints credentials-in-URL via console.log(error)) + leftover commented test() block; dead removeSelectedMallSlug helper. lint 0/0, typecheck clean, 7 suites/49 tests each task.

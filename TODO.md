@@ -233,9 +233,19 @@ Rules for the factory:
       when indoor_navigation is DEGRADED, unavailable state when DISABLED,
       and an explicit no-live-positioning disclaimer. Map tab is now a
       capability-gated landing that opens the floor map.)
-- [ ] **Destination search + route preview (mock)**: search POIs, show
+- [x] **Destination search + route preview (mock)**: search POIs, show
       destination detail, manual start-point picker, static route preview.
       Never claim live positioning. Blueprint: SCREEN_INVENTORY 45–49.
+      (Done: `src/mock/navigation.js` (published-POI destinations, curated
+      start points, deterministic static route steps; "!error" query
+      simulates a recoverable search failure; capability-gated on
+      indoor_navigation). Four stack routes — DestinationSearch (idle
+      suggestions + debounced search + empty/error states),
+      DestinationDetail (category/floor card + "Get directions"),
+      StartPointSelect (manual start picker, explainer that live
+      positioning is off), RoutePreview (from/to summary card + numbered
+      directions + preview-build note). Map tab gained a "Find a
+      destination" entry. No pathfinding, no live positioning.)
 - [x] **Events list + event detail** on mock events (title, image, time,
       location, registration-link placeholder; expired events hidden).
       Blueprint: PRD 5.14, SCREEN_INVENTORY 54–55. (Done:
@@ -265,27 +275,341 @@ Rules for the factory:
       LuckyOne's mock loyalty flipped to ENABLED so the preview is
       reachable, Harbour Walk stays DISABLED to show gating. No
       earn/redeem logic.)
-- [ ] **Order history + order detail timeline (mock)**: list of mock orders
+- [x] **Order history + order detail timeline (mock)**: list of mock orders
       and a status timeline using the PRD state names; clear pending vs
       confirmed states. No checkout or payments (blocked). Blueprint:
-      PRD 5.10, SCREEN_INVENTORY 40–41.
+      PRD 5.10, SCREEN_INVENTORY 40–41. (Done: `src/mock/orders.js` (four
+      LuckyOne mock orders covering in-progress PREPARING, completed,
+      cancelled and payment-failed flows; states/timeline use the PRD 5.10
+      names with `ORDER_STATE_META` labels/tones and an "expected next
+      step" hint for active orders; capability-gated on online_ordering —
+      Harbour Walk DISABLED shows the unavailable state).
+      `OrderHistoryScreen` + `OrderDetailScreen` stack routes — history
+      rows with current-state StatusChip, detail with status timeline
+      (current step chip + pending next step), items with tabular-nums
+      totals, preview-build notes. Profile → Orders now opens the real
+      history screen. No checkout, payment or transition logic.)
 
 ### Stage G — quality and polish
 
-- [ ] **Jest setup** (`jest-expo`) + first tests: typed API client envelope
+- [x] **Jest setup** (`jest-expo`) + first tests: typed API client envelope
       helper and `MallContext` switching; `npm test` script. Blueprint:
-      `07-delivery/ROADMAP_AND_BACKLOG.md` Phase 1.
-- [ ] **i18n groundwork**: `expo-localization` + string catalog (English),
+      `07-delivery/ROADMAP_AND_BACKLOG.md` Phase 1. (Done: `jest-expo@~50`
+      preset + `jest`, `react-test-renderer`, `@testing-library/react-native`
+      devDependencies; `npm test` script; AsyncStorage mapped to its jest
+      mock via `moduleNameMapper`. First suites: `src/services/__tests__/
+      apiClient.test.js` (envelope passthrough/wrapping, never-throws
+      failure paths, method/data wiring — axios mocked) and
+      `src/utils/__tests__/mallData.test.js` (default mall, slug switch,
+      unknown-slug ignored, object re-resolution). 12 tests, all passing.)
+- [x] **i18n groundwork**: `expo-localization` + string catalog (English),
       RTL-ready layout audit of new screens (no hardcoded left/right where
       avoidable). Full Urdu translation is a later decision. PRD section 10.
-- [ ] **App identity**: rename app (app.json) to MallMate, placeholder
-      icon/splash, remove `user_logsignin`.
-- [ ] **Accessibility pass on new MallMate screens**: 44–48px targets,
+      (Done: `expo-localization` installed (config plugin added to
+      app.json); `src/i18n/` with the English catalog `en.js` (grouped
+      common/mall/search/orders/rewards keys with `{placeholder}`
+      interpolation) and a `t()` helper that detects the device locale,
+      falls back to English, returns the key for unknown strings and never
+      throws; `isRTL()` for known RTL language codes. RTL audit: all
+      marginLeft/Right + paddingLeft/Right in the MallMate kit and new
+      screens converted to logical marginStart/End + paddingStart/End (32
+      files); two absolute left/right offsets (Signin logo, search filter
+      badge) converted to start/end. Map POI pin coordinates stay physical
+      (data positions). `t()` covered by unit tests. Screens still render
+      English literals directly — adopting `t()` screen-by-screen is
+      follow-up work when translations land.)
+- [x] **Adopt `t()` across MallMate screens**: the i18n groundwork ships
+      the catalog + helper but screens still render English literals;
+      migrate them to `t()` keys (one area per task). (Decision made:
+      owner answered "sure add language translations" on issue #9, so
+      English + Urdu is scheduled per PRD 10. Progress: the Urdu catalog
+      `src/i18n/ur.js` now ships — mirrors `en.js` key-for-key with
+      placeholder parity enforced by tests, registered in `CATALOGS`, and
+      `t()` accepts an optional locale override. The auth area (Signin,
+      Signup, ForgotPassword) is fully migrated to `t()` keys, including
+      validation strings and accessibility labels — plus their remaining
+      physical marginRight/Left margins
+      converted to marginEnd/Start for RTL. The phone-OTP screens
+      (RegisterPhone/Verification/CountryPicker) also shipped on t() keys
+      (`otp.*`), and the Profile area (Profile, Settings,
+      ProfilePlaceholder) is migrated on `profile.*` keys (rows use
+      title/subtitle key pairs translated at render), followed by the
+      Events area (Events + EventDetail) on `events.*` keys (interpolated
+      mall/organizer/capacity strings), then the Home area (HomeScreen +
+      MallSelectorScreen) on `home.*` keys plus new `mall.*` hours/choose
+      strings (section headers, badge/scope labels, mall-bar a11y
+      interpolation, empty states; mock data strings stay in the mock
+      catalogues), then the Explore area (ExploreScreen +
+      MerchantListScreen) on `explore.*` keys (search entry, directory/
+      category placeholders, open/closed chip, paging footer with
+      singular/plural list-end, loading/error interpolations; mock
+      directory titles and LIST_KIND_META copy stay in the mock), then
+      the Search area (SearchScreen — the kit `FilterSheet` stays for
+      the kit-defaults pass) on the extended `search.*` keys (suggestion
+      header, searching/error states, interpolated no-results message,
+      filtered-empty state, singular/plural results count, clear-filter
+      actions, filter-button a11y, open-now subtitle tag), then the Maps
+      area (MapScreen, FloorMapScreen, DestinationSearchScreen,
+      DestinationDetailScreen, StartPointSelectScreen, RoutePreviewScreen)
+      on a new `maps.*` group (tab landing, floor selector + POI pins,
+      destination search/detail, manual start picker, static route
+      preview + disclaimers; reuses common.goBack / search.* state
+      strings / mall.mapsUnavailable where the copy matched), then the
+      Food court area (FoodCourtScreen + the five seat-session screens)
+      on a new `foodCourt.*` group (venue overview, scan-to-sit gating,
+      seating zones with interpolated seat counts, camera-permission
+      explainer + demo codes, confirm/start, active-session card,
+      ended/expired outcomes via key pairs, help actions; mock
+      SEAT_HELP_COPY / zone status labels stay in the mock), then the
+      Rewards area (RewardsScreen) on the `rewards.*` keys (unavailable
+      state with mall interpolation, balance-card labels + a11y point
+      counts, pending/expiring chips with interpolated counts and date,
+      mock disclosure, Activity header and empty-ledger message; reused
+      `maps.limited` for the degraded chip; mock ledger titles/contexts
+      stay in the mock), then the Orders area (OrderHistoryScreen +
+      OrderDetailScreen) on the `orders.*` keys (list title/empty with
+      mall interpolation, mock disclosure, order-code header,
+      unavailable states, timeline/items section titles, Current and
+      expected-next-step copy, interpolated item lines and Total label;
+      mock ORDER_STATE_META labels/descriptions, state codes, fulfilment
+      and service messages stay in the mock), then the mallmate kit
+      defaults (ErrorState default title/retry, LoadingState default
+      message, Button loading a11y, CapabilityCard degraded chip, and
+      the FilterSheet that earlier passes deferred — sheet title, close
+      a11y on backdrop + button, Category/Cuisine/Open now/Floor/Price
+      group titles, open-now pills, Any option, Clear all / Show N /
+      Apply footer) on new generic `common.*` keys. Done: every MallMate
+      screen and kit default renders via `t()`; new strings added later
+      go straight into `en.js` + `ur.js` (parity enforced by tests).
+      Mock-catalogue strings stay untranslated by design.)
+- [x] **App identity**: rename app (app.json) to MallMate, placeholder
+      icon/splash, remove `user_logsignin`. (Done: app.json `name` →
+      "MallMate", `slug` → "mallmate", `userInterfaceStyle` → dark;
+      splash + adaptive-icon background retinted to Midnight Graphite
+      `#101418` to match Theme.js. Existing placeholder icon/splash images
+      kept — real branding is blocked pending owner permission.
+      package.json `name` → "mallmate".)
+- [x] **Accessibility pass on new MallMate screens**: 44–48px targets,
       dynamic-type friendly layouts, no color-only status, accessible
-      labels on icon buttons. Blueprint: DESIGN_SYSTEM rules.
-- [ ] **Screenshots for new screens**: extend `scripts/capture-screens.mjs`
-      to walk the MallMate screens (tabs, merchant, offer) into `output/`
-      once the local capture pipeline works (workflow pending).
+      labels on icon buttons. Blueprint: DESIGN_SYSTEM rules. (Done: full
+      audit of the mallmate kit + 30 MallMate screens against the
+      DESIGN_SYSTEM rules. Already compliant: icon-only controls all have
+      labels/roles, no color-only status, the Settings `Switch` is
+      labelled, no `allowFontScaling={false}`. Fixed: `accessibilityRole
+      ="header"` on every screen/section title (~25 Texts incl. the kit
+      `SectionHeader`), mall-selector cards now expose
+      `accessibilityState.selected` (via a new `Card` prop passthrough;
+      the decorative checkmark is hidden from screen readers), floor-map
+      POI pins got `hitSlop` (30px → ≥44px touch area), modal backdrops
+      (filters, offer terms) got `accessibilityRole="button"`, and the
+      search filter-count badge uses `minHeight` + padding so it can't
+      clip at large font scales. Verified: `npm run lint` (0 errors;
+      changed files clean), `npm run typecheck`, `npm test` — 18/18.)
+- [x] **Screenshots for new screens**: create the capture script
+      (`scripts/capture-screens.mjs` does NOT exist yet — earlier wording
+      assumed it did) to walk the MallMate screens (tabs, merchant, offer)
+      into `output/` once the local capture pipeline works (workflow
+      pending; needs a device/emulator or Expo web runner). (Done:
+      `npm run capture:screens` runs the local pipeline with zero new npm
+      dependencies — `expo export:web` (webpack) → tiny static SPA server
+      → headless Chrome/Chromium (`$CHROME_PATH` or a detected system
+      binary) with `--screenshot` per screen. The navigator gained a
+      web-only `linking` config so deep-link URLs (`/Main/Home`,
+      `/MerchantDetail?merchantId=…`) restore navigation state; native
+      behaviour unchanged. Walks 26 screens (tabs, merchant/menu, offer,
+      events, food court, maps/route preview, orders, settings) into
+      `output/screens/` (gitignored), with `--skip-export`/`--only`/
+      `--out` flags and non-zero exit on any failed/tiny capture.
+      Verified end-to-end here: 26/26 PNGs captured and spot-checked as
+      real rendered UI. No CI workflow added — that's still pending a
+      runner decision.)
+
+### Docs debt (found in the 2026-10-20 analysis pass)
+
+- [x] **AGENTS.md stale "stubbed screens" paragraph**: it listed
+      `SignupScreen`/`ForgotPasswordScreen` as non-existent stubs — both exist
+      and are registered; only the phone-verification pair is parked (issue
+      #9). (Found + fixed in the same run.)
+- [x] **README stale claims**: the features list still advertised "Facebook /
+      Google social sign‑in buttons (UI only, not wired up)" (removed from
+      `SigninScreen` in `7db84a0`), the tech-stack row said React Native
+      `0.73.4` (package.json: `0.73.6`), and the project-structure tree omitted
+      `src/mock/`, `src/i18n/` and the `src/components/mallmate/` kit while
+      labelling `constants/` as "mock data". (Found + fixed the same run:
+      dead bullet dropped, version row corrected to `0.73.6`, tree refreshed
+      against the current `src/` layout.)
+- [x] **Boot font loading carries legacy weight (gated on the P1 legacy-kit
+      direction)**: `CustomFonts.js` still preloads eight Poppins weights that
+      only unused legacy components (`FoodCard`, `FlagItem`, …) reference — no
+      screen renders them, and MallMate screens use Inter. Trim once the P1
+      "post‑login main flow / retire unused components" question is answered.
+      (Done 2026-10-21, same run as the legacy-scaffold removal below: the
+      owner answered "remove the legacy stuff" on issue #9, so `CustomFonts.js`
+      now loads only the four Inter weights, the nine Poppins TTFs are
+      deleted, `Fonts.js` (Poppins/Inter name constants) had no remaining
+      consumers and was removed, and the parked `FlagItem` was restyled onto
+      `MallMateTheme` fonts so nothing references Poppins anymore.)
+
+### Quality debt (found in the 2026-10-22 analysis pass)
+
+- [x] **README intro still describes the removed food-ordering scaffold**:
+      the opening paragraph (lines 3–10) calls this "A food-ordering style
+      mobile app" whose "shipped flow today is a Sign In screen … for the rest
+      of the food-ordering experience (restaurants, food, cart, bookmarks)",
+      plus a three-screens status note — but that scaffold was deleted on
+      2026-10-21 and the Features section right below says those
+      services/components were removed. Rewrite the intro/status around
+      MallMate and the current screen set. (Done 2026-10-22: title is now
+      "MallMate (Expo)", the intro describes the multi-mall client with
+      MallMate screens on `src/mock/` preview data, and the status note
+      lists the real registered surface — auth + phone-OTP screens, the
+      five bottom tabs, and their stack screens — instead of the removed
+      food-ordering flow.)
+- [x] **`RootStackParamList` misses the OTP routes**: the map's own doc
+      comment says it mirrors `src/navigators/index.js`, yet
+      `RegisterPhone`, `CountryPicker` and `Verification` (registered with
+      the phone-OTP flow) are absent — converting those screens to `.tsx`
+      would not type. Add them with the params callers actually pass
+      (`flow: "register" | "login"`, `username`, `destination`, merged
+      `country` as `unknown`). (Done 2026-10-22: the three routes added
+      under Auth with every field optional — matching how each screen
+      defaults missing params; `country` typed `unknown` for the
+      CountryPicker merge, `flow` narrowed to `"register" | "login"`.)
+- [x] **Screenshot script misses 11 registered routes**:
+      `scripts/capture-screens.mjs` SCREENS still lists the 26 paths from
+      2026-10-19 — no `Signup`, `ForgotPassword`, `RegisterPhone`,
+      `Verification`, `CountryPicker`, `ProfilePlaceholder`, `OutletList`,
+      or the four seat-session screens (`SeatConfirm`/`SeatSession`/
+      `SeatSessionEnd`/`SeatHelp`) that registered later. Extend the list;
+      the capture pipeline itself works (verified 26/26 when it shipped).
+      (Done 2026-10-22: all 11 added with caller-accurate query params —
+      OTP screens carry `flow`/`username`/`destination`, `OutletList`
+      `kind=outlets`, `SeatHelp` a real `outcome` key, `SeatSessionEnd`
+      `reason=expired`; `SeatConfirm`/`SeatSession` capture their designed
+      missing-param states since object fixtures can't round-trip a URL
+      query. Verified end-to-end in this environment: `node
+      scripts/capture-screens.mjs` exported the web build and captured
+      37/37 screens >5KB.)
+- [x] **Three unreferenced i18n keys**: `common.noLivePositioning`,
+      `mall.switchMall` and `rewards.basedOnAppOrders` are exported by
+      `en.js` + `ur.js` but referenced nowhere outside `src/i18n/`
+      (grep-verified across js/ts/tsx/mjs). Wire them where the copy
+      matches or drop them from both catalogs (the parity test follows
+      `en`). (Done 2026-10-22: `mall.switchMall` wired as the visible
+      label on Home's switch-mall bar; `rewards.basedOnAppOrders` and
+      `common.noLivePositioning` dropped — the top-selling disclosure is
+      per-mall mock copy in `homeContent.js` and every map surface ships
+      its own tailored disclaimer (`maps.tabNote`/`floorDisclaimer`/
+      `searchDisclaimer`/`detailDisclaimer`/`staticPreviewDisclaimer`/
+      `routeNote`). A full unused-key audit of all 278 keys plus a
+      key-by-key grep found five more of the same class, also fixed:
+      `rewards.emptyLedger` wired as
+      the kit `EmptyState` title on the empty ledger (matches the
+      OrderHistory title+message pattern), `common.close` wired to the
+      hardcoded `label="Close"` in the offer terms sheet,
+      `common.cancel`/`common.save`/`mall.selectedMall` dropped (no
+      consumers; selection already shown by checkmark + a11yState).
+      Re-audit: 0 unreferenced keys of 276. New debt from this audit
+      queued below. (Count note: the pass handled 8 dead keys total —
+      3 wired, 5 dropped.)
+- [x] **Hardcoded English strings in two un-translated screens**: the
+      Offer detail terms sheet still renders "No extra terms for this
+      offer.", "Validity: …" and two `accessibilityLabel="Close terms"`
+      strings, and Favorites shows "Saved on this device · …" — none go
+      through `t()`. (Found while auditing unreferenced i18n keys; the
+      sheet's Close button was fixed in that pass — the rest wants a
+      small offer/favorites t() migration with en+ur keys.) (Done
+      2026-10-22: full t() migration of both screens — new `offer.*`
+      group (header, unavailable state, merchant a11y, Active chip,
+      Eligibility/Terms sections, view-terms row + One/Many term count,
+      checkout note, sheet title/close a11y/no-extra-terms/validity
+      label) and `favorites.*` group (empty title/message with {mall},
+      saved One/Many count, remove-from-favorites a11y); header title
+      reuses `profile.favorites`, back buttons reuse `common.goBack`.
+      en+ur mirrored (parity tests pass), 0 unreferenced keys of 293,
+      offer-detail/favorites captures byte-identical to before (values
+      unchanged — zero visual regression).)
+- [x] **README "Backend configuration" section is duplicated**: the same
+      content is stated twice back-to-back (lines ~111–128 vs ~129–155)
+      — precedence list (env var → app.json → localhost fallback),
+      app.json snippet and the "All endpoints … derived from this base
+      URL" sentence all appear twice, and the first JSON snippet is a
+      bare `"extra": {…}` fragment while the second is the full
+      `{"expo": {…}}` object. Keep one merged version (the fuller one,
+      minus the redundant sentences). (Done 2026-10-23: kept the fuller
+      version — full `{"expo": {…}}` snippet, env-var launch example,
+      `expo-constants` precedence wording — dropped the duplicate
+      fragment/precedence list; the endpoints sentence now lists only
+      the auth paths still wired in `ApiContants`/`AuthenticationService`
+      (`/api/register`, `/api/getUser/`, `/api/user-exist`,
+      `/api/refresh-token`) since the cart/food/bookmark services were
+      deleted in the legacy removal. Markdown-only change — verified by
+      re-read; lint/typecheck don't cover `.md`.)
+
+### Quality debt (found in the 2026-10-23 analysis pass)
+
+- [x] **No sign-out anywhere**: `UserProvider.resetUser` (clears context
+      state + `StorageService.removeUser`) has zero consumers — a
+      signed-in preview user can never end their session or return to
+      Signin without clearing app storage. Add a Profile "Sign out" row
+      wired to `resetUser` (local state only; no backend call). Pairs
+      with the session-restore item above. (Done 2026-10-23: Profile
+      gained a danger-toned "Sign out" `ListRow` (new optional
+      `titleColor` prop on the kit row, `log-out-outline` icon +
+      `MallMateTheme.color.error`) that calls `resetUser()` and then
+      `navigation.reset({ index: 0, routes: [{ name: "Signin" }] })` —
+      the RESET names a root-stack route, so it bubbles past the tab
+      router (`useOnAction` → `onActionParent`) and clears the whole
+      stack: no back-navigation into a signed-out session. New `t()`
+      keys `profile.signOut`/`signOutSubtitle` in en + ur (parity
+      enforced by tests). Local state only — no backend call, mall and
+      favorites state untouched. Verified: `npm run lint` (0/0),
+      `npm run typecheck`, `npm test` — 49/49 incl. a new ProfileScreen
+      test asserting `removeUser` runs and navigation resets to
+      Signin.)
+- [x] **Dead `ApiContants` keys left over from the legacy removal**:
+      `STATIC_IMAGE` (whole block), `ALL_RESTAURANTS`, `CART`, `FOOD`,
+      `BOOKMARK_LIST`, `USER` and `ADDUSER` have zero consumers
+      (grep-verified across `src/`, `scripts/`, `App.js`) since the
+      restaurant/food/cart/bookmark/user services were deleted on
+      2026-10-21. Remove them, keeping `BASE_API_URL`, `REGISTER`,
+      `LOGIN`, `USER_EXIST` and `REFRESH_TOKEN` (used by
+      `AuthenticationService` + `ApiClient`). (Done 2026-10-23: removed
+      the `STATIC_IMAGE` block and the six dead endpoint keys; the
+      default export is now `{ BACKEND_API, BACKEND_BASE_URL }` —
+      `BACKEND_BASE_URL` kept since it builds `BASE_API_URL` and is the
+      documented root-URL escape hatch. AGENTS.md's stale "unique keys"
+      note reworded (it still named the removed keys). Re-grep: zero
+      references outside TODO/README history. Verified: `npm run lint`
+      (0/0), `npm run typecheck`, `npm test` — 49/49.)
+- [x] **Dead first-time-use helpers in `StorageService`**:
+      `setFirstTimeUse`/`getFirstTimeUse` (the `"isFirstTimeUse"` key)
+      have zero consumers — leftovers from the removed onboarding
+      scaffold. Remove. (Done 2026-10-23: both helpers removed from
+      `src/services/StorageService.js` after re-grepping `src/`,
+      `scripts/`, `App.js` and config files — zero references outside
+      the service itself. Verified: `npm run lint` (0/0),
+      `npm run typecheck`, `npm test` — 49/49.)
+
+### Quality debt (found in the 2026-10-23 close-out analysis)
+
+- [ ] **`AuthenticationService` logs raw errors (login can print
+      credentials) + leftover commented `test()` block**: every catch does
+      `console.log(error)` — on a failed `login`, the axios error object
+      carries `config.url`, which embeds the JSON-stringified
+      `{username, password}` (the known GET-in-URL quirk), so credentials
+      are printed to the dev console. Lines 71–88 also still hold the
+      commented-out legacy `test()` block — the "removed dead test()
+      endpoint" fix only commented it out, it was never deleted. Fix:
+      delete the dead block; log only a safe digest (e.g.
+      `console.warn(error?.message)`) or nothing — keep the
+      `{status:false, message}` envelope contract unchanged and update
+      `authenticationService.test.js` if it asserts the logging.
+- [ ] **Dead `removeSelectedMallSlug` in `StorageService`**: zero
+      consumers (grep-verified across `src/`, `scripts/`, `App.js`) — mall
+      selection is only ever set, never removed. Remove the helper (same
+      class as the first-time-use helpers removed 2026-10-23; re-add with
+      a real "reset app data" feature if one lands).
 
 ### Blocked — do NOT implement until the owner decides
 
@@ -328,22 +652,79 @@ P0 — App is broken / blocking
       and registered in the navigator.
 - [x] `ForgotPasswordScreen` — created (email lookup via `checkUserExist`)
       and registered in the navigator.
-- [ ] `RegisterPhoneScreen` + `VerificationScreen` (still stubbed as comments
-      in `src/navigators/index.js` and `src/screens/index.js`).
-- [ ] Post‑login main flow: home / restaurants, restaurant detail, food detail,
+- [x] `RegisterPhoneScreen` + `VerificationScreen` (still stubbed as comments
+      in `src/navigators/index.js` and `src/screens/index.js`). (Skipped
+      2026-10-19: no phone/OTP endpoints exist in `ApiContants`/
+      `AuthenticationService` and nothing in the signup flow references a
+      phone step — building it would mean inventing the verification flow
+      and hook points. Needs owner input on the intended flow first.)
+      (2026-10-19 later run: a provisional implementation was briefly
+      committed to `work` by mistake and reverted in the next commit —
+      nothing ships until the flow question in issue #9 is answered.)
+      (2026-10-21: the owner ANSWERED the flow on issue #9 — "register →
+      otp → app, login → check if not sus proceed without otp / if sus ask
+      for otp → app". Build as a presentation-only mock flow on the seat
+      session precedent: OTP send/verify stand-ins in `src/mock/`, no real
+      validation rules, country picker via `CountryCode.js` + `FlagItem`.)
+      (Done 2026-10-21: `src/mock/otp.js` stand-ins — `sendMockOtp`
+      (demo code `123456`, `!error` destination fails recoverably),
+      `verifyMockOtp` (6-digit demo code only), `isSuspiciousLogin`
+      (usernames containing "sus" stand in for the backend risk check).
+      Three stack routes — `RegisterPhone` (country row via `CountryPicker`,
+      phone entry, mock send), `CountryPicker` (searchable bundled
+      `CountryCode` list rendered with `FlagItem`, selection merged back
+      into RegisterPhone), `Verification` (6-digit entry, resend, on-screen
+      demo-code note, review-note for the login flow). Signup success now
+      navigates RegisterPhone → Verification → Main with a mock session;
+      Signin routes suspicious usernames through Verification and everyone
+      else straight to Main. New screens use `t()` (`otp.*` keys, en+ur).
+      No SMS, no real validation, no backend endpoints.)
+- [x] Post‑login main flow: home / restaurants, restaurant detail, food detail,
       cart, bookmarks, profile. Components already exist
       (`RestaurantCard`, `RestaurantMediumCard`, `FoodCard`, `WelcomeCard`,
       `CategoryMenuItem`, `CategoryListItem`) but no screens use them.
-      There is also no screen to navigate to after a successful sign‑in yet.
-- [ ] Wire social sign‑in buttons (Facebook / Google) or hide them until real
-      auth exists.
-- [ ] Country code picker screen (`CountryCode.js` + `FlagItem.js` are ready;
+      (Item text corrected 2026-10-19: sign‑in DOES navigate now —
+      `SigninScreen` replaces into the MallMate `Main` tab navigator. What's
+      missing is a legacy restaurant/cart flow that consumes those scaffold
+      components. Needs owner direction: build the legacy flow, or retire
+      this item and the unused components now that MallMate covers
+      discovery.) (Retired 2026-10-21: the owner answered "remove the legacy
+      stuff" on issue #9 — MallMate covers discovery, so the legacy flow is
+      not built. Removed in the same pass: the six unused components
+      (`FoodCard`, `RestaurantCard`, `RestaurantMediumCard`, `WelcomeCard`,
+      `CategoryMenuItem`, `CategoryListItem`), the dead services
+      (`RestaurantService`, `FoodService`, `CartService`, `BookmarkService`,
+      `UserService`, `StaticImageService`), `General.js` (onboarding copy),
+      the unused Poppins/image assets including the ~58MB
+      gallery/logo/poster trees, and the unused `lottie-react-native`
+      dependency. Kept: `Separator` + `ToggleButton` (in use), `FlagItem`
+      (parked for the OTP flow), `Images.FACEBOOK`/`GOOGLE` (future social
+      re-wire), `Colors.js` (ToggleButton).)
+- [x] Wire social sign‑in buttons (Facebook / Google) or hide them until real
+      auth exists. (Done via the "hide" option: no social auth provider is
+      integrated, so the "OR / Connect with Facebook / Connect with Google"
+      block and its dead styles/imports were removed from `SigninScreen`.
+      `Images.FACEBOOK`/`Images.GOOGLE` assets and constants are kept for a
+      future re-wire.)
+- [x] Country code picker screen (`CountryCode.js` + `FlagItem.js` are ready;
       note `countryflags.io` is dead — use emoji flags or a bundled image set).
+      (Parked with the phone‑verification flow — issue #9: a provisional
+      CountryCode screen was reverted in commit `22ac53c` because its only
+      entry point is the also‑parked `RegisterPhoneScreen`. 2026-10-21: the
+      flow is now decided (register → OTP → app; login → OTP only when the
+      backend flags a suspicious attempt) — build the picker together with
+      the OTP screens. `FlagItem` was kept and restyled to MallMate theme
+      fonts/logical margins during the legacy removal.) (Done 2026-10-21
+      with the OTP flow: `CountryPickerScreen` stack route — searchable
+      filter over the bundled `CountryCode` list (emoji flags, no remote
+      flag service), rows rendered with `FlagItem`, selection merged back
+      into `RegisterPhone`. Entry point: the country row on RegisterPhone.)
 
 ## P2 — State, storage & auth hardening
 
-- [ ] Replace/upgrade `useUserManagement` (`src/utils/userData.js`) with a
+- [x] Replace/upgrade `useUserManagement` (`src/utils/userData.js`) with a
       Context or Redux store so the logged‑in user is shared across screens.
+      (Stale duplicate — already done via the React Context entry below.)
 - [x] **Fix `StorageService`:**
   - `setUser` now `JSON.stringify`s before writing.
   - `getUser` reads the same `"user"` key and `JSON.parse`s the result.
@@ -357,10 +738,25 @@ P0 — App is broken / blocking
   - Added `removeUser()`; fixed the `AsyncSorage` typo.
 - [ ] Persist the token and restore session on app launch; wire
       `refreshToken()` and auth headers (`utils/Generator.js#authHeader`) into
-      the services (currently commented out).
-- [ ] Decide on a state library (Redux Toolkit vs React Query vs Context) and
+      the services (currently commented out). (Skipped 2026-10-23: the
+      token/refresh/header halves need a live backend contract — no flow
+      produces a token today (the mock OTP session is
+      `{username, phone, mockSession: true}`; real login always fails
+      without a backend), so inventing a token/refresh shape would guess
+      the API. The client-only half is itself a UX decision: restoring the
+      persisted user in `UserProvider` is pointless while the app always
+      boots at Signin, and auto-booting into Main needs a sign-out escape
+      hatch (see the 2026-10-23 analysis item on missing sign-out). Needs
+      owner direction.)
+- [x] Decide on a state library (Redux Toolkit vs React Query vs Context) and
       remove the commented‑out `react-redux` / `src/actions` leftovers in
-      `FoodCard.js` and `RestaurantCard.js`.
+      `FoodCard.js` and `RestaurantCard.js`. (Done: Context is the decision —
+      `UserProvider`/`MallProvider`/`FavoritesProvider` are mounted in
+      `src/navigators/index.js` and `react-redux` is not installed (AGENTS.md:
+      "Redux was removed"). Dead `useDispatch`/`useSelector`/`../actions`
+      imports and their commented dispatch/selector bodies were removed from
+      `FoodCard.js` and `RestaurantCard.js`; the local console-stub cart/
+      bookmark handlers they guarded are unchanged.)
 
 ## P3 — API & data cleanup
 
@@ -370,27 +766,82 @@ P0 — App is broken / blocking
       argument to `axios.get` was removed, behaviour unchanged).
 - [x] Remove the hardcoded `test()` endpoint / dead `ngrok` URLs from
       `AuthenticationService.js`.
-- [ ] Consolidate `resdata.js` / `fooddata.js` / `Mock.js` mock data vs the live
-      API; decide which is the source of truth.
+- [x] Consolidate `resdata.js` / `fooddata.js` / `Mock.js` mock data vs the live
+      API; decide which is the source of truth. (Done: decision documented in
+      AGENTS.md architecture rules — services are the live‑API path and
+      `src/mock/` is the single mock‑data source. The three legacy scaffold
+      files were provably dead — exported from the constants barrel but
+      imported by no screen, component, service, test or script — so they were
+      deleted along with their barrel exports; README's mock‑data bullet now
+      points at `src/mock/`.)
 - [ ] Services ignore auth headers everywhere — add them consistently once token
       storage works.
 
 ## P4 — Tooling & quality
 
 - [x] Add ESLint (`eslint-config-universe` or similar) + `npm run lint`.
-- [ ] Bring the existing codebase to a clean lint baseline: run
+- [x] Bring the existing codebase to a clean lint baseline: run
       `npx eslint . --fix` (clears ~260 of the ~275 current warnings) and
-      fix the remainder by hand.
-- [ ] Add tests (Jest + `@testing-library/react-native`) for services and the
-      sign‑in flow; add `npm test`.
-- [ ] Consider TypeScript migration for screens/services.
-- [ ] Add `react-native-reanimated` / gesture handler setup notes if the stack
-      navigator needs them.
-- [ ] Review `app.json` (icon/splash/name `user_logsignin`) and rename the
-      package to match the product.
-- [ ] `expo-doctor` still flags pre‑existing version drift (`expo`,
+      fix the remainder by hand. (Done: baseline was 174 warnings / 0
+      errors; `npx eslint . --fix` cleared 159; the 15 leftovers were
+      fixed by hand — unused imports removed from `FoodCard`,
+      `RestaurantCard`, `RestaurantMediumCard`, `WelcomeCard`,
+      `ToggleButton`; unused `setAnimatedValue` setter dropped in
+      `ToggleButton`; unused catch args renamed to `_error` in
+      `Bookmark`/`Cart`/`Food`/`Restaurant` services. `npm run lint` now
+      reports 0 errors and 0 warnings; AGENTS.md verification note
+      updated to match.)
+- [x] Add tests (Jest + `@testing-library/react-native`) for services and the
+      sign‑in flow; add `npm test`. (Done incrementally: `npm test` +
+      jest-expo landed earlier; this pass added
+      `src/services/__tests__/authenticationService.test.js` —
+      register/login/checkUserExist/refreshToken cover validation
+      short-circuits, URL/body/params wiring (including a test that locks
+      the current GET-with-credentials quirk from P3 so a redesign
+      updates it deliberately) and never-throws failure envelopes, axios
+      mocked — plus `src/screens/__tests__/SigninScreen.test.js`: form
+      renders with no social buttons, error message on failed login,
+      submit → `replace("Main")` on success, forgot-password/signup
+      navigation, password-visibility toggle (services mocked, screen
+      wrapped in `UserProvider`). New global `jest.setup.js` mocks
+      `react-native-safe-area-context` (wired via `setupFiles`).
+      5 suites / 34 tests, all passing.)
+- [x] Consider TypeScript migration for screens/services. (Done: decision =
+      migrate file-by-file under `strict`; the first slice lands the pattern —
+      `src/services/apiClient.js` → `apiClient.ts` (typed envelope helpers,
+      `unknown` payload/catch narrowing via type guards) and
+      `ProfilePlaceholderScreen` → `.tsx` typed with
+      `RootStackScreenProps<"ProfilePlaceholder">` from the new
+      `src/types/navigation.ts` (`RootStackParamList` mirroring the root
+      stack routes + params). Added the missing `@types/react` devDependency
+      (required for any `.tsx`) and a JSDoc optional-props signature on the
+      kit `EmptyState` so its inferred props match real usage. Barrels and
+      the navigator are untouched — extensionless imports resolve `.ts`/`.tsx`
+      in tsc/jest/Metro. Remaining screens/services stay JS until touched;
+      future slices follow the AGENTS.md note. Verified: lint 0/0 (ESLint
+      covers `.ts`/`.tsx`), typecheck clean, 34/34 tests.)
+- [x] Add `react-native-reanimated` / gesture handler setup notes if the stack
+      navigator needs them. (Done: audited the need — `@react-navigation/stack`
+      hard-requires `react-native-gesture-handler` (already a dependency) but
+      nothing imported it at the app entry, which is the documented setup;
+      `App.js` now imports it first. Reanimated is not installed and not
+      needed (animations use `Animated` + lottie) — README "Navigation setup
+      notes" documents both, including the Babel-plugin caveat if reanimated
+      is ever added. Verified: lint/typecheck/tests clean and the web export
+      still compiles and renders.)
+- [x] Review `app.json` (icon/splash/name `user_logsignin`) and rename the
+      package to match the product. (Done via the MallMate "App identity"
+      item above — app.json + package.json renamed, splash/adaptive
+      backgrounds themed.)
+- [x] `expo-doctor` still flags pre‑existing version drift (`expo`,
       `lottie-react-native`, `react-native`, `react-native-safe-area-context`)
-      — align them with `npx expo install --check` when convenient.
+      — align them with `npx expo install --check` when convenient. (Done:
+      `npx expo install --check` → `--fix` aligned all four to the Expo
+      SDK 50 expected versions — `expo@~50.0.20`, `lottie-react-native@6.5.1`,
+      `react-native@0.73.6`, `react-native-safe-area-context@4.8.2`; a
+      follow-up `--check` reports "Dependencies are up to date". Verified:
+      lint 0/0, typecheck clean, 34/34 tests, web export compiles and the
+      home screenshot still renders.)
 
 ---
 
@@ -447,3 +898,13 @@ P0 — App is broken / blocking
 - [x] ESLint + Prettier introduced (`eslint-config-universe` `universe/native`,
       `.eslintrc.js` + `.prettierrc`) with `npm run lint`; existing style
       debt left as warnings pending a follow-up `--fix` pass.
+- [x] Legacy food-ordering scaffold removed per the owner decision on issue
+      #9 ("remove the legacy stuff"): six unused components, six dead
+      services, `General.js`, `Fonts.js`, Poppins TTFs, unused images
+      (incl. the ~58MB gallery/logo/poster trees) and the unused
+      `lottie-react-native` dependency; barrels, README and AGENTS updated.
+- [x] Phone-OTP auth flow (presentation-only) built on the owner's decided
+      flow from issue #9: `src/mock/otp.js` stand-ins, `RegisterPhone` +
+      `CountryPicker` + `Verification` stack routes, Signup rewired to
+      register → OTP → app, Signin routes suspicious usernames through the
+      OTP step. No SMS, no real validation, no backend endpoints.

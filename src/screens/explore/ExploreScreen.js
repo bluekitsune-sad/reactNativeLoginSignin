@@ -5,13 +5,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card, EmptyState, ListRow, SectionHeader } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getExploreContent } from "../../mock";
 import { useMallManagement } from "../../utils";
 
 const DIRECTORY_PLACEHOLDERS = {
   offers: {
-    title: "Offers",
-    message: "All active offers and coupons will appear here.",
+    titleKey: "explore.offersPlaceholderTitle",
+    messageKey: "explore.offersPlaceholderMessage",
   },
 };
 
@@ -23,8 +24,7 @@ const DIRECTORY_ROUTES = {
 };
 
 const CATEGORY_PLACEHOLDER = {
-  title: "Category",
-  message: "Merchants in this category will appear here.",
+  messageKey: "explore.categoryPlaceholderMessage",
 };
 
 const ExploreScreen = ({ navigation }) => {
@@ -39,19 +39,19 @@ const ExploreScreen = ({ navigation }) => {
       navigation.navigate(DIRECTORY_ROUTES[entry.key]);
       return;
     }
-    const fallback = { title: entry.title, message: "Merchants in this section will appear here." };
+    const fallback = { title: entry.title, messageKey: "explore.sectionPlaceholderMessage" };
     const placeholder =
       entry.key && DIRECTORY_PLACEHOLDERS[entry.key] ? DIRECTORY_PLACEHOLDERS[entry.key] : fallback;
     navigation.navigate("ProfilePlaceholder", {
-      title: placeholder.title,
-      message: placeholder.message,
+      title: placeholder.titleKey ? t(placeholder.titleKey) : placeholder.title,
+      message: t(placeholder.messageKey),
     });
   };
 
   const openCategory = (category) => {
     navigation.navigate("ProfilePlaceholder", {
       title: category.title,
-      message: CATEGORY_PLACEHOLDER.message,
+      message: t(CATEGORY_PLACEHOLDER.messageKey),
     });
   };
 
@@ -59,7 +59,9 @@ const ExploreScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <ScrollView key={selectedMall.slug} contentContainerStyle={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Explore</Text>
+          <Text style={styles.headerTitle} accessibilityRole="header">
+            {t("explore.title")}
+          </Text>
           <Text style={styles.headerMeta} numberOfLines={1}>
             {selectedMall.name}
           </Text>
@@ -67,14 +69,14 @@ const ExploreScreen = ({ navigation }) => {
         <Pressable
           onPress={() => navigation.navigate("Search")}
           accessibilityRole="button"
-          accessibilityLabel="Search this mall"
+          accessibilityLabel={t("explore.searchA11y")}
           style={({ pressed }) => [styles.searchBar, pressed && styles.searchBarPressed]}
         >
           <Ionicons name="search-outline" size={20} color={MallMateTheme.color.textMuted} />
-          <Text style={styles.searchPlaceholder}>Search restaurants, outlets, offers</Text>
+          <Text style={styles.searchPlaceholder}>{t("explore.searchPlaceholder")}</Text>
         </Pressable>
 
-        <SectionHeader title="Browse by type" style={styles.section} />
+        <SectionHeader title={t("explore.browseByType")} style={styles.section} />
         {directories.length ? (
           <View style={styles.rows}>
             {directories.map((entry) => (
@@ -91,15 +93,12 @@ const ExploreScreen = ({ navigation }) => {
             ))}
           </View>
         ) : (
-          <EmptyState
-            title="Nothing to browse yet"
-            message="Directory sections will appear when this mall enables them."
-          />
+          <EmptyState title={t("explore.emptyTitle")} message={t("explore.emptyMessage")} />
         )}
 
         {categoryGrid.length ? (
           <>
-            <SectionHeader title="Categories" style={styles.section} />
+            <SectionHeader title={t("explore.categories")} style={styles.section} />
             <View style={styles.grid}>
               {categoryGrid.map((category) => (
                 <Card
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
     backgroundColor: MallMateTheme.color.surfaceElevated,
   },
   searchPlaceholder: {
-    marginLeft: MallMateTheme.spacing.sm,
+    marginStart: MallMateTheme.spacing.sm,
     color: MallMateTheme.color.textMuted,
     fontSize: MallMateTheme.typography.body.fontSize,
     fontFamily: MallMateTheme.fontFamily.regular,

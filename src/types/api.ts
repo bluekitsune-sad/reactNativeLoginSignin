@@ -3,7 +3,7 @@
  *
  * Every network helper in `src/services/` resolves to this shape instead of
  * throwing (see AGENTS.md "Network calls only in `src/services/`"). The same
- * contract is produced by `src/services/apiClient.js` and consumed by screens.
+ * contract is produced by `src/services/apiClient.ts` and consumed by screens.
  */
 
 /** Successful service response. */

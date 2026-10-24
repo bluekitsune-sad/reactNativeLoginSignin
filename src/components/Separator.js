@@ -1,8 +1,8 @@
-import React from 'react';
-import {View} from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-const Separator = ({height, width, ...extraProps}) => (
-  <View style={{height, width, ...extraProps}} />
+const Separator = ({ height, width, ...extraProps }) => (
+  <View style={{ height, width, ...extraProps }} />
 );
 
 Separator.defaultProps = {

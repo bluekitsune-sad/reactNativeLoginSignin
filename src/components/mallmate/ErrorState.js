@@ -4,12 +4,13 @@ import { StyleSheet, Text, View } from "react-native";
 
 import Button from "./Button";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 
 const ErrorState = ({
-  title = "Something went wrong",
+  title = t("common.somethingWentWrong"),
   message,
   onRetry,
-  retryLabel = "Retry",
+  retryLabel = t("common.retry"),
   style,
 }) => (
   <View style={[styles.wrapper, style]}>
