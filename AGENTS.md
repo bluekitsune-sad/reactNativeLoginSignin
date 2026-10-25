@@ -78,11 +78,11 @@ covered code.
   `../services`), not deep relative paths.
 - **Screens live in `src/screens/`,** registered in `src/navigators/index.js`.
   A screen must be exported from `src/screens/index.js` *and* added to the
-  navigator. `SignupScreen` and `ForgotPasswordScreen` exist and are
-  registered; only `RegisterPhoneScreen` and `VerificationScreen` remain
-  stubbed as comments (parked on owner question #9), and `SigninScreen`
-  already calls `navigation.navigate("Signup")` and
-  `navigate("ForgotPassword")`.
+  navigator. All auth screens shipped 2026-10-21 (Signin, Signup,
+  ForgotPassword, plus the phone‑OTP trio `RegisterPhoneScreen`,
+  `VerificationScreen`, `CountryPickerScreen` — mock flow per owner
+  decision on issue #9) and are registered; MallMate tab/stack screens
+  live under `src/screens/<area>/`.
 - **Network calls only in `src/services/`.** Services return a stable envelope:
   `{ status: boolean, message: string, data?: any }`. Keep that shape.
 - **API paths and base URL come from `src/constants/ApiContants.js`.** Never
@@ -172,7 +172,10 @@ components were themselves deleted in the 2026-10-21 legacy removal).
 
 ## Conventions
 
-- JavaScript only (`.js`, JSX), double quotes in newer files, 2‑space indent.
+- JavaScript‑first (`.js`, JSX), double quotes in newer files, 2‑space
+  indent; TypeScript is introduced incrementally under `strict` (see the
+  MallMate note above) — new type files are `.ts`, existing `.js` files
+  stay as they are unless a task says to convert them.
 - Default exports for screens/services/components; named exports for constants
   and utils.
 - Service functions are `async` and never throw — they catch and return

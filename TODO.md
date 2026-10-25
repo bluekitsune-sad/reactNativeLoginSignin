@@ -651,14 +651,23 @@ Rules for the factory:
       matched); mock-catalogue strings (names, tags, section titles)
       stay untranslated by design. Verified: `npm run lint` (0/0 after
       prettier --fix), `npm run typecheck`, `npm test` — 50/50.)
-- [ ] **AGENTS.md stale screens/conventions claims**: the architecture
+- [x] **AGENTS.md stale screens/conventions claims**: the architecture
       paragraph still says `RegisterPhoneScreen`/`VerificationScreen`
       "remain stubbed as comments (parked on owner question #9)" — both
       shipped 2026-10-21 (plus `CountryPickerScreen`), are exported and
       registered; and "JavaScript only (`.js`, JSX)" in Conventions
       contradicts the shipped `apiClient.ts`/`ProfilePlaceholderScreen.tsx`
       /`src/types/*.ts` and AGENTS.md's own TypeScript-migration note.
-      Rewrite both so agents aren't misled.
+      Rewrite both so agents aren't misled. (Done 2026-10-25: the
+      screens paragraph now states all auth screens shipped 2026-10-21
+      — Signin/Signup/ForgotPassword + the phone-OTP trio
+      RegisterPhone/Verification/CountryPicker (mock flow, issue #9) —
+      and points at the MallMate area folders; Conventions now says
+      "JavaScript‑first … TypeScript introduced incrementally under
+      strict" matching the shipped `.ts`/`.tsx` slices. Markdown-only —
+      verified by re-read plus grep that all three OTP screens are
+      exported from the barrel and registered in the navigator; lint +
+      typecheck still clean.)
 - [ ] **Sign-in "Remember me" toggle is decorative + a11y
       non-compliant**: `SigninScreen` renders `<ToggleButton size={0.5} />`
       with no callback; `ToggleButton` keeps `isActive` in its own state
