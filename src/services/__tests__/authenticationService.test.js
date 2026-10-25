@@ -2,7 +2,7 @@
 import axios from "axios";
 
 import { ApiContants } from "../../constants";
-import AuthenicationService from "../AuthenticationService";
+import AuthenticationService from "../AuthenticationService";
 
 jest.mock("axios", () => {
   const get = jest.fn();
@@ -22,7 +22,7 @@ describe("AuthenticationService", () => {
 
   describe("register", () => {
     it("short-circuits with a validation envelope when fields are missing", async () => {
-      const response = await AuthenicationService.register({ username: "alice" });
+      const response = await AuthenticationService.register({ username: "alice" });
       expect(response).toEqual({ status: false, message: "Please fill up all fields" });
       expect(mockedPost).not.toHaveBeenCalled();
     });
@@ -30,7 +30,7 @@ describe("AuthenticationService", () => {
     it("posts username/email/password and returns the server body", async () => {
       const body = { status: true, message: "registered", data: { id: 1 } };
       mockedPost.mockResolvedValue({ data: body });
-      const response = await AuthenicationService.register({
+      const response = await AuthenticationService.register({
         username: "alice",
         email: "alice@example.com",
         password: "secret",
@@ -45,7 +45,7 @@ describe("AuthenticationService", () => {
 
     it("never throws and returns a failure envelope on errors", async () => {
       mockedPost.mockRejectedValue(new Error("boom"));
-      const response = await AuthenicationService.register({
+      const response = await AuthenticationService.register({
         username: "alice",
         email: "alice@example.com",
         password: "secret",
@@ -56,7 +56,7 @@ describe("AuthenticationService", () => {
 
   describe("login", () => {
     it("short-circuits with a validation envelope when fields are missing", async () => {
-      const response = await AuthenicationService.login({ username: "alice" });
+      const response = await AuthenticationService.login({ username: "alice" });
       expect(response).toEqual({ status: false, message: "Please fill up all fields" });
       expect(mockedGet).not.toHaveBeenCalled();
     });
@@ -67,7 +67,7 @@ describe("AuthenticationService", () => {
       // redesign to POST /login updates it deliberately.
       const body = { status: true, message: "fetched", data: { username: "alice" } };
       mockedGet.mockResolvedValue({ data: body });
-      const response = await AuthenicationService.login({ username: "alice", password: "secret" });
+      const response = await AuthenticationService.login({ username: "alice", password: "secret" });
       expect(mockedGet).toHaveBeenCalledWith(
         ApiContants.BACKEND_API.LOGIN + JSON.stringify({ username: "alice", password: "secret" }),
       );
@@ -76,7 +76,7 @@ describe("AuthenticationService", () => {
 
     it("never throws and returns a failure envelope on errors", async () => {
       mockedGet.mockRejectedValue(new Error("boom"));
-      const response = await AuthenicationService.login({ username: "a", password: "b" });
+      const response = await AuthenticationService.login({ username: "a", password: "b" });
       expect(response).toEqual({ status: false, message: "Oops! Something went wrong" });
     });
 
@@ -89,7 +89,7 @@ describe("AuthenticationService", () => {
       };
       mockedGet.mockRejectedValue(axiosLikeError);
       try {
-        await AuthenicationService.login({ username: "alice", password: "secret" });
+        await AuthenticationService.login({ username: "alice", password: "secret" });
         const loggedText = warnSpy.mock.calls.map((call) => call.join(" ")).join("\n");
         expect(loggedText).not.toContain("secret");
         expect(loggedText).not.toContain("alice");
@@ -107,7 +107,7 @@ describe("AuthenticationService", () => {
     it("GETs the user-exist endpoint with the lookup as query params", async () => {
       const body = { status: true, message: "exists", data: { exist: true } };
       mockedGet.mockResolvedValue({ data: body });
-      const response = await AuthenicationService.checkUserExist("email", "alice@example.com");
+      const response = await AuthenticationService.checkUserExist("email", "alice@example.com");
       expect(mockedGet).toHaveBeenCalledWith(ApiContants.BACKEND_API.USER_EXIST, {
         params: { email: "alice@example.com" },
       });
@@ -116,7 +116,7 @@ describe("AuthenticationService", () => {
 
     it("never throws and returns a failure envelope on errors", async () => {
       mockedGet.mockRejectedValue(new Error("boom"));
-      const response = await AuthenicationService.checkUserExist("email", "a@b.c");
+      const response = await AuthenticationService.checkUserExist("email", "a@b.c");
       expect(response).toEqual({ status: false, message: "Oops! Something went wrong" });
     });
   });
@@ -124,20 +124,20 @@ describe("AuthenticationService", () => {
   describe("refreshToken", () => {
     it("returns the body wrapped in a success envelope on HTTP 200", async () => {
       mockedPost.mockResolvedValue({ status: 200, data: { token: "fresh" } });
-      const response = await AuthenicationService.refreshToken();
+      const response = await AuthenticationService.refreshToken();
       expect(mockedPost).toHaveBeenCalledWith(ApiContants.BACKEND_API.REFRESH_TOKEN);
       expect(response).toEqual({ status: true, data: { token: "fresh" } });
     });
 
     it("returns {status:false} for non-200 responses", async () => {
       mockedPost.mockResolvedValue({ status: 204 });
-      const response = await AuthenicationService.refreshToken();
+      const response = await AuthenticationService.refreshToken();
       expect(response).toEqual({ status: false });
     });
 
     it("never throws and returns a failure envelope on errors", async () => {
       mockedPost.mockRejectedValue(new Error("boom"));
-      const response = await AuthenicationService.refreshToken();
+      const response = await AuthenticationService.refreshToken();
       expect(response).toEqual({ status: false, message: "Oops! Something went wrong" });
     });
   });

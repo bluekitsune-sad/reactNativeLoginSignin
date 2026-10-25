@@ -1,5 +1,5 @@
-import AuthenicationService from "./AuthenticationService";
+import AuthenticationService from "./AuthenticationService";
 import StorageService from "./StorageService";
 import ApiClient from "./apiClient";
 
-export { AuthenicationService, StorageService, ApiClient };
+export { AuthenticationService, StorageService, ApiClient };

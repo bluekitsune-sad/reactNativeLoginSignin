@@ -7,7 +7,7 @@ import { Button, Separator, ToggleButton } from "../components";
 import { MallMateTheme } from "../constants";
 import { t } from "../i18n";
 import { isSuspiciousLogin } from "../mock";
-import { AuthenicationService } from "../services";
+import { AuthenticationService } from "../services";
 import useUserManagement from "../utils/userData";
 
 const SigninScreen = ({ navigation }) => {
@@ -27,7 +27,7 @@ const SigninScreen = ({ navigation }) => {
       username,
       password,
     };
-    AuthenicationService.login(user).then((response) => {
+    AuthenticationService.login(user).then((response) => {
       setIsLoading(false);
       if (response?.status) {
         updateUser(response?.data);

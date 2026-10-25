@@ -2,12 +2,12 @@
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import React from "react";
 
-import { AuthenicationService } from "../../services";
+import { AuthenticationService } from "../../services";
 import { UserProvider } from "../../utils/userData";
 import SigninScreen from "../SigninScreen";
 
 jest.mock("../../services", () => ({
-  AuthenicationService: { login: jest.fn() },
+  AuthenticationService: { login: jest.fn() },
   StorageService: {
     setUser: jest.fn(),
     getUser: jest.fn(),
@@ -47,7 +47,7 @@ describe("SigninScreen", () => {
 
   it("shows the service error message when login fails", async () => {
     const navigation = createNavigation();
-    AuthenicationService.login.mockResolvedValue({
+    AuthenticationService.login.mockResolvedValue({
       status: false,
       message: "Please fill up all fields",
     });
@@ -58,7 +58,7 @@ describe("SigninScreen", () => {
     fireEvent.press(getByRole("button", { name: "Sign In" }));
 
     expect(await findByText("Please fill up all fields")).toBeTruthy();
-    expect(AuthenicationService.login).toHaveBeenCalledWith({
+    expect(AuthenticationService.login).toHaveBeenCalledWith({
       username: "alice",
       password: "wrong",
     });
@@ -67,7 +67,7 @@ describe("SigninScreen", () => {
 
   it("submits the credentials and replaces into Main on success", async () => {
     const navigation = createNavigation();
-    AuthenicationService.login.mockResolvedValue({
+    AuthenticationService.login.mockResolvedValue({
       status: true,
       message: "ok",
       data: { username: "alice" },
@@ -79,7 +79,7 @@ describe("SigninScreen", () => {
     fireEvent.press(getByRole("button", { name: "Sign In" }));
 
     await waitFor(() => expect(navigation.replace).toHaveBeenCalledWith("Main"));
-    expect(AuthenicationService.login).toHaveBeenCalledWith({
+    expect(AuthenticationService.login).toHaveBeenCalledWith({
       username: "alice",
       password: "secret",
     });
@@ -87,7 +87,7 @@ describe("SigninScreen", () => {
 
   it("routes suspicious usernames through the Verification step (issue #9 flow)", async () => {
     const navigation = createNavigation();
-    AuthenicationService.login.mockResolvedValue({
+    AuthenticationService.login.mockResolvedValue({
       status: true,
       message: "ok",
       data: { username: "suspicious-user" },

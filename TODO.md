@@ -679,13 +679,20 @@ Rules for the factory:
       pass claims. Either wire it (local persistence only) or drop it from
       the form and README feature list; fix the target size + labels
       either way.
-- [ ] **`AuthenicationService` barrel typo propagated to every consumer**:
+- [x] **`AuthenicationService` barrel typo propagated to every consumer**:
       `src/services/index.js` imports/exports the misspelled
       `AuthenicationService` (file is `AuthenticationService.js`), and
       Signin/Signup/ForgotPassword screens copy the typo. Importing the
       correctly-spelled name silently yields `undefined`. Add an
       `AuthenticationService` alias (keep the old name briefly if needed),
-      update the three screens, drop the typo from the barrel.
+      update the three screens, drop the typo from the barrel. (Done
+      2026-10-25: barrel now imports/exports `AuthenticationService`
+      correctly and the typo name is dropped — every in-repo consumer
+      (Signin/Signup/ForgotPassword screens + their tests + the service
+      test's local binding) was renamed in the same change, so no alias
+      was needed; repo-wide grep finds zero remaining `Authenication`
+      references outside this history. Verified: `npm run lint` (0/0),
+      `npm run typecheck`, `npm test` — 50/50.)
 - [ ] **Dead code/dependency sweep**: `src/utils/Generator.js` (exports
       only `authHeader`, referenced nowhere — not even the utils barrel),
       `expo-status-bar` in package.json (zero imports; screens use RN's

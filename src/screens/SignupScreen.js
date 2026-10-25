@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Separator } from "../components";
 import { MallMateTheme } from "../constants";
 import { t } from "../i18n";
-import { AuthenicationService } from "../services";
+import { AuthenticationService } from "../services";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -36,7 +36,7 @@ const SignupScreen = ({ navigation }) => {
       return;
     }
     setIsLoading(true);
-    AuthenicationService.register({ username, email, password }).then((response) => {
+    AuthenticationService.register({ username, email, password }).then((response) => {
       setIsLoading(false);
       if (response?.status) {
         // Decided flow (issue #9): register -> OTP -> app. The phone
