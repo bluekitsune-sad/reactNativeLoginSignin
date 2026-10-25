@@ -627,7 +627,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-24 close-out analysis)
 
-- [ ] **Merchant area never migrated to `t()`** — the "Adopt `t()`
+- [x] **Merchant area never migrated to `t()`** — the "Adopt `t()`
       across MallMate screens" item claims every MallMate screen renders
       via `t()`, but `MerchantDetailScreen`/`MenuScreen`/`MenuItemScreen`
       have no `src/i18n` import and no `merchant`/`menu` key group in
@@ -637,6 +637,20 @@ Rules for the factory:
       exist; section titles Location/Hours/Active offers/Menu/Contact,
       "View menu", "Sold out", "Merchant not found"). Migrate the three
       screens onto new `merchant.*`/`menu.*` keys (en+ur, parity tests).
+      (Done 2026-10-25: new `merchant.*` group (not-found title + {mall}
+      message, favorite add/remove a11y with {merchant}, section titles
+      Location/Hours/Active offers/Menu/Contact, map-destination
+      placeholder, hours fallback/open-now/closed-right-now + "{status} ·
+      mock hours" note, no-offers note, View menu row, Phone/Email
+      contact subtitles, approval-only contact note) and `menu.*` group
+      (title/{merchant} header + item-header variants, not-found/empty
+      states with interpolation, Sold out, Available, browse-only notes
+      for list + item, incl.-taxes note) added to en.js and mirrored
+      key-for-key in ur.js. All three screens now render through `t()`
+      (reusing `common.goBack` and `explore.closed` where the copy
+      matched); mock-catalogue strings (names, tags, section titles)
+      stay untranslated by design. Verified: `npm run lint` (0/0 after
+      prettier --fix), `npm run typecheck`, `npm test` — 50/50.)
 - [ ] **AGENTS.md stale screens/conventions claims**: the architecture
       paragraph still says `RegisterPhoneScreen`/`VerificationScreen`
       "remain stubbed as comments (parked on owner question #9)" — both
