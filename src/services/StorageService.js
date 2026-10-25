@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const USER_KEY = "user";
 const SELECTED_MALL_KEY = "selectedMallSlug";
 const FAVORITE_IDS_KEY = "favoriteMerchantIds";
+const REMEMBERED_USERNAME_KEY = "rememberedUsername";
 
 const setUser = (userData) => {
   return AsyncStorage.setItem(USER_KEY, JSON.stringify(userData ?? null));
@@ -42,6 +43,22 @@ const setFavoriteIds = (ids) => {
   return AsyncStorage.setItem(FAVORITE_IDS_KEY, JSON.stringify(ids ?? []));
 };
 
+const setRememberedUsername = (username) => {
+  return AsyncStorage.setItem(REMEMBERED_USERNAME_KEY, username);
+};
+
+const getRememberedUsername = async () => {
+  try {
+    return await AsyncStorage.getItem(REMEMBERED_USERNAME_KEY);
+  } catch {
+    return null;
+  }
+};
+
+const removeRememberedUsername = () => {
+  return AsyncStorage.removeItem(REMEMBERED_USERNAME_KEY);
+};
+
 export default {
   setUser,
   getUser,
@@ -50,4 +67,7 @@ export default {
   getSelectedMallSlug,
   getFavoriteIds,
   setFavoriteIds,
+  setRememberedUsername,
+  getRememberedUsername,
+  removeRememberedUsername,
 };

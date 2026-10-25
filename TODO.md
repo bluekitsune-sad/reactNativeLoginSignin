@@ -668,7 +668,7 @@ Rules for the factory:
       verified by re-read plus grep that all three OTP screens are
       exported from the barrel and registered in the navigator; lint +
       typecheck still clean.)
-- [ ] **Sign-in "Remember me" toggle is decorative + a11y
+- [x] **Sign-in "Remember me" toggle is decorative + a11y
       non-compliant**: `SigninScreen` renders `<ToggleButton size={0.5} />`
       with no callback; `ToggleButton` keeps `isActive` in its own state
       and never reports it, so the choice is never persisted or sent to
@@ -678,7 +678,21 @@ Rules for the factory:
       violating the 44–48px + labelled-control rules the accessibility
       pass claims. Either wire it (local persistence only) or drop it from
       the form and README feature list; fix the target size + labels
-      either way.
+      either way. (Done 2026-10-25: wired as local persistence — "Remember
+      me" now remembers the USERNAME only (never the password) via new
+      `StorageService.set/get/removeRememberedUsername` helpers
+      ("rememberedUsername" key); on mount SigninScreen prefills the
+      username and checks the switch when one is stored, and a successful
+      sign-in stores/clears it based on the toggle. `ToggleButton` gained
+      controlled `value`/`onValueChange` + `accessibilityLabel` props,
+      `accessibilityRole="switch"` with `accessibilityState.checked`, and
+      `hitSlop` so the 32×16px pill reaches a 44px vertical target; the
+      username input is now controlled (`value={username}`) so prefill is
+      visible. `login()` still only receives `{username, password}` — no
+      credential storage, no backend sync. 4 new SigninScreen tests
+      (labelled switch role/state toggle, prefill from storage, username
+      stored on success when on / cleared when off). Verified: `npm run
+      lint` (0/0), `npm run typecheck`, `npm test` — 54/54.)
 - [x] **`AuthenicationService` barrel typo propagated to every consumer**:
       `src/services/index.js` imports/exports the misspelled
       `AuthenicationService` (file is `AuthenticationService.js`), and

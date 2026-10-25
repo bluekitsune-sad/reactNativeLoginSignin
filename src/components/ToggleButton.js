@@ -23,19 +23,30 @@ const toggleStyle = (size, animatedValue) => ({
   ],
 });
 
-const ToggleButton = ({ size }) => {
-  const [isActive, setIsActive] = useState(false);
-  const [animatedValue] = useState(new Animated.Value(0));
+/**
+ * Legacy pill switch (the only Colors.js consumer left). Controlled when
+ * `value`/`onValueChange` are provided; otherwise keeps internal state for
+ * any uncontrolled use. Exposes the RN `switch` role with a checked state
+ * and hitSlop so the small pill still meets the 44px touch-target rule.
+ */
+const ToggleButton = ({ size, value, onValueChange, accessibilityLabel }) => {
+  const [internalActive, setInternalActive] = useState(false);
+  const isActive = value ?? internalActive;
+  const [animatedValue] = useState(new Animated.Value(value ? 32 * size : 0));
 
   const toggleHandle = () => {
+    const next = !isActive;
     Animated.timing(animatedValue, {
-      toValue: isActive ? 0 : 32 * size,
+      toValue: next ? 32 * size : 0,
       duration: 250,
       easing: Easing.bounce,
       delay: 0,
       useNativeDriver: true,
     }).start();
-    setIsActive(!isActive);
+    if (value === undefined) {
+      setInternalActive(next);
+    }
+    onValueChange?.(next);
   };
 
   return (
@@ -43,6 +54,10 @@ const ToggleButton = ({ size }) => {
       style={containerStyle(size, isActive)}
       onPress={() => toggleHandle()}
       activeOpacity={0.8}
+      hitSlop={{ top: 14, bottom: 14, start: 6, end: 6 }}
+      accessibilityRole="switch"
+      accessibilityState={{ checked: isActive }}
+      accessibilityLabel={accessibilityLabel}
     >
       <Animated.View style={toggleStyle(size, animatedValue)} />
     </TouchableOpacity>
