@@ -714,9 +714,12 @@ Rules for the factory:
       it), and `isTerminalOrderState` (re-exported from the mock barrel,
       used by no screen). Remove or wire each; re-verify `npm install`
       shrinkage is safe for Expo web export.
-- [ ] **README tech-stack row overstates icons**: claims
+- [x] **README tech-stack row overstates icons**: claims
       "`@expo/vector-icons` (Ionicons, Feather, AntDesign, FontAwesome)"
       but `src/` only imports Ionicons + Feather. Correct the row.
+      (Done 2026-10-25: row now lists only Ionicons + Feather —
+      grep-verified the only two `@expo/vector-icons` import shapes in
+      `src/`. Markdown-only — verified by re-read.)
 - [ ] **Coverage gap on the trickiest pure logic**: no suite for
       `StorageService` (JSON round-trip + array validation — historically
       bug-prone), `fetchMerchantListPage`/`applyMerchantFilters`

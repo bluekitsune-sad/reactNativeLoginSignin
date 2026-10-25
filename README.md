@@ -67,7 +67,7 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 | Storage    | `@react-native-async-storage/async-storage` |
 | Animation  | `Animated` API |
 | Fonts      | `expo-font` (Inter via `@expo-google-fonts/inter`) |
-| Icons      | `@expo/vector-icons` (Ionicons, Feather, AntDesign, FontAwesome) |
+| Icons      | `@expo/vector-icons` (Ionicons, Feather)                     |
 | Safe area  | `react-native-safe-area-context` |
 
 ### Navigation setup notes
