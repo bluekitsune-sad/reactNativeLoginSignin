@@ -102,8 +102,6 @@ const NEXT_STATE_HINT = {
   [ORDER_STATES.CANCELLATION_REQUESTED]: ORDER_STATES.CANCELLED,
 };
 
-export const isTerminalOrderState = (state) => !NEXT_STATE_HINT[state];
-
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export const formatOrderDateTime = (iso) => {

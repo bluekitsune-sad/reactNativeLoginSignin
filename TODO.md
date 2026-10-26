@@ -707,13 +707,26 @@ Rules for the factory:
       was needed; repo-wide grep finds zero remaining `Authenication`
       references outside this history. Verified: `npm run lint` (0/0),
       `npm run typecheck`, `npm test` — 50/50.)
-- [ ] **Dead code/dependency sweep**: `src/utils/Generator.js` (exports
+- [x] **Dead code/dependency sweep**: `src/utils/Generator.js` (exports
       only `authHeader`, referenced nowhere — not even the utils barrel),
       `expo-status-bar` in package.json (zero imports; screens use RN's
       built-in `StatusBar`), `isRTL()` (only its own unit test consumes
       it), and `isTerminalOrderState` (re-exported from the mock barrel,
       used by no screen). Remove or wire each; re-verify `npm install`
-      shrinkage is safe for Expo web export.
+      shrinkage is safe for Expo web export. (Done 2026-10-26: all four
+      removed — `Generator.js` deleted (zero references), `expo-status-bar`
+      dropped from package.json (1 package removed from the tree),
+      `isRTL()` + its lone typeof-boolean test assertion dropped (logical
+      `marginStart/End` props already handle RTL from the OS setting — no
+      screen needed the helper), and `isTerminalOrderState` removed from
+      `src/mock/orders.js` + barrel (the detail screen keys off
+      `order.nextState`, computed from the still-private `NEXT_STATE_HINT`).
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test` — 53/53 (one fewer than before: the dropped isRTL
+      assertion), and `npx expo export:web` still compiles and emits
+      `web-build/` (the react-native-reanimated "Module not found" warning
+      is pre-existing and documented in README — optional require inside
+      gesture-handler, unrelated to this sweep).)
 - [x] **README tech-stack row overstates icons**: claims
       "`@expo/vector-icons` (Ionicons, Feather, AntDesign, FontAwesome)"
       but `src/` only imports Ionicons + Feather. Correct the row.
