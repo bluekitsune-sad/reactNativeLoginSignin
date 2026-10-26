@@ -733,12 +733,29 @@ Rules for the factory:
       (Done 2026-10-25: row now lists only Ionicons + Feather —
       grep-verified the only two `@expo/vector-icons` import shapes in
       `src/`. Markdown-only — verified by re-read.)
-- [ ] **Coverage gap on the trickiest pure logic**: no suite for
+- [x] **Coverage gap on the trickiest pure logic**: no suite for
       `StorageService` (JSON round-trip + array validation — historically
       bug-prone), `fetchMerchantListPage`/`applyMerchantFilters`
       (pagination + fail-first-attempt state machine), or
       `FavoritesProvider`. Add focused unit tests; 50/50 currently pass
-      with these uncovered.
+      with these uncovered. (Done 2026-10-26: three new suites —
+      `src/services/__tests__/storageService.test.js` (user JSON
+      stringify/parse round-trip incl. the null cases, favorite-ids
+      array validation dropping non-string/non-array/corrupt-JSON values,
+      remembered-username + mall-slug round-trips);
+      `src/mock/__tests__/merchants.test.js` (`applyMerchantFilters`
+      all five dimensions + AND semantics + empty/no-mutation;
+      `fetchMerchantListPage` fail-first-attempt per mall+kind,
+      independent-kind failures, unknown-kind envelope, page 1/2 slicing
+      with hasMore/total and no page overlap, past-end empty page, page-0
+      clamp, DISABLED capability → empty page, DEGRADED still lists);
+      `src/utils/__tests__/favorites.test.js` (hydration from storage,
+      empty start, hydrate-empty on read rejection, toggle on/off with
+      persistence assertions, falsy-id no-op, out-of-provider throw).
+      Test isolation: each fetchMerchantListPage test owns a unique mall
+      slug so the module-level fail-first Set stays deterministic.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test` — 94/94 across 10 suites (was 53/53).)
 
 ### Blocked — do NOT implement until the owner decides
 
