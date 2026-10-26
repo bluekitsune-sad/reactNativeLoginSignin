@@ -26,16 +26,6 @@ export const getLocale = () => {
   }
 };
 
-/** True when the device locale reads right-to-left ( Urdu, Arabic… ). */
-export const isRTL = () => {
-  try {
-    const tag = getLocales()[0]?.languageCode || "";
-    return ["ur", "ar", "he", "fa"].includes(tag);
-  } catch {
-    return false;
-  }
-};
-
 /**
  * Look up `key` (dot path, e.g. "common.retry") in the active catalog and
  * interpolate `{placeholders}` from `params`. Falls back to English, then

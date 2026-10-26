@@ -56,7 +56,6 @@ import {
   formatOrderDateTime,
   getOrderById,
   getOrderList,
-  isTerminalOrderState,
 } from "./orders";
 import { DEMO_OTP_CODE, isSuspiciousLogin, sendMockOtp, verifyMockOtp } from "./otp";
 import { LEDGER_META, LEDGER_TYPES, MOCK_REWARDS, getRewardsOverview } from "./rewards";
@@ -133,7 +132,6 @@ export {
   formatOrderDateTime,
   getOrderById,
   getOrderList,
-  isTerminalOrderState,
   MOCK_SCAN_TARGETS,
   MOCK_SESSION_PREVIEW_MINUTES,
   SCAN_OUTCOMES,
