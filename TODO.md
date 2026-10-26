@@ -757,6 +757,24 @@ Rules for the factory:
       Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
       `npm test` — 94/94 across 10 suites (was 53/53).)
 
+### Quality debt (found in the 2026-10-26 close-out analysis)
+
+- [ ] **No CI runs lint/typecheck/tests on PRs or pushes**: the only
+      workflows (`.github/workflows/opencode.yml`, `opencode-cron.yml`)
+      drive the agent; nothing verifies a push to `work` or the
+      work → main PR with `npm run lint` / `npm run typecheck` /
+      `npm test` — regressions land unverified by automation. Add a
+      small `ci.yml` (push to work/main + pull_request: npm ci, lint,
+      typecheck, test). Keep it read-only (no secrets, no deploy).
+- [ ] **Module-private helpers exported unnecessarily**: `isCampaignActive`
+      and `isOfferActive` (only used inside `src/mock/homeContent.js`, not
+      re-exported by the mock barrel), and `MOCK_MERCHANTS` /
+      `SEARCH_SUGGESTIONS` (only used inside `src/mock/merchants.js`).
+      Grep-verified zero external imports. Drop the `export` keyword
+      (keep the functions/data) so the public mock surface matches what
+      screens actually consume — same class as the earlier dead-export
+      sweeps.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
