@@ -766,6 +766,14 @@ Rules for the factory:
       `npm test` — regressions land unverified by automation. Add a
       small `ci.yml` (push to work/main + pull_request: npm ci, lint,
       typecheck, test). Keep it read-only (no secrets, no deploy).
+      (Blocked 2026-10-26 — see issue #11: `ci.yml` is written,
+      verified (lint 0/0, typecheck clean, tests 94/94, YAML parses)
+      but cannot be pushed — the run's `GITHUB_TOKEN` gets 403 on any
+      `.github/workflows/*` change (git push and contents API; the
+      Actions integration token never has the `workflows` permission).
+      Full ready-to-apply file content is in issue #11. Once the owner
+      lands the file (web UI or a privileged token), finish this item:
+      add the README automation row + mark [x].)
 - [ ] **Module-private helpers exported unnecessarily**: `isCampaignActive`
       and `isOfferActive` (only used inside `src/mock/homeContent.js`, not
       re-exported by the mock barrel), and `MOCK_MERCHANTS` /
