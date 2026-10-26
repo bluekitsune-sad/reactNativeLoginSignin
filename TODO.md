@@ -774,14 +774,18 @@ Rules for the factory:
       Full ready-to-apply file content is in issue #11. Once the owner
       lands the file (web UI or a privileged token), finish this item:
       add the README automation row + mark [x].)
-- [ ] **Module-private helpers exported unnecessarily**: `isCampaignActive`
+- [x] **Module-private helpers exported unnecessarily**: `isCampaignActive`
       and `isOfferActive` (only used inside `src/mock/homeContent.js`, not
       re-exported by the mock barrel), and `MOCK_MERCHANTS` /
       `SEARCH_SUGGESTIONS` (only used inside `src/mock/merchants.js`).
       Grep-verified zero external imports. Drop the `export` keyword
       (keep the functions/data) so the public mock surface matches what
       screens actually consume — same class as the earlier dead-export
-      sweeps.
+      sweeps. (Done 2026-10-26: all four `export` keywords dropped —
+      re-grepped the whole repo first (only intra-file references plus
+      TODO/README history mentions; the mock barrel's named export list
+      doesn't include them). Verified: `npm run lint` (0/0),
+      `npm run typecheck` (clean), `npm test -- --ci` — 94/94.)
 
 ### Blocked — do NOT implement until the owner decides
 

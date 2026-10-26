@@ -341,7 +341,7 @@ export const isCapabilityVisible = (capabilityMap, capability) => {
   return status === CAPABILITY_STATUS.ENABLED || status === CAPABILITY_STATUS.DEGRADED;
 };
 
-export const isCampaignActive = (item, now = new Date()) => {
+const isCampaignActive = (item, now = new Date()) => {
   const start = item.activeFrom ? Date.parse(item.activeFrom) : null;
   const end = item.activeTo ? Date.parse(item.activeTo) : null;
   if (start !== null && Number.isFinite(start) && now.getTime() < start) {
@@ -353,7 +353,7 @@ export const isCampaignActive = (item, now = new Date()) => {
   return true;
 };
 
-export const isOfferActive = (offer, now = new Date()) => {
+const isOfferActive = (offer, now = new Date()) => {
   if (!offer.endsAt) {
     return true;
   }

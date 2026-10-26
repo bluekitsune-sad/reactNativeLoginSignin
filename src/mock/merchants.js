@@ -8,7 +8,7 @@ import { getActiveOffersForMerchant } from "./offers";
  * whose discovery capability is visible; DISABLED capabilities hide their
  * merchants entirely.
  */
-export const MOCK_MERCHANTS = {
+const MOCK_MERCHANTS = {
   luckyone: [
     {
       id: "lucky-m-1",
@@ -255,7 +255,7 @@ export const MOCK_MERCHANTS = {
   ],
 };
 
-export const SEARCH_SUGGESTIONS = {
+const SEARCH_SUGGESTIONS = {
   luckyone: ["Spice Route", "Fashion", "Electronics", "Beauty", "Lunch combo"],
   harbourwalk: ["Harbour Boutique", "Home", "Summer edit", "Fashion"],
 };
