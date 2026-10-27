@@ -787,6 +787,30 @@ Rules for the factory:
       doesn't include them). Verified: `npm run lint` (0/0),
       `npm run typecheck` (clean), `npm test -- --ci` — 94/94.)
 
+### Quality debt (found in the 2026-10-27 analysis)
+
+- [ ] **AGENTS.md still claims "the existing hardcoded IPs are legacy
+      debt"**: the API-paths bullet warns agents not to add more
+      hardcoded hosts as if some remain, but grep across `src/` finds
+      zero `192.168`/`10.0.` IPs — `ApiContants.js` resolves strictly
+      from `EXPO_PUBLIC_BACKEND_URL` → `app.json` `extra.backendUrl` →
+      `http://localhost:3001` (the hardcoded-IP cleanup shipped earlier).
+      Reword the parenthetical so it warns against *new* hardcoding
+      without implying current debt.
+- [ ] **README automation table misdescribes `opencode.yml`, and the
+      project-structure tree omits `CapabilityMeta.js`**: the table says
+      the workflow triggers on "issues and `/opencode` comments", but
+      `.github/workflows/opencode.yml`'s `on:` block also includes
+      `pull_request` (opened/synchronize/reopened/ready_for_review) and
+      `pull_request_review_comment`, and the workflow has a third
+      `review-pr` job that reviews every OWNER PR — none of that is
+      documented. The `constants/` tree line also lists
+      Colors/Images/ApiContants/Theme/Capabilities/CustomFonts/
+      CountryCode but misses the barrel-exported `CapabilityMeta.js`.
+      Update the trigger cell (add the PR-review behaviour) and the tree
+      line. Doc-only; verify by re-reading against the workflow `on:`
+      block and `src/constants/index.js`.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
