@@ -823,6 +823,34 @@ Rules for the factory:
       workflow `on:`/`jobs:` blocks and `src/constants/index.js`
       (barrel exports `CAPABILITY_META` from `CapabilityMeta`.)
 
+### Quality debt (found in the 2026-10-28 close-out analysis)
+
+- [ ] **Invalid Ionicons name `route-outline` — Route Preview's hero icon
+      renders blank**: `src/screens/map/RoutePreviewScreen.js:52` uses
+      `<Ionicons name="route-outline" … />`, but no such glyph exists in the
+      installed `@expo/vector-icons` 14.1.0 Ionicons glyphmap (1338 glyphs;
+      zero `route*` names). A glyphmap-verified sweep of every
+      `Ionicons`/`Feather` `name` literal across `src/` + `App.js` found
+      this is the only invalid icon name in the app — unknown names render
+      an empty box, so the route-preview card shows no icon on every
+      platform. Swap to a valid direction-ish glyph (`map-outline` and
+      `navigate-outline` both exist; `signpost-outline` does not) and
+      re-run lint/typecheck/tests. Optionally add a tiny test asserting
+      every icon-name literal in the codebase exists in the packaged
+      glyphmaps so this class can't regress.
+- [ ] **20 of 23 `Colors.js` tokens are dead**: grep across `src/`,
+      `scripts/` + `App.js` finds only `DEFAULT_GREEN`/`DEFAULT_GREY`/
+      `DEFAULT_WHITE` consumed (all three by the legacy `ToggleButton`);
+      the other 20 (`DEFAULT_BLACK`, `DEFAULT_YELLOW`, `DEFAULT_RED`,
+      `SECONDARY_*`, `LIGHT_*`, `FABEBOOK_BLUE` [sic], `GOOGLE_BLUE`,
+      `INACTIVE_GREY`, `DARK_ONE`…`DARK_FIVE`) have zero consumers —
+      leftovers from the removed food-ordering scaffold. Trim
+      `src/constants/Colors.js` down to the three tokens `ToggleButton`
+      needs (AGENTS.md already documents Colors.js as the legacy palette
+      kept only for that component). Same dead-code class as the
+      ApiContants/StorageService/mock-export sweeps. Verify by
+      re-grepping `Colors\.` across the repo + lint/typecheck/tests.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
