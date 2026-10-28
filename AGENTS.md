@@ -86,8 +86,8 @@ covered code.
 - **Network calls only in `src/services/`.** Services return a stable envelope:
   `{ status: boolean, message: string, data?: any }`. Keep that shape.
 - **API paths and base URL come from `src/constants/ApiContants.js`.** Never
-  hardcode a new host inside a service (the existing hardcoded IPs are legacy
-  debt — do not add more).
+  hardcode a host inside a service — resolve every path and the base URL from
+  `ApiContants` (the hardcoded-IP cleanup shipped; don't regress it).
 - **New MallMate network calls go through the shared API client helper**
   (`src/services/apiClient.ts`) — see "API client helper" below.
 - **Mock data lives in `src/mock/`** (barrel‑exported) — that is the single

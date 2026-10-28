@@ -789,14 +789,19 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-27 analysis)
 
-- [ ] **AGENTS.md still claims "the existing hardcoded IPs are legacy
+- [x] **AGENTS.md still claims "the existing hardcoded IPs are legacy
       debt"**: the API-paths bullet warns agents not to add more
       hardcoded hosts as if some remain, but grep across `src/` finds
       zero `192.168`/`10.0.` IPs — `ApiContants.js` resolves strictly
       from `EXPO_PUBLIC_BACKEND_URL` → `app.json` `extra.backendUrl` →
       `http://localhost:3001` (the hardcoded-IP cleanup shipped earlier).
       Reword the parenthetical so it warns against *new* hardcoding
-      without implying current debt.
+      without implying current debt. (Done 2026-10-28: the bullet now
+      says to resolve every path and the base URL from `ApiContants`
+      with a "hardcoded-IP cleanup shipped; don't regress it" note —
+      no longer implies current debt. Markdown-only — verified by
+      re-reading the bullet plus re-grepping `src/`, `App.js` and
+      `scripts/` for `192.168`/`10.0.` IPs: zero matches.)
 - [ ] **README automation table misdescribes `opencode.yml`, and the
       project-structure tree omits `CapabilityMeta.js`**: the table says
       the workflow triggers on "issues and `/opencode` comments", but
