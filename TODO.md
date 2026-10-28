@@ -802,7 +802,7 @@ Rules for the factory:
       no longer implies current debt. Markdown-only — verified by
       re-reading the bullet plus re-grepping `src/`, `App.js` and
       `scripts/` for `192.168`/`10.0.` IPs: zero matches.)
-- [ ] **README automation table misdescribes `opencode.yml`, and the
+- [x] **README automation table misdescribes `opencode.yml`, and the
       project-structure tree omits `CapabilityMeta.js`**: the table says
       the workflow triggers on "issues and `/opencode` comments", but
       `.github/workflows/opencode.yml`'s `on:` block also includes
@@ -814,7 +814,14 @@ Rules for the factory:
       CountryCode but misses the barrel-exported `CapabilityMeta.js`.
       Update the trigger cell (add the PR-review behaviour) and the tree
       line. Doc-only; verify by re-reading against the workflow `on:`
-      block and `src/constants/index.js`.
+      block and `src/constants/index.js`. (Done 2026-10-28: the
+      `opencode.yml` trigger cell now lists OWNER pull requests
+      (opened/synchronize/reopened/ready_for_review) + PR review
+      comments, and the description documents the `review-pr` job that
+      reviews every OWNER PR against its base; the `constants/` tree
+      line now includes `CapabilityMeta`. Verified by re-reading the
+      workflow `on:`/`jobs:` blocks and `src/constants/index.js`
+      (barrel exports `CAPABILITY_META` from `CapabilityMeta`.)
 
 ### Blocked — do NOT implement until the owner decides
 

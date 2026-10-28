@@ -152,7 +152,7 @@ The expected sign‑in payload shape:
 └── src/
     ├── assets/                # Retained image assets (social-auth placeholders)
     ├── components/            # UI kit: mallmate/ components + Separator/ToggleButton/FlagItem
-    ├── constants/             # Colors, Images, ApiContants, Theme, Capabilities, CustomFonts, CountryCode
+    ├── constants/             # Colors, Images, ApiContants, Theme, Capabilities, CapabilityMeta, CustomFonts, CountryCode
     ├── i18n/                  # English + Urdu string catalogs + t() helper
     ├── mock/                  # MallMate preview data (merchants, offers, events, ...)
     ├── navigators/            # Root stack + MallMate bottom tabs (Main), context providers
@@ -213,7 +213,7 @@ git checkout main && git merge work && git push
 
 | Workflow | Trigger | What it does |
 | -------- | ------- | ------------ |
-| `opencode.yml` | Issues and `/opencode` comments you open | Implements on an `opencode/*` branch based on `work`, merges it straight into `work` (no PR), comments the result on your issue. Blocked? It opens a question issue @-mentioning you instead of guessing. |
+| `opencode.yml` | Issues and `/opencode` comments you open; OWNER pull requests (opened/synchronize/reopened/ready_for_review) and PR review comments | Implements on an `opencode/*` branch based on `work`, merges it straight into `work` (no PR), comments the result on your issue. Blocked? It opens a question issue @-mentioning you instead of guessing. A `review-pr` job also reviews every OWNER PR against its base branch with OpenCode. |
 | `opencode-cron.yml` | 09:00 / 13:00 / 17:00 UTC + manual | Burns down **up to 5 TODO items per run** (branch from `work` → implement → mark done → land in `work`, one at a time), always ships a `todoAgent Ran` README footer on `work`, sweeps any stranded branch from earlier runs into `work`. |
 
 **Why isn't it one endless in-run loop?** Three GitHub platform limits:
