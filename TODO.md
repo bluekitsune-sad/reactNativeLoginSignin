@@ -866,6 +866,42 @@ Rules for the factory:
       Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
       `npm test` — 95/95.)
 
+### Quality debt (found in the 2026-10-29 analysis)
+
+- [ ] **20 unused mock-barrel exports (19 of them module-private)**: a
+      barrel-usage sweep (every named export of `src/mock/index.js`
+      checked against `import { … } from` sites across `src/`, `App.js`,
+      `scripts/` and tests) finds 20 exports no screen or script imports:
+      `EVENT_ICONS`, `FOOD_COURTS`, `MOCK_EVENTS`, `POI_ICONS`,
+      `HOME_CONTENT`, `getContentForMall`, `toEventSummary`,
+      `LEDGER_TYPES`, `MOCK_REWARDS`, `LIST_PAGE_SIZE`, `MERCHANT_DETAILS`,
+      `MOCK_MENUS`, `MOCK_OFFERS`, `DESTINATION_SUGGESTIONS`,
+      `OFFER_TYPES`, `formatOfferDate`, `getMerchantInitials`,
+      `MOCK_ORDERS`, `ORDER_STATES`, `MOCK_SESSION_PREVIEW_MINUTES`
+      (screens consume the resolvers, not the raw data). 19 of the 20 are
+      referenced only inside their own defining module file;
+      `LIST_PAGE_SIZE`'s sole external consumer is
+      `src/mock/__tests__/merchants.test.js` (deep import). Shrink the
+      barrel surface to what screens actually import and drop the `export`
+      keyword from the now-module-private names — same class as the
+      dc58039 four-helper sweep — but KEEP `LIST_PAGE_SIZE` exported from
+      `merchants.js` (the test imports it) and keep every resolver/status/
+      meta constant screens do use. Verify: re-grep each name,
+      lint/typecheck/tests.
+- [ ] **`useUserManagement`/`UserProvider` barrel re-exports are unused —
+      four deep imports bypass the utils barrel**: `src/utils/index.js`
+      exports both, but `SigninScreen`, `VerificationScreen` and
+      `ProfileScreen` each do `import useUserManagement from
+      "../utils/userData"` (default import) and `src/navigators/index.js`
+      does `import { UserProvider } from "../utils/userData"` — deep
+      relative paths that violate the AGENTS.md "import via the folder"
+      rule and leave the barrel re-exports dead (the sibling contexts
+      `MallProvider`/`FavoritesProvider` already import via the barrel).
+      Switch the four sites to `import { useUserManagement } from
+      "../utils"` / `import { UserProvider } from "../utils"` and run
+      lint/typecheck/tests (the three screens have render tests that
+      cover the import path).
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
