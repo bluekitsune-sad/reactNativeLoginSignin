@@ -868,7 +868,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-29 analysis)
 
-- [ ] **20 unused mock-barrel exports (19 of them module-private)**: a
+- [x] **20 unused mock-barrel exports (19 of them module-private)**: a
       barrel-usage sweep (every named export of `src/mock/index.js`
       checked against `import { … } from` sites across `src/`, `App.js`,
       `scripts/` and tests) finds 20 exports no screen or script imports:
@@ -887,7 +887,26 @@ Rules for the factory:
       dc58039 four-helper sweep — but KEEP `LIST_PAGE_SIZE` exported from
       `merchants.js` (the test imports it) and keep every resolver/status/
       meta constant screens do use. Verify: re-grep each name,
-      lint/typecheck/tests.
+      lint/typecheck/tests. (Done 2026-10-29: barrel (`src/mock/index.js`)
+      re-export list shrunk to the 50 names screens/scripts actually
+      import — the 20 dead names dropped from both the barrel's named
+      imports and its export list; `export` keyword dropped from the 19
+      module-private names across `events.js` (MOCK_EVENTS/EVENT_ICONS/
+      toEventSummary), `floors.js` (POI_ICONS), `foodCourt.js`
+      (FOOD_COURTS), `homeContent.js` (HOME_CONTENT/getContentForMall),
+      `menus.js` (MOCK_MENUS), `merchants.js` (MERCHANT_DETAILS/
+      getMerchantInitials), `navigation.js` (DESTINATION_SUGGESTIONS),
+      `offers.js` (OFFER_TYPES/MOCK_OFFERS/formatOfferDate), `orders.js`
+      (ORDER_STATES/MOCK_ORDERS), `rewards.js` (LEDGER_TYPES/
+      MOCK_REWARDS) and `seatSessions.js`
+      (MOCK_SESSION_PREVIEW_MINUTES); `LIST_PAGE_SIZE` kept exported from
+      `merchants.js` for its deep-importing test, just no longer
+      re-exported by the barrel. No behaviour change — data/functions kept,
+      only visibility narrowed. Re-grep-verified every name before editing:
+      only intra-module references + the barrel (+ the one test deep
+      import). Verified: `npm run lint` (0/0 after prettier --fix),
+      `npm run typecheck` (clean), `npm test -- --ci` — 95/95 across 11
+      suites.)
 - [ ] **`useUserManagement`/`UserProvider` barrel re-exports are unused —
       four deep imports bypass the utils barrel**: `src/utils/index.js`
       exports both, but `SigninScreen`, `VerificationScreen` and

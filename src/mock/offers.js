@@ -9,13 +9,13 @@
  */
 const farFuture = "2099-12-31T23:59:59Z";
 
-export const OFFER_TYPES = {
+const OFFER_TYPES = {
   PERCENTAGE: "PERCENTAGE",
   FIXED_AMOUNT: "FIXED_AMOUNT",
   BOGO: "BOGO",
 };
 
-export const MOCK_OFFERS = {
+const MOCK_OFFERS = {
   "lucky-discount-1": {
     id: "lucky-discount-1",
     merchantId: "lucky-m-1",
@@ -130,7 +130,7 @@ export const MOCK_OFFERS = {
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export const formatOfferDate = (iso) => {
+const formatOfferDate = (iso) => {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) {
     return null;

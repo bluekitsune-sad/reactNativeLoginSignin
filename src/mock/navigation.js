@@ -35,7 +35,7 @@ const getDestinations = (mallSlug) => {
 };
 
 /** Idle-state suggestion queries per mall for the destination search. */
-export const DESTINATION_SUGGESTIONS = {
+const DESTINATION_SUGGESTIONS = {
   luckyone: ["Food court", "Guest services", "Restrooms", "Cinema"],
   harbourwalk: [],
 };

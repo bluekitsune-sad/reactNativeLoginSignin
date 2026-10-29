@@ -10,7 +10,7 @@ import { getEventList } from "./events";
  */
 const farFuture = "2099-12-31T23:59:59Z";
 
-export const HOME_CONTENT = {
+const HOME_CONTENT = {
   luckyone: {
     categories: [
       {
@@ -331,7 +331,7 @@ export const HOME_CONTENT = {
   },
 };
 
-export const getContentForMall = (mallSlug) => HOME_CONTENT[mallSlug] || null;
+const getContentForMall = (mallSlug) => HOME_CONTENT[mallSlug] || null;
 
 export const isCapabilityVisible = (capabilityMap, capability) => {
   if (!capability) {

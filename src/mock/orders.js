@@ -8,7 +8,7 @@ import { formatPrice } from "./menus";
  * Capability-gated on online_ordering.
  */
 
-export const ORDER_STATES = {
+const ORDER_STATES = {
   PENDING_PAYMENT: "PENDING_PAYMENT",
   PAID: "PAID",
   AWAITING_MERCHANT: "AWAITING_MERCHANT",
@@ -120,7 +120,7 @@ export const formatOrderDateTime = (iso) => {
  * fulfilment, line items, total, and a history of {state, at} entries —
  * the last entry is the current state.
  */
-export const MOCK_ORDERS = {
+const MOCK_ORDERS = {
   luckyone: [
     {
       id: "mm-order-1042",
