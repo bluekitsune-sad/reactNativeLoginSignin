@@ -3,7 +3,7 @@ import { fireEvent, render } from "@testing-library/react-native";
 import React from "react";
 
 import { StorageService } from "../../services";
-import { UserProvider } from "../../utils/userData";
+import { UserProvider } from "../../utils";
 import ProfileScreen from "../profile/ProfileScreen";
 
 const createNavigation = () => ({

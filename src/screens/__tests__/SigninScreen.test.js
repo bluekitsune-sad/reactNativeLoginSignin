@@ -3,7 +3,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import React from "react";
 
 import { AuthenticationService, StorageService } from "../../services";
-import { UserProvider } from "../../utils/userData";
+import { UserProvider } from "../../utils";
 import SigninScreen from "../SigninScreen";
 
 jest.mock("../../services", () => ({

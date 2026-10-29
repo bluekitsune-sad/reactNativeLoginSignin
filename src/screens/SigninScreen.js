@@ -8,7 +8,7 @@ import { MallMateTheme } from "../constants";
 import { t } from "../i18n";
 import { isSuspiciousLogin } from "../mock";
 import { AuthenticationService, StorageService } from "../services";
-import useUserManagement from "../utils/userData";
+import { useUserManagement } from "../utils";
 
 const SigninScreen = ({ navigation }) => {
   const [isPasswordShow, setIsPasswordShow] = useState(false);

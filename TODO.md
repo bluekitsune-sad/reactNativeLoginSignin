@@ -907,7 +907,7 @@ Rules for the factory:
       import). Verified: `npm run lint` (0/0 after prettier --fix),
       `npm run typecheck` (clean), `npm test -- --ci` — 95/95 across 11
       suites.)
-- [ ] **`useUserManagement`/`UserProvider` barrel re-exports are unused —
+- [x] **`useUserManagement`/`UserProvider` barrel re-exports are unused —
       four deep imports bypass the utils barrel**: `src/utils/index.js`
       exports both, but `SigninScreen`, `VerificationScreen` and
       `ProfileScreen` each do `import useUserManagement from
@@ -919,7 +919,21 @@ Rules for the factory:
       Switch the four sites to `import { useUserManagement } from
       "../utils"` / `import { UserProvider } from "../utils"` and run
       lint/typecheck/tests (the three screens have render tests that
-      cover the import path).
+      cover the import path). (Done 2026-10-29: the four app sites
+      switched to barrel named imports — the three screens' default
+      `import useUserManagement from "../utils/userData"` became
+      `import { useUserManagement } from "../utils"`, and the navigator's
+      `UserProvider` deep import became `import { UserProvider } from
+      "../utils"` (ordered before the still-deep `../utils/favorites` /
+      `../utils/mallData` sibling imports, which the navigator also
+      keeps — the item's "siblings already use the barrel" claim only
+      held for screens). The re-grep also found two test wrappers the
+      item's count missed — `SigninScreen.test.js` and
+      `ProfileScreen.test.js` deep-imported `UserProvider` too; both
+      switched to `from "../../utils"` so zero `utils/userData` string
+      references remain outside the module itself. Verified:
+      `npm run lint` (0/0), `npm run typecheck` (clean), `npm test --
+      --ci` — 95/95 across 11 suites.)
 
 ### Blocked — do NOT implement until the owner decides
 

@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ListRow, SectionHeader } from "../../components";
 import { MallMateTheme } from "../../constants";
 import { t } from "../../i18n";
-import useUserManagement from "../../utils/userData";
+import { useUserManagement } from "../../utils";
 
 const PROFILE_ROWS = [
   {
