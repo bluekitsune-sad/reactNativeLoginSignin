@@ -825,7 +825,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-28 close-out analysis)
 
-- [ ] **Invalid Ionicons name `route-outline` — Route Preview's hero icon
+- [x] **Invalid Ionicons name `route-outline` — Route Preview's hero icon
       renders blank**: `src/screens/map/RoutePreviewScreen.js:52` uses
       `<Ionicons name="route-outline" … />`, but no such glyph exists in the
       installed `@expo/vector-icons` 14.1.0 Ionicons glyphmap (1338 glyphs;
@@ -837,7 +837,15 @@ Rules for the factory:
       `navigate-outline` both exist; `signpost-outline` does not) and
       re-run lint/typecheck/tests. Optionally add a tiny test asserting
       every icon-name literal in the codebase exists in the packaged
-      glyphmaps so this class can't regress.
+      glyphmaps so this class can't regress. (Done 2026-10-29: hero icon
+      swapped to `navigate-outline` (re-glyphmap-verified present);
+      full-source sweep re-confirmed it was the only invalid name. New
+      regression test `src/__tests__/iconNames.test.js` walks `src/` +
+      `App.js`, extracts every `<Ionicons|Feather name="…">` literal and
+      asserts each exists in the packaged glyphmaps — sanity-checked to
+      fail on `route-outline` and pass on the fix. Verified:
+      `npm run lint` (0/0), `npm run typecheck` (clean), `npm test` —
+      95/95.)
 - [ ] **20 of 23 `Colors.js` tokens are dead**: grep across `src/`,
       `scripts/` + `App.js` finds only `DEFAULT_GREEN`/`DEFAULT_GREY`/
       `DEFAULT_WHITE` consumed (all three by the legacy `ToggleButton`);

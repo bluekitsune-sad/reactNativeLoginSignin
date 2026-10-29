@@ -49,7 +49,9 @@ const RoutePreviewScreen = ({ navigation, route }) => {
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
         {header}
         <EmptyState
-          icon={<Ionicons name="route-outline" size={48} color={MallMateTheme.color.textMuted} />}
+          icon={
+            <Ionicons name="navigate-outline" size={48} color={MallMateTheme.color.textMuted} />
+          }
           title={t("maps.routeUnavailableTitle")}
           message={response.message || t("maps.routeUnavailableMessage")}
         />
