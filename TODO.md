@@ -846,7 +846,7 @@ Rules for the factory:
       fail on `route-outline` and pass on the fix. Verified:
       `npm run lint` (0/0), `npm run typecheck` (clean), `npm test` —
       95/95.)
-- [ ] **20 of 23 `Colors.js` tokens are dead**: grep across `src/`,
+- [x] **20 of 23 `Colors.js` tokens are dead**: grep across `src/`,
       `scripts/` + `App.js` finds only `DEFAULT_GREEN`/`DEFAULT_GREY`/
       `DEFAULT_WHITE` consumed (all three by the legacy `ToggleButton`);
       the other 20 (`DEFAULT_BLACK`, `DEFAULT_YELLOW`, `DEFAULT_RED`,
@@ -858,6 +858,13 @@ Rules for the factory:
       kept only for that component). Same dead-code class as the
       ApiContants/StorageService/mock-export sweeps. Verify by
       re-grepping `Colors\.` across the repo + lint/typecheck/tests.
+      (Done 2026-10-29: the 20 dead tokens dropped — `Colors.js` now holds
+      only `DEFAULT_GREEN`/`DEFAULT_GREY`/`DEFAULT_WHITE`; default export
+      shape and token names unchanged so the barrel export and
+      `ToggleButton` needed no edits. Re-grep across `src/`, `scripts/`,
+      `App.js` + root configs: zero references to any removed token.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test` — 95/95.)
 
 ### Blocked — do NOT implement until the owner decides
 
