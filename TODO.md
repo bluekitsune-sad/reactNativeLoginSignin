@@ -937,7 +937,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-29 close-out analysis)
 
-- [ ] **Navigator deep-imports `FavoritesProvider`/`MallProvider`**: after
+- [x] **Navigator deep-imports `FavoritesProvider`/`MallProvider`**: after
       the `UserProvider` barrel-import fix above, `src/navigators/index.js`
       is the only remaining consumer that bypasses the utils barrel —
       `import { FavoritesProvider } from "../utils/favorites"` and
@@ -946,7 +946,14 @@ Rules for the factory:
       `import { FavoritesProvider, MallProvider } from "../utils"` (the
       barrel already re-exports both; every other screen imports context
       hooks via the folder). Same AGENTS.md "import via the folder" rule
-      as the completed item. Verify: lint/typecheck/tests.
+      as the completed item. Verify: lint/typecheck/tests. (Done
+      2026-10-30: the navigator's three separate context imports merged
+      into one barrel import — `import { FavoritesProvider, MallProvider,
+      UserProvider } from "../utils"` — removing the last two deep
+      relative paths into `../utils/favorites` and `../utils/mallData`.
+      The barrel already re-exported both providers; no other consumer
+      bypassed it. Verified: `npm run lint` (0/0), `npm run typecheck`
+      (clean), `npm test` — 95/95 across 11 suites.)
 
 ### Blocked — do NOT implement until the owner decides
 
