@@ -7,7 +7,7 @@ import { Button, TextInput } from "../components";
 import { MallMateTheme } from "../constants";
 import { t } from "../i18n";
 import { DEMO_OTP_CODE, sendMockOtp, verifyMockOtp } from "../mock";
-import useUserManagement from "../utils/userData";
+import { useUserManagement } from "../utils";
 
 /**
  * OTP entry for the decided auth flow (issue #9). Register flow finishes

@@ -10,7 +10,7 @@ import { getEventList } from "./events";
  */
 const farFuture = "2099-12-31T23:59:59Z";
 
-export const HOME_CONTENT = {
+const HOME_CONTENT = {
   luckyone: {
     categories: [
       {
@@ -331,7 +331,7 @@ export const HOME_CONTENT = {
   },
 };
 
-export const getContentForMall = (mallSlug) => HOME_CONTENT[mallSlug] || null;
+const getContentForMall = (mallSlug) => HOME_CONTENT[mallSlug] || null;
 
 export const isCapabilityVisible = (capabilityMap, capability) => {
   if (!capability) {
@@ -341,7 +341,7 @@ export const isCapabilityVisible = (capabilityMap, capability) => {
   return status === CAPABILITY_STATUS.ENABLED || status === CAPABILITY_STATUS.DEGRADED;
 };
 
-export const isCampaignActive = (item, now = new Date()) => {
+const isCampaignActive = (item, now = new Date()) => {
   const start = item.activeFrom ? Date.parse(item.activeFrom) : null;
   const end = item.activeTo ? Date.parse(item.activeTo) : null;
   if (start !== null && Number.isFinite(start) && now.getTime() < start) {
@@ -353,7 +353,7 @@ export const isCampaignActive = (item, now = new Date()) => {
   return true;
 };
 
-export const isOfferActive = (offer, now = new Date()) => {
+const isOfferActive = (offer, now = new Date()) => {
   if (!offer.endsAt) {
     return true;
   }

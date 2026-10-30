@@ -593,7 +593,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-23 close-out analysis)
 
-- [ ] **`AuthenticationService` logs raw errors (login can print
+- [x] **`AuthenticationService` logs raw errors (login can print
       credentials) + leftover commented `test()` block**: every catch does
       `console.log(error)` — on a failed `login`, the axios error object
       carries `config.url`, which embeds the JSON-stringified
@@ -604,12 +604,349 @@ Rules for the factory:
       delete the dead block; log only a safe digest (e.g.
       `console.warn(error?.message)`) or nothing — keep the
       `{status:false, message}` envelope contract unchanged and update
-      `authenticationService.test.js` if it asserts the logging.
-- [ ] **Dead `removeSelectedMallSlug` in `StorageService`**: zero
+      `authenticationService.test.js` if it asserts the logging. (Done
+      2026-10-24: deleted the dead `test()` block; all four catches now
+      call a `logAuthError` helper that logs only
+      `console.warn("AuthenticationService request failed:",
+      error?.message)` — never the raw error object, so the credentials
+      embedded in the login error's `config.url` can no longer print to
+      the dev console. Envelope contract unchanged. New regression test
+      in `authenticationService.test.js` asserts a failed login whose
+      axios-like error carries credentials in `config.url` logs only the
+      safe message — no "alice"/"secret" in console output. Verified:
+      `npm run lint` (0/0), `npm run typecheck`, `npm test` — 50/50.)
+- [x] **Dead `removeSelectedMallSlug` in `StorageService`**: zero
       consumers (grep-verified across `src/`, `scripts/`, `App.js`) — mall
       selection is only ever set, never removed. Remove the helper (same
       class as the first-time-use helpers removed 2026-10-23; re-add with
-      a real "reset app data" feature if one lands).
+      a real "reset app data" feature if one lands). (Done 2026-10-24:
+      helper + its barrel export removed after re-grepping `src/`,
+      `scripts/`, `App.js` — zero references outside the service itself;
+      no test asserted it. Verified: `npm run lint` (0/0),
+      `npm run typecheck`, `npm test` — 50/50.)
+
+### Quality debt (found in the 2026-10-24 close-out analysis)
+
+- [x] **Merchant area never migrated to `t()`** — the "Adopt `t()`
+      across MallMate screens" item claims every MallMate screen renders
+      via `t()`, but `MerchantDetailScreen`/`MenuScreen`/`MenuItemScreen`
+      have no `src/i18n` import and no `merchant`/`menu` key group in
+      `en.js`/`ur.js`. ~30 hardcoded English strings (e.g.
+      `accessibilityLabel="Go back"` — `common.goBack` exists and every
+      other screen uses it; "Open now"/"Closed" — `explore.open/closed`
+      exist; section titles Location/Hours/Active offers/Menu/Contact,
+      "View menu", "Sold out", "Merchant not found"). Migrate the three
+      screens onto new `merchant.*`/`menu.*` keys (en+ur, parity tests).
+      (Done 2026-10-25: new `merchant.*` group (not-found title + {mall}
+      message, favorite add/remove a11y with {merchant}, section titles
+      Location/Hours/Active offers/Menu/Contact, map-destination
+      placeholder, hours fallback/open-now/closed-right-now + "{status} ·
+      mock hours" note, no-offers note, View menu row, Phone/Email
+      contact subtitles, approval-only contact note) and `menu.*` group
+      (title/{merchant} header + item-header variants, not-found/empty
+      states with interpolation, Sold out, Available, browse-only notes
+      for list + item, incl.-taxes note) added to en.js and mirrored
+      key-for-key in ur.js. All three screens now render through `t()`
+      (reusing `common.goBack` and `explore.closed` where the copy
+      matched); mock-catalogue strings (names, tags, section titles)
+      stay untranslated by design. Verified: `npm run lint` (0/0 after
+      prettier --fix), `npm run typecheck`, `npm test` — 50/50.)
+- [x] **AGENTS.md stale screens/conventions claims**: the architecture
+      paragraph still says `RegisterPhoneScreen`/`VerificationScreen`
+      "remain stubbed as comments (parked on owner question #9)" — both
+      shipped 2026-10-21 (plus `CountryPickerScreen`), are exported and
+      registered; and "JavaScript only (`.js`, JSX)" in Conventions
+      contradicts the shipped `apiClient.ts`/`ProfilePlaceholderScreen.tsx`
+      /`src/types/*.ts` and AGENTS.md's own TypeScript-migration note.
+      Rewrite both so agents aren't misled. (Done 2026-10-25: the
+      screens paragraph now states all auth screens shipped 2026-10-21
+      — Signin/Signup/ForgotPassword + the phone-OTP trio
+      RegisterPhone/Verification/CountryPicker (mock flow, issue #9) —
+      and points at the MallMate area folders; Conventions now says
+      "JavaScript‑first … TypeScript introduced incrementally under
+      strict" matching the shipped `.ts`/`.tsx` slices. Markdown-only —
+      verified by re-read plus grep that all three OTP screens are
+      exported from the barrel and registered in the navigator; lint +
+      typecheck still clean.)
+- [x] **Sign-in "Remember me" toggle is decorative + a11y
+      non-compliant**: `SigninScreen` renders `<ToggleButton size={0.5} />`
+      with no callback; `ToggleButton` keeps `isActive` in its own state
+      and never reports it, so the choice is never persisted or sent to
+      `login()` (which only receives `{username, password}`). The touch
+      target is 32×16px at that size with no `hitSlop` and the control has
+      no `accessibilityLabel`/`accessibilityRole`/`accessibilityState` —
+      violating the 44–48px + labelled-control rules the accessibility
+      pass claims. Either wire it (local persistence only) or drop it from
+      the form and README feature list; fix the target size + labels
+      either way. (Done 2026-10-25: wired as local persistence — "Remember
+      me" now remembers the USERNAME only (never the password) via new
+      `StorageService.set/get/removeRememberedUsername` helpers
+      ("rememberedUsername" key); on mount SigninScreen prefills the
+      username and checks the switch when one is stored, and a successful
+      sign-in stores/clears it based on the toggle. `ToggleButton` gained
+      controlled `value`/`onValueChange` + `accessibilityLabel` props,
+      `accessibilityRole="switch"` with `accessibilityState.checked`, and
+      `hitSlop` so the 32×16px pill reaches a 44px vertical target; the
+      username input is now controlled (`value={username}`) so prefill is
+      visible. `login()` still only receives `{username, password}` — no
+      credential storage, no backend sync. 4 new SigninScreen tests
+      (labelled switch role/state toggle, prefill from storage, username
+      stored on success when on / cleared when off). Verified: `npm run
+      lint` (0/0), `npm run typecheck`, `npm test` — 54/54.)
+- [x] **`AuthenicationService` barrel typo propagated to every consumer**:
+      `src/services/index.js` imports/exports the misspelled
+      `AuthenicationService` (file is `AuthenticationService.js`), and
+      Signin/Signup/ForgotPassword screens copy the typo. Importing the
+      correctly-spelled name silently yields `undefined`. Add an
+      `AuthenticationService` alias (keep the old name briefly if needed),
+      update the three screens, drop the typo from the barrel. (Done
+      2026-10-25: barrel now imports/exports `AuthenticationService`
+      correctly and the typo name is dropped — every in-repo consumer
+      (Signin/Signup/ForgotPassword screens + their tests + the service
+      test's local binding) was renamed in the same change, so no alias
+      was needed; repo-wide grep finds zero remaining `Authenication`
+      references outside this history. Verified: `npm run lint` (0/0),
+      `npm run typecheck`, `npm test` — 50/50.)
+- [x] **Dead code/dependency sweep**: `src/utils/Generator.js` (exports
+      only `authHeader`, referenced nowhere — not even the utils barrel),
+      `expo-status-bar` in package.json (zero imports; screens use RN's
+      built-in `StatusBar`), `isRTL()` (only its own unit test consumes
+      it), and `isTerminalOrderState` (re-exported from the mock barrel,
+      used by no screen). Remove or wire each; re-verify `npm install`
+      shrinkage is safe for Expo web export. (Done 2026-10-26: all four
+      removed — `Generator.js` deleted (zero references), `expo-status-bar`
+      dropped from package.json (1 package removed from the tree),
+      `isRTL()` + its lone typeof-boolean test assertion dropped (logical
+      `marginStart/End` props already handle RTL from the OS setting — no
+      screen needed the helper), and `isTerminalOrderState` removed from
+      `src/mock/orders.js` + barrel (the detail screen keys off
+      `order.nextState`, computed from the still-private `NEXT_STATE_HINT`).
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test` — 53/53 (one fewer than before: the dropped isRTL
+      assertion), and `npx expo export:web` still compiles and emits
+      `web-build/` (the react-native-reanimated "Module not found" warning
+      is pre-existing and documented in README — optional require inside
+      gesture-handler, unrelated to this sweep).)
+- [x] **README tech-stack row overstates icons**: claims
+      "`@expo/vector-icons` (Ionicons, Feather, AntDesign, FontAwesome)"
+      but `src/` only imports Ionicons + Feather. Correct the row.
+      (Done 2026-10-25: row now lists only Ionicons + Feather —
+      grep-verified the only two `@expo/vector-icons` import shapes in
+      `src/`. Markdown-only — verified by re-read.)
+- [x] **Coverage gap on the trickiest pure logic**: no suite for
+      `StorageService` (JSON round-trip + array validation — historically
+      bug-prone), `fetchMerchantListPage`/`applyMerchantFilters`
+      (pagination + fail-first-attempt state machine), or
+      `FavoritesProvider`. Add focused unit tests; 50/50 currently pass
+      with these uncovered. (Done 2026-10-26: three new suites —
+      `src/services/__tests__/storageService.test.js` (user JSON
+      stringify/parse round-trip incl. the null cases, favorite-ids
+      array validation dropping non-string/non-array/corrupt-JSON values,
+      remembered-username + mall-slug round-trips);
+      `src/mock/__tests__/merchants.test.js` (`applyMerchantFilters`
+      all five dimensions + AND semantics + empty/no-mutation;
+      `fetchMerchantListPage` fail-first-attempt per mall+kind,
+      independent-kind failures, unknown-kind envelope, page 1/2 slicing
+      with hasMore/total and no page overlap, past-end empty page, page-0
+      clamp, DISABLED capability → empty page, DEGRADED still lists);
+      `src/utils/__tests__/favorites.test.js` (hydration from storage,
+      empty start, hydrate-empty on read rejection, toggle on/off with
+      persistence assertions, falsy-id no-op, out-of-provider throw).
+      Test isolation: each fetchMerchantListPage test owns a unique mall
+      slug so the module-level fail-first Set stays deterministic.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test` — 94/94 across 10 suites (was 53/53).)
+
+### Quality debt (found in the 2026-10-26 close-out analysis)
+
+- [ ] **No CI runs lint/typecheck/tests on PRs or pushes**: the only
+      workflows (`.github/workflows/opencode.yml`, `opencode-cron.yml`)
+      drive the agent; nothing verifies a push to `work` or the
+      work → main PR with `npm run lint` / `npm run typecheck` /
+      `npm test` — regressions land unverified by automation. Add a
+      small `ci.yml` (push to work/main + pull_request: npm ci, lint,
+      typecheck, test). Keep it read-only (no secrets, no deploy).
+      (Blocked 2026-10-26 — see issue #11: `ci.yml` is written,
+      verified (lint 0/0, typecheck clean, tests 94/94, YAML parses)
+      but cannot be pushed — the run's `GITHUB_TOKEN` gets 403 on any
+      `.github/workflows/*` change (git push and contents API; the
+      Actions integration token never has the `workflows` permission).
+      Full ready-to-apply file content is in issue #11. Once the owner
+      lands the file (web UI or a privileged token), finish this item:
+      add the README automation row + mark [x].)
+- [x] **Module-private helpers exported unnecessarily**: `isCampaignActive`
+      and `isOfferActive` (only used inside `src/mock/homeContent.js`, not
+      re-exported by the mock barrel), and `MOCK_MERCHANTS` /
+      `SEARCH_SUGGESTIONS` (only used inside `src/mock/merchants.js`).
+      Grep-verified zero external imports. Drop the `export` keyword
+      (keep the functions/data) so the public mock surface matches what
+      screens actually consume — same class as the earlier dead-export
+      sweeps. (Done 2026-10-26: all four `export` keywords dropped —
+      re-grepped the whole repo first (only intra-file references plus
+      TODO/README history mentions; the mock barrel's named export list
+      doesn't include them). Verified: `npm run lint` (0/0),
+      `npm run typecheck` (clean), `npm test -- --ci` — 94/94.)
+
+### Quality debt (found in the 2026-10-27 analysis)
+
+- [x] **AGENTS.md still claims "the existing hardcoded IPs are legacy
+      debt"**: the API-paths bullet warns agents not to add more
+      hardcoded hosts as if some remain, but grep across `src/` finds
+      zero `192.168`/`10.0.` IPs — `ApiContants.js` resolves strictly
+      from `EXPO_PUBLIC_BACKEND_URL` → `app.json` `extra.backendUrl` →
+      `http://localhost:3001` (the hardcoded-IP cleanup shipped earlier).
+      Reword the parenthetical so it warns against *new* hardcoding
+      without implying current debt. (Done 2026-10-28: the bullet now
+      says to resolve every path and the base URL from `ApiContants`
+      with a "hardcoded-IP cleanup shipped; don't regress it" note —
+      no longer implies current debt. Markdown-only — verified by
+      re-reading the bullet plus re-grepping `src/`, `App.js` and
+      `scripts/` for `192.168`/`10.0.` IPs: zero matches.)
+- [x] **README automation table misdescribes `opencode.yml`, and the
+      project-structure tree omits `CapabilityMeta.js`**: the table says
+      the workflow triggers on "issues and `/opencode` comments", but
+      `.github/workflows/opencode.yml`'s `on:` block also includes
+      `pull_request` (opened/synchronize/reopened/ready_for_review) and
+      `pull_request_review_comment`, and the workflow has a third
+      `review-pr` job that reviews every OWNER PR — none of that is
+      documented. The `constants/` tree line also lists
+      Colors/Images/ApiContants/Theme/Capabilities/CustomFonts/
+      CountryCode but misses the barrel-exported `CapabilityMeta.js`.
+      Update the trigger cell (add the PR-review behaviour) and the tree
+      line. Doc-only; verify by re-reading against the workflow `on:`
+      block and `src/constants/index.js`. (Done 2026-10-28: the
+      `opencode.yml` trigger cell now lists OWNER pull requests
+      (opened/synchronize/reopened/ready_for_review) + PR review
+      comments, and the description documents the `review-pr` job that
+      reviews every OWNER PR against its base; the `constants/` tree
+      line now includes `CapabilityMeta`. Verified by re-reading the
+      workflow `on:`/`jobs:` blocks and `src/constants/index.js`
+      (barrel exports `CAPABILITY_META` from `CapabilityMeta`.)
+
+### Quality debt (found in the 2026-10-28 close-out analysis)
+
+- [x] **Invalid Ionicons name `route-outline` — Route Preview's hero icon
+      renders blank**: `src/screens/map/RoutePreviewScreen.js:52` uses
+      `<Ionicons name="route-outline" … />`, but no such glyph exists in the
+      installed `@expo/vector-icons` 14.1.0 Ionicons glyphmap (1338 glyphs;
+      zero `route*` names). A glyphmap-verified sweep of every
+      `Ionicons`/`Feather` `name` literal across `src/` + `App.js` found
+      this is the only invalid icon name in the app — unknown names render
+      an empty box, so the route-preview card shows no icon on every
+      platform. Swap to a valid direction-ish glyph (`map-outline` and
+      `navigate-outline` both exist; `signpost-outline` does not) and
+      re-run lint/typecheck/tests. Optionally add a tiny test asserting
+      every icon-name literal in the codebase exists in the packaged
+      glyphmaps so this class can't regress. (Done 2026-10-29: hero icon
+      swapped to `navigate-outline` (re-glyphmap-verified present);
+      full-source sweep re-confirmed it was the only invalid name. New
+      regression test `src/__tests__/iconNames.test.js` walks `src/` +
+      `App.js`, extracts every `<Ionicons|Feather name="…">` literal and
+      asserts each exists in the packaged glyphmaps — sanity-checked to
+      fail on `route-outline` and pass on the fix. Verified:
+      `npm run lint` (0/0), `npm run typecheck` (clean), `npm test` —
+      95/95.)
+- [x] **20 of 23 `Colors.js` tokens are dead**: grep across `src/`,
+      `scripts/` + `App.js` finds only `DEFAULT_GREEN`/`DEFAULT_GREY`/
+      `DEFAULT_WHITE` consumed (all three by the legacy `ToggleButton`);
+      the other 20 (`DEFAULT_BLACK`, `DEFAULT_YELLOW`, `DEFAULT_RED`,
+      `SECONDARY_*`, `LIGHT_*`, `FABEBOOK_BLUE` [sic], `GOOGLE_BLUE`,
+      `INACTIVE_GREY`, `DARK_ONE`…`DARK_FIVE`) have zero consumers —
+      leftovers from the removed food-ordering scaffold. Trim
+      `src/constants/Colors.js` down to the three tokens `ToggleButton`
+      needs (AGENTS.md already documents Colors.js as the legacy palette
+      kept only for that component). Same dead-code class as the
+      ApiContants/StorageService/mock-export sweeps. Verify by
+      re-grepping `Colors\.` across the repo + lint/typecheck/tests.
+      (Done 2026-10-29: the 20 dead tokens dropped — `Colors.js` now holds
+      only `DEFAULT_GREEN`/`DEFAULT_GREY`/`DEFAULT_WHITE`; default export
+      shape and token names unchanged so the barrel export and
+      `ToggleButton` needed no edits. Re-grep across `src/`, `scripts/`,
+      `App.js` + root configs: zero references to any removed token.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test` — 95/95.)
+
+### Quality debt (found in the 2026-10-29 analysis)
+
+- [x] **20 unused mock-barrel exports (19 of them module-private)**: a
+      barrel-usage sweep (every named export of `src/mock/index.js`
+      checked against `import { … } from` sites across `src/`, `App.js`,
+      `scripts/` and tests) finds 20 exports no screen or script imports:
+      `EVENT_ICONS`, `FOOD_COURTS`, `MOCK_EVENTS`, `POI_ICONS`,
+      `HOME_CONTENT`, `getContentForMall`, `toEventSummary`,
+      `LEDGER_TYPES`, `MOCK_REWARDS`, `LIST_PAGE_SIZE`, `MERCHANT_DETAILS`,
+      `MOCK_MENUS`, `MOCK_OFFERS`, `DESTINATION_SUGGESTIONS`,
+      `OFFER_TYPES`, `formatOfferDate`, `getMerchantInitials`,
+      `MOCK_ORDERS`, `ORDER_STATES`, `MOCK_SESSION_PREVIEW_MINUTES`
+      (screens consume the resolvers, not the raw data). 19 of the 20 are
+      referenced only inside their own defining module file;
+      `LIST_PAGE_SIZE`'s sole external consumer is
+      `src/mock/__tests__/merchants.test.js` (deep import). Shrink the
+      barrel surface to what screens actually import and drop the `export`
+      keyword from the now-module-private names — same class as the
+      dc58039 four-helper sweep — but KEEP `LIST_PAGE_SIZE` exported from
+      `merchants.js` (the test imports it) and keep every resolver/status/
+      meta constant screens do use. Verify: re-grep each name,
+      lint/typecheck/tests. (Done 2026-10-29: barrel (`src/mock/index.js`)
+      re-export list shrunk to the 50 names screens/scripts actually
+      import — the 20 dead names dropped from both the barrel's named
+      imports and its export list; `export` keyword dropped from the 19
+      module-private names across `events.js` (MOCK_EVENTS/EVENT_ICONS/
+      toEventSummary), `floors.js` (POI_ICONS), `foodCourt.js`
+      (FOOD_COURTS), `homeContent.js` (HOME_CONTENT/getContentForMall),
+      `menus.js` (MOCK_MENUS), `merchants.js` (MERCHANT_DETAILS/
+      getMerchantInitials), `navigation.js` (DESTINATION_SUGGESTIONS),
+      `offers.js` (OFFER_TYPES/MOCK_OFFERS/formatOfferDate), `orders.js`
+      (ORDER_STATES/MOCK_ORDERS), `rewards.js` (LEDGER_TYPES/
+      MOCK_REWARDS) and `seatSessions.js`
+      (MOCK_SESSION_PREVIEW_MINUTES); `LIST_PAGE_SIZE` kept exported from
+      `merchants.js` for its deep-importing test, just no longer
+      re-exported by the barrel. No behaviour change — data/functions kept,
+      only visibility narrowed. Re-grep-verified every name before editing:
+      only intra-module references + the barrel (+ the one test deep
+      import). Verified: `npm run lint` (0/0 after prettier --fix),
+      `npm run typecheck` (clean), `npm test -- --ci` — 95/95 across 11
+      suites.)
+- [x] **`useUserManagement`/`UserProvider` barrel re-exports are unused —
+      four deep imports bypass the utils barrel**: `src/utils/index.js`
+      exports both, but `SigninScreen`, `VerificationScreen` and
+      `ProfileScreen` each do `import useUserManagement from
+      "../utils/userData"` (default import) and `src/navigators/index.js`
+      does `import { UserProvider } from "../utils/userData"` — deep
+      relative paths that violate the AGENTS.md "import via the folder"
+      rule and leave the barrel re-exports dead (the sibling contexts
+      `MallProvider`/`FavoritesProvider` already import via the barrel).
+      Switch the four sites to `import { useUserManagement } from
+      "../utils"` / `import { UserProvider } from "../utils"` and run
+      lint/typecheck/tests (the three screens have render tests that
+      cover the import path). (Done 2026-10-29: the four app sites
+      switched to barrel named imports — the three screens' default
+      `import useUserManagement from "../utils/userData"` became
+      `import { useUserManagement } from "../utils"`, and the navigator's
+      `UserProvider` deep import became `import { UserProvider } from
+      "../utils"` (ordered before the still-deep `../utils/favorites` /
+      `../utils/mallData` sibling imports, which the navigator also
+      keeps — the item's "siblings already use the barrel" claim only
+      held for screens). The re-grep also found two test wrappers the
+      item's count missed — `SigninScreen.test.js` and
+      `ProfileScreen.test.js` deep-imported `UserProvider` too; both
+      switched to `from "../../utils"` so zero `utils/userData` string
+      references remain outside the module itself. Verified:
+      `npm run lint` (0/0), `npm run typecheck` (clean), `npm test --
+      --ci` — 95/95 across 11 suites.)
+
+### Quality debt (found in the 2026-10-29 close-out analysis)
+
+- [ ] **Navigator deep-imports `FavoritesProvider`/`MallProvider`**: after
+      the `UserProvider` barrel-import fix above, `src/navigators/index.js`
+      is the only remaining consumer that bypasses the utils barrel —
+      `import { FavoritesProvider } from "../utils/favorites"` and
+      `import { MallProvider } from "../utils/mallData"` sit right below
+      `import { UserProvider } from "../utils"`. Switch both to
+      `import { FavoritesProvider, MallProvider } from "../utils"` (the
+      barrel already re-exports both; every other screen imports context
+      hooks via the folder). Same AGENTS.md "import via the folder" rule
+      as the completed item. Verify: lint/typecheck/tests.
 
 ### Blocked — do NOT implement until the owner decides
 

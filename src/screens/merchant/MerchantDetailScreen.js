@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Badge, Card, EmptyState, ListRow, SectionHeader, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { getMerchantDetail } from "../../mock";
 import { useFavorites, useMallManagement } from "../../utils";
 
@@ -29,7 +30,7 @@ const MerchantDetailScreen = ({ navigation, route }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
@@ -42,7 +43,11 @@ const MerchantDetailScreen = ({ navigation, route }) => {
         <Pressable
           onPress={() => toggleFavorite(merchantId)}
           accessibilityRole="button"
-          accessibilityLabel={favorited ? "Remove from favorites" : "Add to favorites"}
+          accessibilityLabel={
+            favorited
+              ? t("merchant.removeFavoriteA11y", { merchant: merchant.name })
+              : t("merchant.addFavoriteA11y", { merchant: merchant.name })
+          }
           accessibilityState={{ selected: favorited }}
           hitSlop={MallMateTheme.spacing.sm}
           style={styles.favoriteButton}
@@ -65,8 +70,8 @@ const MerchantDetailScreen = ({ navigation, route }) => {
           icon={
             <Ionicons name="storefront-outline" size={48} color={MallMateTheme.color.textMuted} />
           }
-          title="Merchant not found"
-          message={`This merchant isn't listed at ${selectedMall.name}. It may belong to another mall.`}
+          title={t("merchant.notFoundTitle")}
+          message={t("merchant.notFoundMessage", { mall: selectedMall.name })}
         />
       </SafeAreaView>
     );
@@ -94,7 +99,7 @@ const MerchantDetailScreen = ({ navigation, route }) => {
                 {merchant.cuisine ? ` · ${merchant.cuisine}` : ""}
               </Text>
               <StatusChip
-                label={merchant.openNow ? "Open now" : "Closed"}
+                label={merchant.openNow ? t("merchant.openNow") : t("explore.closed")}
                 tone={merchant.openNow ? "success" : "muted"}
                 style={styles.statusChip}
               />
@@ -112,7 +117,7 @@ const MerchantDetailScreen = ({ navigation, route }) => {
           ) : null}
         </Card>
 
-        <SectionHeader title="Location" style={styles.section} />
+        <SectionHeader title={t("merchant.location")} style={styles.section} />
         <ListRow
           title={merchant.floor}
           subtitle={selectedMall.name}
@@ -120,23 +125,22 @@ const MerchantDetailScreen = ({ navigation, route }) => {
             <Ionicons name="location-outline" size={20} color={MallMateTheme.color.primary} />
           }
           onPress={() =>
-            openPlaceholder(
-              "Map destination",
-              "Directions to this merchant will open on the mall map soon.",
-            )
+            openPlaceholder(t("merchant.mapPlaceholderTitle"), t("merchant.mapPlaceholderMessage"))
           }
           style={styles.row}
         />
 
-        <SectionHeader title="Hours" style={styles.section} />
+        <SectionHeader title={t("merchant.hours")} style={styles.section} />
         <Card>
-          <Text style={styles.hours}>{merchant.hours || "Hours to be confirmed"}</Text>
+          <Text style={styles.hours}>{merchant.hours || t("merchant.hoursToBeConfirmed")}</Text>
           <Text style={styles.hoursNote}>
-            {merchant.openNow ? "Open now" : "Closed right now"} · mock hours
+            {t("merchant.hoursNote", {
+              status: merchant.openNow ? t("merchant.openNow") : t("merchant.closedRightNow"),
+            })}
           </Text>
         </Card>
 
-        <SectionHeader title="Active offers" style={styles.section} />
+        <SectionHeader title={t("merchant.activeOffers")} style={styles.section} />
         {merchant.offers && merchant.offers.length ? (
           <View style={styles.rows}>
             {merchant.offers.map((offer) => (
@@ -151,25 +155,25 @@ const MerchantDetailScreen = ({ navigation, route }) => {
           </View>
         ) : (
           <Card>
-            <Text style={styles.mutedNote}>No active offers right now.</Text>
+            <Text style={styles.mutedNote}>{t("merchant.noOffers")}</Text>
           </Card>
         )}
 
-        <SectionHeader title="Menu" style={styles.section} />
+        <SectionHeader title={t("merchant.menu")} style={styles.section} />
         <ListRow
-          title="View menu"
-          subtitle="Sections, items and prices"
+          title={t("merchant.viewMenu")}
+          subtitle={t("merchant.viewMenuSubtitle")}
           leading={<Ionicons name="book-outline" size={20} color={MallMateTheme.color.primary} />}
           onPress={() => navigation.navigate("Menu", { merchantId: merchant.id })}
           style={styles.row}
         />
 
-        <SectionHeader title="Contact" style={styles.section} />
+        <SectionHeader title={t("merchant.contact")} style={styles.section} />
         <View style={styles.rows}>
           {merchant.contact?.phone ? (
             <ListRow
               title={merchant.contact.phone}
-              subtitle="Phone"
+              subtitle={t("merchant.phone")}
               leading={
                 <Ionicons name="call-outline" size={20} color={MallMateTheme.color.primary} />
               }
@@ -180,7 +184,7 @@ const MerchantDetailScreen = ({ navigation, route }) => {
           {merchant.contact?.email ? (
             <ListRow
               title={merchant.contact.email}
-              subtitle="Email"
+              subtitle={t("merchant.email")}
               leading={
                 <Ionicons name="mail-outline" size={20} color={MallMateTheme.color.primary} />
               }
@@ -189,9 +193,7 @@ const MerchantDetailScreen = ({ navigation, route }) => {
             />
           ) : null}
         </View>
-        <Text style={styles.contactNote}>
-          Placeholder contact details. Published only once a merchant approves listing them.
-        </Text>
+        <Text style={styles.contactNote}>{t("merchant.contactNote")}</Text>
       </ScrollView>
     </SafeAreaView>
   );

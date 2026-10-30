@@ -6,7 +6,7 @@
  * presentation — no cart, checkout or nutrition logic (ordering and
  * payments are blocked on business decisions).
  */
-export const MOCK_MENUS = {
+const MOCK_MENUS = {
   "lucky-m-1": {
     sections: [
       {

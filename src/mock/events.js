@@ -10,7 +10,7 @@ import { CAPABILITY_STATUS } from "../constants";
  */
 const farFuture = "2099-12-31T23:59:59Z";
 
-export const MOCK_EVENTS = {
+const MOCK_EVENTS = {
   "lucky-event-1": {
     id: "lucky-event-1",
     mallSlug: "luckyone",
@@ -93,7 +93,7 @@ const isEventActive = (event, now) => {
 };
 
 /** Icon (Ionicons outline name) per event category for banner placeholders. */
-export const EVENT_ICONS = {
+const EVENT_ICONS = {
   Market: "storefront-outline",
   Workshop: "color-palette-outline",
   Art: "brush-outline",
@@ -107,7 +107,7 @@ const isCapabilityOn = (capabilityMap, capability) => {
 };
 
 /** Light summary used by Home cards and the events list. */
-export const toEventSummary = (event) => ({
+const toEventSummary = (event) => ({
   id: event.id,
   title: event.title,
   subtitle: event.subtitle,

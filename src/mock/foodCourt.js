@@ -5,7 +5,7 @@ import { CAPABILITY_STATUS } from "../constants";
  * preview). Zones carry static seat counts for presentation only — no live
  * seat state, no session logic (those are blocked on open decisions #9/#10).
  */
-export const FOOD_COURTS = {
+const FOOD_COURTS = {
   luckyone: {
     name: "Central Food Court",
     floor: "Level 2 · Atrium wing",

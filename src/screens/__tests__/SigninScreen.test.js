@@ -2,16 +2,19 @@
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import React from "react";
 
-import { AuthenicationService } from "../../services";
-import { UserProvider } from "../../utils/userData";
+import { AuthenticationService, StorageService } from "../../services";
+import { UserProvider } from "../../utils";
 import SigninScreen from "../SigninScreen";
 
 jest.mock("../../services", () => ({
-  AuthenicationService: { login: jest.fn() },
+  AuthenticationService: { login: jest.fn() },
   StorageService: {
     setUser: jest.fn(),
     getUser: jest.fn(),
     removeUser: jest.fn(),
+    setRememberedUsername: jest.fn(),
+    getRememberedUsername: jest.fn(() => Promise.resolve(null)),
+    removeRememberedUsername: jest.fn(),
   },
 }));
 
@@ -47,7 +50,7 @@ describe("SigninScreen", () => {
 
   it("shows the service error message when login fails", async () => {
     const navigation = createNavigation();
-    AuthenicationService.login.mockResolvedValue({
+    AuthenticationService.login.mockResolvedValue({
       status: false,
       message: "Please fill up all fields",
     });
@@ -58,7 +61,7 @@ describe("SigninScreen", () => {
     fireEvent.press(getByRole("button", { name: "Sign In" }));
 
     expect(await findByText("Please fill up all fields")).toBeTruthy();
-    expect(AuthenicationService.login).toHaveBeenCalledWith({
+    expect(AuthenticationService.login).toHaveBeenCalledWith({
       username: "alice",
       password: "wrong",
     });
@@ -67,7 +70,7 @@ describe("SigninScreen", () => {
 
   it("submits the credentials and replaces into Main on success", async () => {
     const navigation = createNavigation();
-    AuthenicationService.login.mockResolvedValue({
+    AuthenticationService.login.mockResolvedValue({
       status: true,
       message: "ok",
       data: { username: "alice" },
@@ -79,7 +82,7 @@ describe("SigninScreen", () => {
     fireEvent.press(getByRole("button", { name: "Sign In" }));
 
     await waitFor(() => expect(navigation.replace).toHaveBeenCalledWith("Main"));
-    expect(AuthenicationService.login).toHaveBeenCalledWith({
+    expect(AuthenticationService.login).toHaveBeenCalledWith({
       username: "alice",
       password: "secret",
     });
@@ -87,7 +90,7 @@ describe("SigninScreen", () => {
 
   it("routes suspicious usernames through the Verification step (issue #9 flow)", async () => {
     const navigation = createNavigation();
-    AuthenicationService.login.mockResolvedValue({
+    AuthenticationService.login.mockResolvedValue({
       status: true,
       message: "ok",
       data: { username: "suspicious-user" },
@@ -125,5 +128,65 @@ describe("SigninScreen", () => {
     expect(getByLabelText("Show password")).toBeTruthy();
     fireEvent.press(getByLabelText("Show password"));
     expect(getByLabelText("Hide password")).toBeTruthy();
+  });
+
+  it("exposes Remember me as a labelled switch that toggles its checked state", () => {
+    const navigation = createNavigation();
+    const { getByRole } = renderScreen(navigation);
+
+    const toggle = getByRole("switch", { name: "Remember me" });
+    expect(toggle.props.accessibilityState).toEqual({ checked: false });
+    fireEvent.press(toggle);
+    expect(getByRole("switch", { name: "Remember me" }).props.accessibilityState).toEqual({
+      checked: true,
+    });
+  });
+
+  it("prefills the username and checks the switch when one is remembered", async () => {
+    const navigation = createNavigation();
+    StorageService.getRememberedUsername.mockResolvedValueOnce("alice");
+    const { findByLabelText, getByRole } = renderScreen(navigation);
+
+    expect((await findByLabelText("Username")).props.value).toBe("alice");
+    expect(getByRole("switch", { name: "Remember me" }).props.accessibilityState.checked).toBe(
+      true,
+    );
+  });
+
+  it("stores the username (never the password) after success when Remember me is on", async () => {
+    const navigation = createNavigation();
+    AuthenticationService.login.mockResolvedValue({
+      status: true,
+      message: "ok",
+      data: { username: "alice" },
+    });
+    const { getByLabelText, getByRole } = renderScreen(navigation);
+
+    fireEvent.press(getByRole("switch", { name: "Remember me" }));
+    fireEvent.changeText(getByLabelText("Username"), "alice");
+    fireEvent.changeText(getByLabelText("Password"), "secret");
+    fireEvent.press(getByRole("button", { name: "Sign In" }));
+
+    await waitFor(() => expect(navigation.replace).toHaveBeenCalledWith("Main"));
+    expect(StorageService.setRememberedUsername).toHaveBeenCalledWith("alice");
+    expect(StorageService.removeRememberedUsername).not.toHaveBeenCalled();
+  });
+
+  it("clears any remembered username after success when Remember me is off", async () => {
+    const navigation = createNavigation();
+    AuthenticationService.login.mockResolvedValue({
+      status: true,
+      message: "ok",
+      data: { username: "alice" },
+    });
+    const { getByLabelText, getByRole } = renderScreen(navigation);
+
+    fireEvent.changeText(getByLabelText("Username"), "alice");
+    fireEvent.changeText(getByLabelText("Password"), "secret");
+    fireEvent.press(getByRole("button", { name: "Sign In" }));
+
+    await waitFor(() => expect(navigation.replace).toHaveBeenCalledWith("Main"));
+    expect(StorageService.removeRememberedUsername).toHaveBeenCalled();
+    expect(StorageService.setRememberedUsername).not.toHaveBeenCalled();
   });
 });

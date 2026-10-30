@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Badge, Card, EmptyState, StatusChip } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { formatPrice, getMerchantDetail, getMenuItemById } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -28,14 +29,16 @@ const MenuItemScreen = ({ navigation, route }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
         <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
       </Pressable>
       <Text style={styles.headerMeta} numberOfLines={1}>
-        {merchant ? `${merchant.name} · Menu` : "Menu item"}
+        {merchant
+          ? t("menu.itemHeader", { merchant: merchant.name })
+          : t("menu.itemFallbackHeader")}
       </Text>
     </View>
   );
@@ -48,8 +51,8 @@ const MenuItemScreen = ({ navigation, route }) => {
           icon={
             <Ionicons name="fast-food-outline" size={48} color={MallMateTheme.color.textMuted} />
           }
-          title="Item not found"
-          message="This menu item isn't available. It may have been removed."
+          title={t("menu.itemNotFoundTitle")}
+          message={t("menu.itemNotFoundMessage")}
         />
       </SafeAreaView>
     );
@@ -68,14 +71,14 @@ const MenuItemScreen = ({ navigation, route }) => {
           </Text>
           <View style={styles.statusRow}>
             <StatusChip
-              label={item.available ? "Available" : "Sold out"}
+              label={item.available ? t("menu.available") : t("menu.soldOut")}
               tone={item.available ? "success" : "error"}
             />
           </View>
           {item.description ? <Text style={styles.description}>{item.description}</Text> : null}
           <View style={styles.priceRow}>
             <Text style={styles.price}>{formatPrice(item.price)}</Text>
-            <Text style={styles.currencyNote}>incl. taxes where applicable</Text>
+            <Text style={styles.currencyNote}>{t("menu.inclTaxes")}</Text>
           </View>
           {item.tags && item.tags.length ? (
             <View style={styles.tags}>
@@ -87,9 +90,7 @@ const MenuItemScreen = ({ navigation, route }) => {
         </Card>
 
         <Card style={styles.note}>
-          <Text style={styles.noteText}>
-            Browse-only preview — adding to cart, checkout and payment are not enabled yet.
-          </Text>
+          <Text style={styles.noteText}>{t("menu.browseOnlyItemNote")}</Text>
         </Card>
       </ScrollView>
     </SafeAreaView>

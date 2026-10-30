@@ -8,7 +8,7 @@ import { getActiveOffersForMerchant } from "./offers";
  * whose discovery capability is visible; DISABLED capabilities hide their
  * merchants entirely.
  */
-export const MOCK_MERCHANTS = {
+const MOCK_MERCHANTS = {
   luckyone: [
     {
       id: "lucky-m-1",
@@ -255,7 +255,7 @@ export const MOCK_MERCHANTS = {
   ],
 };
 
-export const SEARCH_SUGGESTIONS = {
+const SEARCH_SUGGESTIONS = {
   luckyone: ["Spice Route", "Fashion", "Electronics", "Beauty", "Lunch combo"],
   harbourwalk: ["Harbour Boutique", "Home", "Summer edit", "Fashion"],
 };
@@ -455,7 +455,7 @@ export const fetchMerchantListPage = ({ mallSlug, capabilityMap, kind, page = 1 
  * approved"). Active offers are resolved from the shared offer catalogue
  * (`./offers`), not stored here.
  */
-export const MERCHANT_DETAILS = {
+const MERCHANT_DETAILS = {
   "lucky-m-1": {
     description: "Pakistani classics, family seating and daily buffets in the food court.",
     hours: "Daily · 10:00 – 22:00",
@@ -558,7 +558,7 @@ export const MERCHANT_DETAILS = {
   },
 };
 
-export const getMerchantInitials = (name) =>
+const getMerchantInitials = (name) =>
   (name || "")
     .split(/\s+/)
     .filter(Boolean)

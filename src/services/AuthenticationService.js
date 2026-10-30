@@ -6,6 +6,13 @@ const AuthRequest = axios.create({
   baseURL: ApiContants.BACKEND_API.BASE_API_URL,
 });
 
+// Log only a safe digest of the error. Never log the raw error object —
+// on a failed login the axios error carries config.url, which embeds the
+// JSON-stringified credentials (the known GET-in-URL quirk, TODO P3).
+const logAuthError = (error) => {
+  console.warn("AuthenticationService request failed:", error?.message ?? "unknown error");
+};
+
 const register = async (user) => {
   if (!user?.username || !user?.email || !user?.password) {
     return { status: false, message: "Please fill up all fields" };
@@ -19,7 +26,7 @@ const register = async (user) => {
     const registerResponse = await AuthRequest.post(ApiContants.BACKEND_API.REGISTER, requestBody);
     return registerResponse?.data;
   } catch (error) {
-    console.log(error);
+    logAuthError(error);
     return { status: false, message: "Oops! Something went wrong" };
   }
 };
@@ -38,7 +45,7 @@ const login = async (user) => {
 
     return loginResponse?.data;
   } catch (error) {
-    console.log(error);
+    logAuthError(error);
     return { status: false, message: "Oops! Something went wrong" };
   }
 };
@@ -49,7 +56,7 @@ const checkUserExist = async (type, value) => {
     const userCheckResponse = await AuthRequest.get(ApiContants.BACKEND_API.USER_EXIST, { params });
     return userCheckResponse?.data;
   } catch (error) {
-    console.log(error);
+    logAuthError(error);
     return { status: false, message: "Oops! Something went wrong" };
   }
 };
@@ -63,26 +70,9 @@ const refreshToken = async () => {
       return { status: false };
     }
   } catch (error) {
-    console.log(error);
+    logAuthError(error);
     return { status: false, message: "Oops! Something went wrong" };
   }
 };
 
-// const test = async () => {
-//   try {
-//     let apirespons = await axios.get(`${ApiContants.BACKEND_BASE_URL}/test`);
-
-//     if (apirespons?.status === 200) {
-//       console.log(apirespons);
-//       return { status: true, data: apirespons?.data };
-//     } else {
-//       return { status: false };
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     return { status: false, message: "Oops! Something went wrong" };
-//   }
-// };
-
-// export default { register, login, checkUserExist, refreshToken, test };
 export default { register, login, checkUserExist, refreshToken };

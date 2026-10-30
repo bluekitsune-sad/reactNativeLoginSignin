@@ -8,13 +8,13 @@ import { CAPABILITY_STATUS } from "../constants";
  * policy questions are blocked on the owner. Expired fixtures are kept in
  * the list on purpose to show how reversals render.
  */
-export const LEDGER_TYPES = {
+const LEDGER_TYPES = {
   EARN: "EARN",
   REDEEM: "REDEEM",
   REVERSE: "REVERSE",
 };
 
-export const MOCK_REWARDS = {
+const MOCK_REWARDS = {
   luckyone: {
     balance: 1250,
     pending: 120,

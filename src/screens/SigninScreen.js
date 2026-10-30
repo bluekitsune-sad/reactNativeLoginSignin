@@ -1,5 +1,5 @@
 import { Ionicons, Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -7,8 +7,8 @@ import { Button, Separator, ToggleButton } from "../components";
 import { MallMateTheme } from "../constants";
 import { t } from "../i18n";
 import { isSuspiciousLogin } from "../mock";
-import { AuthenicationService } from "../services";
-import useUserManagement from "../utils/userData";
+import { AuthenticationService, StorageService } from "../services";
+import { useUserManagement } from "../utils";
 
 const SigninScreen = ({ navigation }) => {
   const [isPasswordShow, setIsPasswordShow] = useState(false);
@@ -16,9 +16,25 @@ const SigninScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   const insets = useSafeAreaInsets();
   const { updateUser } = useUserManagement();
+
+  useEffect(() => {
+    let cancelled = false;
+    StorageService.getRememberedUsername()
+      .then((storedUsername) => {
+        if (!cancelled && storedUsername) {
+          setUsername(storedUsername);
+          setRememberMe(true);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const signIn = async () => {
     setIsLoading(true);
@@ -27,10 +43,17 @@ const SigninScreen = ({ navigation }) => {
       username,
       password,
     };
-    AuthenicationService.login(user).then((response) => {
+    AuthenticationService.login(user).then((response) => {
       setIsLoading(false);
       if (response?.status) {
         updateUser(response?.data);
+        // Remember me = remember the USERNAME only for prefill on this
+        // device — never the password (local storage, no backend sync).
+        if (rememberMe) {
+          StorageService.setRememberedUsername(username);
+        } else {
+          StorageService.removeRememberedUsername();
+        }
         // Decided flow (issue #9): logins the backend flags as suspicious
         // take an extra OTP step (mock rule in src/mock/otp.js); everyone
         // else proceeds straight to the app.
@@ -79,6 +102,7 @@ const SigninScreen = ({ navigation }) => {
             placeholderTextColor={MallMateTheme.color.textMuted}
             selectionColor={MallMateTheme.color.primary}
             style={styles.inputText}
+            value={username}
             onChangeText={(text) => setUsername(text)}
             accessibilityLabel={t("auth.username")}
           />
@@ -116,7 +140,12 @@ const SigninScreen = ({ navigation }) => {
       <Text style={styles.errorMessage}>{errorMessage}</Text>
       <View style={styles.forgotPasswordContainer}>
         <View style={styles.toggleContainer}>
-          <ToggleButton size={0.5} />
+          <ToggleButton
+            size={0.5}
+            value={rememberMe}
+            onValueChange={setRememberMe}
+            accessibilityLabel={t("auth.rememberMe")}
+          />
           <Text style={styles.rememberMeText}>{t("auth.rememberMe")}</Text>
         </View>
         <Text

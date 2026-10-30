@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { getLocale, isRTL, t, CATALOGS, en, ur } from "..";
+import { getLocale, t, CATALOGS, en, ur } from "..";
 
 describe("i18n t() helper", () => {
   it("resolves dot-path keys from the English catalog", () => {
@@ -21,10 +21,6 @@ describe("i18n t() helper", () => {
 
   it("normalizes the device locale to a supported catalog key", () => {
     expect(["en"]).toContain(getLocale());
-  });
-
-  it("reports RTL only for known RTL language codes", () => {
-    expect(typeof isRTL()).toBe("boolean");
   });
 });
 

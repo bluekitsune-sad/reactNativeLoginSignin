@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Badge, Card, EmptyState, SectionHeader } from "../../components";
 import { MallMateTheme } from "../../constants";
+import { t } from "../../i18n";
 import { formatPrice, getMerchantDetail, getMenuForMerchant } from "../../mock";
 import { useMallManagement } from "../../utils";
 
@@ -27,7 +28,7 @@ const MenuScreen = ({ navigation, route }) => {
       <Pressable
         onPress={() => navigation.goBack()}
         accessibilityRole="button"
-        accessibilityLabel="Go back"
+        accessibilityLabel={t("common.goBack")}
         hitSlop={MallMateTheme.spacing.sm}
         style={styles.backButton}
       >
@@ -35,7 +36,7 @@ const MenuScreen = ({ navigation, route }) => {
       </Pressable>
       <View style={styles.headerBody}>
         <Text style={styles.headerTitle} numberOfLines={1} accessibilityRole="header">
-          {merchant ? `${merchant.name} menu` : "Menu"}
+          {merchant ? t("menu.headerTitle", { merchant: merchant.name }) : t("menu.title")}
         </Text>
         <Text style={styles.headerMeta} numberOfLines={1}>
           {selectedMall.name}
@@ -50,8 +51,8 @@ const MenuScreen = ({ navigation, route }) => {
         {header}
         <EmptyState
           icon={<Ionicons name="book-outline" size={48} color={MallMateTheme.color.textMuted} />}
-          title="Merchant not found"
-          message={`This merchant isn't listed at ${selectedMall.name}.`}
+          title={t("merchant.notFoundTitle")}
+          message={t("menu.notFoundMessage", { mall: selectedMall.name })}
         />
       </SafeAreaView>
     );
@@ -63,8 +64,8 @@ const MenuScreen = ({ navigation, route }) => {
         {header}
         <EmptyState
           icon={<Ionicons name="book-outline" size={48} color={MallMateTheme.color.primary} />}
-          title="No menu yet"
-          message={`The menu for ${merchant.name} hasn't been published yet.`}
+          title={t("menu.emptyTitle")}
+          message={t("menu.emptyMessage", { merchant: merchant.name })}
         />
       </SafeAreaView>
     );
@@ -89,7 +90,7 @@ const MenuScreen = ({ navigation, route }) => {
                       {item.name}
                     </Text>
                     {!item.available ? (
-                      <Badge label="Sold out" tone="neutral" style={styles.soldOut} />
+                      <Badge label={t("menu.soldOut")} tone="neutral" style={styles.soldOut} />
                     ) : null}
                   </View>
                   {item.description ? (
@@ -112,9 +113,7 @@ const MenuScreen = ({ navigation, route }) => {
             </View>
           </View>
         ))}
-        <Text style={styles.browseNote}>
-          Browse-only preview — ordering and payment are not enabled yet.
-        </Text>
+        <Text style={styles.browseNote}>{t("menu.browseOnlyNote")}</Text>
       </ScrollView>
     </SafeAreaView>
   );

@@ -84,7 +84,7 @@ export const getFloorPlan = (mallSlug, capabilityMap) => {
 };
 
 /** Icon (Ionicons outline name) per POI category for the pin markers. */
-export const POI_ICONS = {
+const POI_ICONS = {
   Entrance: "door-outline",
   Amenity: "information-circle-outline",
   Transition: "swap-vertical-outline",

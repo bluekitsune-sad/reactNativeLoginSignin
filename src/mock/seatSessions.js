@@ -72,7 +72,7 @@ export const MOCK_SCAN_TARGETS = [
 ];
 
 /** Preview session window shown on the active-session card (display only). */
-export const MOCK_SESSION_PREVIEW_MINUTES = 120;
+const MOCK_SESSION_PREVIEW_MINUTES = 120;
 
 /**
  * Stand-in for "server resolves the seat behind the QR": unknown codes

@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Separator } from "../components";
 import { MallMateTheme } from "../constants";
 import { t } from "../i18n";
-import { AuthenicationService } from "../services";
+import { AuthenticationService } from "../services";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -30,7 +30,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
       return;
     }
     setIsLoading(true);
-    AuthenicationService.checkUserExist("email", email).then((response) => {
+    AuthenticationService.checkUserExist("email", email).then((response) => {
       setIsLoading(false);
       if (response?.status) {
         setInfoMessage(t("auth.resetSentIfAccount"));
