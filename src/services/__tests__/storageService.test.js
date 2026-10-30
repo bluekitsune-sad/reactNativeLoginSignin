@@ -109,3 +109,65 @@ describe("StorageService mall slug", () => {
     await expect(StorageService.getSelectedMallSlug()).resolves.toBeNull();
   });
 });
+
+describe("StorageService never rejects (fire-and-forget safe)", () => {
+  beforeEach(async () => {
+    await AsyncStorage.clear();
+    jest.clearAllMocks();
+  });
+
+  it("setUser resolves when AsyncStorage.setItem rejects", async () => {
+    AsyncStorage.setItem.mockRejectedValueOnce(new Error("disk full"));
+    await expect(StorageService.setUser({ username: "alice" })).resolves.toBeUndefined();
+  });
+
+  it("removeUser resolves when AsyncStorage.removeItem rejects", async () => {
+    AsyncStorage.removeItem.mockRejectedValueOnce(new Error("disk full"));
+    await expect(StorageService.removeUser()).resolves.toBeUndefined();
+  });
+
+  it("setSelectedMallSlug resolves when AsyncStorage.setItem rejects", async () => {
+    AsyncStorage.setItem.mockRejectedValueOnce(new Error("disk full"));
+    await expect(StorageService.setSelectedMallSlug("luckyone")).resolves.toBeUndefined();
+  });
+
+  it("setFavoriteIds resolves when AsyncStorage.setItem rejects", async () => {
+    AsyncStorage.setItem.mockRejectedValueOnce(new Error("disk full"));
+    await expect(StorageService.setFavoriteIds(["lucky-m-1"])).resolves.toBeUndefined();
+  });
+
+  it("setRememberedUsername resolves when AsyncStorage.setItem rejects", async () => {
+    AsyncStorage.setItem.mockRejectedValueOnce(new Error("disk full"));
+    await expect(StorageService.setRememberedUsername("alice")).resolves.toBeUndefined();
+  });
+
+  it("removeRememberedUsername resolves when AsyncStorage.removeItem rejects", async () => {
+    AsyncStorage.removeItem.mockRejectedValueOnce(new Error("disk full"));
+    await expect(StorageService.removeRememberedUsername()).resolves.toBeUndefined();
+  });
+
+  it("getUser resolves null when AsyncStorage.getItem rejects", async () => {
+    AsyncStorage.getItem.mockRejectedValueOnce(new Error("read failed"));
+    await expect(StorageService.getUser()).resolves.toBeNull();
+  });
+
+  it("getUser resolves null when the stored value is corrupt JSON", async () => {
+    await AsyncStorage.setItem("user", "{not-json");
+    await expect(StorageService.getUser()).resolves.toBeNull();
+  });
+
+  it("getSelectedMallSlug resolves null when AsyncStorage.getItem rejects", async () => {
+    AsyncStorage.getItem.mockRejectedValueOnce(new Error("read failed"));
+    await expect(StorageService.getSelectedMallSlug()).resolves.toBeNull();
+  });
+
+  it("getFavoriteIds resolves [] when AsyncStorage.getItem rejects", async () => {
+    AsyncStorage.getItem.mockRejectedValueOnce(new Error("read failed"));
+    await expect(StorageService.getFavoriteIds()).resolves.toEqual([]);
+  });
+
+  it("getRememberedUsername resolves null when AsyncStorage.getItem rejects", async () => {
+    AsyncStorage.getItem.mockRejectedValueOnce(new Error("read failed"));
+    await expect(StorageService.getRememberedUsername()).resolves.toBeNull();
+  });
+});

@@ -1006,7 +1006,7 @@ Rules for the factory:
       ToggleButton is the only Colors.js consumer, FlagItem the only
       Display caller. Markdown-only — verified by re-read; lint/typecheck
       unaffected (still clean), tests 95/95.)
-- [ ] **`StorageService` write helpers can reject and two call sites
+- [x] **`StorageService` write helpers can reject and two call sites
       fire-and-forget them**: `setUser`/`removeUser`/
       `setRememberedUsername`/`removeRememberedUsername` (and the mall/fav
       setters) return raw AsyncStorage promises with no catch —
@@ -1019,7 +1019,22 @@ Rules for the factory:
       functions never throw" claim true for it) or add `.catch` at the fire-
       and-forget sites — prefer the in-service fix so future callers are
       safe by default. Add/adjust `storageService.test.js` coverage.
-      Verify: lint/typecheck/tests.
+      Verify: lint/typecheck/tests. (Done 2026-10-30: in-service fix —
+      every write helper (`setUser`/`removeUser`/`setSelectedMallSlug`/
+      `setFavoriteIds`/`setRememberedUsername`/`removeRememberedUsername`)
+      now ends in `.catch(() => {})` and every read helper
+      (`getUser`/`getSelectedMallSlug`/`getFavoriteIds`/
+      `getRememberedUsername`) catches and returns its safe default
+      (`getUser` also guards the previously-uncaught `JSON.parse`;
+      `getFavoriteIds`'s try now covers the `getItem` too). Behaviour on
+      success unchanged; callers' existing `.catch(() => {})` in
+      favorites/mallData are now redundant but harmless and were left
+      alone. 11 new tests in a "never rejects" suite (each write resolves
+      on a rejecting AsyncStorage call; reads resolve their safe default
+      on rejecting `getItem`; corrupt-JSON user resolves null) — verified
+      to fail 10/11 against the old implementation. Verified: `npm run
+      lint` (0/0), `npm run typecheck` (clean), `npm test -- --ci` —
+      106/106.)
 
 ### Blocked — do NOT implement until the owner decides
 
