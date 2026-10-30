@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-import { MALLS } from "../mock/malls";
+import { MALLS } from "../mock";
 import { StorageService } from "../services";
 
 const MallContext = createContext(null);

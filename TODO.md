@@ -957,7 +957,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-30 analysis)
 
-- [ ] **Three app-code imports still bypass barrels**: after the utils/mock
+- [x] **Three app-code imports still bypass barrels**: after the utils/mock
       barrel sweeps, `src/screens/mall/MallSelectorScreen.js:9`
       (`import { MALLS } from "../../mock/malls"`), `src/utils/mallData.js:3`
       (`import { MALLS } from "../mock/malls"`) and `src/components/FlagItem.js:4`
@@ -965,7 +965,12 @@ Rules for the factory:
       while `MALLS` and `MallMateTheme` are barrel-exported (every other
       MallMate consumer uses `from "../../constants"`). Switch to the folder
       imports. Test-file deep imports of internals are fine by precedent.
-      Verify: lint/typecheck/tests.
+      Verify: lint/typecheck/tests. (Done 2026-10-30: the two `MALLS` sites
+      now import from `../../mock` / `../mock` and FlagItem uses the named
+      barrel import `import { MallMateTheme } from "../constants"`; the
+      remaining `mock/malls` references are the mock barrel itself plus a
+      test file (allowed by precedent). Verified: `npm run lint` (0/0),
+      `npm run typecheck` (clean), `npm test` — 95/95.)
 - [ ] **Two unreferenced mock-barrel re-exports**: `FLOORS` and
       `getActiveOffersForMerchant` are exported from `src/mock/index.js` but
       their only importers are inside `src/mock/` (`navigation.js`,
