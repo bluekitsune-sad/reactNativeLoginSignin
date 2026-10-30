@@ -971,13 +971,21 @@ Rules for the factory:
       remaining `mock/malls` references are the mock barrel itself plus a
       test file (allowed by precedent). Verified: `npm run lint` (0/0),
       `npm run typecheck` (clean), `npm test` — 95/95.)
-- [ ] **Two unreferenced mock-barrel re-exports**: `FLOORS` and
+- [x] **Two unreferenced mock-barrel re-exports**: `FLOORS` and
       `getActiveOffersForMerchant` are exported from `src/mock/index.js` but
       their only importers are inside `src/mock/` (`navigation.js`,
       `merchants.js`) — nothing outside the folder imports either. Same class
       as the 2026-10-29 shrink: drop them from the barrel (keep the
       module-level exports for the intra-folder consumers). Verify:
-      re-grep, lint/typecheck/tests.
+      re-grep, lint/typecheck/tests. (Done 2026-10-30: both names dropped
+      from the barrel's named imports and export list; `export const
+      FLOORS` (floors.js) and `export const getActiveOffersForMerchant`
+      (offers.js) kept for the intra-folder consumers `navigation.js` /
+      `merchants.js`, which import them directly from the defining
+      modules. Re-grep: zero references outside the defining modules,
+      their intra-folder importers and TODO/README history. Verified:
+      `npm run lint` (0/0), `npm run typecheck` (clean), `npm test` —
+      95/95.)
 - [ ] **AGENTS.md/README stale claims**: (a) AGENTS.md says "Legacy screens
       still use `Colors.js`" — the sole consumer is the kit-adjacent
       `ToggleButton` (AGENTS.md itself says so correctly elsewhere); (b) the
