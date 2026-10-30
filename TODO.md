@@ -955,6 +955,49 @@ Rules for the factory:
       bypassed it. Verified: `npm run lint` (0/0), `npm run typecheck`
       (clean), `npm test` — 95/95 across 11 suites.)
 
+### Quality debt (found in the 2026-10-30 analysis)
+
+- [ ] **Three app-code imports still bypass barrels**: after the utils/mock
+      barrel sweeps, `src/screens/mall/MallSelectorScreen.js:9`
+      (`import { MALLS } from "../../mock/malls"`), `src/utils/mallData.js:3`
+      (`import { MALLS } from "../mock/malls"`) and `src/components/FlagItem.js:4`
+      (`import MallMateTheme from "../constants/Theme"`) still deep-import
+      while `MALLS` and `MallMateTheme` are barrel-exported (every other
+      MallMate consumer uses `from "../../constants"`). Switch to the folder
+      imports. Test-file deep imports of internals are fine by precedent.
+      Verify: lint/typecheck/tests.
+- [ ] **Two unreferenced mock-barrel re-exports**: `FLOORS` and
+      `getActiveOffersForMerchant` are exported from `src/mock/index.js` but
+      their only importers are inside `src/mock/` (`navigation.js`,
+      `merchants.js`) — nothing outside the folder imports either. Same class
+      as the 2026-10-29 shrink: drop them from the barrel (keep the
+      module-level exports for the intra-folder consumers). Verify:
+      re-grep, lint/typecheck/tests.
+- [ ] **AGENTS.md/README stale claims**: (a) AGENTS.md says "Legacy screens
+      still use `Colors.js`" — the sole consumer is the kit-adjacent
+      `ToggleButton` (AGENTS.md itself says so correctly elsewhere); (b) the
+      styling convention claims sizing uses "`Display.setWidth/setHeight`"
+      but only `FlagItem` calls `Display` — no MallMate screen does, so the
+      convention misleads; (c) README's key-modules row says the navigator
+      "wraps the app in `<UserProvider>`" while it composes
+      `MallProvider` + `FavoritesProvider` too. Realign the three docs with
+      reality. Doc-only; verify by re-reading against `src/components/
+      ToggleButton.js`, `src/navigators/index.js` and a Display usage grep.
+- [ ] **`StorageService` write helpers can reject and two call sites
+      fire-and-forget them**: `setUser`/`removeUser`/
+      `setRememberedUsername`/`removeRememberedUsername` (and the mall/fav
+      setters) return raw AsyncStorage promises with no catch —
+      `src/utils/userData.js:12,17` and `src/screens/SigninScreen.js:53,55`
+      call them without `.catch`, so a storage failure becomes an unhandled
+      rejection (the sibling contexts in `favorites.js`/`mallData.js` do
+      `.catch(() => {})`). Also `getUser`'s `JSON.parse` (line 14) is
+      unguarded while `getFavoriteIds` guards the same pattern. Either add
+      catches inside `StorageService` (making the AGENTS.md "service
+      functions never throw" claim true for it) or add `.catch` at the fire-
+      and-forget sites — prefer the in-service fix so future callers are
+      safe by default. Add/adjust `storageService.test.js` coverage.
+      Verify: lint/typecheck/tests.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
