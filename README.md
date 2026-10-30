@@ -167,7 +167,7 @@ The expected sign‑in payload shape:
 | Path | Purpose |
 | ---- | ------- |
 | `App.js` | Loads custom fonts, then mounts `<Navigators />`. |
-| `src/navigators/index.js` | Root `Stack.Navigator`; wraps the app in `<UserProvider>`. |
+| `src/navigators/index.js` | Root `Stack.Navigator`; composes `<UserProvider>`, `<MallProvider>` and `<FavoritesProvider>`. |
 | `src/screens/SigninScreen.js` | Sign in form and submit logic. |
 | `src/screens/SignupScreen.js` | Registration form and validation. |
 | `src/screens/ForgotPasswordScreen.js` | Email lookup for password reset. |

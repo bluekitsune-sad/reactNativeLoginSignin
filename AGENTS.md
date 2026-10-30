@@ -34,8 +34,8 @@ Rules for agents working toward MallMate:
   implement them, even partially.
 - **New MallMate code uses `src/constants/Theme.js`** (Midnight Graphite +
   Emerald tokens) and `src/constants/Capabilities.js` (capability keys /
-  statuses). Legacy screens still use `Colors.js` — do not rewrite them
-  just to swap tokens.
+  statuses). `Colors.js` survives only for `ToggleButton` (the lone
+  remaining consumer) — do not rewrite it just to swap tokens.
 - **TypeScript is introduced incrementally** (`allowJs`): new type files are
   `.ts`, existing `.js` files stay as they are unless a TODO item says to
   convert them. The first migration slice landed the pattern: services can be
@@ -99,8 +99,10 @@ covered code.
   (only `ToggleButton` still consumes it); `Fonts.js` was removed with the
   legacy scaffold — font names come from `Theme.fontFamily`. Don't inline
   hex colors or font names.
-- **Styling** is `StyleSheet.create` at the bottom of each component file, using
-  `Display.setWidth/setHeight` for relative sizing.
+- **Styling** is `StyleSheet.create` at the bottom of each component file,
+  sizing with plain React Native values and `Theme.js` tokens (the
+  `Display.setWidth/setHeight` percentage helpers are only used by the
+  legacy `FlagItem` — MallMate screens do not use them).
 - **State:** Redux was removed (and the old commented‑out
   `useDispatch`/`useSelector`/`src/actions` leftovers have been cleaned up).
   Current state lives in local `useState` plus React Context providers

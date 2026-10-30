@@ -986,7 +986,7 @@ Rules for the factory:
       their intra-folder importers and TODO/README history. Verified:
       `npm run lint` (0/0), `npm run typecheck` (clean), `npm test` —
       95/95.)
-- [ ] **AGENTS.md/README stale claims**: (a) AGENTS.md says "Legacy screens
+- [x] **AGENTS.md/README stale claims**: (a) AGENTS.md says "Legacy screens
       still use `Colors.js`" — the sole consumer is the kit-adjacent
       `ToggleButton` (AGENTS.md itself says so correctly elsewhere); (b) the
       styling convention claims sizing uses "`Display.setWidth/setHeight`"
@@ -996,6 +996,16 @@ Rules for the factory:
       `MallProvider` + `FavoritesProvider` too. Realign the three docs with
       reality. Doc-only; verify by re-reading against `src/components/
       ToggleButton.js`, `src/navigators/index.js` and a Display usage grep.
+      (Done 2026-10-30: (a) AGENTS.md MallMate bullet now says `Colors.js`
+      "survives only for `ToggleButton` (the lone remaining consumer)";
+      (b) the styling convention now says sizing uses plain RN values +
+      Theme tokens, noting the `Display` helpers are only used by the
+      legacy `FlagItem`; (c) the README key-modules row now says the
+      navigator "composes `<UserProvider>`, `<MallProvider>` and
+      `<FavoritesProvider>`". Reality re-verified by grep before editing:
+      ToggleButton is the only Colors.js consumer, FlagItem the only
+      Display caller. Markdown-only — verified by re-read; lint/typecheck
+      unaffected (still clean), tests 95/95.)
 - [ ] **`StorageService` write helpers can reject and two call sites
       fire-and-forget them**: `setUser`/`removeUser`/
       `setRememberedUsername`/`removeRememberedUsername` (and the mall/fav
