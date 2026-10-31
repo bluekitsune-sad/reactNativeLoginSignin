@@ -1062,7 +1062,7 @@ Rules for the factory:
       `{status: true, message: "rejected", data: undefined}`.
       Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
       `npm test`.)
-- [ ] **Three stale AGENTS.md claims**: (1) "Service functions are `async`
+- [x] **Three stale AGENTS.md claims**: (1) "Service functions are `async`
       and never throw — they catch and return `{ status: false, message }`"
       (Conventions) is false for `StorageService` — its helpers are plain
       functions returning safe defaults (`null`/`[]`/`undefined`, zero
@@ -1073,7 +1073,22 @@ Rules for the factory:
       the stack routes live in `index.js`. (3) "Every folder has an
       `index.js` aggregator" (Barrel files) is off for `src/types/`
       (which has `index.ts`) and the test/asset folders (no barrel at
-      all). Scope each claim to reality.
+      all). Scope each claim to reality. (Done 2026-10-31: all three
+      re-scoped after re-verifying each against the tree. (1) The
+      Conventions rule now scopes the envelope contract to network
+      services (`AuthenticationService`, `ApiClient` consumers) and
+      notes `StorageService` helpers never throw but resolve to safe
+      defaults with no envelope fields. (2) The Screens rule now says
+      screens register either as stack routes in
+      `src/navigators/index.js` or as the five bottom-tab screens
+      (Home/Explore/Map/Rewards/Profile) in `MainTabNavigator.js`, and
+      must be exported from the screens barrel *and* registered in one
+      of the two. (3) The Barrel rule now lists every source folder
+      under `src/` with its aggregator (`index.js`, `index.ts` for
+      `src/types/`) and states that test (`src/**/__tests__/`) and
+      asset folders (`src/assets/`, `assets/`) have no barrel —
+      verified against a per-folder `ls`. Markdown-only; verified by
+      re-reading the edited bullets against the filesystem layout.)
 - [ ] **README tree/barrel line misses two shipped paths**: the
       project-structure tree lists every `src/` subfolder except
       `src/__tests__/` (holds `iconNames.test.js`), and the "add it to

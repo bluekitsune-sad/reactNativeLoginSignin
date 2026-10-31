@@ -71,15 +71,19 @@ covered code.
 
 ## Architecture rules
 
-- **Barrel files.** Every folder has an `index.js` aggregator
-  (`src/components/index.js`, `src/constants/index.js`, `src/screens/index.js`,
-  `src/services/index.js`, `src/utils/index.js`). When you add a module, export it
-  from the barrel too, and import via the folder (`../components`,
+- **Barrel files.** Every source folder under `src/` has an aggregator —
+  `index.js` (`src/components/`, `src/constants/`, `src/i18n/`, `src/mock/`,
+  `src/navigators/`, `src/screens/`, `src/services/`, `src/utils/`) or
+  `index.ts` for `src/types/`. Test (`src/**/__tests__/`) and asset
+  (`src/assets/`, `assets/`) folders have no barrel. When you add a module,
+  export it from the barrel too, and import via the folder (`../components`,
   `../services`), not deep relative paths.
-- **Screens live in `src/screens/`,** registered in `src/navigators/index.js`.
-  A screen must be exported from `src/screens/index.js` *and* added to the
-  navigator. All auth screens shipped 2026-10-21 (Signin, Signup,
-  ForgotPassword, plus the phone‑OTP trio `RegisterPhoneScreen`,
+- **Screens live in `src/screens/`,** registered either as stack routes in
+  `src/navigators/index.js` or as the five bottom‑tab screens (Home,
+  Explore, Map, Rewards, Profile) in `src/navigators/MainTabNavigator.js`.
+  A screen must be exported from `src/screens/index.js` *and* registered in
+  one of those two navigators. All auth screens shipped 2026-10-21 (Signin,
+  Signup, ForgotPassword, plus the phone‑OTP trio `RegisterPhoneScreen`,
   `VerificationScreen`, `CountryPickerScreen` — mock flow per owner
   decision on issue #9) and are registered; MallMate tab/stack screens
   live under `src/screens/<area>/`.
@@ -183,8 +187,12 @@ components were themselves deleted in the 2026-10-21 legacy removal).
   stay as they are unless a task says to convert them.
 - Default exports for screens/services/components; named exports for constants
   and utils.
-- Service functions are `async` and never throw — they catch and return
-  `{ status: false, message }`.
+- Network service functions (`AuthenticationService`, `ApiClient` consumers)
+  are `async` and never throw — they catch and return
+  `{ status: false, message }`. The envelope rule does not apply to
+  non‑network services: `StorageService` helpers never throw either, but
+  they resolve to safe defaults (`null`/`[]`, or a fire‑and‑forget
+  `undefined`) — no envelope fields.
 - Comments in the codebase are often commented‑out legacy code; don't assume
   they are intentional documentation.
 - Keep `App.js` minimal (font loading + navigator mount).
