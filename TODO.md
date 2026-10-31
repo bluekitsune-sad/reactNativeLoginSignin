@@ -1099,13 +1099,20 @@ Rules for the factory:
       barrel note now reads `src/*/index.js`, or `src/types/index.ts` —
       both verified against a per-folder `ls` of `src/`. Markdown-only;
       verified by re-reading the edited sections.)
-- [ ] **Dead `export default t` in the i18n barrel**:
+- [x] **Dead `export default t` in the i18n barrel**:
       `src/i18n/index.js` ends with `export default t;` but all 41
       consumers use the named import (`import { t } from "../i18n"`) —
       `import t from` / `import t,` finds zero matches across `src/`,
       `App.js`, `scripts/` (grep-verified). Same class as the earlier
       dead-export sweeps; drop the default line, keep the named export.
-      Run lint/typecheck/tests after.
+      Run lint/typecheck/tests after. (Done 2026-10-31: the
+      `export default t;` line removed from the barrel; the named
+      `export const t` (and `CATALOGS`/`getLocale`/`en`/`ur`) are
+      untouched. Re-grepped before editing: `import t from` /
+      `import t,` → zero matches; all 41 i18n consumers use
+      `import { t } from …/i18n`; no test asserts the default export.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test` — 107/107.)
 
 ### Blocked — do NOT implement until the owner decides
 
