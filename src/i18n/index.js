@@ -55,4 +55,3 @@ export const t = (key, params, locale) => {
 };
 
 export { en, ur };
-export default t;
