@@ -1036,6 +1036,46 @@ Rules for the factory:
       lint` (0/0), `npm run typecheck` (clean), `npm test -- --ci` —
       106/106.)
 
+### Quality debt (found in the 2026-10-31 analysis)
+
+- [ ] **AGENTS.md "Envelope passthrough" bullet misdescribes failure
+      handling**: it says a body that "already looks like
+      `{ status: boolean, ... }` is passed through", but
+      `src/services/apiClient.ts` `toSuccessEnvelope` hard-codes
+      `status: true` for every 2xx — a `200` body of
+      `{ status: false, message: "rejected" }` resolves as
+      `{ status: true, message: "rejected", data: undefined }` (the
+      `status` field is NOT passed through; `apiClient.test.js` only
+      pins the `status: true` case). Either reword the bullet to match
+      the code (message/data lifted from envelope-shaped bodies; status
+      follows the HTTP outcome) or make the code return `payload.status`
+      and add a test for the `200` + `status:false` case. Pick one —
+      doc fix is the safe default, code fix changes behaviour.
+- [ ] **Three stale AGENTS.md claims**: (1) "Service functions are `async`
+      and never throw — they catch and return `{ status: false, message }`"
+      (Conventions) is false for `StorageService` — its helpers are plain
+      functions returning safe defaults (`null`/`[]`/`undefined`, zero
+      envelope fields); only the network services follow the envelope
+      rule. (2) "Screens live in `src/screens/`, registered in
+      `src/navigators/index.js`" (Architecture) misses the five tab
+      screens registered in `src/navigators/MainTabNavigator.js` — only
+      the stack routes live in `index.js`. (3) "Every folder has an
+      `index.js` aggregator" (Barrel files) is off for `src/types/`
+      (which has `index.ts`) and the test/asset folders (no barrel at
+      all). Scope each claim to reality.
+- [ ] **README tree/barrel line misses two shipped paths**: the
+      project-structure tree lists every `src/` subfolder except
+      `src/__tests__/` (holds `iconNames.test.js`), and the "add it to
+      the barrel (`src/*/index.js`)" note misses `src/types/index.ts`.
+      Tiny doc sync; verify against a directory listing.
+- [ ] **Dead `export default t` in the i18n barrel**:
+      `src/i18n/index.js` ends with `export default t;` but all 41
+      consumers use the named import (`import { t } from "../i18n"`) —
+      `import t from` / `import t,` finds zero matches across `src/`,
+      `App.js`, `scripts/` (grep-verified). Same class as the earlier
+      dead-export sweeps; drop the default line, keep the named export.
+      Run lint/typecheck/tests after.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
