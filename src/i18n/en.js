@@ -407,5 +407,3 @@ export const en = {
       "External registration or ticket links open here once the organiser provides them.",
   },
 };
-
-export default en;
