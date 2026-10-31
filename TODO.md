@@ -1114,6 +1114,22 @@ Rules for the factory:
       Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
       `npm test` — 107/107.)
 
+### Quality debt (found in the 2026-10-31 close-out analysis)
+
+- [x] **Dead `export default en` / `export default ur` in the catalog
+      files**: same class as the `export default t` barrel line removed
+      earlier this run — `src/i18n/en.js` and `src/i18n/ur.js` each end
+      with a default export, but the only importer
+      (`src/i18n/index.js`) uses named imports (`import { en } from
+      "./en"` / `import { ur } from "./ur"`) and the parity test
+      (`src/i18n/__tests__/i18n.test.js`) imports `{ en, ur }` from the
+      barrel. Repo-wide grep (`import en` / `import ur` default shapes,
+      `require("./en")` / `require("./ur")`) finds zero consumers.
+      Found + fixed in the same run: the two dead default lines removed;
+      the named `export const en` / `export const ur` are untouched.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test` — 107/107.)
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
