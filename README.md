@@ -150,6 +150,7 @@ The expected sign‑in payload shape:
 ├── package.json
 ├── assets/                    # Expo icons / splash images
 └── src/
+    ├── __tests__/             # Repo-root tests (icon-name glyphmap validation)
     ├── assets/                # Retained image assets (social-auth placeholders)
     ├── components/            # UI kit: mallmate/ components + Separator/ToggleButton/FlagItem
     ├── constants/             # Colors, Images, ApiContants, Theme, Capabilities, CapabilityMeta, CustomFonts, CountryCode
@@ -195,7 +196,7 @@ The expected sign‑in payload shape:
 
 1. Fork and create a feature branch.
 2. Keep changes scoped; follow the existing folder layout and barrel files
-   (`src/*/index.js`) when adding modules.
+   (`src/*/index.js`, or `src/types/index.ts`) when adding modules.
 3. Update [TODO.md](./TODO.md) / this README if you change behaviour.
 4. Open a pull request.
 

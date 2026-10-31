@@ -1089,11 +1089,16 @@ Rules for the factory:
       asset folders (`src/assets/`, `assets/`) have no barrel —
       verified against a per-folder `ls`. Markdown-only; verified by
       re-reading the edited bullets against the filesystem layout.)
-- [ ] **README tree/barrel line misses two shipped paths**: the
+- [x] **README tree/barrel line misses two shipped paths**: the
       project-structure tree lists every `src/` subfolder except
       `src/__tests__/` (holds `iconNames.test.js`), and the "add it to
       the barrel (`src/*/index.js`)" note misses `src/types/index.ts`.
-      Tiny doc sync; verify against a directory listing.
+      Tiny doc sync; verify against a directory listing. (Done
+      2026-10-31: the tree gained a `src/__tests__/` line ("Repo-root
+      tests — icon-name glyphmap validation") and the Contributing
+      barrel note now reads `src/*/index.js`, or `src/types/index.ts` —
+      both verified against a per-folder `ls` of `src/`. Markdown-only;
+      verified by re-reading the edited sections.)
 - [ ] **Dead `export default t` in the i18n barrel**:
       `src/i18n/index.js` ends with `export default t;` but all 41
       consumers use the named import (`import { t } from "../i18n"`) —
