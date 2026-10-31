@@ -1038,7 +1038,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-31 analysis)
 
-- [ ] **AGENTS.md "Envelope passthrough" bullet misdescribes failure
+- [x] **AGENTS.md "Envelope passthrough" bullet misdescribes failure
       handling**: it says a body that "already looks like
       `{ status: boolean, ... }` is passed through", but
       `src/services/apiClient.ts` `toSuccessEnvelope` hard-codes
@@ -1050,7 +1050,18 @@ Rules for the factory:
       the code (message/data lifted from envelope-shaped bodies; status
       follows the HTTP outcome) or make the code return `payload.status`
       and add a test for the `200` + `status:false` case. Pick one —
-      doc fix is the safe default, code fix changes behaviour.
+      doc fix is the safe default, code fix changes behaviour. (Done
+      2026-10-31: doc fix — the bullet is now "Envelope-shaped bodies"
+      and states that message/data are lifted from a `2xx`
+      envelope-shaped body but `status` is not passed through: HTTP
+      outcome governs, so a `2xx` always resolves `status: true` even
+      when the body says `status: false`. No code change. Two test
+      updates pin the documented behaviour: the old "passes through"
+      test renamed to "lifts message/data … (status stays true)", plus
+      a new `200` + `status:false` case asserting
+      `{status: true, message: "rejected", data: undefined}`.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test`.)
 - [ ] **Three stale AGENTS.md claims**: (1) "Service functions are `async`
       and never throw — they catch and return `{ status: false, message }`"
       (Conventions) is false for `StorageService` — its helpers are plain

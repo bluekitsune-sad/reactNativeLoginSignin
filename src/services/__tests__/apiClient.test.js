@@ -18,12 +18,22 @@ describe("ApiClient envelope helper", () => {
     mockedRequest().mockReset();
   });
 
-  it("passes through a server envelope that already has {status, message, data}", async () => {
+  it("lifts message/data from a 2xx envelope-shaped body (status stays true)", async () => {
     mockedRequest().mockResolvedValue({
       data: { status: true, message: "server says ok", data: { id: 7 } },
     });
     const response = await ApiClient.get("/thing");
     expect(response).toEqual({ status: true, message: "server says ok", data: { id: 7 } });
+  });
+
+  it("still resolves status:true when a 2xx body says status:false (HTTP governs)", async () => {
+    mockedRequest().mockResolvedValue({
+      data: { status: false, message: "rejected" },
+    });
+    const response = await ApiClient.get("/thing");
+    expect(response.status).toBe(true);
+    expect(response.message).toBe("rejected");
+    expect(response.data).toBeUndefined();
   });
 
   it("wraps a plain 2xx body into a success envelope", async () => {

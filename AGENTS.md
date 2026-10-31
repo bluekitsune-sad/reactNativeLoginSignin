@@ -134,10 +134,13 @@ if (res.status) {
   resolve to `{ status: boolean, message: string, data?: any }` — the same
   envelope legacy services already return. HTTP/network failures become
   `{ status: false, message }`.
-- **Envelope passthrough.** If the response body already looks like
-  `{ status: boolean, ... }` it is passed through; otherwise success
-  (`2xx`) yields `{ status: true, message, data }` where `data` is the body
-  (or its nested `data` field).
+- **Envelope-shaped bodies.** A `2xx` body that already looks like
+  `{ status: boolean, ... }` has its `message` (with a fallback) and its
+  nested `data` field lifted into the envelope — but `status` is not passed
+  through: every `2xx` resolves `{ status: true, ... }` even when the body
+  itself says `status: false` (HTTP outcome governs). Otherwise a `2xx`
+  yields `{ status: true, message, data }` where `data` is the body (or its
+  nested `data` field).
 - **Types** live in `src/types/api.ts` (`ApiEnvelope<T>`,
   `ApiSuccessEnvelope`, `ApiFailureEnvelope`) and are re-exported from
   `src/types`. Prefer the helper over hand-rolling envelope shaping.
