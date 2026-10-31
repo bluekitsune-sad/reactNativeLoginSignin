@@ -1129,6 +1129,16 @@ Rules for the factory:
       the named `export const en` / `export const ur` are untouched.
       Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
       `npm test` — 107/107.)
+- [ ] **Test deep-imports `MALLS` from `src/mock/malls`, bypassing the
+      mock barrel**: `src/utils/__tests__/mallData.test.js` line 7 does
+      `import { MALLS } from "../../mock/malls"`, but `MALLS` is
+      already re-exported by the mock barrel (`src/mock/index.js`) —
+      every other consumer (and the AGENTS.md "import via the folder"
+      rule) goes through the barrel. Same class as the 2026-10-29
+      `utils/userData` deep-import sweep; the 2026-10-30 analysis
+      flagged MALLS twice, one site was fixed, this test remains.
+      Switch to `import { MALLS } from "../../mock"`; run
+      lint/typecheck/tests.
 
 ### Blocked — do NOT implement until the owner decides
 
