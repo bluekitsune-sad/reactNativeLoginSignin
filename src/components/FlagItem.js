@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import MallMateTheme from "../constants/Theme";
+import { MallMateTheme } from "../constants";
 import { Display } from "../utils";
 import Separator from "./Separator";
 

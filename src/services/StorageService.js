@@ -6,32 +6,40 @@ const FAVORITE_IDS_KEY = "favoriteMerchantIds";
 const REMEMBERED_USERNAME_KEY = "rememberedUsername";
 
 const setUser = (userData) => {
-  return AsyncStorage.setItem(USER_KEY, JSON.stringify(userData ?? null));
+  return AsyncStorage.setItem(USER_KEY, JSON.stringify(userData ?? null)).catch(() => {});
 };
 
 const getUser = async () => {
-  const storedUser = await AsyncStorage.getItem(USER_KEY);
-  return storedUser ? JSON.parse(storedUser) : null;
+  try {
+    const storedUser = await AsyncStorage.getItem(USER_KEY);
+    return storedUser ? JSON.parse(storedUser) : null;
+  } catch {
+    return null;
+  }
 };
 
 const removeUser = () => {
-  return AsyncStorage.removeItem(USER_KEY);
+  return AsyncStorage.removeItem(USER_KEY).catch(() => {});
 };
 
 const setSelectedMallSlug = (slug) => {
-  return AsyncStorage.setItem(SELECTED_MALL_KEY, slug);
+  return AsyncStorage.setItem(SELECTED_MALL_KEY, slug).catch(() => {});
 };
 
-const getSelectedMallSlug = () => {
-  return AsyncStorage.getItem(SELECTED_MALL_KEY);
+const getSelectedMallSlug = async () => {
+  try {
+    return await AsyncStorage.getItem(SELECTED_MALL_KEY);
+  } catch {
+    return null;
+  }
 };
 
 const getFavoriteIds = async () => {
-  const stored = await AsyncStorage.getItem(FAVORITE_IDS_KEY);
-  if (!stored) {
-    return [];
-  }
   try {
+    const stored = await AsyncStorage.getItem(FAVORITE_IDS_KEY);
+    if (!stored) {
+      return [];
+    }
     const parsed = JSON.parse(stored);
     return Array.isArray(parsed) ? parsed.filter((id) => typeof id === "string") : [];
   } catch {
@@ -40,11 +48,11 @@ const getFavoriteIds = async () => {
 };
 
 const setFavoriteIds = (ids) => {
-  return AsyncStorage.setItem(FAVORITE_IDS_KEY, JSON.stringify(ids ?? []));
+  return AsyncStorage.setItem(FAVORITE_IDS_KEY, JSON.stringify(ids ?? [])).catch(() => {});
 };
 
 const setRememberedUsername = (username) => {
-  return AsyncStorage.setItem(REMEMBERED_USERNAME_KEY, username);
+  return AsyncStorage.setItem(REMEMBERED_USERNAME_KEY, username).catch(() => {});
 };
 
 const getRememberedUsername = async () => {
@@ -56,7 +64,7 @@ const getRememberedUsername = async () => {
 };
 
 const removeRememberedUsername = () => {
-  return AsyncStorage.removeItem(REMEMBERED_USERNAME_KEY);
+  return AsyncStorage.removeItem(REMEMBERED_USERNAME_KEY).catch(() => {});
 };
 
 export default {

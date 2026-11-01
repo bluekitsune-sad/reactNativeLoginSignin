@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Card } from "../../components";
 import { MallMateTheme } from "../../constants";
 import { t } from "../../i18n";
-import { MALLS } from "../../mock/malls";
+import { MALLS } from "../../mock";
 import { useMallManagement } from "../../utils";
 
 const hoursSummary = (mall) => {

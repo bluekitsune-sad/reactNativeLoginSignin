@@ -37,9 +37,7 @@ import {
   OrderDetailScreen,
 } from "../screens";
 import MainTabNavigator from "./MainTabNavigator";
-import { UserProvider } from "../utils";
-import { FavoritesProvider } from "../utils/favorites";
-import { MallProvider } from "../utils/mallData";
+import { FavoritesProvider, MallProvider, UserProvider } from "../utils";
 
 const Stack = createStackNavigator();
 

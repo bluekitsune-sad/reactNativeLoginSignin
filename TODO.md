@@ -937,7 +937,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-10-29 close-out analysis)
 
-- [ ] **Navigator deep-imports `FavoritesProvider`/`MallProvider`**: after
+- [x] **Navigator deep-imports `FavoritesProvider`/`MallProvider`**: after
       the `UserProvider` barrel-import fix above, `src/navigators/index.js`
       is the only remaining consumer that bypasses the utils barrel —
       `import { FavoritesProvider } from "../utils/favorites"` and
@@ -946,7 +946,199 @@ Rules for the factory:
       `import { FavoritesProvider, MallProvider } from "../utils"` (the
       barrel already re-exports both; every other screen imports context
       hooks via the folder). Same AGENTS.md "import via the folder" rule
-      as the completed item. Verify: lint/typecheck/tests.
+      as the completed item. Verify: lint/typecheck/tests. (Done
+      2026-10-30: the navigator's three separate context imports merged
+      into one barrel import — `import { FavoritesProvider, MallProvider,
+      UserProvider } from "../utils"` — removing the last two deep
+      relative paths into `../utils/favorites` and `../utils/mallData`.
+      The barrel already re-exported both providers; no other consumer
+      bypassed it. Verified: `npm run lint` (0/0), `npm run typecheck`
+      (clean), `npm test` — 95/95 across 11 suites.)
+
+### Quality debt (found in the 2026-10-30 analysis)
+
+- [x] **Three app-code imports still bypass barrels**: after the utils/mock
+      barrel sweeps, `src/screens/mall/MallSelectorScreen.js:9`
+      (`import { MALLS } from "../../mock/malls"`), `src/utils/mallData.js:3`
+      (`import { MALLS } from "../mock/malls"`) and `src/components/FlagItem.js:4`
+      (`import MallMateTheme from "../constants/Theme"`) still deep-import
+      while `MALLS` and `MallMateTheme` are barrel-exported (every other
+      MallMate consumer uses `from "../../constants"`). Switch to the folder
+      imports. Test-file deep imports of internals are fine by precedent.
+      Verify: lint/typecheck/tests. (Done 2026-10-30: the two `MALLS` sites
+      now import from `../../mock` / `../mock` and FlagItem uses the named
+      barrel import `import { MallMateTheme } from "../constants"`; the
+      remaining `mock/malls` references are the mock barrel itself plus a
+      test file (allowed by precedent). Verified: `npm run lint` (0/0),
+      `npm run typecheck` (clean), `npm test` — 95/95.)
+- [x] **Two unreferenced mock-barrel re-exports**: `FLOORS` and
+      `getActiveOffersForMerchant` are exported from `src/mock/index.js` but
+      their only importers are inside `src/mock/` (`navigation.js`,
+      `merchants.js`) — nothing outside the folder imports either. Same class
+      as the 2026-10-29 shrink: drop them from the barrel (keep the
+      module-level exports for the intra-folder consumers). Verify:
+      re-grep, lint/typecheck/tests. (Done 2026-10-30: both names dropped
+      from the barrel's named imports and export list; `export const
+      FLOORS` (floors.js) and `export const getActiveOffersForMerchant`
+      (offers.js) kept for the intra-folder consumers `navigation.js` /
+      `merchants.js`, which import them directly from the defining
+      modules. Re-grep: zero references outside the defining modules,
+      their intra-folder importers and TODO/README history. Verified:
+      `npm run lint` (0/0), `npm run typecheck` (clean), `npm test` —
+      95/95.)
+- [x] **AGENTS.md/README stale claims**: (a) AGENTS.md says "Legacy screens
+      still use `Colors.js`" — the sole consumer is the kit-adjacent
+      `ToggleButton` (AGENTS.md itself says so correctly elsewhere); (b) the
+      styling convention claims sizing uses "`Display.setWidth/setHeight`"
+      but only `FlagItem` calls `Display` — no MallMate screen does, so the
+      convention misleads; (c) README's key-modules row says the navigator
+      "wraps the app in `<UserProvider>`" while it composes
+      `MallProvider` + `FavoritesProvider` too. Realign the three docs with
+      reality. Doc-only; verify by re-reading against `src/components/
+      ToggleButton.js`, `src/navigators/index.js` and a Display usage grep.
+      (Done 2026-10-30: (a) AGENTS.md MallMate bullet now says `Colors.js`
+      "survives only for `ToggleButton` (the lone remaining consumer)";
+      (b) the styling convention now says sizing uses plain RN values +
+      Theme tokens, noting the `Display` helpers are only used by the
+      legacy `FlagItem`; (c) the README key-modules row now says the
+      navigator "composes `<UserProvider>`, `<MallProvider>` and
+      `<FavoritesProvider>`". Reality re-verified by grep before editing:
+      ToggleButton is the only Colors.js consumer, FlagItem the only
+      Display caller. Markdown-only — verified by re-read; lint/typecheck
+      unaffected (still clean), tests 95/95.)
+- [x] **`StorageService` write helpers can reject and two call sites
+      fire-and-forget them**: `setUser`/`removeUser`/
+      `setRememberedUsername`/`removeRememberedUsername` (and the mall/fav
+      setters) return raw AsyncStorage promises with no catch —
+      `src/utils/userData.js:12,17` and `src/screens/SigninScreen.js:53,55`
+      call them without `.catch`, so a storage failure becomes an unhandled
+      rejection (the sibling contexts in `favorites.js`/`mallData.js` do
+      `.catch(() => {})`). Also `getUser`'s `JSON.parse` (line 14) is
+      unguarded while `getFavoriteIds` guards the same pattern. Either add
+      catches inside `StorageService` (making the AGENTS.md "service
+      functions never throw" claim true for it) or add `.catch` at the fire-
+      and-forget sites — prefer the in-service fix so future callers are
+      safe by default. Add/adjust `storageService.test.js` coverage.
+      Verify: lint/typecheck/tests. (Done 2026-10-30: in-service fix —
+      every write helper (`setUser`/`removeUser`/`setSelectedMallSlug`/
+      `setFavoriteIds`/`setRememberedUsername`/`removeRememberedUsername`)
+      now ends in `.catch(() => {})` and every read helper
+      (`getUser`/`getSelectedMallSlug`/`getFavoriteIds`/
+      `getRememberedUsername`) catches and returns its safe default
+      (`getUser` also guards the previously-uncaught `JSON.parse`;
+      `getFavoriteIds`'s try now covers the `getItem` too). Behaviour on
+      success unchanged; callers' existing `.catch(() => {})` in
+      favorites/mallData are now redundant but harmless and were left
+      alone. 11 new tests in a "never rejects" suite (each write resolves
+      on a rejecting AsyncStorage call; reads resolve their safe default
+      on rejecting `getItem`; corrupt-JSON user resolves null) — verified
+      to fail 10/11 against the old implementation. Verified: `npm run
+      lint` (0/0), `npm run typecheck` (clean), `npm test -- --ci` —
+      106/106.)
+
+### Quality debt (found in the 2026-10-31 analysis)
+
+- [x] **AGENTS.md "Envelope passthrough" bullet misdescribes failure
+      handling**: it says a body that "already looks like
+      `{ status: boolean, ... }` is passed through", but
+      `src/services/apiClient.ts` `toSuccessEnvelope` hard-codes
+      `status: true` for every 2xx — a `200` body of
+      `{ status: false, message: "rejected" }` resolves as
+      `{ status: true, message: "rejected", data: undefined }` (the
+      `status` field is NOT passed through; `apiClient.test.js` only
+      pins the `status: true` case). Either reword the bullet to match
+      the code (message/data lifted from envelope-shaped bodies; status
+      follows the HTTP outcome) or make the code return `payload.status`
+      and add a test for the `200` + `status:false` case. Pick one —
+      doc fix is the safe default, code fix changes behaviour. (Done
+      2026-10-31: doc fix — the bullet is now "Envelope-shaped bodies"
+      and states that message/data are lifted from a `2xx`
+      envelope-shaped body but `status` is not passed through: HTTP
+      outcome governs, so a `2xx` always resolves `status: true` even
+      when the body says `status: false`. No code change. Two test
+      updates pin the documented behaviour: the old "passes through"
+      test renamed to "lifts message/data … (status stays true)", plus
+      a new `200` + `status:false` case asserting
+      `{status: true, message: "rejected", data: undefined}`.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test`.)
+- [x] **Three stale AGENTS.md claims**: (1) "Service functions are `async`
+      and never throw — they catch and return `{ status: false, message }`"
+      (Conventions) is false for `StorageService` — its helpers are plain
+      functions returning safe defaults (`null`/`[]`/`undefined`, zero
+      envelope fields); only the network services follow the envelope
+      rule. (2) "Screens live in `src/screens/`, registered in
+      `src/navigators/index.js`" (Architecture) misses the five tab
+      screens registered in `src/navigators/MainTabNavigator.js` — only
+      the stack routes live in `index.js`. (3) "Every folder has an
+      `index.js` aggregator" (Barrel files) is off for `src/types/`
+      (which has `index.ts`) and the test/asset folders (no barrel at
+      all). Scope each claim to reality. (Done 2026-10-31: all three
+      re-scoped after re-verifying each against the tree. (1) The
+      Conventions rule now scopes the envelope contract to network
+      services (`AuthenticationService`, `ApiClient` consumers) and
+      notes `StorageService` helpers never throw but resolve to safe
+      defaults with no envelope fields. (2) The Screens rule now says
+      screens register either as stack routes in
+      `src/navigators/index.js` or as the five bottom-tab screens
+      (Home/Explore/Map/Rewards/Profile) in `MainTabNavigator.js`, and
+      must be exported from the screens barrel *and* registered in one
+      of the two. (3) The Barrel rule now lists every source folder
+      under `src/` with its aggregator (`index.js`, `index.ts` for
+      `src/types/`) and states that test (`src/**/__tests__/`) and
+      asset folders (`src/assets/`, `assets/`) have no barrel —
+      verified against a per-folder `ls`. Markdown-only; verified by
+      re-reading the edited bullets against the filesystem layout.)
+- [x] **README tree/barrel line misses two shipped paths**: the
+      project-structure tree lists every `src/` subfolder except
+      `src/__tests__/` (holds `iconNames.test.js`), and the "add it to
+      the barrel (`src/*/index.js`)" note misses `src/types/index.ts`.
+      Tiny doc sync; verify against a directory listing. (Done
+      2026-10-31: the tree gained a `src/__tests__/` line ("Repo-root
+      tests — icon-name glyphmap validation") and the Contributing
+      barrel note now reads `src/*/index.js`, or `src/types/index.ts` —
+      both verified against a per-folder `ls` of `src/`. Markdown-only;
+      verified by re-reading the edited sections.)
+- [x] **Dead `export default t` in the i18n barrel**:
+      `src/i18n/index.js` ends with `export default t;` but all 41
+      consumers use the named import (`import { t } from "../i18n"`) —
+      `import t from` / `import t,` finds zero matches across `src/`,
+      `App.js`, `scripts/` (grep-verified). Same class as the earlier
+      dead-export sweeps; drop the default line, keep the named export.
+      Run lint/typecheck/tests after. (Done 2026-10-31: the
+      `export default t;` line removed from the barrel; the named
+      `export const t` (and `CATALOGS`/`getLocale`/`en`/`ur`) are
+      untouched. Re-grepped before editing: `import t from` /
+      `import t,` → zero matches; all 41 i18n consumers use
+      `import { t } from …/i18n`; no test asserts the default export.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test` — 107/107.)
+
+### Quality debt (found in the 2026-10-31 close-out analysis)
+
+- [x] **Dead `export default en` / `export default ur` in the catalog
+      files**: same class as the `export default t` barrel line removed
+      earlier this run — `src/i18n/en.js` and `src/i18n/ur.js` each end
+      with a default export, but the only importer
+      (`src/i18n/index.js`) uses named imports (`import { en } from
+      "./en"` / `import { ur } from "./ur"`) and the parity test
+      (`src/i18n/__tests__/i18n.test.js`) imports `{ en, ur }` from the
+      barrel. Repo-wide grep (`import en` / `import ur` default shapes,
+      `require("./en")` / `require("./ur")`) finds zero consumers.
+      Found + fixed in the same run: the two dead default lines removed;
+      the named `export const en` / `export const ur` are untouched.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test` — 107/107.)
+- [ ] **Test deep-imports `MALLS` from `src/mock/malls`, bypassing the
+      mock barrel**: `src/utils/__tests__/mallData.test.js` line 7 does
+      `import { MALLS } from "../../mock/malls"`, but `MALLS` is
+      already re-exported by the mock barrel (`src/mock/index.js`) —
+      every other consumer (and the AGENTS.md "import via the folder"
+      rule) goes through the barrel. Same class as the 2026-10-29
+      `utils/userData` deep-import sweep; the 2026-10-30 analysis
+      flagged MALLS twice, one site was fixed, this test remains.
+      Switch to `import { MALLS } from "../../mock"`; run
+      lint/typecheck/tests.
 
 ### Blocked — do NOT implement until the owner decides
 

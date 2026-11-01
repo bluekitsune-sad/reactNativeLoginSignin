@@ -150,6 +150,7 @@ The expected sign‑in payload shape:
 ├── package.json
 ├── assets/                    # Expo icons / splash images
 └── src/
+    ├── __tests__/             # Repo-root tests (icon-name glyphmap validation)
     ├── assets/                # Retained image assets (social-auth placeholders)
     ├── components/            # UI kit: mallmate/ components + Separator/ToggleButton/FlagItem
     ├── constants/             # Colors, Images, ApiContants, Theme, Capabilities, CapabilityMeta, CustomFonts, CountryCode
@@ -167,7 +168,7 @@ The expected sign‑in payload shape:
 | Path | Purpose |
 | ---- | ------- |
 | `App.js` | Loads custom fonts, then mounts `<Navigators />`. |
-| `src/navigators/index.js` | Root `Stack.Navigator`; wraps the app in `<UserProvider>`. |
+| `src/navigators/index.js` | Root `Stack.Navigator`; composes `<UserProvider>`, `<MallProvider>` and `<FavoritesProvider>`. |
 | `src/screens/SigninScreen.js` | Sign in form and submit logic. |
 | `src/screens/SignupScreen.js` | Registration form and validation. |
 | `src/screens/ForgotPasswordScreen.js` | Email lookup for password reset. |
@@ -195,7 +196,7 @@ The expected sign‑in payload shape:
 
 1. Fork and create a feature branch.
 2. Keep changes scoped; follow the existing folder layout and barrel files
-   (`src/*/index.js`) when adding modules.
+   (`src/*/index.js`, or `src/types/index.ts`) when adding modules.
 3. Update [TODO.md](./TODO.md) / this README if you change behaviour.
 4. Open a pull request.
 
@@ -283,3 +284,9 @@ analysis only:> todoAgent Ran (2026-10-28 21:38 UTC): no actionable tasks — an
 done today:  > todoAgent Ran (2026-10-29 16:00 UTC): done — 2 tasks: (1) fixed blank Route Preview hero icon (Ionicons `route-outline` does not exist in the packaged glyphmap → swapped to glyphmap-verified `navigate-outline`; new `src/__tests__/iconNames.test.js` validates every Ionicons/Feather name literal in the codebase against the glyphmaps, sanity-checked to fail on the old name); (2) trimmed dead Colors.js palette (20 unconsumed tokens removed, only ToggleButton's DEFAULT_GREEN/GREY/WHITE kept; zero references to removed tokens). Analysis: i18n audit clean (0 unreferenced of 341), navigator/paramlist/capture-script in sync, no console logging in src/, no dead deps. Added 2 new TODO items (20 unused mock-barrel exports incl. 19 module-private names; useUserManagement/UserProvider barrel re-exports bypassed by 4 deep imports). Remaining unchecked items all blocked on owner/backend (issue #11 CI token; token/session, login POST, auth headers).
 
 done today:  > todoAgent Ran (2026-10-29 21:41 UTC): done — 2 tasks: (1) shrunk the mock barrel surface — removed 20 unused named exports from src/mock/index.js (EVENT_ICONS/FOOD_COURTS/MOCK_EVENTS/POI_ICONS/HOME_CONTENT/getContentForMall/toEventSummary/LEDGER_TYPES/MOCK_REWARDS/LIST_PAGE_SIZE/MERCHANT_DETAILS/MOCK_MENUS/MOCK_OFFERS/DESTINATION_SUGGESTIONS/OFFER_TYPES/formatOfferDate/getMerchantInitials/MOCK_ORDERS/ORDER_STATES/MOCK_SESSION_PREVIEW_MINUTES; screens consume the resolvers, not the raw data) and dropped the export keyword from the 19 module-private names across 11 mock modules — LIST_PAGE_SIZE stays exported from merchants.js for its deep-importing test; (2) wired useUserManagement/UserProvider through the utils barrel — the three screens (Signin/Verification/Profile) switched from default deep imports to named barrel imports, the navigator's UserProvider import moved to "../utils", and the two test wrappers the item count missed were switched too; zero utils/userData references remain outside the module. Verified: lint 0/0, typecheck clean, 95/95 tests. Analysis: navigator still deep-imports FavoritesProvider/MallProvider (same class, queued as a new TODO item); Images (FACEBOOK/GOOGLE) intentionally parked for a future social re-wire — not dead; routes/RootStackParamList in sync (33/33); no console.log in src/; i18n untouched this run. Remaining unchecked items all blocked on owner/backend (issue #11 CI token; token/session restore, login GET-to-POST, auth headers).
+
+done today:  > todoAgent Ran (2026-10-30 15:55 UTC): done — 1 task: navigators/index.js now imports FavoritesProvider, MallProvider and UserProvider via a single "../utils" barrel import (was the last app-code consumer bypassing the utils barrel with deep ../utils/favorites and ../utils/mallData paths); TODO item marked done. Verified: lint 0/0, typecheck clean, 95/95 tests across 11 suites (one earlier suite failure was flaky — a clean re-run passed). Analysis added 4 new items to TODO.md (3 barrel-bypass deep imports incl. MALLS x2 + MallMateTheme; 2 unreferenced mock-barrel re-exports FLOORS/getActiveOffersForMerchant; stale AGENTS.md/README claims re Colors.js, Display sizing, navigator providers; fire-and-forget StorageService writes can reject unhandled). CI item still blocked (issue #11 token 403 on workflow pushes); remaining unchecked items blocked on owner/backend (token/session restore, login GET-to-POST, auth headers).
+
+analysis only:> todoAgent Ran (2026-10-31 15:23 UTC): no actionable tasks — analysis added 4 new items to TODO.md
+
+done today:  > todoAgent Ran (2026-10-31 20:34 UTC): done — 5 tasks: (1) fixed the AGENTS.md "Envelope passthrough" bullet to match apiClient.ts (message/data are lifted from 2xx envelope-shaped bodies but status always follows the HTTP outcome — a 2xx resolves true even when the body says false) + renamed the misleading test and added a pinning case for 200+status:false; (2) re-scoped three stale AGENTS.md claims (envelope contract now scoped to network services, with StorageService's safe-default behaviour noted; screens register as stack routes in navigators/index.js OR the five tabs in MainTabNavigator.js; barrel rule lists every src/ folder's aggregator incl. src/types/index.ts and states test/asset folders have none); (3) synced the README project tree (added the missing src/__tests__/ line) and the Contributing barrel note (src/*/index.js, or src/types/index.ts); (4) removed the dead `export default t` from the i18n barrel (zero default-import consumers; all 41 sites use the named import); (5) removed the dead `export default en`/`export default ur` from the i18n catalog files (same class, found in the close-out analysis and fixed in-run). Verified each task: lint 0/0, typecheck clean, 107/107 tests across 11 suites (was 106/106; +1 new pinning test). Analysis: no console.log in src/; barrel discipline clean except one test deep-import of MALLS (new TODO item); issue #11 still OPEN (CI blocked — GITHUB_TOKEN lacks workflows permission); remaining unchecked items all blocked on owner/backend (token/session restore, login GET-to-POST, auth headers).

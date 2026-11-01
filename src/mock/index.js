@@ -1,5 +1,5 @@
 import { getEventById, getEventIcon, getEventList } from "./events";
-import { FLOORS, getFloorPlan, getPoiIcon } from "./floors";
+import { getFloorPlan, getPoiIcon } from "./floors";
 import { getFoodCourtOverview, getZoneStatus } from "./foodCourt";
 import { getExploreContent, getHomeSections, isCapabilityVisible } from "./homeContent";
 import { MALLS } from "./malls";
@@ -23,12 +23,7 @@ import {
   getStartPoints,
   searchDestinations,
 } from "./navigation";
-import {
-  getActiveOffersForMerchant,
-  getOfferById,
-  getOfferHeadline,
-  getOfferValidity,
-} from "./offers";
+import { getOfferById, getOfferHeadline, getOfferValidity } from "./offers";
 import { ORDER_STATE_META, formatOrderDateTime, getOrderById, getOrderList } from "./orders";
 import { DEMO_OTP_CODE, isSuspiciousLogin, sendMockOtp, verifyMockOtp } from "./otp";
 import { LEDGER_META, getRewardsOverview } from "./rewards";
@@ -42,7 +37,6 @@ import {
 
 export {
   MALLS,
-  FLOORS,
   getEventById,
   getEventIcon,
   getEventList,
@@ -72,7 +66,6 @@ export {
   sendMockOtp,
   verifyMockOtp,
   formatPrice,
-  getActiveOffersForMerchant,
   getMerchantDetail,
   getMenuForMerchant,
   getMenuItemById,
