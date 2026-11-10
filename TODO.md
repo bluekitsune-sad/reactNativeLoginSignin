@@ -1143,6 +1143,20 @@ Rules for the factory:
       code changed. Verified: `npm run lint` (0/0), `npm run typecheck`
       (clean), `npm test` — 107/107.)
 
+### Quality debt (found in the 2026-11-10 analysis)
+
+- [ ] **MallMate kit has zero direct tests**: `src/components/mallmate/`
+      ships 12 design-system components (Button, TextInput, Card, ListRow,
+      Badge, StatusChip, EmptyState, ErrorState, LoadingState, SectionHeader,
+      CapabilityCard, FilterSheet) but no test file imports any of them
+      (grep-verified across all 11 suites) — only `Button`/`ListRow` run
+      indirectly through the Signin/Profile screen renders. The 2026-10-26
+      coverage-gap sweep covered StorageService/merchants/FavoritesProvider,
+      never the kit itself. Add focused unit tests for the interactive/state
+      logic (Button pressed/disabled/loading, TextInput focused/invalid,
+      FilterSheet open/option-toggle/clear-all, StatusChip tones,
+      CapabilityCard degraded chip). Verify: lint/typecheck/tests.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
