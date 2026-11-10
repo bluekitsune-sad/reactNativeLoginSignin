@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import React from "react";
 import { Button, Text } from "react-native";
 
-import { MALLS } from "../../mock/malls";
+import { MALLS } from "../../mock";
 import useMallManagement, { MallProvider } from "../mallData";
 
 const Probe = () => {
