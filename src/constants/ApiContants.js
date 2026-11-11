@@ -9,7 +9,7 @@ const resolveBackendBaseUrl = () => {
   if (envUrl) {
     return stripTrailingSlash(envUrl);
   }
-  const extraUrl = Constants.expoConfig?.extra?.backendUrl ?? Constants.manifest?.extra?.backendUrl;
+  const extraUrl = Constants.expoConfig?.extra?.backendUrl;
   if (extraUrl) {
     return stripTrailingSlash(extraUrl);
   }

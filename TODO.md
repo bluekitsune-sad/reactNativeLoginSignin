@@ -1178,7 +1178,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-11-11 analysis)
 
-- [ ] **`ApiContants` still reads the deprecated `Constants.manifest`**:
+- [x] **`ApiContants` still reads the deprecated `Constants.manifest`**:
       `src/constants/ApiContants.js:12` falls back to
       `Constants.manifest?.extra?.backendUrl` when
       `Constants.expoConfig?.extra?.backendUrl` is missing. Verified against
@@ -1197,7 +1197,15 @@ Rules for the factory:
       half, keep the env var → `expoConfig` → localhost precedence, re-run
       lint/typecheck/tests, confirm `npx expo export:web` still compiles,
       and check README's "Backend configuration" precedence wording still
-      matches the code.
+      matches the code. (Done 2026-11-11: the `?? Constants.manifest…`
+      half removed — `extraUrl` is now just
+      `Constants.expoConfig?.extra?.backendUrl`; precedence unchanged
+      (env var → expoConfig → localhost). README's Backend configuration
+      list never documented the manifest half, so it still matches.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test -- --ci` — 138/138 across 16 suites, and the deprecated
+      "Constants.manifest has been deprecated" warning no longer appears
+      in the jest output; `npx expo export:web` compiles.)
 
 ### Blocked — do NOT implement until the owner decides
 
