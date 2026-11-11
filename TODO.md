@@ -1207,6 +1207,35 @@ Rules for the factory:
       "Constants.manifest has been deprecated" warning no longer appears
       in the jest output; `npx expo export:web` compiles.)
 
+### Quality debt (found in the 2026-11-11 close-out analysis)
+
+- [x] **`npm audit`: direct runtime dep `axios@1.6.7` is inside the
+      vulnerable range for two high advisories** (SSRF
+      GHSA-8hc4-vh64-cxmj; absolute-URL credential leakage
+      GHSA-jr5f-v2jv-69x6 — audit range `1.0.0 - 1.19.0`, fixed in
+      ≥1.19.1). The declared range `^1.6.7` already allows the fix, so a
+      targeted `npm update axios` clears it without touching any other
+      package. Do NOT run blanket `npm audit fix`: it fails resolution on
+      a peer conflict (`react-test-renderer@18.3.1` wants
+      `react@^18.3.1`, Expo SDK 50 pins `react@18.2.0`) and `--force`
+      would be unsafe. Tests mock axios, so verify by version + audit +
+      lint/typecheck/test + web export, not by live traffic. (Done
+      2026-11-11: `npm update axios` bumped the lockfile to a fixed 1.x
+      release inside `^1.6.7` (package.json unchanged); re-audit shows
+      axios no longer flagged. Verified: `npm run lint` (0/0),
+      `npm run typecheck` (clean), `npm test -- --ci` — 138/138 across
+      16 suites, `npx expo export:web` compiles.)
+- [ ] **Remaining `npm audit` debt is Expo SDK 50 toolchain/major-bound**:
+      87 advisories in the production tree (5 critical, 42 high) —
+      `@react-navigation/*@6` (fix is v7, a semver-major with API
+      migration), `expo`/`react-native`/`expo-constants` (fixes are the
+      SDK 58 line), plus webpack/CLI/Express transitive toolchain noise.
+      Every non-axios fix requires a semver-major bump pinned by the SDK
+      50 contract, and `npm audit fix` cannot resolve at all without
+      breaking the react peer pin. Needs an owner decision: schedule an
+      Expo SDK upgrade (major work) or accept/document the toolchain debt
+      for the pilot. Do not `--force` or hand-bump majors piecemeal.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
