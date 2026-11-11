@@ -1176,6 +1176,29 @@ Rules for the factory:
       suites; the other components stay covered indirectly by the screen
       suites.)
 
+### Quality debt (found in the 2026-11-11 analysis)
+
+- [ ] **`ApiContants` still reads the deprecated `Constants.manifest`**:
+      `src/constants/ApiContants.js:12` falls back to
+      `Constants.manifest?.extra?.backendUrl` when
+      `Constants.expoConfig?.extra?.backendUrl` is missing. Verified against
+      the installed `expo-constants`: the `manifest` getter logs
+      "Constants.manifest has been deprecated in favor of
+      Constants.expoConfig" (dev, once) whenever it is evaluated — it fires
+      on every Jest run (the pre-existing `apiClient.test.js` suite shows it
+      too, so it predates this run), because the test env's `expoConfig` has
+      no `extra.backendUrl`. The fallback is also redundant on SDK 50: the
+      getter only returns non-null for bare-manifest shapes
+      (`isBareManifest = !isManifest`, and modern manifests carry
+      `metadata` → `manifest` returns `null`), while embedded/bare configs
+      already flow through `expoConfig` (`isBareManifest` → returned as-is)
+      — and the only value it could return (`extra.backendUrl`) equals the
+      hardcoded localhost default anyway. Drop the `?? Constants.manifest…`
+      half, keep the env var → `expoConfig` → localhost precedence, re-run
+      lint/typecheck/tests, confirm `npx expo export:web` still compiles,
+      and check README's "Backend configuration" precedence wording still
+      matches the code.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
