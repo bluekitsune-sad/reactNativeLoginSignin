@@ -1145,7 +1145,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-11-10 analysis)
 
-- [ ] **MallMate kit has zero direct tests**: `src/components/mallmate/`
+- [x] **MallMate kit has zero direct tests**: `src/components/mallmate/`
       ships 12 design-system components (Button, TextInput, Card, ListRow,
       Badge, StatusChip, EmptyState, ErrorState, LoadingState, SectionHeader,
       CapabilityCard, FilterSheet) but no test file imports any of them
@@ -1155,7 +1155,26 @@ Rules for the factory:
       never the kit itself. Add focused unit tests for the interactive/state
       logic (Button pressed/disabled/loading, TextInput focused/invalid,
       FilterSheet open/option-toggle/clear-all, StatusChip tones,
-      CapabilityCard degraded chip). Verify: lint/typecheck/tests.
+      CapabilityCard degraded chip). Verify: lint/typecheck/tests. (Done
+      2026-11-11: five suites under `src/components/__tests__/` — `Button`
+      (label/onPress, 44–48px target, pressed dim+restore driven by synthetic
+      responder events since `fireEvent.press` only hits onPress, disabled and
+      loading block presses with the right a11y state, unknown-variant
+      fallback), `TextInput` (label/placeholder a11y, changeText, focus/blur
+      border swap, invalid colour + message, disabled rejects input),
+      `FilterSheet` (hidden renders nothing, group per non-empty option set,
+      option select + Any clear + open-now toggle via `onChange`, Show N/Apply
+      + Clear all footer, both close targets — backdrop needs
+      `includeHiddenElements` because the sheet's `accessibilityViewIsModal`
+      hides it from default queries), `StatusChip` (all five tones map onto
+      border+label colour, default/unknown fall back to muted, a11y label),
+      `CapabilityCard` (title/description, warning-toned Limited chip when
+      degraded, non-pressable card). Mutation-checked: breaking the Pressable
+      `disabled` wiring, the focus style, the tone map or the pressed style
+      each fails the matching test. Verified: `npm run lint` (0/0),
+      `npm run typecheck` (clean), `npm test -- --ci` — 138/138 across 16
+      suites; the other components stay covered indirectly by the screen
+      suites.)
 
 ### Blocked — do NOT implement until the owner decides
 
