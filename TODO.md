@@ -1235,6 +1235,46 @@ Rules for the factory:
       breaking the react peer pin. Needs an owner decision: schedule an
       Expo SDK upgrade (major work) or accept/document the toolchain debt
       for the pilot. Do not `--force` or hand-bump majors piecemeal.
+- [x] **Remaining 7 mallmate kit components still have no direct test
+      coverage**: the 2026-11-11 kit-test item covered 5 of 12 (Button,
+      TextInput, FilterSheet, StatusChip, CapabilityCard) and closed with
+      "the other components stay covered indirectly by the screen
+      suites" — but `Badge`, `Card`, `SectionHeader`, `ListRow`,
+      `EmptyState`, `ErrorState` and `LoadingState` have no files under
+      `src/components/__tests__/` (grep-verified). Add focused suites in
+      the existing style (render + RNTL queries + `StyleSheet.flatten`
+      style assertions + synthetic responder events for pressed states):
+      Badge tone map + unknown-tone fallback; Card pressable vs plain
+      view, `accessibilityState` passthrough, `unavailable` opacity,
+      pressed dim/restore; SectionHeader header role + action button
+      gating (needs both `actionLabel` and `onAction`); ListRow
+      press/label wiring, chevron gating (`showChevron && onPress`),
+      leading/trailing slots, `titleColor`; EmptyState optional
+      icon/title/message; ErrorState t() defaults + retry button
+      firing `onRetry` and absent without it; LoadingState t() default
+      message mirrored onto the spinner's accessibilityLabel. Mutation-
+      check the gating branches. Verify: lint/typecheck/tests. (Done
+      2026-11-11: 7 new suites / 31 tests under
+      `src/components/__tests__/` — Badge (label + a11y, sponsored/
+      featured/neutral tone map, unknown-tone fallback), Card (plain vs
+      pressable, onPress, `accessibilityState` passthrough, unavailable
+      opacity on both branches, pressed elevate/restore via synthetic
+      responder events), SectionHeader (header role, action fires
+      `onAction`, hidden unless BOTH `actionLabel` and `onAction`),
+      ListRow (title/subtitle, labelled button + onPress, not-a-button
+      without onPress, chevron only when `showChevron && onPress`,
+      leading/trailing slots, `titleColor`, pressed dim/restore —
+      note: its style fn yields `false` unpressed so the test guards
+      `flatten() ?? {}`), EmptyState (icon/title/message + omitted
+      props), ErrorState (t() default title/retry, `onRetry` fires,
+      no button without it, custom labels override), LoadingState (t()
+      default mirrored onto the spinner's accessibilityLabel, custom
+      message both places). Mutation-checked: breaking SectionHeader's
+      `&&`, ListRow's `&&`, ErrorState's `onRetry ?` and Card's
+      `!onPress` branch each fails exactly the matching test; all four
+      sources reverted after. Verified: `npm run lint` (0/0),
+      `npm run typecheck` (clean), `npm test -- --ci` — 169/169 across
+      23 suites (was 138/138 across 16).)
 
 ### Blocked — do NOT implement until the owner decides
 
