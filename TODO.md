@@ -1276,6 +1276,33 @@ Rules for the factory:
       `npm run typecheck` (clean), `npm test -- --ci` — 169/169 across
       23 suites (was 138/138 across 16).)
 
+### Quality debt (found in the 2026-11-12 analysis)
+
+- [ ] **Dead `Images` re-export in the constants barrel**:
+      `src/constants/index.js` imports and re-exports `Images`
+      (`src/constants/Images.js` — the parked FACEBOOK/GOOGLE social-auth
+      assets), but a repo-wide grep (`src/`, `App.js`, `scripts/`,
+      `MallMate_Project_Blueprint/`) finds zero `import { Images }`
+      consumers — the only `Images` references outside the module are the
+      barrel's own import line and an unrelated prose comment in
+      `mock/events.js`. Same dead-export class as the 2026-10-29 mock
+      barrel sweep. Drop the `Images` name from the barrel's import and
+      export lists; KEEP `src/constants/Images.js` and the two PNGs — they
+      are intentionally parked for a future social sign-in re-wire (2026-10-21
+      legacy removal decision) and are not dead. Verify: re-grep,
+      `npm run lint` / `npm run typecheck` / `npm test`.
+- [ ] **Byte-identical duplicate blueprint PRD**:
+      `MallMate_Project_Blueprint/docs/PRD.md` is a file-identical copy of
+      `MallMate_Project_Blueprint/PRD.md` (`diff -q` reports no
+      differences) and nothing references the `docs/` copy — every pointer
+      (AGENTS.md reading order, the blueprint README's file list, TODO.md)
+      targets the root `PRD.md`; a repo-wide grep for `docs/PRD` /
+      `blueprint/docs` finds zero references. Two identical copies of the
+      product source of truth will drift. Delete
+      `MallMate_Project_Blueprint/docs/PRD.md` (likely an accidental
+      double-add). Doc-only — verify by re-grep + `diff` that the root
+      copy remains; lint/typecheck/tests unaffected.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
