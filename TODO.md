@@ -1278,7 +1278,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-11-12 analysis)
 
-- [ ] **Dead `Images` re-export in the constants barrel**:
+- [x] **Dead `Images` re-export in the constants barrel**:
       `src/constants/index.js` imports and re-exports `Images`
       (`src/constants/Images.js` — the parked FACEBOOK/GOOGLE social-auth
       assets), but a repo-wide grep (`src/`, `App.js`, `scripts/`,
@@ -1290,7 +1290,13 @@ Rules for the factory:
       export lists; KEEP `src/constants/Images.js` and the two PNGs — they
       are intentionally parked for a future social sign-in re-wire (2026-10-21
       legacy removal decision) and are not dead. Verify: re-grep,
-      `npm run lint` / `npm run typecheck` / `npm test`.
+      `npm run lint` / `npm run typecheck` / `npm test`. (Done: dropped
+      `Images` from the barrel's import and export lists —
+      `src/constants/Images.js` and its two PNGs kept for the parked
+      social re-wire. Re-grep: zero `Images` references outside the
+      module itself, the barrel history in TODO/README and a prose
+      comment in `mock/events.js`. Verified: `npm run lint` (0/0),
+      `npm run typecheck` (clean), `npm test`.)
 - [ ] **Byte-identical duplicate blueprint PRD**:
       `MallMate_Project_Blueprint/docs/PRD.md` is a file-identical copy of
       `MallMate_Project_Blueprint/PRD.md` (`diff -q` reports no
