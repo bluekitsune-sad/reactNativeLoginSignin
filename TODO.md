@@ -1297,7 +1297,7 @@ Rules for the factory:
       module itself, the barrel history in TODO/README and a prose
       comment in `mock/events.js`. Verified: `npm run lint` (0/0),
       `npm run typecheck` (clean), `npm test`.)
-- [ ] **Byte-identical duplicate blueprint PRD**:
+- [x] **Byte-identical duplicate blueprint PRD**:
       `MallMate_Project_Blueprint/docs/PRD.md` is a file-identical copy of
       `MallMate_Project_Blueprint/PRD.md` (`diff -q` reports no
       differences) and nothing references the `docs/` copy — every pointer
@@ -1307,7 +1307,13 @@ Rules for the factory:
       product source of truth will drift. Delete
       `MallMate_Project_Blueprint/docs/PRD.md` (likely an accidental
       double-add). Doc-only — verify by re-grep + `diff` that the root
-      copy remains; lint/typecheck/tests unaffected.
+      copy remains; lint/typecheck/tests unaffected. (Done: deleted the
+      byte-identical `docs/PRD.md` copy (and the now-empty `docs/`
+      directory); re-verified `diff -q` reported no differences before
+      deleting and the root `MallMate_Project_Blueprint/PRD.md` remains
+      intact. Re-grep: zero `docs/PRD`, `blueprint/docs` or `](docs/`
+      markdown links anywhere outside this history. Verified:
+      `npm run lint` (0/0), `npm run typecheck` (clean), `npm test`.)
 
 ### Blocked — do NOT implement until the owner decides
 
