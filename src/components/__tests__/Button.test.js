@@ -41,8 +41,31 @@ describe("mallmate Button", () => {
     );
   });
 
-  it("dims while pressed and restores once the press ends", async () => {
+  it("swaps to the pressed accent while pressed and restores once the press ends", async () => {
     render(<Button label="Press" onPress={jest.fn()} />);
+    const styleNow = () => StyleSheet.flatten(screen.getByRole("button").props.style);
+    expect(styleNow().backgroundColor).toBe(MallMateTheme.color.primary);
+    expect(styleNow().opacity).toBeUndefined();
+
+    fireEvent(
+      screen.getByRole("button"),
+      "responderGrant",
+      responderEvent(screen.getByRole("button")),
+    );
+    expect(styleNow().backgroundColor).toBe(MallMateTheme.color.primaryPressed);
+    expect(styleNow().opacity).toBeUndefined();
+
+    fireEvent(
+      screen.getByRole("button"),
+      "responderRelease",
+      responderEvent(screen.getByRole("button")),
+    );
+    // Pressability honours a minimum press duration before onPressOut.
+    await waitFor(() => expect(styleNow().backgroundColor).toBe(MallMateTheme.color.primary));
+  });
+
+  it("dims non-primary variants while pressed and restores once the press ends", async () => {
+    render(<Button label="Press" onPress={jest.fn()} variant="secondary" />);
     const styleNow = () => StyleSheet.flatten(screen.getByRole("button").props.style);
     expect(styleNow().opacity).toBeUndefined();
 
@@ -52,13 +75,13 @@ describe("mallmate Button", () => {
       responderEvent(screen.getByRole("button")),
     );
     expect(styleNow().opacity).toBe(0.85);
+    expect(styleNow().backgroundColor).toBe(MallMateTheme.color.surfaceElevated);
 
     fireEvent(
       screen.getByRole("button"),
       "responderRelease",
       responderEvent(screen.getByRole("button")),
     );
-    // Pressability honours a minimum press duration before onPressOut.
     await waitFor(() => expect(styleNow().opacity).toBeUndefined());
   });
 

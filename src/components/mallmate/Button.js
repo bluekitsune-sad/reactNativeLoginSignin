@@ -7,6 +7,7 @@ import { t } from "../../i18n";
 const variants = {
   primary: {
     container: { backgroundColor: MallMateTheme.color.primary },
+    pressed: { backgroundColor: MallMateTheme.color.primaryPressed },
     label: {
       color: MallMateTheme.color.background,
       fontFamily: MallMateTheme.fontFamily.semiBold,
@@ -18,6 +19,7 @@ const variants = {
       borderWidth: 1,
       borderColor: MallMateTheme.color.border,
     },
+    pressed: { opacity: 0.85 },
     label: {
       color: MallMateTheme.color.textPrimary,
       fontFamily: MallMateTheme.fontFamily.semiBold,
@@ -25,6 +27,7 @@ const variants = {
   },
   ghost: {
     container: { backgroundColor: "transparent" },
+    pressed: { opacity: 0.85 },
     label: {
       color: MallMateTheme.color.primary,
       fontFamily: MallMateTheme.fontFamily.semiBold,
@@ -41,6 +44,7 @@ const Button = ({
   style,
 }) => {
   const isDisabled = disabled || loading;
+  const variantStyles = variants[variant] || variants.primary;
   return (
     <Pressable
       onPress={onPress}
@@ -49,8 +53,8 @@ const Button = ({
       accessibilityState={{ disabled: isDisabled, busy: loading }}
       style={({ pressed }) => [
         styles.base,
-        (variants[variant] || variants.primary).container,
-        pressed && !isDisabled && styles.pressed,
+        variantStyles.container,
+        pressed && !isDisabled && variantStyles.pressed,
         isDisabled && styles.disabled,
         style,
       ]}
@@ -63,7 +67,7 @@ const Button = ({
           accessibilityLabel={t("common.loading")}
         />
       ) : (
-        <Text style={[styles.label, (variants[variant] || variants.primary).label]}>{label}</Text>
+        <Text style={[styles.label, variantStyles.label]}>{label}</Text>
       )}
     </Pressable>
   );
@@ -77,9 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: MallMateTheme.spacing.lg,
     paddingVertical: MallMateTheme.spacing.sm,
-  },
-  pressed: {
-    opacity: 0.85,
   },
   disabled: {
     opacity: 0.5,

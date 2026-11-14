@@ -1382,7 +1382,7 @@ Rules for the factory:
       `accessibilityRole="header"`; `npm run lint` (0/0), `npm run
       typecheck` (clean), `npm test -- --ci` — 170/170 across 23
       suites.)
-- [ ] **Two dead `Theme.js` tokens** — `color.primaryPressed` (`#12A66A`)
+- [x] **Two dead `Theme.js` tokens** — `color.primaryPressed` (`#12A66A`)
       and `fontFamily.fallback` (`"System"`) have zero consumers
       repo-wide (grep-verified across `src/`, `scripts/`, `App.js`
       excluding `Theme.js` itself; no destructured bare-name uses either).
@@ -1395,6 +1395,32 @@ Rules for the factory:
       behaviour change, needs a capture diff) or drop both tokens from
       `Theme.js` (and from DESIGN_SYSTEM.md's table if dropped there).
       Verify: re-grep, lint/typecheck/tests.
+      (Done 2026-11-14: decided per token. (1) `primaryPressed` WIRED —
+      it is documented in BOTH blueprint docs (DESIGN_SYSTEM.md color
+      table + PRD §8 "Pressed accent … Pressed state"), so it is
+      unimplemented spec rather than dead spec; dropping it would have
+      deleted owner-authored design intent to match the code. Kit
+      `Button` now has per-variant `pressed` styles: `primary` →
+      `backgroundColor: MallMateTheme.color.primaryPressed` (replacing
+      the generic dim — the darker emerald keeps the background-colored
+      label contrast), `secondary`/`ghost` keep `opacity: 0.85` (no
+      accent applies to them; a ghost press-fill would put primary-colored
+      text on emerald — unreadable). `Card` deliberately NOT tinted:
+      its pressed feedback stays `surfaceElevated` (cards are
+      surface-colored, not accent — emerald press-tint would be wrong),
+      so the accent token is wired where the spec's "Pressed accent"
+      actually applies. (2) `fontFamily.fallback` DROPPED from
+      `Theme.js` — zero consumers and no token row in either doc
+      (DESIGN_SYSTEM's "platform fallback" prose is RN's default system
+      font, not a token). No blueprint edits needed: both docs stay
+      accurate, now with a live consumer. Button tests: the pressed test
+      now asserts the primary accent swap + restore, plus a new
+      secondary-variant dim/restore test; mutation-checked (breaking
+      the primary pressed wiring fails exactly that test, restored
+      after). Verified: re-grep — `primaryPressed` consumed by
+      `Button.js` + its test, zero `fontFamily.fallback` refs;
+      `npm run lint` (0/0), `npm run typecheck` (clean), `npm test --
+      --ci` — 171/171 across 23 suites.)
 
 ### Blocked — do NOT implement until the owner decides
 
