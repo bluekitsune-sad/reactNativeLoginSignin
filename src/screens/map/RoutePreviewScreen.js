@@ -85,7 +85,9 @@ const RoutePreviewScreen = ({ navigation, route }) => {
           </View>
         </Card>
 
-        <Text style={styles.sectionTitle}>{t("maps.directions")}</Text>
+        <Text style={styles.sectionTitle} accessibilityRole="header">
+          {t("maps.directions")}
+        </Text>
         <View style={styles.steps}>
           {preview.steps.map((step, index) => (
             <View key={`${index}-${step}`} style={styles.stepRow}>

@@ -85,7 +85,9 @@ const SigninScreen = ({ navigation }) => {
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t("auth.signIn")}</Text>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          {t("auth.signIn")}
+        </Text>
       </View>
       <Text style={styles.title}>{t("auth.welcome")}</Text>
       <Text style={styles.content}>{t("auth.welcomeSubtitle")}</Text>

@@ -57,7 +57,9 @@ const ForgotPasswordScreen = ({ navigation }) => {
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t("auth.forgotPassword")}</Text>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          {t("auth.forgotPassword")}
+        </Text>
       </View>
       <Text style={styles.title}>{t("auth.forgotPasswordTitle")}</Text>
       <Text style={styles.content}>{t("auth.forgotPasswordSubtitle")}</Text>

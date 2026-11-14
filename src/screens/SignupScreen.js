@@ -65,7 +65,9 @@ const SignupScreen = ({ navigation }) => {
         >
           <Ionicons name="chevron-back-outline" size={28} color={MallMateTheme.color.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t("auth.signUp")}</Text>
+        <Text style={styles.headerTitle} accessibilityRole="header">
+          {t("auth.signUp")}
+        </Text>
       </View>
       <Text style={styles.title}>{t("auth.createAccount")}</Text>
       <Text style={styles.content}>{t("auth.signupSubtitle")}</Text>

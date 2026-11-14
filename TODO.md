@@ -1350,7 +1350,7 @@ Rules for the factory:
       Re-grep: zero `door-outline` references outside this history.
       Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
       `npm test -- --ci` — 170/170 across 23 suites.)
-- [ ] **Auth titles + one section title lack
+- [x] **Auth titles + one section title lack
       `accessibilityRole="header"`** — the accessibility-pass item claims
       the role is on "every screen/section title", but a repo sweep finds
       four screens with visible titles/section titles and zero header
@@ -1368,6 +1368,20 @@ Rules for the factory:
       one-role-per-screen convention — likely the visible page title, plus
       the RoutePreview section title). Verify: lint/typecheck/tests, and
       grep that the four files now contain the role.
+      (Done 2026-11-14: one role per screen, placed on the top-bar
+      `styles.headerTitle` for the three auth screens — every other
+      MallMate screen that renders a `headerTitle` Text (Explore,
+      MerchantList, Favorites, MallSelector, Map, Menu, Settings, Rewards,
+      CountryPicker, ProfilePlaceholder — 10/10) marks exactly that Text,
+      so the large `styles.title` greeting stays unmarked per the
+      one-role rule — and on `RoutePreviewScreen`'s `styles.sectionTitle`
+      "Directions" (the item named only line 88; its `headerMeta` "Route
+      preview" stays unmarked — adding that too would be a second heading
+      role on the screen, contrary to the convention the item cites).
+      Verified: grep — each of the four files now contains exactly one
+      `accessibilityRole="header"`; `npm run lint` (0/0), `npm run
+      typecheck` (clean), `npm test -- --ci` — 170/170 across 23
+      suites.)
 - [ ] **Two dead `Theme.js` tokens** — `color.primaryPressed` (`#12A66A`)
       and `fontFamily.fallback` (`"System"`) have zero consumers
       repo-wide (grep-verified across `src/`, `scripts/`, `App.js`
