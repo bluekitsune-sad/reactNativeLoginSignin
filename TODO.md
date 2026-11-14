@@ -1315,6 +1315,60 @@ Rules for the factory:
       markdown links anywhere outside this history. Verified:
       `npm run lint` (0/0), `npm run typecheck` (clean), `npm test`.)
 
+### Quality debt (found in the 2026-11-14 analysis)
+
+- [ ] **Invalid Ionicons name `door-outline` — the floor-map "Main
+      entrance" pin renders blank, and the icon test can't see it**:
+      `src/mock/floors.js:88` maps the `Entrance` POI category to
+      `"door-outline"`, which does not exist in the packaged
+      `@expo/vector-icons` 14.1.0 Ionicons glyphmap (zero `door*` names —
+      checked against the same JSON `iconNames.test.js` loads);
+      `getPoiIcon` feeds it into `<Ionicons>` at
+      `FloorMapScreen.js:136` (pin marker) and
+      `DestinationDetailScreen.js:66`, and LuckyOne floor G ships a
+      reachable Entrance POI (`lz-g-entrance`, "Main entrance" — the
+      published default floor), so the pin shows an empty box. Same bug
+      class as `route-outline` (fixed 2026-10-29); the existing
+      `src/__tests__/iconNames.test.js` misses it because its regex only
+      matches JSX literals (`<Ionicons name="…">`), not icon names held in
+      data maps. Fix: swap to a glyphmap-verified name (`enter-outline`,
+      `log-in-outline` and `location-outline` exist; `door-outline` does
+      not) AND extend the test to also collect data-driven icon strings
+      (`icon:`/`ICONS`-map values — `POI_ICONS`, `CAPABILITY_META`, event/
+      POI icon tables) so the class stays closed. Verify: lint/typecheck/
+      tests, and sanity-check the extended test fails on `door-outline`.
+- [ ] **Auth titles + one section title lack
+      `accessibilityRole="header"`** — the accessibility-pass item claims
+      the role is on "every screen/section title", but a repo sweep finds
+      four screens with visible titles/section titles and zero header
+      roles: `SigninScreen.js:88,90`, `SignupScreen.js:68,70` and
+      `ForgotPasswordScreen.js:60,62` (each renders a top-bar
+      `styles.headerTitle` *and* a large `styles.title` heading — neither
+      Text carries the role; the files only use
+      `accessibilityRole="button"`), and `RoutePreviewScreen.js:88`
+      (`styles.sectionTitle` "Directions", which doesn't use the kit
+      `SectionHeader` that carries the role elsewhere). Every comparable
+      screen marks its title (`OrderHistoryScreen.js:46`,
+      `EventsScreen.js:70`, `MapScreen.js:37`, `RewardsScreen.js:43`,
+      `ProfileScreen.js:75` …). Screen-reader heading navigation lands on
+      a flat page on these four. Add the role to the titles (match the
+      one-role-per-screen convention — likely the visible page title, plus
+      the RoutePreview section title). Verify: lint/typecheck/tests, and
+      grep that the four files now contain the role.
+- [ ] **Two dead `Theme.js` tokens** — `color.primaryPressed` (`#12A66A`)
+      and `fontFamily.fallback` (`"System"`) have zero consumers
+      repo-wide (grep-verified across `src/`, `scripts/`, `App.js`
+      excluding `Theme.js` itself; no destructured bare-name uses either).
+      The kit `Button` implements pressed state with `opacity: 0.85`
+      instead of the documented `primaryPressed` token (DESIGN_SYSTEM.md
+      lists the hex under Color tokens and "pressed" under component
+      states), and nothing ever renders `fontFamily.fallback`. Same class
+      as the 2026-10-29 Colors.js dead-token trim. Decide per token: wire
+      `primaryPressed` into the pressed states (Button/Card — a visible
+      behaviour change, needs a capture diff) or drop both tokens from
+      `Theme.js` (and from DESIGN_SYSTEM.md's table if dropped there).
+      Verify: re-grep, lint/typecheck/tests.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
