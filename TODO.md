@@ -1317,7 +1317,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-11-14 analysis)
 
-- [ ] **Invalid Ionicons name `door-outline` — the floor-map "Main
+- [x] **Invalid Ionicons name `door-outline` — the floor-map "Main
       entrance" pin renders blank, and the icon test can't see it**:
       `src/mock/floors.js:88` maps the `Entrance` POI category to
       `"door-outline"`, which does not exist in the packaged
@@ -1337,6 +1337,19 @@ Rules for the factory:
       (`icon:`/`ICONS`-map values — `POI_ICONS`, `CAPABILITY_META`, event/
       POI icon tables) so the class stays closed. Verify: lint/typecheck/
       tests, and sanity-check the extended test fails on `door-outline`.
+      (Done 2026-11-14: `POI_ICONS.Entrance` swapped to `enter-outline`
+      (glyphmap-verified present; `door-outline` confirmed absent, zero
+      `door*` keys). `iconNames.test.js` gained a second suite that
+      collects data-driven icon strings — `icon: "…"` props (CapabilityMeta,
+      homeContent, LIST_KIND_META, ledger/row/outcome maps), icon-name
+      maps (`POI_ICONS`, `EVENT_ICONS`, the tab `icons` map) and
+      `ICONS[…] ?? default` fallbacks — validated against the Ionicons
+      glyphmap. Sanity-checked before the fix: the extended test failed on
+      exactly `src/mock/floors.js:88 door-outline` (and its own doc comment
+      after a reword to stop the patterns matching the comment text).
+      Re-grep: zero `door-outline` references outside this history.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test -- --ci` — 170/170 across 23 suites.)
 - [ ] **Auth titles + one section title lack
       `accessibilityRole="header"`** — the accessibility-pass item claims
       the role is on "every screen/section title", but a repo sweep finds
