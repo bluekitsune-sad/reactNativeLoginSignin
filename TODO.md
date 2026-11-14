@@ -1422,6 +1422,26 @@ Rules for the factory:
       `npm run lint` (0/0), `npm run typecheck` (clean), `npm test --
       --ci` — 171/171 across 23 suites.)
 
+### Quality debt (found in the 2026-11-14 close-out analysis)
+
+- [ ] **Section/sheet titles lack `accessibilityRole="header"` (a11y
+      consistency gap left by the same-day header-role fix)**: the
+      2026-11-14 item fixed the four screens with ZERO header roles, but
+      section titles on screens that already have one remain flat text:
+      `OrderDetailScreen.js:74,116` (`styles.sectionTitle` "Timeline" /
+      "Items" — the identical pattern to RoutePreview's "Directions",
+      fixed the same day), `FilterSheet.js:72` (modal sheet title
+      "Filters") and `:29,97` (the `styles.groupTitle` group titles —
+      Category/Cuisine/Open now/Floor/Price), and
+      `OfferDetailScreen.js:143` (`styles.sheetTitle` terms-sheet
+      title) — while kit `SectionHeader` (and therefore every Explore
+      section) carries the role. Screen-reader heading navigation inside
+      the order timeline/items and the filter/terms sheets lands on a
+      flat page. Add the role to those titles (decide at implementation
+      whether `EmptyState`/`ErrorState` component titles should count as
+      headings too — they are currently unmarked everywhere). Verify:
+      lint/typecheck/tests + grep that the sites now carry the role.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
