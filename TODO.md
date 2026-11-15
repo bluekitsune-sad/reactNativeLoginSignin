@@ -1424,7 +1424,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-11-14 close-out analysis)
 
-- [ ] **Section/sheet titles lack `accessibilityRole="header"` (a11y
+- [x] **Section/sheet titles lack `accessibilityRole="header"` (a11y
       consistency gap left by the same-day header-role fix)**: the
       2026-11-14 item fixed the four screens with ZERO header roles, but
       section titles on screens that already have one remain flat text:
@@ -1441,6 +1441,22 @@ Rules for the factory:
       whether `EmptyState`/`ErrorState` component titles should count as
       headings too — they are currently unmarked everywhere). Verify:
       lint/typecheck/tests + grep that the sites now carry the role.
+      (Done 2026-11-15: role added to all six named sites —
+      `OrderDetailScreen` Timeline/Items section titles (screen keeps
+      its existing `headerMeta` role; page header + section headings is
+      the intended hierarchy this item describes), `FilterSheet` sheet
+      title + both `groupTitle` sites (OptionGroup's shared title and
+      the inline Open-now group, covering all five group titles), and
+      `OfferDetailScreen` terms-sheet title. Decision on the open
+      sub-question: `EmptyState`/`ErrorState` titles stay UNMARKED —
+      they are transient state messages that replace content rather
+      than structural sections, so marking them would pollute heading
+      navigation with per-empty-state noise; revisit if a design-system
+      rule says otherwise. New FilterSheet test asserts the sheet +
+      group titles expose the header role. Verified: `npm run lint`
+      (0/0), `npm run typecheck` (clean), `npm test -- --ci` — 172/172
+      across 23 suites (was 171 +1 new); grep confirms every named site
+      now carries the role.)
 
 ### Blocked — do NOT implement until the owner decides
 

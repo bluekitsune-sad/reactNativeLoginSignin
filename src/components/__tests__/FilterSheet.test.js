@@ -62,6 +62,14 @@ describe("mallmate FilterSheet", () => {
     expect(screen.getAllByLabelText("Any")).toHaveLength(3);
   });
 
+  it("marks the sheet title and group titles as headers", () => {
+    renderSheet();
+
+    expect(screen.getByText("Filters").props.accessibilityRole).toBe("header");
+    expect(screen.getByText("Category").props.accessibilityRole).toBe("header");
+    expect(screen.getByText("Open now").props.accessibilityRole).toBe("header");
+  });
+
   it("marks the selected option and reports option changes", () => {
     const { onChange } = renderSheet({ filters: { ...emptyFilters, category: "restaurants" } });
 

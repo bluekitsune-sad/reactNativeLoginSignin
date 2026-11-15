@@ -26,7 +26,9 @@ const OptionGroup = ({ title, options, selected, onSelect, anyLabel = t("common.
   }
   return (
     <View style={styles.group}>
-      <Text style={styles.groupTitle}>{title}</Text>
+      <Text style={styles.groupTitle} accessibilityRole="header">
+        {title}
+      </Text>
       <View style={styles.pillRow}>
         <OptionPill label={anyLabel} selected={!selected} onPress={() => onSelect(null)} />
         {options.map((option) => (
@@ -69,7 +71,9 @@ const FilterSheet = ({
       <View style={styles.sheet} accessibilityViewIsModal>
         <View style={styles.handle} />
         <View style={styles.header}>
-          <Text style={styles.title}>{t("common.filters")}</Text>
+          <Text style={styles.title} accessibilityRole="header">
+            {t("common.filters")}
+          </Text>
           <Pressable
             onPress={onClose}
             accessibilityRole="button"
@@ -94,7 +98,9 @@ const FilterSheet = ({
             onSelect={(value) => onChange({ ...filters, cuisine: value })}
           />
           <View style={styles.group}>
-            <Text style={styles.groupTitle}>{t("common.filterOpenNow")}</Text>
+            <Text style={styles.groupTitle} accessibilityRole="header">
+              {t("common.filterOpenNow")}
+            </Text>
             <OptionPill
               label={filters.openNow ? t("common.filterOpenNowOnly") : t("common.filterShowAll")}
               selected={filters.openNow}

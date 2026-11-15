@@ -140,7 +140,9 @@ const OfferDetailScreen = ({ navigation, route }) => {
         <View style={styles.sheet} accessibilityViewIsModal>
           <View style={styles.sheetHandle} />
           <View style={styles.sheetHeader}>
-            <Text style={styles.sheetTitle}>{t("offer.sheetTitle")}</Text>
+            <Text style={styles.sheetTitle} accessibilityRole="header">
+              {t("offer.sheetTitle")}
+            </Text>
             <Pressable
               onPress={() => setTermsVisible(false)}
               accessibilityRole="button"

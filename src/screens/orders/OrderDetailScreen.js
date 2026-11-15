@@ -71,7 +71,9 @@ const OrderDetailScreen = ({ navigation, route }) => {
         </View>
         <Text style={styles.statusDescription}>{order.currentMeta.description}</Text>
 
-        <Text style={styles.sectionTitle}>{t("orders.timeline")}</Text>
+        <Text style={styles.sectionTitle} accessibilityRole="header">
+          {t("orders.timeline")}
+        </Text>
         <Card style={styles.timelineCard}>
           {order.history.map((entry, index) => {
             const isCurrent = index === order.history.length - 1;
@@ -113,7 +115,9 @@ const OrderDetailScreen = ({ navigation, route }) => {
           ) : null}
         </Card>
 
-        <Text style={styles.sectionTitle}>{t("orders.items")}</Text>
+        <Text style={styles.sectionTitle} accessibilityRole="header">
+          {t("orders.items")}
+        </Text>
         <Card style={styles.itemsCard}>
           {order.itemLines.map((item) => (
             <View key={item.name} style={styles.itemRow}>
