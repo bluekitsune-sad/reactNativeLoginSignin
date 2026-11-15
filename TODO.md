@@ -1225,7 +1225,7 @@ Rules for the factory:
       axios no longer flagged. Verified: `npm run lint` (0/0),
       `npm run typecheck` (clean), `npm test -- --ci` — 138/138 across
       16 suites, `npx expo export:web` compiles.)
-- [ ] **Remaining `npm audit` debt is Expo SDK 50 toolchain/major-bound**:
+- [x] **Remaining `npm audit` debt is Expo SDK 50 toolchain/major-bound**:
       87 advisories in the production tree (5 critical, 42 high) —
       `@react-navigation/*@6` (fix is v7, a semver-major with API
       migration), `expo`/`react-native`/`expo-constants` (fixes are the
@@ -1235,6 +1235,38 @@ Rules for the factory:
       breaking the react peer pin. Needs an owner decision: schedule an
       Expo SDK upgrade (major work) or accept/document the toolchain debt
       for the pilot. Do not `--force` or hand-bump majors piecemeal.
+      (Done 2026-11-15 — premise corrected + non-major half cleared: the
+      ERESOLVE was self-inflicted by the devDep range
+      `react-test-renderer: "^18.2.0"` (npm re-resolves it to 18.3.1,
+      whose peer `react@^18.3.1` clashes with Expo's pinned
+      `react@18.2.0`); pinning it to exact `18.2.0` — already the
+      lockfile version, no actual package change — lets plain
+      `npm audit fix` (NO `--force`) resolve. Ran it: production tree
+      84 → 46 advisories (critical 4 → 1, high 41 → 20), full tree
+      97 → 61. package.json diff is the one pin; lockfile churn is all
+      within existing semver ranges (187 entries; the 3 majors are
+      nested transitive copies whose parents already allowed them;
+      direct deps moved only within-range: @react-navigation/* 6.x,
+      @babel/core 7.x — expo/react/react-native/axios untouched).
+      The remaining 46 are genuinely major-bound (expo/webpack-config →
+      SDK 58 line, @react-navigation/* → v7, react-native → 0.88,
+      `image-size` fix sits outside metro's `^1.0.2`) — re-queued as the
+      narrowed owner-decision item below. Verified: `npm ci` from the
+      new lockfile, `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test -- --ci` — 172/172 across 23 suites,
+      `npx expo export:web` compiles (exit 0, documented reanimated
+      warning only).)
+- [ ] **Remaining 46 production `npm audit` advisories need an owner
+      decision: Expo SDK upgrade vs accept the toolchain debt** (narrowed
+      2026-11-15 after the non-major half was cleared above): 1 critical
+      (`tar` via expo), 20 high, 22 moderate, 3 low — every fix is a
+      semver-major pinned by the SDK 50 contract: `expo`/`@expo/*` →
+      the SDK 58 line, `@react-navigation/*@6` → v7 (API migration),
+      `react-native` → 0.88, `@expo/webpack-config` → 18. Plus
+      `image-size` (metro's `^1.0.2` — fix is 2.x, outside the range
+      without `--force`). Decide: schedule the Expo SDK upgrade (major
+      work) or accept/document the debt for the pilot. Do not `--force`
+      or hand-bump majors piecemeal.
 - [x] **Remaining 7 mallmate kit components still have no direct test
       coverage**: the 2026-11-11 kit-test item covered 5 of 12 (Button,
       TextInput, FilterSheet, StatusChip, CapabilityCard) and closed with
