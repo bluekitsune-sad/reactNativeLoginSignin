@@ -773,7 +773,9 @@ Rules for the factory:
       Actions integration token never has the `workflows` permission).
       Full ready-to-apply file content is in issue #11. Once the owner
       lands the file (web UI or a privileged token), finish this item:
-      add the README automation row + mark [x].)
+      add the README automation row + mark [x]. Re-probed 2026-11-16:
+      a fresh branch with `ci.yml` written still cannot push — identical
+      `workflows`-permission refusal; comment added to issue #11.)
 - [x] **Module-private helpers exported unnecessarily**: `isCampaignActive`
       and `isOfferActive` (only used inside `src/mock/homeContent.js`, not
       re-exported by the mock barrel), and `MOCK_MERCHANTS` /
@@ -1489,6 +1491,38 @@ Rules for the factory:
       (0/0), `npm run typecheck` (clean), `npm test -- --ci` — 172/172
       across 23 suites (was 171 +1 new); grep confirms every named site
       now carries the role.)
+
+### Quality debt (found in the 2026-11-16 analysis)
+
+- [ ] **`FlagItem` country row has no accessibility role/label and a
+      sub-44px touch target; docs still call it "parked"**:
+      `src/components/FlagItem.js:15` is a `TouchableOpacity` with `onPress`
+      but zero `accessibilityRole`/`accessibilityLabel` — the only file in
+      `src/` whose own pressable element carries no role (every kit
+      `Button`/`Card`/`ListRow`/`OptionPill` has one). Its row is ~30px
+      tall (`paddingVertical: 5` + ~20px line-height, no `minHeight`/
+      `hitSlop`), below the DESIGN_SYSTEM "44–48 px minimum"
+      interactive-target rule. It is NOT parked anymore —
+      `CountryPickerScreen` (shipped OTP flow) renders one row per
+      country — yet README's kit bullet says "the parked `FlagItem`
+      country-code row" and the component's own doc comment says
+      "Row for the (parked) country-code picker". Fix: add
+      `accessibilityRole="button"` + an `accessibilityLabel` (name + dial
+      code), give the row a ≥44px target (minHeight or hitSlop), and drop
+      both stale "parked" claims. Verify: lint/typecheck/tests + grep.
+- [ ] **Search deep-link `q` param is silently ignored**:
+      `scripts/capture-screens.mjs:62` opens `/Search?q=pizza` and the API
+      spec defines search as `q=...`, but `SearchScreen` (line 28)
+      destructures only `{ navigation }` — never reads `route.params` — and
+      `RootStackParamList` types `Search: undefined`. Any `/Search?q=…`
+      URL lands on the idle suggestions state, so the captured "search"
+      screenshot never shows results and the param is dead wiring.
+      Either wire an initial query from `route.params.q` (seed the query
+      state + run the search on mount; type the param as
+      `{ q?: string } | undefined`) or drop `?q=pizza` from the capture
+      path so the script stops implying it works. Verify:
+      lint/typecheck/tests (+ recapture or a mount-search unit test if
+      wired).
 
 ### Blocked — do NOT implement until the owner decides
 
