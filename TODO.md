@@ -1559,6 +1559,29 @@ Rules for the factory:
       (0/0), `npm run typecheck` (clean), `npm test -- --ci` — 179/179
       across 25 suites (was 176/176 across 24).)
 
+### Quality debt (found in the 2026-11-17 analysis)
+
+- [ ] **11 of 13 `src/mock/` modules have zero test coverage — the pure
+      resolvers (capability gating, expiry filtering, status mapping) are
+      untested**: `npx jest --coverage --collectCoverageFrom="src/mock/**/*.js"`
+      over the mock suites reports 26.2% stmts / 16.31% branch for the folder
+      — only `otp.js` (100%) and `merchants.js` (57%) have suites;
+      `floors`/`foodCourt`/`menus`/`navigation`/`orders`/`rewards`/
+      `seatSessions` are at 0%, and `homeContent` (22%) / `offers` (22.5%) /
+      `events` (34.6%) only execute where an other module happens to import
+      them. No screen test imports them either (only SearchScreen →
+      merchants, via this run's new suite). The uncovered logic is cheap,
+      deterministic pure functions: capability gating + expired-date
+      filtering (`getHomeSections`/`getExploreContent`, offer/event
+      resolvers), published-floor + POI resolution (`floors`), zone
+      Open/Busy/Full (`getZoneStatus`), order next-state hints/timeline
+      (`orders`), scan outcome mapping (`resolveMockScan`), destination
+      search + static route steps (`navigation`). Same class as the accepted
+      2026-10-26 "Coverage gap on the trickiest pure logic" item. Add
+      focused suites in the existing style (`src/mock/__tests__/
+      merchants.test.js` precedent) — cover resolver behaviour, not raw
+      presentation data. Verify: lint/typecheck/tests.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
