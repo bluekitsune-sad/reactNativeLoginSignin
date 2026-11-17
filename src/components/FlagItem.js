@@ -6,13 +6,19 @@ import { Display } from "../utils";
 import Separator from "./Separator";
 
 /**
- * Row for the (parked) country-code picker: emoji flag + name + dial
- * code. Kept as a building block for the phone-OTP flow; uses MallMate
- * theme fonts and logical margins so it is RTL-ready.
+ * Country-code picker row: emoji flag + name + dial code, used by the
+ * phone-OTP `CountryPickerScreen`. Uses MallMate theme fonts and logical
+ * margins so it is RTL-ready; exposes a labelled button role and a 44px
+ * minimum touch target per the design system.
  */
 const FlagItem = ({ code, name, dial_code, flag, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onPress({ code, name, dial_code })}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => onPress({ code, name, dial_code })}
+      accessibilityRole="button"
+      accessibilityLabel={`${name} ${dial_code}`}
+    >
       <View style={styles.subContainer}>
         <Text>{flag}</Text>
         <Separator width={10} />
@@ -28,6 +34,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    minHeight: 44,
     paddingHorizontal: 10,
     paddingVertical: 5,
   },

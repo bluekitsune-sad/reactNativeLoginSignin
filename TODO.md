@@ -1494,7 +1494,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-11-16 analysis)
 
-- [ ] **`FlagItem` country row has no accessibility role/label and a
+- [x] **`FlagItem` country row has no accessibility role/label and a
       sub-44px touch target; docs still call it "parked"**:
       `src/components/FlagItem.js:15` is a `TouchableOpacity` with `onPress`
       but zero `accessibilityRole`/`accessibilityLabel` — the only file in
@@ -1510,6 +1510,22 @@ Rules for the factory:
       `accessibilityRole="button"` + an `accessibilityLabel` (name + dial
       code), give the row a ≥44px target (minHeight or hitSlop), and drop
       both stale "parked" claims. Verify: lint/typecheck/tests + grep.
+      (Done 2026-11-17: `FlagItem` gained `accessibilityRole="button"` +
+      `accessibilityLabel` of `"{name} {dial_code}"` (e.g. "Pakistan
+      +92") and `minHeight: 44` on the row; the doc comment now describes
+      it as the live `CountryPickerScreen` row instead of "parked". Stale
+      wording also dropped from README's kit bullet ("`FlagItem`
+      country-code row (used by the phone-OTP picker)") and from
+      `RegisterPhoneScreen`'s comment — the only other place calling it
+      parked; `CountryPickerScreen`'s "parked scaffold revived" stays
+      (accurate history: the OTP scaffold was parked, then revived).
+      New suite `src/components/__tests__/FlagItem.test.js` (4 tests:
+      labelled button role, ≥44px minHeight, flag/name/dial rendering,
+      onPress payload minus the emoji) — mutation-checked: against the
+      old implementation 3/4 fail (only the render test passes).
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test -- --ci` — 176/176 across 24 suites (was 172/172 across
+      23).)
 - [ ] **Search deep-link `q` param is silently ignored**:
       `scripts/capture-screens.mjs:62` opens `/Search?q=pizza` and the API
       spec defines search as `q=...`, but `SearchScreen` (line 28)

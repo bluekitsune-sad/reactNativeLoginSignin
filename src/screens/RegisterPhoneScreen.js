@@ -13,7 +13,7 @@ const DEFAULT_COUNTRY = CountryCode.find((country) => country.code === "PK") ?? 
 /**
  * Phone-entry step of the decided register flow (issue #9:
  * register -> OTP -> app). Sends a mock OTP and hands off to
- * Verification; the country picker reuses the parked FlagItem row.
+ * Verification; the country picker reuses the FlagItem row.
  * Pure presentation — no SMS and no backend endpoints yet.
  */
 const RegisterPhoneScreen = ({ navigation, route }) => {

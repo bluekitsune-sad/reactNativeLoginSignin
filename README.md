@@ -50,7 +50,7 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 - Reusable UI kit in `src/components/mallmate/` (`Button`, `TextInput`,
   `Card`, `ListRow`, `Badge`, `StatusChip`, `EmptyState`, `ErrorState`,
   `LoadingState`, `FilterSheet`, …) plus `Separator`, `ToggleButton` and the
-  parked `FlagItem` country-code row.
+  `FlagItem` country-code row (used by the phone-OTP picker).
 - English + Urdu string catalogs with a shared `t()` helper (`src/i18n/`).
 - MallMate preview data for merchants, menus, offers, events, orders, maps
   and rewards in `src/mock/` (the single source for mock data; the legacy
