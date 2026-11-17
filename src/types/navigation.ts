@@ -23,7 +23,7 @@ export type RootStackParamList = {
   // Shell
   Main: undefined;
   MallSelector: undefined;
-  Search: undefined;
+  Search: { q?: string } | undefined;
   RestaurantList: { kind?: "restaurants" | "outlets" } | undefined;
   OutletList: { kind?: "restaurants" | "outlets" } | undefined;
   // Discovery

@@ -25,9 +25,10 @@ import {
 } from "../../mock";
 import { useMallManagement } from "../../utils";
 
-const SearchScreen = ({ navigation }) => {
+const SearchScreen = ({ navigation, route }) => {
   const { selectedMall } = useMallManagement();
-  const [query, setQuery] = useState("");
+  const initialQuery = typeof route?.params?.q === "string" ? route.params.q : "";
+  const [query, setQuery] = useState(initialQuery);
   const [status, setStatus] = useState("idle");
   const [rawResults, setRawResults] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);

@@ -59,7 +59,7 @@ const SCREENS = [
   { name: "rewards", path: "/Main/Rewards" },
   { name: "profile", path: "/Main/Profile" },
   { name: "mall-selector", path: "/MallSelector" },
-  { name: "search", path: "/Search?q=pizza" },
+  { name: "search", path: "/Search?q=spice" },
   { name: "restaurant-list", path: "/RestaurantList?kind=restaurants" },
   { name: "outlet-list", path: "/OutletList?kind=outlets" },
   { name: "merchant-detail", path: "/MerchantDetail?merchantId=lucky-m-1" },

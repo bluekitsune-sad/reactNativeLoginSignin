@@ -1526,7 +1526,7 @@ Rules for the factory:
       Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
       `npm test -- --ci` — 176/176 across 24 suites (was 172/172 across
       23).)
-- [ ] **Search deep-link `q` param is silently ignored**:
+- [x] **Search deep-link `q` param is silently ignored**:
       `scripts/capture-screens.mjs:62` opens `/Search?q=pizza` and the API
       spec defines search as `q=...`, but `SearchScreen` (line 28)
       destructures only `{ navigation }` — never reads `route.params` — and
@@ -1539,6 +1539,25 @@ Rules for the factory:
       path so the script stops implying it works. Verify:
       lint/typecheck/tests (+ recapture or a mount-search unit test if
       wired).
+      (Done 2026-11-17: wired — `SearchScreen` now reads
+      `route?.params?.q` (string-guarded) and seeds its `query` state with
+      it, so the existing debounce effect runs the search on mount;
+      `RootStackParamList.Search` typed `{ q?: string } | undefined`. The
+      capture path's query moved `q=pizza` → `q=spice`: "pizza" matches
+      no mock merchant, so even wired the screenshot would only show the
+      empty state — `q=spice` matches "Spice Route Kitchen" and shows a
+      real results list (the capture-path rationale the item cites).
+      New suite `src/screens/__tests__/SearchScreen.test.js` (3 tests:
+      seeds query + results render on mount, distinct empty-results state
+      for an unmatched query, idle suggestions without the param) —
+      mutation-checked: reverting the wiring fails 2/3 (the idle test
+      passes, as expected), restored after. End-to-end recapture of the
+      deep link: `node scripts/capture-screens.mjs --only search` re-exported
+      the web build and `output/screens/search.png` shows the seeded
+      "spice" input + "1 result — Spice Route Kitchen" (real rendered UI,
+      previously the idle suggestions state). Verified: `npm run lint`
+      (0/0), `npm run typecheck` (clean), `npm test -- --ci` — 179/179
+      across 25 suites (was 176/176 across 24).)
 
 ### Blocked — do NOT implement until the owner decides
 
