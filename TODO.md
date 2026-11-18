@@ -1561,7 +1561,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-11-17 analysis)
 
-- [ ] **11 of 13 `src/mock/` modules have zero test coverage — the pure
+- [x] **11 of 13 `src/mock/` modules have zero test coverage — the pure
       resolvers (capability gating, expiry filtering, status mapping) are
       untested**: `npx jest --coverage --collectCoverageFrom="src/mock/**/*.js"`
       over the mock suites reports 26.2% stmts / 16.31% branch for the folder
@@ -1580,7 +1580,35 @@ Rules for the factory:
       2026-10-26 "Coverage gap on the trickiest pure logic" item. Add
       focused suites in the existing style (`src/mock/__tests__/
       merchants.test.js` precedent) — cover resolver behaviour, not raw
-      presentation data. Verify: lint/typecheck/tests.
+      presentation data. Verify: lint/typecheck/tests. (Done 2026-11-18:
+      11 new suites under `src/mock/__tests__/` — floors (capability
+      gating ENABLED/DEGRADED/DISABLED, unpublished floors kept, unknown
+      mall, POI icon map + fallback), foodCourt (venue gating incl.
+      separate seat_sessions flag, unknown-venue mall, zone Open/Busy/
+      Full/Unknown incl. the exact 20% boundary), events (mall scoping,
+      expired filtering with injected `now` in both directions, capability
+      gating, icon map), homeContent (`isCapabilityVisible` tri-state,
+      getHomeSections capability + expiry filtering + topSelling gating,
+      getExploreContent directories/category grid gating, unknown mall
+      empties), offers (getOfferById active/expired/unknown, headline by
+      type + fallback, validity date shapes, per-merchant active summaries
+      excluding expired), navigation (suggestion lists, search by name/
+      category/floor + `!error` + gating, destination/start-point
+      resolution, same-floor vs cross-floor route steps, endpoint/
+      capability failures), orders (list gating + DEGRADED, currentState
+      from last history entry, next-state hints vs terminal states,
+      total/item line labels, meta groups for all 11 PRD states,
+      date-time formatting), rewards (dashboard gating + DEGRADED,
+      empty-ledger mall, unknown mall, LEDGER_META), seatSessions (every
+      demo code outcome, unknown code, unique targets, 2-hour session
+      window, help copy per non-AVAILABLE outcome), menus (formatPrice
+      grouping/truncation/clamp/non-finite, menu + item resolvers),
+      malls (unique slugs/ids, differing capability maps, valid status
+      per capability, blocked branding + opening hours). No production
+      code changed. Coverage: `src/mock/` 26.2% → 89.31% stmts / 16.31%
+      → 80.14% branch (only `index.js` barrel at 0% — re-exports only).
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test -- --ci` — 293/293 across 36 suites (was 179/179.)
 
 ### Blocked — do NOT implement until the owner decides
 
