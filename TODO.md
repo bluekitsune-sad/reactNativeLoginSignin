@@ -1610,6 +1610,45 @@ Rules for the factory:
       Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
       `npm test -- --ci` — 293/293 across 36 suites (was 179/179.)
 
+### Quality debt (found in the 2026-11-19 analysis)
+
+- [ ] **README claims the shared user state is "persisted to
+      `AsyncStorage`" but it is write-only**: `README.md:39-40` says
+      `UserProvider` + `useUserManagement` state is "persisted to
+      `AsyncStorage`", yet `src/utils/userData.js` starts `useState(null)`
+      with no hydration effect — only `setUser`/`removeUser` write, and
+      `StorageService.getUser` has zero production callers (test-only).
+      The stored `"user"` key is never read back; session restore is a
+      deferred P2 decision (see the token/session item below). Reword the
+      bullet to say the user is written to `AsyncStorage` (restore-on-
+      launch deferred), matching the sibling `MallProvider`/
+      `FavoritesProvider` which do hydrate.
+- [ ] **README project-structure tree misdescribes two things it shows**:
+      the `navigators/` line comments "context providers" but the
+      providers are defined in `src/utils/` (`userData.js`/`mallData.js`/
+      `favorites.js`) and merely composed by `src/navigators/index.js`
+      (README's own key-modules row says "composes"); and the tree omits
+      top-level entries the same README links to — `scripts/`,
+      `.github/workflows/`, `MallMate_Project_Blueprint/`, `TODO.md`,
+      `webpack.config.js`, `tsconfig.json` — while reading as exhaustive.
+      Fix the comment and add the missing entries.
+- [ ] **README tech-stack table omits shipped, load-bearing packages**:
+      the Navigation row lists only `@react-navigation/native`/`stack` +
+      `react-native-gesture-handler`, but `@react-navigation/bottom-tabs`
+      (package.json, powers the 5-tab shell in `MainTabNavigator.js`),
+      `expo-localization` (i18n locale detection) and `expo-constants`
+      (backend URL resolution in `ApiContants.js`) are all installed and
+      imported. Add the missing rows/packages.
+- [ ] **AGENTS.md export-convention line is false at file level**: the
+      Conventions bullet says "Default exports for screens/services/
+      components; named exports for constants and utils", but the
+      constants files default-export (`Theme.js`, `ApiContants.js`,
+      `Capabilities.js` default, `Colors.js`, `CustomFonts.js`,
+      `Images.js`) and utils are mixed (providers named, hooks
+      default-exported) — consumers see named imports only because the
+      barrels re-export. Reword to describe what the code does (source
+      modules mostly default-export; barrels expose named imports).
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
