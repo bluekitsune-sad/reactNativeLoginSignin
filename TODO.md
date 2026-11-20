@@ -1630,7 +1630,7 @@ Rules for the factory:
       callers (grep across `src/`, `scripts/`, `App.js` excluding tests)
       and `userData.js` has no hydration effect. Markdown-only — verified
       by re-read.)
-- [ ] **README project-structure tree misdescribes two things it shows**:
+- [x] **README project-structure tree misdescribes two things it shows**:
       the `navigators/` line comments "context providers" but the
       providers are defined in `src/utils/` (`userData.js`/`mallData.js`/
       `favorites.js`) and merely composed by `src/navigators/index.js`
@@ -1638,7 +1638,13 @@ Rules for the factory:
       top-level entries the same README links to — `scripts/`,
       `.github/workflows/`, `MallMate_Project_Blueprint/`, `TODO.md`,
       `webpack.config.js`, `tsconfig.json` — while reading as exhaustive.
-      Fix the comment and add the missing entries.
+      Fix the comment and add the missing entries. (Done 2026-11-20:
+      `navigators/` comment now reads "composes the context providers"
+      (and `utils/` says "context providers" — they are defined there),
+      and the six named top-level entries added to the tree with
+      one-line descriptions. Re-verified against `ls` of the repo root
+      and `src/navigators/index.js` (imports providers from `../utils`,
+      only wraps children). Markdown-only — verified by re-read.)
 - [ ] **README tech-stack table omits shipped, load-bearing packages**:
       the Navigation row lists only `@react-navigation/native`/`stack` +
       `react-native-gesture-handler`, but `@react-navigation/bottom-tabs`
