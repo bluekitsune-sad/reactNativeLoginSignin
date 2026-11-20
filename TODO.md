@@ -1612,7 +1612,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-11-19 analysis)
 
-- [ ] **README claims the shared user state is "persisted to
+- [x] **README claims the shared user state is "persisted to
       `AsyncStorage`" but it is write-only**: `README.md:39-40` says
       `UserProvider` + `useUserManagement` state is "persisted to
       `AsyncStorage`", yet `src/utils/userData.js` starts `useState(null)`
@@ -1622,7 +1622,14 @@ Rules for the factory:
       deferred P2 decision (see the token/session item below). Reword the
       bullet to say the user is written to `AsyncStorage` (restore-on-
       launch deferred), matching the sibling `MallProvider`/
-      `FavoritesProvider` which do hydrate.
+      `FavoritesProvider` which do hydrate. (Done 2026-11-20: bullet
+      reworded to "sign-in/sign-out write the user to `AsyncStorage`
+      (restore-on-launch is deferred — the app boots at Signin today; the
+      mall and favorites contexts do hydrate from storage)". Re-verified
+      before editing: `StorageService.getUser` has zero production
+      callers (grep across `src/`, `scripts/`, `App.js` excluding tests)
+      and `userData.js` has no hydration effect. Markdown-only — verified
+      by re-read.)
 - [ ] **README project-structure tree misdescribes two things it shows**:
       the `navigators/` line comments "context providers" but the
       providers are defined in `src/utils/` (`userData.js`/`mallData.js`/

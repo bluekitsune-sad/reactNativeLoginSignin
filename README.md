@@ -37,7 +37,9 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 - Sign Up screen (username / email / password with validation) and a Forgot
   Password screen (email lookup via `user-exist`).
 - Shared user state through a React Context (`UserProvider` +
-  `useUserManagement`), persisted to `AsyncStorage`.
+  `useUserManagement`); sign-in/sign-out write the user to `AsyncStorage`
+  (restore-on-launch is deferred — the app boots at Signin today; the mall
+  and favorites contexts do hydrate from storage).
 - Authentication service (`register`, `login`, `checkUserExist`, `refreshToken`)
   built on `axios`.
 - Services: `AuthenticationService`, `StorageService` and the typed axios
