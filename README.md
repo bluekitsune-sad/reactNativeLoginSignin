@@ -64,9 +64,11 @@ navigation, dining and loyalty platform (pilot: LuckyOne Mall, Karachi).
 | ---------- | ------ |
 | Framework  | React Native `0.73.6` via Expo SDK `50` |
 | Language   | JavaScript (JSX); TypeScript converted file-by-file (`allowJs`, first slice: `apiClient.ts`, `ProfilePlaceholderScreen.tsx`) |
-| Navigation | `@react-navigation/native` + `@react-navigation/stack` + `react-native-gesture-handler` |
+| Navigation | `@react-navigation/native` + `@react-navigation/stack` + `@react-navigation/bottom-tabs` + `react-native-gesture-handler` |
 | HTTP       | `axios` |
 | Storage    | `@react-native-async-storage/async-storage` |
+| i18n       | `expo-localization` (device locale detection for `t()`) |
+| Config     | `expo-constants` (backend URL resolution in `ApiContants.js`) |
 | Animation  | `Animated` API |
 | Fonts      | `expo-font` (Inter via `@expo-google-fonts/inter`) |
 | Icons      | `@expo/vector-icons` (Ionicons, Feather)                     |

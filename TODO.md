@@ -1645,13 +1645,20 @@ Rules for the factory:
       one-line descriptions. Re-verified against `ls` of the repo root
       and `src/navigators/index.js` (imports providers from `../utils`,
       only wraps children). Markdown-only — verified by re-read.)
-- [ ] **README tech-stack table omits shipped, load-bearing packages**:
+- [x] **README tech-stack table omits shipped, load-bearing packages**:
       the Navigation row lists only `@react-navigation/native`/`stack` +
       `react-native-gesture-handler`, but `@react-navigation/bottom-tabs`
       (package.json, powers the 5-tab shell in `MainTabNavigator.js`),
       `expo-localization` (i18n locale detection) and `expo-constants`
       (backend URL resolution in `ApiContants.js`) are all installed and
-      imported. Add the missing rows/packages.
+      imported. Add the missing rows/packages. (Done 2026-11-20:
+      `@react-navigation/bottom-tabs` added to the Navigation row; new
+      `i18n` row (`expo-localization`) and `Config` row
+      (`expo-constants`). Re-verified before editing: all three in
+      package.json dependencies and imported by `MainTabNavigator.js`,
+      `src/i18n/index.js` and `src/constants/ApiContants.js`
+      respectively. Markdown-only — verified by re-read; lint/typecheck
+      clean.)
 - [ ] **AGENTS.md export-convention line is false at file level**: the
       Conventions bullet says "Default exports for screens/services/
       components; named exports for constants and utils", but the
