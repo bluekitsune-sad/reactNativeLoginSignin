@@ -1659,7 +1659,7 @@ Rules for the factory:
       `src/i18n/index.js` and `src/constants/ApiContants.js`
       respectively. Markdown-only — verified by re-read; lint/typecheck
       clean.)
-- [ ] **AGENTS.md export-convention line is false at file level**: the
+- [x] **AGENTS.md export-convention line is false at file level**: the
       Conventions bullet says "Default exports for screens/services/
       components; named exports for constants and utils", but the
       constants files default-export (`Theme.js`, `ApiContants.js`,
@@ -1668,6 +1668,20 @@ Rules for the factory:
       default-exported) — consumers see named imports only because the
       barrels re-export. Reword to describe what the code does (source
       modules mostly default-export; barrels expose named imports).
+      (Done 2026-11-20: bullet rewritten — source modules mostly
+      default-export (screens/services/components + most constants
+      named in the item), utils mixed (providers named, hooks
+      default), consumers see named imports via the folder barrels
+      which import defaults and re-export under names; new modules
+      should match their folder's pattern and be added to the barrel.
+      Re-verified before editing: `grep export default` across
+      `src/constants/`/`src/utils/` (defaults on Theme/ApiContants/
+      Capabilities/Colors/CountryCode/CustomFonts/Images/Display +
+      the three hooks; named `export const` providers), barrel files
+      re-export defaults under names (`constants/index.js`,
+      `utils/index.js`), and all non-barrel screens/services/
+      components default-export. Markdown-only — verified by re-read;
+      lint/typecheck clean.)
 
 ### Blocked — do NOT implement until the owner decides
 
