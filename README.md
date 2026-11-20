@@ -150,7 +150,13 @@ The expected sign‑in payload shape:
 ├── App.js                     # Entry point: loads fonts, renders navigator
 ├── app.json                   # Expo app config (name, icons, splash)
 ├── package.json
+├── tsconfig.json              # Incremental TypeScript setup (allowJs)
+├── webpack.config.js          # Expo web build config (node crypto shim)
 ├── assets/                    # Expo icons / splash images
+├── scripts/                   # Local tooling (screen-capture pipeline)
+├── MallMate_Project_Blueprint/ # PRD, API spec, ERD, screen inventory, design system
+├── .github/workflows/         # Software-factory automation (opencode.yml, opencode-cron.yml)
+├── TODO.md                    # Living backlog (the factory's task queue)
 └── src/
     ├── __tests__/             # Repo-root tests (icon-name glyphmap validation)
     ├── assets/                # Retained image assets (social-auth placeholders)
@@ -158,11 +164,11 @@ The expected sign‑in payload shape:
     ├── constants/             # Colors, Images, ApiContants, Theme, Capabilities, CapabilityMeta, CustomFonts, CountryCode
     ├── i18n/                  # English + Urdu string catalogs + t() helper
     ├── mock/                  # MallMate preview data (merchants, offers, events, ...)
-    ├── navigators/            # Root stack + MallMate bottom tabs (Main), context providers
+    ├── navigators/            # Root stack + MallMate bottom tabs (Main); composes the context providers
     ├── screens/               # Auth + MallMate screens (home, explore, map, rewards, ...)
     ├── services/              # axios API services + AsyncStorage wrapper (auth, storage, ApiClient)
     ├── types/                 # TypeScript types (entities, API envelope, navigation)
-    └── utils/                 # Display helpers, user/mall/favorites contexts
+    └── utils/                 # Display helpers + user/mall/favorites context providers
 ```
 
 ### Key modules
