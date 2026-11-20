@@ -185,8 +185,15 @@ components were themselves deleted in the 2026-10-21 legacy removal).
   indent; TypeScript is introduced incrementally under `strict` (see the
   MallMate note above) — new type files are `.ts`, existing `.js` files
   stay as they are unless a task says to convert them.
-- Default exports for screens/services/components; named exports for constants
-  and utils.
+- Export style: source modules mostly default‑export — screens,
+  services and components do, as do most `src/constants/` files
+  (`Theme.js`, `ApiContants.js`, `Capabilities.js`, `Colors.js`, …) —
+  while utils are mixed (the context providers `UserProvider`/
+  `MallProvider`/`FavoritesProvider` are named exports, the hooks
+  default‑export). Consumers see named imports because the folder
+  barrels (`src/*/index.js`) import the defaults and re‑export them
+  under names; match your folder's existing pattern and add new
+  modules to the barrel.
 - Network service functions (`AuthenticationService`, `ApiClient` consumers)
   are `async` and never throw — they catch and return
   `{ status: false, message }`. The envelope rule does not apply to
