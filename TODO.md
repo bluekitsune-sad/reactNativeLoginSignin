@@ -1683,6 +1683,23 @@ Rules for the factory:
       components default-export. Markdown-only — verified by re-read;
       lint/typecheck clean.)
 
+### Quality debt (found in the 2026-11-22 analysis)
+
+- [ ] **`UserProvider` is the only context provider with no direct test
+      suite**: `src/utils/userData.js` has no file under
+      `src/utils/__tests__/` while its siblings `mallData.test.js` and
+      `favorites.test.js` cover `MallProvider`/`FavoritesProvider`. Grep
+      across all 36 suites finds no test referencing `updateUser`/
+      `resetUser` directly — the sign-out persist half is only asserted
+      indirectly (ProfileScreen's `removeUser` spy) and `updateUser`'s
+      persist half (`StorageService.setUser`) is asserted nowhere
+      (SigninScreen.test mocks it but never checks the call). Add a
+      focused suite in the `mallData.test.js` probe style: `updateUser`
+      sets `userData` (incl. the `?? null` coercion) and persists via
+      `setUser`, `resetUser` clears state and calls `removeUser`, and
+      `useUserManagement` throws outside the provider. Verify:
+      lint/typecheck/tests.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
