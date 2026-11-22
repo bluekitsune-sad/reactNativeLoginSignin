@@ -1698,7 +1698,15 @@ Rules for the factory:
       sets `userData` (incl. the `?? null` coercion) and persists via
       `setUser`, `resetUser` clears state and calls `removeUser`, and
       `useUserManagement` throws outside the provider. Verify:
-      lint/typecheck/tests.
+      lint/typecheck/tests. (Done 2026-11-22:
+      `src/utils/__tests__/userData.test.js` — 6 tests in the probe
+      style: starts empty; `updateUser` sets state + `setUser` spy;
+      persisted to AsyncStorage under the `"user"` key; no-arg
+      `updateUser` coerces state/persistence to null (`"null"` payload);
+      `resetUser` clears state, calls `removeUser` and removes the
+      stored key; `useUserManagement` throws outside `UserProvider`.
+      Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
+      `npm test`.)
 
 ### Blocked — do NOT implement until the owner decides
 
