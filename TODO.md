@@ -1685,7 +1685,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-11-22 analysis)
 
-- [ ] **`UserProvider` is the only context provider with no direct test
+- [x] **`UserProvider` is the only context provider with no direct test
       suite**: `src/utils/userData.js` has no file under
       `src/utils/__tests__/` while its siblings `mallData.test.js` and
       `favorites.test.js` cover `MallProvider`/`FavoritesProvider`. Grep
