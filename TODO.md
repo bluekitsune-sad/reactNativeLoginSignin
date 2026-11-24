@@ -1708,6 +1708,53 @@ Rules for the factory:
       Verified: `npm run lint` (0/0), `npm run typecheck` (clean),
       `npm test`.)
 
+### Quality debt (found in the 2026-11-24 analysis)
+
+- [ ] **README automation table overstates the issue-path merge for PR
+      triggers**: the `opencode.yml` row's trigger cell correctly lists
+      OWNER pull requests and PR review comments, but the "What it does"
+      cell then says the workflow "merges it straight into `work` (no PR),
+      comments the result on your issue" — true only for the issue path.
+      For PR-triggered runs the `review-pr` job is read-only (no merge),
+      and `pull_request_review_comment` runs push to THAT PR's branch and
+      comment "merge this PR manually" (`.github/workflows/opencode.yml`
+      around the `PR_NUMBER`/`gh pr comment` steps); likewise the
+      "lands everything on one long-lived branch: `work`" sentence above
+      the table is overbroad for the same reason. Reword both so the
+      issue path is described as landing in `work` and the PR paths as
+      landing on the PR branch (owner merges). Doc-only; verify by
+      re-reading against the workflow's `on:`/`if:` gates.
+- [ ] **Four stale file references in TODO.md**: (a) the factory rule
+      (lines 18–19) says mock data "lives in `src/constants/` or a new
+      `src/mock/`" — no mock data lives in `src/constants/` anymore and
+      AGENTS.md correctly names `src/mock/` as the single source;
+      (b) the Stage A font item's text and Done note say names are
+      "exposed through `Fonts.js`" / "names exposed in `Fonts.js`", but
+      `Fonts.js` was deleted with the legacy scaffold (TODO itself
+      records this); (c) the Stage A apiClient Done note points at
+      `src/services/apiClient.js` — the file is `apiClient.ts` (renamed
+      later); (d) the open P2 token item says to wire auth headers via
+      `utils/Generator.js#authHeader`, but `Generator.js` was deleted in
+      the dead-code sweep and no header code exists — rewrite the item
+      to say "add auth headers to the services/`apiClient.ts` once token
+      storage exists". Doc-only; verify each against the filesystem.
+- [ ] **Three dead code leftovers from the legacy removal**: (a)
+      `src/constants/Images.js` is orphaned — zero imports anywhere, not
+      exported from `src/constants/index.js`, and its only payload
+      (`src/assets/images/facebook.png`/`google.png`) is referenced only
+      from that file; the legacy note "kept for future social re-wire"
+      has aged out since social sign-in was removed from SigninScreen —
+      wire or delete (the two PNGs go with it); (b)
+      `src/mock/merchants.js` exports `isCapabilityOn` with zero call
+      sites repo-wide (the module gates via its private
+      `isCapabilityVisible`; siblings each define their own private
+      copy) — drop the export or the function; (c)
+      `src/services/apiClient.ts` exports `createApiClient` (named +
+      default-object) with zero consumers anywhere, tests included —
+      drop it from the export list (keep or delete the factory). Same
+      class as the earlier dead-export sweeps. Verify: re-grep each
+      name, lint/typecheck/tests.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
