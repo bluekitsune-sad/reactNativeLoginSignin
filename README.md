@@ -214,9 +214,10 @@ The expected sign‑in payload shape:
 
 This repo runs itself through two GitHub Actions workflows (both heavily
 commented, see `.github/workflows/`). **This repo's Actions policy does not
-allow workflow-created PRs, so the factory lands everything on one
-long-lived branch: `work`.** You merge `work` into `main` manually whenever
-you like:
+allow workflow-created PRs, so issue-driven runs land on one long-lived
+branch: `work`** — runs triggered from a pull request instead push commits
+to that PR's branch for you to merge. You merge `work` into `main` manually
+whenever you like:
 
 ```bash
 git checkout main && git merge work && git push
@@ -224,7 +225,7 @@ git checkout main && git merge work && git push
 
 | Workflow | Trigger | What it does |
 | -------- | ------- | ------------ |
-| `opencode.yml` | Issues and `/opencode` comments you open; OWNER pull requests (opened/synchronize/reopened/ready_for_review) and PR review comments | Implements on an `opencode/*` branch based on `work`, merges it straight into `work` (no PR), comments the result on your issue. Blocked? It opens a question issue @-mentioning you instead of guessing. A `review-pr` job also reviews every OWNER PR against its base branch with OpenCode. |
+| `opencode.yml` | Issues and `/opencode` comments you open; OWNER pull requests (opened/synchronize/reopened/ready_for_review) and PR review comments | Issue and issue-comment runs implement on an `opencode/*` branch based on `work` and merge it straight into `work` (no PR), commenting the result on your issue. Runs triggered by a PR review comment commit to that PR's branch instead — you merge the PR manually. Blocked? It opens a question issue @-mentioning you instead of guessing. A `review-pr` job also reviews every OWNER PR against its base branch with OpenCode (read-only — it never merges). |
 | `opencode-cron.yml` | 09:00 / 13:00 / 17:00 UTC + manual | Burns down **up to 5 TODO items per run** (branch from `work` → implement → mark done → land in `work`, one at a time), always ships a `todoAgent Ran` README footer on `work`, sweeps any stranded branch from earlier runs into `work`. |
 
 **Why isn't it one endless in-run loop?** Three GitHub platform limits:

@@ -1710,7 +1710,7 @@ Rules for the factory:
 
 ### Quality debt (found in the 2026-11-24 analysis)
 
-- [ ] **README automation table overstates the issue-path merge for PR
+- [x] **README automation table overstates the issue-path merge for PR
       triggers**: the `opencode.yml` row's trigger cell correctly lists
       OWNER pull requests and PR review comments, but the "What it does"
       cell then says the workflow "merges it straight into `work` (no PR),
@@ -1723,7 +1723,15 @@ Rules for the factory:
       the table is overbroad for the same reason. Reword both so the
       issue path is described as landing in `work` and the PR paths as
       landing on the PR branch (owner merges). Doc-only; verify by
-      re-reading against the workflow's `on:`/`if:` gates.
+      re-reading against the workflow's `on:`/`if:` gates. (Done
+      2026-11-25: the intro sentence now says issue-driven runs land on
+      `work` while PR-triggered runs push to that PR's branch; the
+      `opencode.yml` row splits issue/issue-comment runs (implement on
+      `opencode/*` → merge into `work`, comment on the issue) from PR
+      review-comment runs (commit to the PR branch, owner merges) and
+      notes `review-pr` is read-only and never merges. Doc-only —
+      verified by re-reading against `opencode.yml`'s `on:` block and
+      the `issue-task`/`comment-task`/`review-pr` job `if:` gates.)
 - [ ] **Four stale file references in TODO.md**: (a) the factory rule
       (lines 18–19) says mock data "lives in `src/constants/` or a new
       `src/mock/`" — no mock data lives in `src/constants/` anymore and
