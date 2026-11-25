@@ -16,7 +16,8 @@ Rules for the factory:
   each item. Keep changes small and verifiable; update this file and the
   README footer when done.
 - **All items below are mobile UI on mock data** (mock data lives in
-  `src/constants/` or a new `src/mock/`). No backend, no real payments.
+  `src/mock/` — the single source, per AGENTS.md). No backend, no real
+  payments.
 - **If the top item needs something blocked or missing (owner decision,
   API keys, mall/map data), leave it unchecked, say why briefly in the PR
   body, and take the next actionable item instead.** The queue must keep
@@ -25,12 +26,13 @@ Rules for the factory:
 ### Stage A — foundation
 
 - [x] **Load the Inter font family** for MallMate typography (bundled TTF
-      or `@expo-google-fonts/inter`) in `App.js`, exposed through
-      `Fonts.js`. Blueprint: `04-mobile/DESIGN_SYSTEM.md`. (Done via
+      or `@expo-google-fonts/inter`) in `App.js`. Blueprint:
+      `04-mobile/DESIGN_SYSTEM.md`. (Done via
       `@expo-google-fonts/inter`: Inter 400/500/600/700 added to
-      `CustomFonts.js` so `App.js`'s `useFonts` loads them; names exposed in
-      `Fonts.js`; `Theme.js` `fontFamily` now maps to the concrete loaded
-      font names.)
+      `CustomFonts.js` so `App.js`'s `useFonts` loads them; the names
+      were first exposed through `Fonts.js`, which was later deleted
+      with the legacy scaffold — `Theme.js` `fontFamily` now maps to
+      the concrete loaded font names directly.)
 - [x] **MallMate base component kit** in `src/components/mallmate/`:
       Button (default/pressed/disabled/loading), TextInput, Card,
       SectionHeader, ListRow, Badge ("Sponsored"/"Featured"), StatusChip,
@@ -65,7 +67,7 @@ Rules for the factory:
 - [x] **Typed API client helper**: axios wrapper using `ApiContants` base
       URL and the services error envelope `{status, message, data}`;
       document it in AGENTS.md. Blueprint: `03-api/API_SPEC.md`. (Done:
-      `src/services/apiClient.js` — shared axios instance + `get`/`post`/
+      `src/services/apiClient.ts` — shared axios instance + `get`/`post`/
       `put`/`patch`/`del` that never throw and always resolve to the
       envelope; typed as `ApiEnvelope` in `src/types/api.ts`; barrel
       export; usage documented in AGENTS.md "API client helper".)
@@ -1732,7 +1734,7 @@ Rules for the factory:
       notes `review-pr` is read-only and never merges. Doc-only —
       verified by re-reading against `opencode.yml`'s `on:` block and
       the `issue-task`/`comment-task`/`review-pr` job `if:` gates.)
-- [ ] **Four stale file references in TODO.md**: (a) the factory rule
+- [x] **Four stale file references in TODO.md**: (a) the factory rule
       (lines 18–19) says mock data "lives in `src/constants/` or a new
       `src/mock/`" — no mock data lives in `src/constants/` anymore and
       AGENTS.md correctly names `src/mock/` as the single source;
@@ -1746,6 +1748,18 @@ Rules for the factory:
       the dead-code sweep and no header code exists — rewrite the item
       to say "add auth headers to the services/`apiClient.ts` once token
       storage exists". Doc-only; verify each against the filesystem.
+      (Done 2026-11-25: all four fixed — (a) the factory rule now says
+      mock data lives in `src/mock/` as the single source per AGENTS.md;
+      (b) the font item no longer points at `Fonts.js` in its text and
+      the Done note records the later deletion with `Theme.js`
+      `fontFamily` as the current name source; (c) the apiClient Done
+      note points at `src/services/apiClient.ts`; (d) the open P2 token
+      item now says to wire `refreshToken()`/auth headers into the
+      services and `apiClient.ts` once token storage exists, noting the
+      `Generator.js#authHeader` helper was deleted. Each verified
+      against the filesystem first: no `Fonts.js`, no `Generator.js`,
+      `apiClient.ts` present, zero mock files under `src/constants/`.
+      Markdown-only — lint/typecheck unaffected (still clean).)
 - [ ] **Three dead code leftovers from the legacy removal**: (a)
       `src/constants/Images.js` is orphaned — zero imports anywhere, not
       exported from `src/constants/index.js`, and its only payload
@@ -1889,8 +1903,11 @@ P0 — App is broken / blocking
   - `getUser` reads the same `"user"` key that `setUser` writes and parses it.
   - Added `removeUser()`; fixed the `AsyncSorage` typo.
 - [ ] Persist the token and restore session on app launch; wire
-      `refreshToken()` and auth headers (`utils/Generator.js#authHeader`) into
-      the services (currently commented out). (Skipped 2026-10-23: the
+      `refreshToken()` and auth headers into the services and
+      `src/services/apiClient.ts` once token storage exists (the old
+      `utils/Generator.js#authHeader` helper no longer exists — deleted
+      in the dead-code sweep — and no header code is wired anywhere
+      today). (Skipped 2026-10-23: the
       token/refresh/header halves need a live backend contract — no flow
       produces a token today (the mock OTP session is
       `{username, phone, mockSession: true}`; real login always fails
