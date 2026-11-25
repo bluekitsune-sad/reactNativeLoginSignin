@@ -161,9 +161,8 @@ The expected sign‑in payload shape:
 ├── TODO.md                    # Living backlog (the factory's task queue)
 └── src/
     ├── __tests__/             # Repo-root tests (icon-name glyphmap validation)
-    ├── assets/                # Retained image assets (social-auth placeholders)
     ├── components/            # UI kit: mallmate/ components + Separator/ToggleButton/FlagItem
-    ├── constants/             # Colors, Images, ApiContants, Theme, Capabilities, CapabilityMeta, CustomFonts, CountryCode
+    ├── constants/             # Colors, ApiContants, Theme, Capabilities, CapabilityMeta, CustomFonts, CountryCode
     ├── i18n/                  # English + Urdu string catalogs + t() helper
     ├── mock/                  # MallMate preview data (merchants, offers, events, ...)
     ├── navigators/            # Root stack + MallMate bottom tabs (Main); composes the context providers

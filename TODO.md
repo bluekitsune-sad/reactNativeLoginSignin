@@ -1760,7 +1760,7 @@ Rules for the factory:
       against the filesystem first: no `Fonts.js`, no `Generator.js`,
       `apiClient.ts` present, zero mock files under `src/constants/`.
       Markdown-only — lint/typecheck unaffected (still clean).)
-- [ ] **Three dead code leftovers from the legacy removal**: (a)
+- [x] **Three dead code leftovers from the legacy removal**: (a)
       `src/constants/Images.js` is orphaned — zero imports anywhere, not
       exported from `src/constants/index.js`, and its only payload
       (`src/assets/images/facebook.png`/`google.png`) is referenced only
@@ -1775,7 +1775,18 @@ Rules for the factory:
       default-object) with zero consumers anywhere, tests included —
       drop it from the export list (keep or delete the factory). Same
       class as the earlier dead-export sweeps. Verify: re-grep each
-      name, lint/typecheck/tests.
+      name, lint/typecheck/tests. (Done 2026-11-25: (a) deleted —
+      `Images.js` and its two PNGs removed (re-grep found zero
+      references in `src/`, `scripts/`, `App.js`, `app.json`,
+      `package.json` and `webpack.config.js`; no barrel export existed);
+      (b) the whole `isCapabilityOn` function dropped from
+      `merchants.js` — it had zero call sites even inside its own module
+      (gating goes through the imported `isCapabilityVisible`), which
+      also made the now-unused `CAPABILITY_STATUS` import removable;
+      (c) `createApiClient` factory deleted along with both export
+      entries (zero consumers incl. tests). Verified: `npm run lint`
+      (0/0), `npm run typecheck` (clean), `npm test -- --ci` — 299/299
+      across 37 suites.)
 
 ### Blocked — do NOT implement until the owner decides
 

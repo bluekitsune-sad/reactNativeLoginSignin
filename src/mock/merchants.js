@@ -1,4 +1,3 @@
-import { CAPABILITY_STATUS } from "../constants";
 import { isCapabilityVisible } from "./homeContent";
 import { getActiveOffersForMerchant } from "./offers";
 
@@ -261,14 +260,6 @@ const SEARCH_SUGGESTIONS = {
 };
 
 const ERROR_QUERY = "!error";
-
-export const isCapabilityOn = (capabilityMap, capability) => {
-  if (!capability) {
-    return true;
-  }
-  const status = capabilityMap?.[capability];
-  return status === CAPABILITY_STATUS.ENABLED || status === CAPABILITY_STATUS.DEGRADED;
-};
 
 /**
  * Client-side mock search: mall-scoped, capability-gated, matches name,

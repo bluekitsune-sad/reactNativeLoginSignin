@@ -75,7 +75,7 @@ covered code.
   `index.js` (`src/components/`, `src/constants/`, `src/i18n/`, `src/mock/`,
   `src/navigators/`, `src/screens/`, `src/services/`, `src/utils/`) or
   `index.ts` for `src/types/`. Test (`src/**/__tests__/`) and asset
-  (`src/assets/`, `assets/`) folders have no barrel. When you add a module,
+  (`assets/`) folders have no barrel. When you add a module,
   export it from the barrel too, and import via the folder (`../components`,
   `../services`), not deep relative paths.
 - **Screens live in `src/screens/`,** registered either as stack routes in

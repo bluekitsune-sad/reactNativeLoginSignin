@@ -15,17 +15,6 @@ const apiClient: AxiosInstance = axios.create({
   baseURL: ApiContants.BACKEND_API.BASE_API_URL,
 });
 
-/**
- * Create an additional client with the same base URL but overridden axios
- * config (e.g. a longer timeout). Prefer the shared `apiClient` unless you
- * have a concrete reason.
- */
-const createApiClient = (options: AxiosRequestConfig = {}): AxiosInstance =>
-  axios.create({
-    baseURL: ApiContants.BACKEND_API.BASE_API_URL,
-    ...options,
-  });
-
 /** Narrow an unknown payload to a plain record we can read keys from. */
 const asRecord = (value: unknown): Record<string, unknown> | undefined =>
   value != null && typeof value === "object" ? (value as Record<string, unknown>) : undefined;
@@ -117,11 +106,10 @@ const patch = (url: string, body: unknown, config: AxiosRequestConfig = {}) =>
 const del = (url: string, config: AxiosRequestConfig = {}) =>
   request({ ...config, method: "DELETE", url });
 
-export { apiClient, createApiClient, request, get, post, put, patch, del, DEFAULT_ERROR_MESSAGE };
+export { apiClient, request, get, post, put, patch, del, DEFAULT_ERROR_MESSAGE };
 
 export default {
   apiClient,
-  createApiClient,
   request,
   get,
   post,
