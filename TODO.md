@@ -1788,6 +1788,41 @@ Rules for the factory:
       (0/0), `npm run typecheck` (clean), `npm test -- --ci` — 299/299
       across 37 suites.)
 
+### Quality debt (found in the 2026-11-27 analysis)
+
+- [ ] **The "capability is visible" rule is hand-rolled in 9 places**:
+      `status === CAPABILITY_STATUS.ENABLED || status ===
+      CAPABILITY_STATUS.DEGRADED` exists as a byte-identical private
+      `isCapabilityOn` helper in six mock modules (`events.js:104`,
+      `orders.js:202`, `rewards.js:73`, `floors.js:63`, `navigation.js:11`,
+      `foodCourt.js:50`), as the barrel-exported `isCapabilityVisible` in
+      `homeContent.js:336` (which adds a `!capability → true` guard), and
+      inline in two screens (`MapScreen.js:20`, `HomeScreen.js:203`) —
+      seven of the nine sites import `CAPABILITY_STATUS` only for this
+      check. Changing the DEGRADED semantics (or adding a status) means
+      editing nine files with nothing tying them together; the 2026-11-25
+      sweep removed the dead tenth copy in `merchants.js` but explicitly
+      left the six private ones. Consolidate onto one helper. Note: a
+      plain re-export of `isCapabilityVisible` into `events.js` would
+      create an import cycle (`homeContent.js` imports `./events`), so
+      hoist the check into a tiny cycle-free module (or reuse the existing
+      helper from the five cycle-free modules) and point the two screens at
+      the barrel export. Behaviour note: the private copies return `false`
+      for a missing capability while `isCapabilityVisible` returns `true` —
+      every current call site passes a literal key, so unify without
+      changing any caller's result. Verify: lint/typecheck/tests (each
+      mock suite covers gating per module).
+- [ ] **33 of 36 screens have no direct test suite**: only
+      `SigninScreen`, `ProfileScreen` and `SearchScreen` have files under
+      `src/screens/__tests__/` (grep-verified across all 37 suites) — the
+      2026-11-11/12 rounds covered the mallmate kit and 2026-11-18 covered
+      `src/mock/`, but the tab screens, merchant/menu, orders, maps and
+      food-court screens render untested, so a broken capability gate,
+      `t()` key or navigation row in them ships unnoticed. Add per-area
+      suites in the existing Signin/Profile style (render in the right
+      providers, RNTL queries, mutation-check the assertions) — one area
+      per task, starting with the five tab screens.
+
 ### Blocked — do NOT implement until the owner decides
 
 P0 business decisions from
